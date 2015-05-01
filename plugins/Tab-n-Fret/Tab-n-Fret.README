@@ -1,0 +1,346 @@
+README file for tablature-mode.el and xfretboard.c
+==================================================
+
+
+
+What are they?
+--------------
+o Tablature-mode.el is GNU Emacs lisp code for editing guitar
+  tablature.  Xfretboard.c is an interactive X Windows graphical
+  display of a guitar fretboard.  Either program may me used by
+  itself, or the two may be used in combination with each other.
+
+o Tablature-mode.el is an updated release of code previously posted to
+  the net.  Used with GNU Emacs, it allows easy entering and editing
+  of tablature, including:
+
+    o Single keystroke entry of notes.
+
+    o Entry of notes and chords via xfretboard.c X Windows graphical
+      interface. (New feature)
+
+    o Sub-modes for entering chords or lead lines.
+
+    o Automatic analysis and labeling of chords.
+
+    o Support for alternate tunings, including automatic transposition
+      between tunings.
+
+    o Copying/moving/deleting passages of notes.
+
+    o Embellishments (bends, hammers, slides, etc.)
+
+    o On-line help.
+
+
+o Xfretboard.c is a X Windows interface to tablature-mode.el.  Notes
+  and chords are entered by mouse-clicking on a detailed, full-color,
+  graphic rendition of a guitar fretboard.  Additional features,
+  useful even when xfretboard.c is being used standalone without
+  tablature-mode.el, include:
+
+    o Labeling of fretboard with chords and scales.
+
+    o All keys, and many common chords and scales.  Chords and scales
+      may be altered, or arbitrary chords/scales displayed.
+
+    o Support for alternate tunings.
+
+    o Fully customizable, including colors, mouse-button actions,
+      string appearances, and built-in chords and scales.
+
+    o On-line help.
+
+
+
+How to obtain the programs
+--------------------------
+o Tablature-mode.el and xfretboard.c have been posted to the
+  alt.sources newsgroup.  They should be available at various
+  alt.sources archive sites.  They may also be requested via email
+  from:
+
+	## address specified is no longer in service. bobz@crl.com
+
+	## copies are available on the following hosts:
+
+ftp.uu.net:doc/music/guitar/other_stuff/Tab-n-Fret.tar
+ftp.uwp.edu:pub/music/guitar/other_stuff/Tab-n-Fret.tar
+unix.hensa.ac.uk:pub/uunet/doc/music/guitar/other_stuff/Tab-n-Fret.tar
+ftp.cosy.sbg.ac.at:pub/mirror/guitar/other_stuff/Tab-n-Fret.tar
+ftp.diku.dk:pub/music/guitar/other_stuff/Tab-n-Fret.tar
+ftp.uni-paderborn.de:doc/guitar/other_stuff/Tab-n-Fret.tar
+ftp.uni-stuttgart.de:pub/misc/guitar/other_stuff/Tab-n-Fret.tar
+and
+ftp.informatik.tu-muenchen.de:
+	pub/rec/music/guitar/songs/nevada/other_stuff/Tab-n-Fret.tar
+
+
+
+What is needed to use the programs?
+-----------------------------------
+o For both tablature-mode.el and xfretboard.c:
+
+    o UNIX
+
+
+o For tablature-mode.el:
+
+    o GNU Emacs.  GNU Emacs is a freely-distributable, highly-
+      extensible editor that runs on all UNIX platforms.  It is often
+      already installed on UNIX systems; if not, it may be found on
+      many archive sites.  Compiling and installing GNU Emacs is
+      fairly easy (requires a C compiler and associated programs).
+
+
+o For xfretboard.c:
+
+    o An X Windows server and development environment, including:
+
+    o C compiler and associated programs.
+
+    o X Windows include files and libraries, including Athena Widget
+      Set (Motif, etc. *not* required).
+
+
+o Portability:
+
+    o Tablature-mode.el and xfretboard.c have been tested on various
+      combinations of:
+
+	System V Release 4, Intel 386 architecture
+	IRIX 4.0.5
+	SunOS 4.1.3
+	X11R4
+	X11R5
+	GNU Emacs 18.59
+	GNU Emacs 19.15
+
+
+
+Installation
+------------
+o Tablature-mode.el and xfretboard.c have been distributed as a multi-
+  part "shar" file.  To unpack:
+
+    o Edit each part, and remove headers that the transport mechanism
+      (news, mail) has added.
+
+    o For each part, in order, execute:
+
+	shellprompt% sh < part_filename
+
+
+o Tablature-mode.el:
+
+    o Tablature-mode.el is interpreted lisp code which is ready to run
+      under GNU Emacs.  See section on "Usage", below.  However, it
+      may be optionally installed for easier use:
+
+    o Move tablature.el to a directory containing lisp code, for
+      example:
+
+	 shellprompt% mkdir $HOME/elisp
+	 shellprompt% mv tablature.el $HOME/elisp
+
+
+    o Edit your $HOME/.emacs file.  Add a, or modify an existing, line
+      to include the directory used above, for example:
+
+	(setq load-path (append (list (concat (getenv "HOME")
+						      "/elisp"))
+				 load-path))
+
+      or (for a non-$HOME relative directory, for example):
+
+	(setq load-path (append (list "/usr/local/elisp")
+				 load-path))
+
+
+
+    o Also add the line:
+
+	(autoload 'chord-mode	"tablature-mode"   "Guitar tablature."  t)
+
+
+    o If using with xfretboard.c, edit the default location where
+      xfretboard will be installed (see xfretboard.c instructions,
+      below).  This is currently:
+
+	(defvar fretboard-program-name
+		(concat (getenv "HOME") "/bin/xfretboard")
+	"*Default path name of auxiliary X-Windows fretboard program."
+	)
+
+      and could be changed, for example (for non-$HOME relative
+      directory) to:
+
+	(defvar fretboard-program-name
+		"/usr/local/bin/xfretboard"
+	"*Default path name of auxiliary X-Windows fretboard program."
+	)
+
+
+o Xfretboard.c:
+
+    o If you are using "xmkmf", examine and optionally edit the file
+      "Imakefile".  Then execute:
+
+	shellprompt% xmkmf 
+
+
+    o If your system does not have xmkmf, edit the file
+      "Makefile.ByHand".  Then:
+
+	shellprompt% mv Makefile.ByHand Makefile
+
+
+    o Compile the program:
+
+	shellprompt% make
+
+
+    o Compilation uses a program called "ad2h".  "Ad2h" in turn uses
+      the programs "sed" and "awk", which occasionally have
+      compatibility problems.  The purpose of "ad2h" is to convert the
+      file "XFretboard.ad" to "XFretboard.h"; however, the 
+      "XFretboard.h" as distributed is up to date.  If errors are
+      reported, do:
+
+	shellprompt% touch XFretboard.h
+	shellprompt% make
+
+
+    o Xfretboard.c can execute from any directory (see "Customization",
+      below).  It may be left in place, or moved to a "bin" directory,
+      for example:
+
+	shellprompt% mv xfretboard $HOME/bin
+
+      (This directory should match any "fretboard-program-name"
+      specified in the tablature-mode.el installation, above).
+
+
+
+Usage
+-----
+o Tablature-mode.el:
+
+    o (The following assumes familiarity with GNU Emacs.  "M-x" means
+      "meta-X", or "ESC X".  Novice emacs users should follow the help
+      instructions that appear on the initial GNU Emacs screen.)
+
+    o Begin GNU Emacs, for example via:
+
+	shellprompt% emacs
+
+
+    o Edit a tablature file, via, for example:
+
+	M-x find-file-other-window filename
+
+
+    o If $HOME/.emacs was *not* modified as per the "Installation"
+      instructions, above, load the tablature-mode.el code via:
+
+	M-x load-file dir1/dir2/tablature-mode.el
+
+      where "dir1/dir2", etc., is the correct path to the tablature.el
+      file.
+
+
+    o In either case, enter "chord-mode" via:
+
+	M-x chord-mode
+
+
+    o For help on tablature-mode.el, the type (while editing a file 
+      using "chord-mode"):
+
+	M-x describe-mode
+
+
+    o To use xfretboard.c with tablature-mode.el, type:
+
+	M-x xfretboard
+
+      If the xfretboard was installed in the default ($HOME/bin)
+      directory, or if the "fretboard-program-name" default was
+      correctly edited (see "Installation", above), press return at
+      the prompt.  Otherwise, edit the correct directory path to the
+      xfretboard program, and press return.
+
+      Note that xfretboard must be executed in this way, from within
+      GNU Emacs, to correctly communicate with tablature-mode.el.  Any
+      xfretboard started otherwise (from a shell prompt, for example)
+      will work, but will not communicate.
+
+
+o Xfretboard.c:
+
+    o To use xfretboard.c with tablature-mode.el, follow the
+      instructions above.  To use it standalone, type:
+
+	shellprompt% xfretboard
+
+      if it was installed in a directory in you $PATH environment
+      variable.  Otherwise:
+
+	shellprompt% cd correct_directory
+	shellprompt% ./xfretboard
+
+
+
+Customization
+-------------
+o Tablature-mode.el:
+
+    o Many aspects of tablature-mode.el are customizable.  See the
+      section labeled "CUSTOMIZABLE DEFAULTS" near the beginning of the
+      file.  The initial tuning may be changed here, as well as the
+      location of xfretboard.c, among other options
+
+    o Also see the section labeled "Jeff Healey style keybindings" for
+      an alternate method of entering notes via the keyboard.
+
+
+o Xfretboard.c:
+
+    o Almost all of the xfretboard.c graphics may be customized via
+      the use of X Windows resource files.  To allow easy usage of
+      xfretboard.c, a default set of resources has been compiled into
+      the program.  These are the same resources contained in the file
+      "XFretboard.ad", which may be examined and modified.
+
+    o There are several methods to allow X to use the resources in a
+      customized XFretboard.ad rather than the compiled-in defaults.
+      Consult an X Windows System manual for details.  The (arguably)
+      best method is to set the "XAPPLRESDIR" environment variable to
+      a directory, for example:
+
+	Cshell-prompt% setenv XAPPLRESDIR $HOME/xdefaults
+
+      or:
+
+        sh-shell-prompt$ XAPPLRESDIR=$HOME/xdefaults
+	sh-shell-prompt$ export XAPPLRESDIR
+
+      then (in either case):
+
+	shellprompt% cp XFretboard.ad $HOME/xdefaults/XFretboard
+
+    o If all else fails, the program "testbed" will execute an
+      xfretboard program in the current directory, using an
+      "XFretboard.ad" resource file in the same directory.
+
+
+
+Copyright and disclaimer
+------------------------
+o This code is released into the public domain without any express or
+  implied warranty.  The author accepts no responsibility for any
+  consequences arising from its use.
+
+o This code may be distributed and modified in any way; however,
+  please retain notice of original authorship in this and any
+  derivative work.

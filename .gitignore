@@ -1,0 +1,37 @@
+# compiled & binary files
+**.elc
+**.exe
+**~
+
+# packages
+elpa/
+
+# private source files
+custom.el
+init/host/*
+plugins/perf-web/
+unused.el
+
+# private cache files
+.org-id-locations
+abbrev_defs
+bookmarks
+ac-comphist.dat
+org-clock-save.el
+projectile-bookmarks.eld
+projectile.cache
+recentf
+smex.save
+tramp
+
+# private folders
+auto-save-list/
+eshell/
+info/
+src/
+server/
+tmp/
+thumbs/
+snippets/
+url/
+var/
