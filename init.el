@@ -133,7 +133,7 @@
 
 (require 'init-gui)
 (require 'init-rice)
-(require 'init-speedbar)
+;(require 'init-speedbar) ;; craps since emacs 24.4 due to void-function ad-advised-definition-p
 
 
 

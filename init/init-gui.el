@@ -104,8 +104,9 @@
 
 ;; - [X] https://github.com/wasamasa/form-feed
 ;; - [ ] https://github.com/purcell/page-break-lines
-(add-hook 'prog-mode-hook 'form-feed-mode)
-
+(when (prf/require-plugin 'form-feed nil 'noerror)
+  (add-hook 'prog-mode-hook 'form-feed-mode)
+  )
 
 ;; -------------------------------------------------------------------------
 ;; INVISIBLE CHARACTERS

@@ -15,6 +15,7 @@
 
 ;; patched version to allow filtering of buffers
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/lusty-explorer-prf"))
+(prf/install-package 'noflet)
 (when (require 'lusty-explorer nil 'noerror)
   (global-set-key (kbd "C-x C-f") 'lusty-file-explorer)
   (global-set-key (kbd "C-x f") 'lusty-file-explorer)

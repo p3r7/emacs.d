@@ -7,19 +7,20 @@
 ;; - brackets completion
 ;; http://emacs-fu.blogspot.fr/2010/06/automatic-pairing-of-brackets-and.html
 ;; - [X] autopair
-(require 'autopair)
-(eval-after-load "autopair"
-  '(progn
-     (autopair-global-mode 1)
-     (if (and (<= emacs-major-version 24)
-	      (<= emacs-minor-version 3))
-	 (progn
-	   (setq autopair-autowrap t)
-	   (put 'autopair-backspace 'cua-selection 'supersede)
-	   )
-       (require 'wrap-region) ;; replacement for autopair-autowrap
-       )
-     ))
+(when (prf/require-plugin 'autopair nil 'noerror)
+  (eval-after-load "autopair"
+    '(progn
+       (autopair-global-mode 1)
+       (if (and (<= emacs-major-version 24)
+		(<= emacs-minor-version 3))
+	   (progn
+	     (setq autopair-autowrap t)
+	     (put 'autopair-backspace 'cua-selection 'supersede)
+	     )
+	 (prf/require-plugin 'wrap-region) ;; replacement for autopair-autowrap
+	 )
+       ))
+  )
 ;; - [ ] electric-pair
 ;; http://xahlee.blogspot.fr/2012/06/emacs-24-feature-electric-pair-mode.html
 
