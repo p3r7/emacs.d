@@ -40,10 +40,11 @@
 
 ;; (setq tramp-verbose 6)
 
-(when (prf/require-plugin 'vagrant-tramp)
-  (eval-after-load 'tramp
-    '(vagrant-tramp-enable))
-  )
+(when (and (not (windows-nt-p))
+	   (prf/require-plugin 'vagrant-tramp))
+ (eval-after-load 'tramp
+   '(vagrant-tramp-enable))
+ )
 
 (defun prf/tramp/convert-remoteFilePath-currentSrv (currentFilePath remoteFilePath)
   "Format a path using current server address prefix and remote server file location"

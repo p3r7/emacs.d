@@ -5,7 +5,11 @@
 (set-face-bold-p 'bold nil)
 
 (when (boundp 'prf/font)
-  (setq font-default prf/font)
+  (if (windows-nt-p)
+      ;; (setq default-frame-alist (intern (concat"((font . " prf/font "))")))
+      (setq default-frame-alist '((font . "-outline-Consolas-normal-r-normal-normal-12-97-96-96-c-*-iso8859-1")))
+    (setq font-default prf/font)
+      )
   )
 
 (when (boundp 'prf/font-height)
