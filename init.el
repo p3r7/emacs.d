@@ -37,6 +37,8 @@
 
 ;; TODO: theming AFTER languages, to support override faces
 
+;; TODO: C-d is currently c-electric-delete-forward, replace w/ copy-line
+
 ;; upstream version of tramp
 ;; http://www.gnu.org/software/tramp/#Installation
 
@@ -146,6 +148,7 @@
 (require 'init-hydra)
 
 
+
 ;; { Langages }--------------------------------------------------------[[<#L]]
 
 
@@ -200,8 +203,8 @@
 
 (require 'init-buffer-navigation)
 (require 'init-file-navigation)
-;; (require 'init-projectile)
-(require 'init-vcs)
+;; (require 'init-projectile) ; slows down tramp
+;; (require 'init-vcs) ; slows down tramp
 
 (require 'init-bookmarks)
 (require 'init-deft)

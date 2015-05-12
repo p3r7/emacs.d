@@ -226,7 +226,6 @@ Only works for single line strings"
     ;; else
     (line/kill-ring-save-trim) ) )
 
-(global-set-key (kbd "M-w") 'copy-line-or-region)
 
 
 ;; Org-mode version
@@ -250,7 +249,6 @@ Only works for single line strings"
 ;; (add-hook 'org-mode-hook
 ;;  	  '(lambda()
 ;; 	     (define-key org-mode-map (kbd "M-w") 'copy-line-or-region-org)  ) )
-(define-key org-mode-map (kbd "M-w") 'copy-line-or-region-org)
 
 
 
@@ -288,7 +286,6 @@ Only works for single line strings"
   )
 
 
-(global-set-key (kbd "C-w") 'cut-line-or-region)
 
 
 ;; Org-mode version
@@ -308,7 +305,6 @@ Only works for single line strings"
 ;; (add-hook 'org-mode-hook
 ;;  	  '(lambda()
 ;; 	     (define-key org-mode-map (kbd "C-w") 'cut-line-or-region-org) ) )
-(define-key org-mode-map (kbd "C-w") 'cut-line-or-region-org)
 
 
 
@@ -341,8 +337,7 @@ Only works for single line strings"
       (comment-or-uncomment-region (line-beginning-position) (line-beginning-position 2))
       (next-visual-line) ) ) )
 
-(global-set-key (kbd "C-<f8>") 'comment-or-uncomment-line-or-region)
-(global-set-key (kbd "<C-kp-divide>") 'comment-or-uncomment-line-or-region)
+
 
 
 ;; C languages
@@ -426,7 +421,6 @@ Only works for single line strings"
 
 ;; -------------------------------------------------------------------------
 
-;; C-d
 ;; duplicates line or region, no save in kill ring
 
 
@@ -451,9 +445,6 @@ With negative N, comment out original line and use the absolute value."
             (comment-region (line-beginning-position) (line-end-position)))
         (forward-line 1)
         (forward-char pos)))))
-
-(global-set-key (kbd "C-d") 'duplicate-line-or-region)
-
 
 
 ;; -------------------------------------------------------------------------
