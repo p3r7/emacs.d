@@ -51,8 +51,8 @@
 
 (when (require 'prf-theme nil 'noerror)
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-  ;; (setq prf/theme/theme-list prf/theme/list/dark)
-  (setq prf/theme/theme-list prf/theme/list/retro-light)
+  (setq prf/theme/theme-list prf/theme/list/dark)
+  ;; (setq prf/theme/theme-list prf/theme/list/retro-light)
   (prf/theme/initialize)
   (global-set-key [f12] 'prf/theme/cycle-theme)
   )
