@@ -158,7 +158,6 @@
 (require 'init-html)
 
 ;; - dev
-(require 'init-c-common)
 (require 'init-c)
 (require 'init-php)
 (require 'init-js)
@@ -166,6 +165,8 @@
 (require 'init-scheme)
 (require 'init-sql)
 (require 'init-haskell)
+(require 'init-c-common)
+
 
 ;; - shell
 (require 'init-dos)

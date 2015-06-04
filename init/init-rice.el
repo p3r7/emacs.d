@@ -24,6 +24,12 @@
 (prf/install-package 'ample-theme)
 (prf/install-package 'plan9-theme)
 
+(defvar prf/theme/list/practical
+  (list
+   'comidia-mod
+   'light-blue
+   ))
+
 (defvar prf/theme/list/dark
   (list
    'comidia-mod
@@ -51,7 +57,7 @@
 
 (when (require 'prf-theme nil 'noerror)
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-  (setq prf/theme/theme-list prf/theme/list/dark)
+  (setq prf/theme/theme-list prf/theme/list/practical)
   ;; (setq prf/theme/theme-list prf/theme/list/retro-light)
   (prf/theme/initialize)
   (global-set-key [f12] 'prf/theme/cycle-theme)

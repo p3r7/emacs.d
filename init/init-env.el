@@ -27,10 +27,11 @@
   )
  ((windows-nt-p)
   (progn
-    (setq
-     ;; tramp-default-method "ssh"
-     tramp-default-method "pscp"
-     )
+    (setq tramp-default-method "pscp")
+    ;; tramp-default-method "ssh"
+    ;; (if (executable-find "ssh")
+	;; (setq tramp-default-method "scpx")
+      ;; (setq tramp-default-method "pscp") )
     (require 'init-w32)
     )
   )

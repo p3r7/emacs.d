@@ -42,6 +42,7 @@ Steel blue on black.")
  `(isearch-lazy-highlight-face ((t (:background "paleturquoise4"))))
  `(italic ((t (:italic t :slant italic))))
  `(menu ((t (nil))))
+
  `(message-cited-text-face ((t (:foreground "red"))))
  `(message-header-cc-face ((t (:bold t :foreground "green4" :weight bold))))
  `(message-header-name-face ((t (:foreground "DarkGreen"))))
@@ -52,6 +53,7 @@ Steel blue on black.")
  `(message-header-xheader-face ((t (:foreground "blue"))))
  `(message-mml-face ((t (:foreground "ForestGreen"))))
  `(message-separator-face ((t (:foreground "blue3"))))
+
  ;; `(modeline ((t (:background "Gray10" :foreground "SteelBlue"))))
  `(mode-line ((t (:background "Gray10" :foreground "SteelBlue" :box (:line-width -1) ))))
  ;; `(mode-line-buffer-id ((,class (:foreground ,cyberpunk-yellow :weight bold))))
@@ -60,6 +62,7 @@ Steel blue on black.")
  ;; `(modeline-buffer-id ((t (:background "Gray10" :foreground "SteelBlue" :box (:line-width 1 :style none) :width condensed :family "neep"))))
  `(modeline-mousable-minor-mode ((t (:background "Gray10" :foreground "SteelBlue" :box (:line-width 1 :style none) :width condensed :family "neep"))))
  `(modeline-mousable ((t (:background "Gray10" :foreground "SteelBlue" :box (:line-width 1 :style none) :width condensed :family "neep"))))
+
  `(mouse ((t (:background "SteelBlue"))))
  `(scroll-bar ((t (:background "grey75"))))
  `(tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width 1 :style released-button)))))
@@ -174,6 +177,10 @@ Steel blue on black.")
  `(speedbar-highlight-face ((t (:background "sea green"))))
  `(speedbar-selected-face ((t (:foreground "red" :underline t))))
  `(speedbar-tag-face ((t (:foreground "yellow"))))
+
+
+ ;;  - helm
+ `(helm-selection ((t (:background "#333300"))))
 
  )
 
