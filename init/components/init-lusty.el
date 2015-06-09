@@ -11,6 +11,7 @@
 					  "^\\*Ediff Registry\\*$"
 					  "^\\*Occur\\*$"
 					  "^\\*vc\\*$"
+					  "^\\*helm M-x\\*$"
 					  ))
 
 ;; patched version to allow filtering of buffers
