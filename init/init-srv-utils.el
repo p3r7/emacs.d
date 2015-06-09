@@ -7,6 +7,7 @@
 (prf/install-package 'hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
 (require 'syslog-mode)
+(add-to-list 'auto-mode-alist '(".*\.log'" . syslog-mode))
 (add-to-list 'auto-mode-alist '("/var/log.*\\'" . syslog-mode))
 (add-to-list 'auto-mode-alist '("\\catalina.out\\'" . syslog-mode))
 
