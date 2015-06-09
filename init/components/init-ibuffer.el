@@ -1,5 +1,7 @@
 ;; TODO: customize ibuffer-formats for larger name column
 
+(setq prf/regex/remote-shell-buffer-name "^\\*\\(.*\\)@[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\\*$")
+
 (require 'ibuffer)
 (setq
  ibuffer-formats
@@ -19,11 +21,8 @@
  ibuffer-saved-filter-groups
  (quote (("default"
 	  ("shells"
-	   ;; (or
-	   (mode . shell-mode)
-	   ;; (and (mode . syslog-mode)
-	   ;; (name . "@") )
-	   ;; )
+	   (or (mode . shell-mode)
+	       (name . "^\\*\\(.*\\)@[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\\*$") )
 	   )
 	  ("dired"
 	   (mode . dired-mode)
