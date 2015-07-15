@@ -26,9 +26,9 @@
 ;; ------------------------------------------------------------------------
 ;; FRAMEMOVE
 
-(when (prf/require-plugin 'framemove nil 'noerror)
-  (setq framemove-hook-into-windmove t)
-  )
+;; (when (prf/require-plugin 'framemove nil 'noerror)
+  ;; (setq framemove-hook-into-windmove t)
+  ;; )
 
 ;; ------------------------------------------------------------------------
 ;; WINDOWS ROTATION
