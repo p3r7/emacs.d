@@ -5,8 +5,12 @@
 (define-key org-mode-map (kbd "M-w") 'copy-line-or-region-org)
 (global-set-key (kbd "C-w") 'cut-line-or-region)
 (define-key org-mode-map (kbd "C-w") 'cut-line-or-region-org)
+
 (global-set-key (kbd "C-d") 'duplicate-line-or-region)
-(define-key c-mode-map (kbd "C-d") 'duplicate-line-or-region) ; c-electric-delete-forward on recent emacs
+					; c-electric-delete-forward on recent emacs
+(define-key c-mode-map (kbd "C-d") 'duplicate-line-or-region)
+(define-key groovy-mode-map (kbd "C-d") 'duplicate-line-or-region)
+
 (global-set-key (kbd "C-<f8>") 'comment-or-uncomment-line-or-region)
 (global-set-key (kbd "<C-kp-divide>") 'comment-or-uncomment-line-or-region)
 
