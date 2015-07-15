@@ -39,6 +39,13 @@
     (add-to-list 'load-path "~/.emacs.d/src/tramp-2.2.11/lisp")
   )
 
+;; disable vc for remote files (speed increase)
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
+
+
 ;; (setq tramp-verbose 6)
 
 (when (and (not (windows-nt-p))
