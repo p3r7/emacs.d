@@ -200,6 +200,7 @@
  ls-lisp-dirs-first t ;; display dirs 1st
  dired-listing-switches "-alh"
  diredp-hide-details-initially-flag nil
+ diredp-hide-details-propagate-flag nil
  )
 ;; http://stackoverflow.com/questions/14602291/dired-how-to-get-really-human-readable-output-find-ls-option
 ;; http://stackoverflow.com/questions/4115465/emacs-dired-too-much-information
