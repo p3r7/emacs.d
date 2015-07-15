@@ -12,4 +12,8 @@
    (t (thing-at-point THING))
    ) )
 
+(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+  (flet ((process-list ())) ad-do-it))
+
+
 (provide 'init-test1)
