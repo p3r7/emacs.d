@@ -36,3 +36,6 @@ thumbs/
 snippets/
 url/
 var/
+plugins-src/tramp-2.2.12/config.status
+plugins-src/tramp-2.2.12/config.log
+*.lnk

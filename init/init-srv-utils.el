@@ -2,6 +2,17 @@
 
 ;; TODO: emacs function to get curren path and convert it to url if contains www
 
+;; manually downloaded and configured upstream versions of tramp
+;; http://www.gnu.org/software/tramp/#Installation
+(if (and (= emacs-major-version 24)
+	 (= emacs-minor-version 3))
+    (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.11/lisp")
+  )
+(if (and (= emacs-major-version 24)
+	 (= emacs-minor-version 5))
+    (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.12/lisp")
+  )
+
 
 (require 'prf-tramp)
 (prf/install-package 'hide-lines)
@@ -33,11 +44,6 @@
 ;; ------------------------------------------------------------------------
 ;; TRAMP
 
-(if (and (= emacs-major-version 24)
-	 (= emacs-minor-version 3))
-    ;; manually downloaded upstream version of tramp
-    (add-to-list 'load-path "~/.emacs.d/src/tramp-2.2.11/lisp")
-  )
 
 ;; disable vc for remote files (speed increase)
 (setq vc-ignore-dir-regexp

@@ -86,7 +86,13 @@
 ;; - themes/ : manually installed deftheme themes
 ;; - elpa/ : features installed through packages.el
 
+;; unused
 (setq prf/load-path load-path)
+
+;; (if (and (= emacs-major-version 24)
+	 ;; (= emacs-minor-version 5))
+    ;; (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.12/lisp")
+  ;; )
 
 (defun prf/recursive-add-to-load-path (dir)
   "Add directory and all child directories to load path"
