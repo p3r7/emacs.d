@@ -12,9 +12,11 @@
 	 (= emacs-minor-version 5))
     (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.12/lisp")
   )
-
+;; NB: solves copy & mv, but potentially crashes find-file
 
 (require 'prf-tramp)
+(setq prf/tramp/local-shell-bin/cmd "C:/Program Files/emacs/emacs-24.5/libexec/emacs/24.5/x86_64-w64-mingw32/cmdproxy.exe")
+(setq prf/tramp/local-shell-bin/bash "C:/Program Files (x86)/Git/bin/bash.exe")
 (prf/install-package 'hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
 (require 'syslog-mode)

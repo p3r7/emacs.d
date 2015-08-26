@@ -33,10 +33,14 @@
 
 ;; ------------------------------------------------------------------------
 
+;; NOTE FOR WIN NT
+;; I recommand using .exe extension to allow setting different explicit-<PROGRAM>-args for remote bash and local bash.exe
+
 (defvar prf/tramp/default-local-shell-bin shell-file-name)
 (defvar prf/tramp/default-remote-shell-bin "/bin/bash")
-(defvar prf/tramp/local-shell-bin/bash "C:/Program Files (x86)/Git/bin/bash.exe")
-(defvar prf/tramp/local-shell-bin/cmd "C:/Program Files (x86)/emacs/emacs-24.2/bin/cmdproxy.exe")
+(defvar prf/tramp/default-remote-shell-bin-args '("-c" "export EMACS=; stty echo; bash"))
+(defvar prf/tramp/local-shell-bin/bash nil)
+(defvar prf/tramp/local-shell-bin/cmd nil)
 (defvar prf/tramp/default-shell-buffer-name "*shell*")
 
 
@@ -62,6 +66,13 @@
 
 ;; ------------------------------------------------------------------------
 
+
+
+(defun prf/tramp/path/normalize (path)
+  ;; could have used convert-standard-filename or executable-find (for local files) as well to give a coherent output
+  ;; we instead to a simple backslash substitution
+  (subst-char-in-string ?\\ ?/ path)
+  )
 
 (defun prf/tramp/path/remote-p (path)
   (let ((match (string-match (nth 0 tramp-file-name-structure) path)))
@@ -110,17 +121,32 @@
   )
 
 
-(defun prf/tramp/generate-buffer-name-local-shell (shellBin)
-  (if (eq shellBin nil)
-      prf/tramp/default-shell-buffer-name
-    (if (string-match "^\\(.*\\)/\\(.*\\)\\.\\(.*\\)$" shellBin)
-	(concat "*" (match-string 2 shellBin) "*")
-      (if (string-match "^\\(.*\\)/\\(.*\\)$" shellBin)
-	  (concat "*" (match-string 2 shellBin) "*")
-	prf/tramp/default-shell-buffer-name
+(defun prf/tramp/get-shellBin-name (shellBin)
+  (if (string-match "^\\(.*\\)/\\(.*\\)$" shellBin)
+      (match-string 2 shellBin)
+    shellBin
+    )
+  )
+(defun prf/tramp/get-shellBin-name-noExt (shellBin)
+  (if (string-match "^\\(.*\\)/\\(.*\\)\\.\\(.*\\)$" shellBin)
+      (match-string 2 shellBin)
+    (if (string-match "^\\(.*\\)/\\(.*\\)$" shellBin)
+	(match-string 2 shellBin)
+      (if (string-match "^\\(.*\\)\\.\\(.*\\)$" shellBin)
+	  (match-string 1 shellBin)
+	  shellBin
 	)
       )
     )
+  )
+
+(defun prf/tramp/generate-buffer-name-local-shell (shellBin)
+  (concat "*"
+	  (if (eq shellBin nil)
+	      prf/tramp/default-shell-buffer-name
+	    (prf/tramp/get-shellBin-name shellBin)
+	    )
+	  "*")
   )
 
 (defun prf/tramp/generate-buffer-name-remote-shell (path)
@@ -137,7 +163,7 @@
 
 ;; ------------------------------------------------------------------------
 
-(defun prf/tramp/shell (&optional path shellBin)
+(defun prf/tramp/shell (&optional path shellBin shellArgs)
   "Create a shell at given path, using given shell binary"
   (interactive)
   (with-temp-buffer
@@ -147,17 +173,28 @@
       (cd path)
 
       (setq shellBin (if shellBin shellBin (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin shell-file-name)))
+      (setq shellBin (prf/tramp/path/normalize shellBin))
+      (setq shellBinName (prf/tramp/get-shellBin-name shellBin))
+      (setq explicitShellBinArgsVarName (concat "explicit-" shellBinName "-args"))
+      ;; (message (concat "shellBinPath=" shellBin))
+      ;; (message (concat "shellBinName=" shellBinName))
+      ;; TODO: use shellArgs potentially defined for a given shellBin
+      ;; (setq shellArgs (if shellArgs shellArgs (if (symbol-value (intern explicitShellBinArgsVarName)) (symbol-value (intern explicitShellBinArgsVarName)) (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin-args nil))))
+      (setq shellArgs (if shellArgs shellArgs (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin-args nil)))
 
-      (let (
-	    (current-prefix-arg '(4))
-	    (explicit-shell-file-name shellBin)
-	    (shell-file-name shellBin)
-	    (explicit-bash-args '("-c" "export EMACS=; stty echo; bash"))
-	    (comint-process-echoes t)
-	    (prf/tramp/buffer-name (if prf/tramp/path/is-remote (prf/tramp/generate-buffer-name-remote-shell path) (prf/tramp/generate-buffer-name-local-shell shellBin)))
-	    )
-	;; TODO: name shell according to path and shellBin
-	(shell (generate-new-buffer-name prf/tramp/buffer-name)))
+      (let (current-prefix-arg explicit-shell-file-name shell-file-name
+			       (intern explicitShellBinArgsVarName)
+			       comint-process-echoes prf/tramp/buffer-name)
+	    (setq current-prefix-arg '(4))
+	    (setq explicit-shell-file-name shellBin)
+	    (setq shell-file-name shellBin)
+	    ;; NOTE: not changing SHELL env variable, as global and not buffer-only
+	    (set (intern explicitShellBinArgsVarName) shellArgs)
+	    (setq comint-process-echoes t)
+	    (setq prf/tramp/buffer-name (if prf/tramp/path/is-remote (prf/tramp/generate-buffer-name-remote-shell path) (prf/tramp/generate-buffer-name-local-shell shellBin)))
+
+	    ;; TODO: name shell according to path and shellBin
+	    (shell (generate-new-buffer-name prf/tramp/buffer-name)))
       )
     )
   )
