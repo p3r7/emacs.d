@@ -1,5 +1,15 @@
-
 ;; inspired by setup-cygwin package
+;; not really suitable for a proper cywgin emacs install, more for using WinNT emacs alongside cygwin
+
+(setq
+ cygwin-root "c:/cygwin64/"
+ cygwin-bin (concat cygwin-root "/usr/bin")
+ exec-path (cons cygwin-bin exec-path)
+ )
+(setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
+(setq process-coding-system-alist '(("bash" . undecided-unix)))
+;; (setq w32-quote-process-args ?\")
+
 
 (prf/require-plugin 'cygwin-mount)
 
@@ -34,7 +44,7 @@ loaded as such.)"
 ;; (setq-default buffer-file-coding-system 'undecided-unix)
 
 ;;; Add Cygwin Info pages
-(setq Info-default-directory-list (append Info-default-directory-list (list "c:/cygwin64/usr/info/")))
+(setq Info-default-directory-list (append Info-default-directory-list (list cygwin-root)))
 
 ;;; Use `bash' as the default shell in Emacs.
 ;; (setq exec-path (cons "C:/cygwin/bin" exec-path))
