@@ -1,3 +1,4 @@
+(prf/require-plugin 'noflet)
 
 (when (prf/require-plugin 'multi-scratch nil 'no-error)
   (setq multi-scratch-buffer-name "scratch")
@@ -13,7 +14,8 @@
    ) )
 
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
-  (flet ((process-list ())) ad-do-it))
+  ;; TODO: use
+  (noflet ((process-list ())) ad-do-it))
 
 
 (provide 'init-test1)
