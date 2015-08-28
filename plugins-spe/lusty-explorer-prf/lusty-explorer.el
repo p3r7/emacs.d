@@ -89,7 +89,11 @@
 
 ;; Used only for its faces (for color-theme).
 (require 'dired)
-(require 'noflet)
+;; Backward compatibility: use noflet if present, fallback to (deprecated since 24.3) flet otherwise
+(defalias 'lusty--flet 'flet)
+(when (require 'noflet nil 'noerror)
+  (defalias 'lusty--flet 'noflet))
+
 
 (declaim (optimize (speed 3) (safety 0)))
 
@@ -174,7 +178,6 @@ buffer names in the matches window; 0.10 = %10."
 (defvar lusty--initial-window-config nil)
 (defvar lusty--previous-minibuffer-contents nil)
 (defvar lusty--current-idle-timer nil)
-;; ###PRF
 (if
     (not(boundp 'lusty--completion-ignored-regexps))
     (defvar lusty--completion-ignored-regexps '()) )
@@ -249,7 +252,6 @@ Uses the faces `lusty-directory-face', `lusty-slash-face', and
   (interactive)
   (let ((lusty--active-mode :file-explorer))
     (lusty--define-mode-map)
-    ;; ###PRF
     (let* ((lusty--ignored-extensions-regex
             (concat "\\(?:" (regexp-opt completion-ignored-extensions) "\\)$"))
 	   (lusty--ignored-buffer-regex
@@ -634,7 +636,7 @@ does not begin with '.'."
 ;; already split frame is not a living window.
 (defun lusty-lowest-window ()
   "Return the lowest window on the frame."
-  (noflet ((iterate-non-dedicated-window (start-win direction)
+  (lusty--flet ((iterate-non-dedicated-window (start-win direction)
            ;; Skip dedicated windows when iterating.
            (let ((iterating-p t)
                  (next start-win))
@@ -736,7 +738,7 @@ does not begin with '.'."
 (defun lusty-buffer-list ()
   "Return a list of buffers ordered with those currently visible at the end."
   (let ((visible-buffers '()))
-    (noflet ((add-buffer-maybe (window)
+    (lusty--flet ((add-buffer-maybe (window)
              (let ((b (window-buffer window)))
                (unless (memq b visible-buffers)
                  (push b visible-buffers)))))
