@@ -87,6 +87,8 @@
 ;; - elpa/ : features installed through packages.el
 
 ;; unused
+;; was wanting to have load-path dedicated to inits, but let-bounding is not suffiscient in that case
+;; we migth need a more complete implementation w/ noflet
 (setq prf/load-path load-path)
 
 ;; (if (and (= emacs-major-version 24)
