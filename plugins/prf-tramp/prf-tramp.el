@@ -27,6 +27,7 @@
 
 ;; TODO: add test file exists
 ;; TODO: use e.g. (file-remote-p default-directory)  instead of prf/tramp/path/remote-p
+;; TODO: have a look at http://jalb.fr/index.php?/archives/209-Emacs-+-tramp-+-shell-mode-+-plink-cool-remote-editing-and-shell.html
 
 (require 'tramp)
 (require 'tramp-sh)
@@ -75,6 +76,7 @@
   )
 
 (defun prf/tramp/path/remote-p (path)
+  ;; NOTE: functionality already provided by file-remote-p
   (let ((match (string-match (nth 0 tramp-file-name-structure) path)))
     (if match
 	't
@@ -150,13 +152,15 @@
   )
 
 (defun prf/tramp/generate-buffer-name-remote-shell (path)
-  (setq prf/tramp/path/vec (tramp-dissect-file-name path))
-  (setq prf/tramp/path/method (tramp-file-name-method prf/tramp/path/vec))
-  (setq prf/tramp/path/user (tramp-file-name-user prf/tramp/path/vec))
-  (setq prf/tramp/path/host (tramp-file-name-host prf/tramp/path/vec))
-  (setq prf/tramp/path/localname (tramp-file-name-localname prf/tramp/path/vec))
-
-  (concat "*" prf/tramp/path/user "@" prf/tramp/path/host "*")
+  ;; TODO: put all those var in the let clause
+  (let (vec method user host localname)
+    (setq vec (tramp-dissect-file-name path))
+    (setq method (tramp-file-name-method vec))
+    (setq user (tramp-file-name-method vec))
+    (setq host (tramp-file-name-host vec))
+    (setq localname (tramp-file-name-localname vec))
+    (concat "*" user "@" host "*")
+    )
   )
 
 
@@ -169,9 +173,11 @@
   (with-temp-buffer
     (let ((path (if path path default-directory)))
       ;; TODO: test file exists
-      (setq prf/tramp/path/is-remote (prf/tramp/path/remote-p path))
       (cd path)
+      ;; TODO: use file-remote-p instead
+      (setq prf/tramp/path/is-remote (prf/tramp/path/remote-p path))
 
+      ;; TODO: put all those var in the let clause
       (setq shellBin (if shellBin shellBin (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin shell-file-name)))
       (setq shellBin (prf/tramp/path/normalize shellBin))
       (setq shellBinName (prf/tramp/get-shellBin-name shellBin))
@@ -182,9 +188,7 @@
       ;; (setq shellArgs (if shellArgs shellArgs (if (symbol-value (intern explicitShellBinArgsVarName)) (symbol-value (intern explicitShellBinArgsVarName)) (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin-args nil))))
       (setq shellArgs (if shellArgs shellArgs (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin-args nil)))
 
-      (let (current-prefix-arg explicit-shell-file-name shell-file-name
-			       (intern explicitShellBinArgsVarName)
-			       comint-process-echoes prf/tramp/buffer-name)
+      (let (current-prefix-arg explicit-shell-file-name shell-file-name (intern explicitShellBinArgsVarName) comint-process-echoes prf/tramp/buffer-name)
 	    (setq current-prefix-arg '(4))
 	    (setq explicit-shell-file-name shellBin)
 	    (setq shell-file-name shellBin)
@@ -193,7 +197,6 @@
 	    (setq comint-process-echoes t)
 	    (setq prf/tramp/buffer-name (if prf/tramp/path/is-remote (prf/tramp/generate-buffer-name-remote-shell path) (prf/tramp/generate-buffer-name-local-shell shellBin)))
 
-	    ;; TODO: name shell according to path and shellBin
 	    (shell (generate-new-buffer-name prf/tramp/buffer-name)))
       )
     )
@@ -202,28 +205,25 @@
 (defun prf/tramp/remote-shell (&optional path shellBin)
   "Open a remote shell to a host."
   (interactive)
-  (let ((path (if path path (read-string "Host: "))))
 
-    (setq path (prf/tramp/sanitize-path path))
+  (setq path (if path path (read-string "Host: ")))
+  (setq path (prf/tramp/sanitize-path path))
 
-    (setq prf/tramp/path/method (prf/tramp/get-method-from-path path))
-    (setq prf/tramp/path/user (prf/tramp/get-user-from-path path))
-    (setq prf/tramp/path/host (prf/tramp/get-host-from-path path))
-    (setq prf/tramp/path/localname (prf/tramp/get-localname-from-path path))
 
-    (if (eq (length prf/tramp/path/method) 0)
-	(setq prf/tramp/path/method tramp-default-method))
-    (if (eq (length prf/tramp/path/user) 0)
-	(setq prf/tramp/path/user tramp-default-user))
-    (if (eq (length prf/tramp/path/localname) 0)
-	(setq prf/tramp/path/localname "/"))
+  (let (method user host localname)
+    (setq method (prf/tramp/get-method-from-path path))
+    (setq user (prf/tramp/get-user-from-path path))
+    (setq host (prf/tramp/get-host-from-path path))
+    (setq localname (prf/tramp/get-localname-from-path path))
 
-    (setq path
-	  (tramp-make-tramp-file-name
-	   prf/tramp/path/method
-	   prf/tramp/path/user
-	   prf/tramp/path/host
-	   prf/tramp/path/localname))
+    (if (eq (length method) 0)
+	(setq method tramp-default-method))
+    (if (eq (length user) 0)
+	(setq user tramp-default-user))
+    (if (eq (length localname) 0)
+	(setq localname "/"))
+
+    (setq path (tramp-make-tramp-file-name method user host localname))
     (prf/tramp/shell path)
     )
   )
