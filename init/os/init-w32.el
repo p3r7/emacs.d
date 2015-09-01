@@ -49,6 +49,19 @@
 
 
 ;; ------------------------------------------------------------------------
+;; CYGWIN
+
+(setq cygwin-root (executable-find "cygpath"))
+(if cygwin-root
+    (progn
+      (setq cygwin-root (replace-regexp-in-string "bin/cygpath.exe" "" cygwin-root))
+      (require 'init-cygwin-integration)
+      )
+  )
+
+
+
+;; ------------------------------------------------------------------------
 ;; KEYS
 
 (setq w32-pass-lwindow-to-system nil

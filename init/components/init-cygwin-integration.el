@@ -2,8 +2,9 @@
 ;; not really suitable for a proper cywgin emacs install, more for using WinNT emacs alongside cygwin
 ;; TODO: also analyze this config http://stackoverflow.com/a/2078367
 
+(defvar cygwin-root "c:/cygwin64/")
+
 (setq
- cygwin-root "c:/cygwin64/"
  cygwin-bin (concat cygwin-root "/usr/bin")
  exec-path (cons cygwin-bin exec-path)
  Info-default-directory-list (append Info-default-directory-list (list cygwin-root))
