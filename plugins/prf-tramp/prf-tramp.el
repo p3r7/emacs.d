@@ -27,6 +27,7 @@
 
 ;; TODO: add test file exists
 ;; TODO: use e.g. (file-remote-p default-directory)  instead of prf/tramp/path/remote-p
+;; TODO: have a look at http://www.emacswiki.org/emacs/setup-cygwin.el
 ;; TODO: have a look at http://jalb.fr/index.php?/archives/209-Emacs-+-tramp-+-shell-mode-+-plink-cool-remote-editing-and-shell.html
 
 (require 'tramp)
@@ -40,7 +41,8 @@
 (defvar prf/tramp/default-local-shell-bin shell-file-name)
 (defvar prf/tramp/default-remote-shell-bin "/bin/bash")
 (defvar prf/tramp/default-remote-shell-bin-args '("-c" "export EMACS=; stty echo; bash"))
-(defvar prf/tramp/local-shell-bin/bash nil)
+(defvar prf/tramp/local-shell-bin/cygwin-bash nil)
+(defvar prf/tramp/local-shell-bin/git-bash nil)
 (defvar prf/tramp/local-shell-bin/cmd nil)
 (defvar prf/tramp/default-shell-buffer-name "*shell*")
 
@@ -82,7 +84,7 @@
 	't
       nil
       )
-  ))
+    ))
 
 (defun prf/tramp/get-method-from-path (path)
   (if (string-match "^/\\(.*\\):" path)
@@ -97,7 +99,7 @@
       (match-string 2 path)
     (if (string-match "\\(.*\\)@" path)
 	(match-string 1 path)
-	nil
+      nil
       )
     )
   )
@@ -136,7 +138,7 @@
 	(match-string 2 shellBin)
       (if (string-match "^\\(.*\\)\\.\\(.*\\)$" shellBin)
 	  (match-string 1 shellBin)
-	  shellBin
+	shellBin
 	)
       )
     )
@@ -156,7 +158,7 @@
   (let (vec method user host localname)
     (setq vec (tramp-dissect-file-name path))
     (setq method (tramp-file-name-method vec))
-    (setq user (tramp-file-name-method vec))
+    (setq user (tramp-file-name-user vec))
     (setq host (tramp-file-name-host vec))
     (setq localname (tramp-file-name-localname vec))
     (concat "*" user "@" host "*")
@@ -167,37 +169,36 @@
 
 ;; ------------------------------------------------------------------------
 
-(defun prf/tramp/shell (&optional path shellBin shellArgs)
+(defun prf/tramp/shell (&optional path shellBin shellArgs shellCommandSwitch w32ArgQuote)
   "Create a shell at given path, using given shell binary"
   (interactive)
   (with-temp-buffer
-    (let ((path (if path path default-directory)))
+    (let (prf/tramp/isRemote prf/tramp/shellBinName prf/tramp/explicitShellBinArgsVarName prf/tramp/buffer-name)
+
       ;; TODO: test file exists
+      (setq path (if path path default-directory))
       (cd path)
-      ;; TODO: use file-remote-p instead
-      (setq prf/tramp/path/is-remote (prf/tramp/path/remote-p path))
 
-      ;; TODO: put all those var in the let clause
-      (setq shellBin (if shellBin shellBin (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin shell-file-name)))
+      (setq prf/tramp/isRemote (prf/tramp/path/remote-p path))
+      (setq shellBin (if shellBin shellBin (if prf/tramp/isRemote prf/tramp/default-remote-shell-bin shell-file-name)))
       (setq shellBin (prf/tramp/path/normalize shellBin))
-      (setq shellBinName (prf/tramp/get-shellBin-name shellBin))
-      (setq explicitShellBinArgsVarName (concat "explicit-" shellBinName "-args"))
-      ;; (message (concat "shellBinPath=" shellBin))
-      ;; (message (concat "shellBinName=" shellBinName))
-      ;; TODO: use shellArgs potentially defined for a given shellBin
-      ;; (setq shellArgs (if shellArgs shellArgs (if (symbol-value (intern explicitShellBinArgsVarName)) (symbol-value (intern explicitShellBinArgsVarName)) (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin-args nil))))
-      (setq shellArgs (if shellArgs shellArgs (if prf/tramp/path/is-remote prf/tramp/default-remote-shell-bin-args nil)))
+      (setq prf/tramp/shellBinName (prf/tramp/get-shellBin-name shellBin))
+      (setq prf/tramp/explicitShellBinArgsVarName (concat "explicit-" prf/tramp/shellBinName "-args"))
+      (setq prf/tramp/buffer-name (if prf/tramp/isRemote (prf/tramp/generate-buffer-name-remote-shell path) (prf/tramp/generate-buffer-name-local-shell shellBin)))
+      (setq shellArgs (if shellArgs shellArgs (if prf/tramp/isRemote prf/tramp/default-remote-shell-bin-args nil)))
 
-      (let (current-prefix-arg explicit-shell-file-name shell-file-name (intern explicitShellBinArgsVarName) comint-process-echoes prf/tramp/buffer-name)
-	    (setq current-prefix-arg '(4))
-	    (setq explicit-shell-file-name shellBin)
-	    (setq shell-file-name shellBin)
-	    ;; NOTE: not changing SHELL env variable, as global and not buffer-only
-	    (set (intern explicitShellBinArgsVarName) shellArgs)
-	    (setq comint-process-echoes t)
-	    (setq prf/tramp/buffer-name (if prf/tramp/path/is-remote (prf/tramp/generate-buffer-name-remote-shell path) (prf/tramp/generate-buffer-name-local-shell shellBin)))
-
-	    (shell (generate-new-buffer-name prf/tramp/buffer-name)))
+      (let (current-prefix-arg explicit-shell-file-name shell-file-name shell-command-switch comint-process-echoes (intern prf/tramp/explicitShellBinArgsVarName))
+	(setq current-prefix-arg '(4))
+	(setq explicit-shell-file-name shellBin)
+	(setq shell-file-name shellBin)
+	(setq comint-process-echoes t)
+	(if shellArgs
+	    (set (intern prf/tramp/explicitShellBinArgsVarName) shellArgs))
+	(if shellCommandSwitch
+	    (setq shell-command-switch shellCommandSwitch))
+	(if w32ArgQuote
+	    (setq w32-quote-process-args w32ArgQuote))
+	(shell (generate-new-buffer-name prf/tramp/buffer-name)))
       )
     )
   )
@@ -207,7 +208,7 @@
   (interactive)
 
   (setq path (if path path (read-string "Host: ")))
-  (setq path (prf/tramp/sanitize-path path))
+    (setq path (prf/tramp/sanitize-path path))
 
 
   (let (method user host localname)

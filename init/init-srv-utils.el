@@ -15,8 +15,25 @@
 ;; NB: solves copy & mv, but potentially crashes find-file
 
 (require 'prf-tramp)
-(setq prf/tramp/local-shell-bin/cmd "C:/Program Files/emacs/emacs-24.5/libexec/emacs/24.5/x86_64-w64-mingw32/cmdproxy.exe")
-(setq prf/tramp/local-shell-bin/bash "C:/Program Files (x86)/Git/bin/bash.exe")
+;; TODO: use http://www.khngai.com/emacs/cygwin.php
+(setq prf/tramp/local-shell-bin/cmd shell-file-name)
+(setq prf/tramp/local-shell-bin/git-bash "C:/Program Files (x86)/Git/bin/bash.exe")
+(setq prf/tramp/local-shell-bin/cygwin-bash "C:/cygwin64/usr/bin/bash.exe")
+(defun prf/tramp/shell/cmd (&optional path)
+  (interactive)
+  (prf/tramp/shell path prf/tramp/local-shell-bin/cmd)
+  )
+(defun prf/tramp/shell/git-bash (&optional path)
+  (interactive)
+  ;; (prf/tramp/shell path prf/tramp/local-shell-bin/bash '("-c" "export EMACS=; bash"))
+  (prf/tramp/shell path prf/tramp/local-shell-bin/git-bash)
+  )
+(defun prf/tramp/shell/cygwin-bash (&optional path)
+  (interactive)
+  (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash '("--login" "-i" "-c" (concat "env HOME=\"/home/" (getenv "USERNAME") "/\"")) ?\")
+  )
+
+
 (prf/install-package 'hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
 (require 'syslog-mode)
@@ -56,8 +73,13 @@
 
 ;; (setq tramp-verbose 6)
 
-(when (and (not (windows-nt-p))
-	   (prf/require-plugin 'vagrant-tramp))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/vagrant-tramp-20140709.814"))
+(when (and
+       't
+       ;;(not (windows-nt-p))
+       ;; (prf/require-plugin 'vagrant-tramp)
+       (require 'vagrant-tramp)
+       )
  (eval-after-load 'tramp
    '(vagrant-tramp-enable))
  )
@@ -258,7 +280,7 @@
        "server utils"
        ("s" prf/tramp/shell "shell")
        ("r" prf/tramp/remote-shell "remote shell")
-       ("a" prf/tramp/shell/bash "alt local shell")
+       ("a" prf/tramp/shell/git-bash "alt local shell")
        ("#" local-root-shell "local root shell")
        ("q" nil "cancel"))
 
