@@ -2,15 +2,15 @@
 ;; not really suitable for a proper cywgin emacs install, more for using WinNT emacs alongside cygwin
 ;; TODO: also analyze this config http://stackoverflow.com/a/2078367
 
-(defvar cygwin-root "c:/cygwin64/")
+(defvar cygwin-root "c:/cygwin64")
 
 (setq
  cygwin-bin (concat cygwin-root "/usr/bin")
  exec-path (cons cygwin-bin exec-path)
  Info-default-directory-list (append Info-default-directory-list (list cygwin-root))
  )
-(setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
-(setq process-coding-system-alist '(("bash" . undecided-unix)))
+;; (setenv "PATH" (concat cygwin-bin ";" (getenv "PATH")))
+;; (setq process-coding-system-alist '(("bash" . undecided-unix)))
 ;; (setq w32-quote-process-args ?\")
 
 ;;; Use Unix-style line endings.
