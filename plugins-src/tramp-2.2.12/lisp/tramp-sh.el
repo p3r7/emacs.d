@@ -26,6 +26,9 @@
 
 ;;; Code:
 
+;; PATCHED according to https://lists.nongnu.org/archive/html/bug-gnu-emacs/2015-10/msg00563.html
+;; search for #PATCH BUG 21562
+
 (require 'tramp)
 
 ;; Pacify byte-compiler.
@@ -2353,16 +2356,19 @@ The method used must be an out-of-band method."
 	(setq source (if t1
 			 (tramp-make-copy-program-file-name v)
 		       (shell-quote-argument filename))
-	      target (funcall
-		      (if (and (file-directory-p filename)
-			       (string-equal
-				(file-name-nondirectory filename)
-				(file-name-nondirectory newname)))
-			  'file-name-directory
-			'identity)
-		      (if t2
-			  (tramp-make-copy-program-file-name v)
-			(shell-quote-argument newname))))
+	      ;; #PATCH BUG 21562
+	      target (if t2
+			 (tramp-make-copy-program-file-name v)
+		       (shell-quote-argument
+			(funcall
+			 (if (and (file-directory-p filename)
+				  (string-equal
+				   (file-name-nondirectory filename)
+				   (file-name-nondirectory newname)))
+			     'file-name-directory
+			   'identity)
+			 newname))))
+
 
 	;; Check for host and port number.  We cannot use
 	;; `tramp-file-name-port', because this returns also
