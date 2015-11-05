@@ -51,10 +51,11 @@
 ;; ------------------------------------------------------------------------
 ;; CYGWIN
 
-(setq cygwin-root (executable-find "cygpath"))
-(if cygwin-root
+
+
+(if (executable-find "cygpath")
     (progn
-      (setq cygwin-root (replace-regexp-in-string "bin/cygpath.exe" "" cygwin-root))
+      (setq cygwin-root (replace-regexp-in-string "bin/cygpath.exe" "" (executable-find "cygpath")))
       (require 'init-cygwin-integration)
       )
   )
