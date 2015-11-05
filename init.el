@@ -9,6 +9,8 @@
 ;;   - emacs-related config that HAS TO be done 1st
 ;; { Packages }---------------------------------------------------------[[#P]]
 ;;   - activate packages.el (aka ELPA)
+;; { Custom Utils }----------------------------------------------------[[<#U]]
+;;   - lib of custom functions to ease elisp dev
 ;; { OS Specific Stuff }------------------------------------------------[[#O]]
 ;;   - windows/linux specific customizations
 ;; { Test Bench Start }------------------------------------------------[[#?s]]
@@ -66,13 +68,6 @@
 ;; (require 'async)
 ;; (require 'async-file)
 
-;; alternative to convert-standard-filename
-(defun prf/system/get-path-system-format (path)
-  (if (windows-nt-p)
-      (subst-char-in-string ?/ ?\\ path)
-    (path)
-  ) )
-
 
 ;; { Packages }--------------------------------------------------------[[<#P]]
 
@@ -127,6 +122,11 @@
 
 
 
+;; { Custom Utils }----------------------------------------------------[[<#U]]
+
+(require 'prf-string)
+
+
 ;; { OS Specific Stuff }-----------------------------------------------[[<#O]]
 
 
@@ -136,7 +136,6 @@
 ;; { Test Bench Start }-----------------------------------------------[[<#?s]]
 
 (require 'init-test1)
-
 
 
 ;; { Appearance }------------------------------------------------------[[<#A]]
