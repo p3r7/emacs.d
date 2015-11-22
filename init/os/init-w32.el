@@ -95,7 +95,12 @@
  key-windmove-left  "<C-f15>"
  key-windmove-righ  "<S-f15>"
  key-windmove-up    "<M-f15>"
- key-windmove-down  "<s-f15>"
+ key-windmove-down  "<C-f17>"
+
+ prf/key-split-window-vertically "<S-f17>"
+ prf/key-split-window-horizontally "<M-f17>"
+ prf/key-delete-other-windows "<C-f19>"
+ prf/key-delete-window "<M-f19>"
  )
 
 
@@ -104,11 +109,13 @@
 
 ;; AutoHotKey
 (defun edit-dot-ahk () (interactive)
-       (find-file "c:/Users/jordan.besly/Documents/AutoHotkey.ahk"))
+       (find-file (concat "c:/Users/" (getenv "USERNAME") "/Documents/AutoHotkey.ahk")))
 ;; (global-set-key (kbd "C-<f3>") 'edit-dot-ahk)
 
+
+
 (defun edit-dot-dosrc () (interactive)
-       (find-file "c:/Users/jordan.besly/Documents/dosrc.bat"))
+       (find-file (concat "c:/Users/" (getenv "USERNAME") "/Documents/dosrc.bat")))
 
 
 ;; ------------------------------------------------------------------------
