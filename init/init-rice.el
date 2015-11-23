@@ -23,10 +23,12 @@
 (prf/install-package 'gotham-theme)
 (prf/install-package 'ample-theme)
 (prf/install-package 'plan9-theme)
+(prf/install-package 'dracula-theme)
 
 (defvar prf/theme/list/practical
   (list
    'comidia-mod
+   'dracula
    'light-blue
    ))
 
