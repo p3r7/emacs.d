@@ -91,18 +91,7 @@
 
 ;; good to use: f15, f17, f19, f21
 
-(setq
- key-windmove-left  "<C-f15>"
- key-windmove-righ  "<S-f15>"
- key-windmove-up    "<M-f15>"
- key-windmove-down  "<C-f17>"
-
- prf/key-split-window-vertically "<S-f17>"
- prf/key-split-window-horizontally "<M-f17>"
- prf/key-delete-other-windows "<C-f19>"
- prf/key-delete-window "<M-f19>"
- )
-
+;; NOTE: moved this config inside host config, as very dependant on keyboard / Windows version
 
 ;; ------------------------------------------------------------------------
 ;; CONFIG FILES
