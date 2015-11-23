@@ -10,6 +10,7 @@
 (setq
  ;; cygwin-bin (concat cygwin-root "/usr/bin")
  cygwin-bin (concat cygwin-root "/bin")
+ cygwin-local-bin (concat cygwin-root "/usr/local/bin")
  Info-default-directory-list (append Info-default-directory-list (list cygwin-root))
  )
 
@@ -22,8 +23,12 @@
 
 ;; exec-path enrichment
 
-(setenv "PATH" (concat (prf/system/get-path-system-format cygwin-bin) ";" (getenv "PATH")))
+(setenv "PATH" (concat
+		(prf/system/get-path-system-format cygwin-local-bin) ";"
+		(prf/system/get-path-system-format cygwin-bin) ";"
+		(getenv "PATH")))
 (setq exec-path (cons cygwin-bin exec-path))
+(setq exec-path (cons cygwin-local-bin exec-path))
 
 
 ;; -------------------------------------------------------------------------
@@ -84,5 +89,19 @@ loaded as such.)"
             (find-alternate-file (match-string 1))))
       )))
 (add-hook 'find-file-hooks 'follow-cygwin-symlink)
+
+;; -------------------------------------------------------------------------
+
+;; cygwin pty compatibility layer
+
+(if (executable-find "fakecygpty")
+    (progn
+      (require 'fakecygpty)
+      (fakecygpty-activate)
+      ))
+
+
+
+;; -------------------------------------------------------------------------
 
 (provide 'init-cygwin-integration)

@@ -18,7 +18,7 @@
 ;; TODO: use http://www.khngai.com/emacs/cygwin.php
 (setq prf/tramp/local-shell-bin/cmd shell-file-name)
 (setq prf/tramp/local-shell-bin/git-bash "C:/Program Files (x86)/Git/bin/bash.exe")
-(setq prf/tramp/local-shell-bin/cygwin-bash "C:/cygwin64/usr/bin/bash.exe")
+(setq prf/tramp/local-shell-bin/cygwin-bash "C:/cygwin64/bin/bash.exe")
 (defun prf/tramp/shell/cmd (&optional path)
   (interactive)
   (prf/tramp/shell path prf/tramp/local-shell-bin/cmd)
@@ -30,7 +30,9 @@
   )
 (defun prf/tramp/shell/cygwin-bash (&optional path)
   (interactive)
-  (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash '("--login" "-i" "-c" (concat "env HOME=\"/home/" (getenv "USERNAME") "/\"")) ?\")
+  (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
+  ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash '((concat "env HOME=\"/home/" (getenv "USERNAME") "/\"")) )
+  ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash '("--login" "-i" "-c" (concat "env HOME=\"/home/" (getenv "USERNAME") "/\"")) ?\")
   )
 
 
