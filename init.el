@@ -217,6 +217,8 @@
 (require 'init-bookmarks)
 (require 'init-deft)
 
+(require 'init-magit)
+
 
 
 ;; Hydras ------------------------------------------------------------
