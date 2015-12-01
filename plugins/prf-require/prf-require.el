@@ -21,14 +21,6 @@
 ;; To install, copy this file somewhere in your load-path and add this line to
 ;; your .emacs:
 ;;
-;;    (require 'prf-tramp)
-
-;;; Commentary:
-;;  -----------
-;;
-;; To install, copy this file somewhere in your load-path and add this line to
-;; your .emacs:
-;;
 ;;    (require 'prf-require)
 
 ;;; Code:
