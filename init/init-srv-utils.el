@@ -30,9 +30,8 @@
   )
 (defun prf/tramp/shell/cygwin-bash (&optional path)
   (interactive)
-  (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
-  ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash '((concat "env HOME=\"/home/" (getenv "USERNAME") "/\"")) )
-  ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash '("--login" "-i" "-c" (concat "env HOME=\"/home/" (getenv "USERNAME") "/\"")) ?\")
+  ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
+  (prf/tramp/shell "c:/Users/perf/AppData/Roaming/.emacs.d/init/" prf/tramp/local-shell-bin/cygwin-bash (list "--init-file" (concat "/home/" (getenv "USERNAME") "/.bashrc")))
   )
 
 
