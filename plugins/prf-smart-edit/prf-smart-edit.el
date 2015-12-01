@@ -1,5 +1,19 @@
 ;;; prf-smart-edit.el --- drastic changes of emacs edit behaviour
 
+;; Copyright (C) 2015 Worney Renth <contact.perf@gmail.com>
+;;
+;; Version: 20130407.1256
+;; X-Original-Version: 2.5
+;; Created: July 27, 2010
+;; Keywords: convenience, files, matching
+;; Compatibility: GNU Emacs 22, 23, and 24
+;;
+;; Permission is hereby granted to use and distribute this code, with or
+;; without modifications, provided that this copyright notice is copied with
+;; it. Like anything else that's free, lusty-explorer.el is provided *as is*
+;; and comes with no warranty of any kind, either expressed or implied. In no
+;; event will the copyright holder be liable for any damages resulting from
+;; the use of this software.
 
 ;; Future improvements:
 ;; - indent when pasting
