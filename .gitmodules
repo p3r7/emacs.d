@@ -1,3 +1,6 @@
 [submodule "plugins/fakecygpty"]
 	path = plugins/fakecygpty
 	url = https://github.com/d5884/fakecygpty
+[submodule "plugins/prf-theme"]
+	path = plugins/prf-theme
+	url = https://github.com/p3r7/prf-theme
