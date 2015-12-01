@@ -4,3 +4,6 @@
 [submodule "plugins/prf-theme"]
 	path = plugins/prf-theme
 	url = https://github.com/p3r7/prf-theme
+[submodule "plugins/prf-require"]
+	path = plugins/prf-require
+	url = https://github.com/p3r7/prf-require
