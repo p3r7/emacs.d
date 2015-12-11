@@ -10,3 +10,9 @@
 [submodule "plugins/prf-tramp"]
 	path = plugins/prf-tramp
 	url = https://github.com/p3r7/prf-tramp
+[submodule "plugins/prf-smart-edit"]
+	path = plugins/prf-smart-edit
+	url = https://github.com/p3r7/prf-smart-edit
+[submodule "plugins/prf-string"]
+	path = plugins/prf-string
+	url = https://github.com/p3r7/prf-string
