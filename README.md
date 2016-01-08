@@ -2,7 +2,7 @@
 
 A moderately simple emacs config.
 
-## Installaton
+## Installation
 
 As submodules are present, you'd need a recursive clone:
 
