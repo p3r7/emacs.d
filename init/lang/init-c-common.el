@@ -1,4 +1,6 @@
 
+(boundp 'hideshowvis-minor-mode)
+
 (add-hook 'c-mode-common-hook
 	  (lambda()
 	    ;; Indent style
@@ -15,12 +17,13 @@
 	    ;; (require 'dtrt-indent)
 	    ;; (dtrt-indent-mode t)
 	    ;; Block of code collapsing
-	    (local-set-key (kbd "C-c <right>") 'hs-show-block)
-	    (local-set-key (kbd "C-c <left>")  'hs-hide-block)
-	    (local-set-key (kbd "C-c <up>")    'hs-hide-all)
-	    (local-set-key (kbd "C-c <down>")  'hs-show-all)
-	    (hs-minor-mode t)
-	    (hideshowvis-minor-mode t)
+	    (when (boundp 'hideshowvis-minor-mode)
+	      (local-set-key (kbd "C-c <right>") 'hs-show-block)
+	      (local-set-key (kbd "C-c <left>")  'hs-hide-block)
+	      (local-set-key (kbd "C-c <up>")    'hs-hide-all)
+	      (local-set-key (kbd "C-c <down>")  'hs-show-all)
+	      (hs-minor-mode t)
+	      (hideshowvis-minor-mode t))
 	    ;; Switch between header/source
 	    (local-set-key  (kbd "C-c o") 'ff-find-other-file)
 	    ;; C-d for deleting
