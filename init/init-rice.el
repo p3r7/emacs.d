@@ -27,9 +27,10 @@
 
 (defvar prf/theme/list/practical
   (list
+   'dracula-mod
    'comidia-mod
-   'dracula
-   'light-blue
+   ;; 'gotham
+   ;;'light-blue
    ))
 
 (defvar prf/theme/list/dark
@@ -112,5 +113,14 @@
   )
 
 
+;; -------------------------------------------------------------------------
+
+;; visual enhancements
+
+(when (prf/require-plugin 'rainbow-mode nil 'noerror)
+  (defun prf/rainbow-mode-prog-mode-hook ()
+    (rainbow-mode 1))
+  (add-hook 'prog-mode-hook 'prf/rainbow-mode-prog-mode-hook)
+  )
 
 (provide 'init-rice)
