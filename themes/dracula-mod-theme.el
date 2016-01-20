@@ -66,24 +66,35 @@
    `(font-lock-warning-face ((,class (:foreground ,warning :background ,bg2))))
    `(region ((,class (:background ,str :foreground ,bg1))))
    `(highlight ((,class (:foreground ,fg3 :background ,bg3))))
-   `(hl-line ((,class (:background  ,nil))))
+   ;`(hl-line ((,class (:background  ,highlight))))
    `(fringe ((,class (:background ,bg1 :foreground ,fg4))))
    `(cursor ((,class (:background ,fg3))))
    `(show-paren-match-face ((,class (:background ,warning))))
    `(isearch ((,class (:bold t :foreground ,warning :background ,bg3))))
-   `(mode-line ((,class (:foreground nil :background ,bg3 :box ,bg3))))
+   ;; `(mode-line ((,class (:foreground nil :background ,bg3 :box ,bg3))))
+   `(mode-line ((,class (:foreground ,keyword :background ,bg3 :box ,bg3))))
    `(mode-line-inactive ((,class (:foreground ,fg4 :background ,bg2 :box ,bg2))))
    `(vertical-border ((,class (:foreground ,bg2))))
    `(minibuffer-prompt ((,class (:bold t :foreground ,keyword))))
    `(default-italic ((,class (:italic t))))
    `(link ((,class (:foreground ,const :underline t))))
    `(linum ((,class (:slant italic :foreground ,bg4 :background ,bg1))))
+   `(ffap ((,class (:foreground ,fg4))))
+   `(warning ((,class (:foreground ,warning))))
+   `(info-quoted-name ((,class (:foreground ,builtin))))
+   `(info-string ((,class (:foreground ,str))))
+   `(icompletep-determined ((,class :foreground ,builtin)))
+   `(slime-repl-inputed-output-face ((,class (:foreground ,type))))
+   `(trailing-whitespace ((,class :foreground nil :background ,warning)))
+   `(lazy-highlight ((,class (:foreground ,fg2 :background ,bg3))))
+
+   ;; org-mode
    `(org-code ((,class (:foreground ,fg2))))
    `(org-hide ((,class (:foreground ,fg4))))
-   `(org-level-1 ((,class (:bold t :foreground ,fg2 :height 1.1))))
-   `(org-level-2 ((,class (:bold nil :foreground ,fg3))))
-   `(org-level-3 ((,class (:bold t :foreground ,fg4))))
-   `(org-level-4 ((,class (:bold nil :foreground ,bg4))))
+   `(org-level-1 ((,class (:bold t :foreground ,rainbow-2 :height 1.1))))
+   `(org-level-2 ((,class (:bold nil :foreground ,rainbow-3))))
+   `(org-level-3 ((,class (:bold t :foreground ,rainbow-4))))
+   `(org-level-4 ((,class (:bold nil :foreground ,rainbow-5))))
    `(org-date ((,class (:underline t :foreground ,var) )))
    `(org-footnote  ((,class (:underline t :foreground ,fg4))))
    `(org-link ((,class (:underline t :foreground ,type ))))
@@ -104,14 +115,20 @@
    `(org-ellipsis ((,class (:foreground ,builtin))))
    `(org-verbatim ((,class (:foreground ,fg4))))
    `(org-document-info-keyword ((,class (:foreground ,func))))
+   `(org-sexp-date ((,class (:foreground ,fg4))))
+
+   ;; latex
    `(font-latex-bold-face ((,class (:foreground ,type))))
    `(font-latex-italic-face ((,class (:foreground ,key3 :italic t))))
    `(font-latex-string-face ((,class (:foreground ,str))))
    `(font-latex-match-reference-keywords ((,class (:foreground ,const))))
    `(font-latex-match-variable-keywords ((,class (:foreground ,var))))
+
+   ;; IDO
    `(ido-only-match ((,class (:foreground ,warning))))
-   `(org-sexp-date ((,class (:foreground ,fg4))))
    `(ido-first-match ((,class (:foreground ,keyword :bold t))))
+
+   ;; mail
    `(gnus-header-content ((,class (:foreground ,keyword))))
    `(gnus-header-from ((,class (:foreground ,var))))
    `(gnus-header-name ((,class (:foreground ,type))))
@@ -120,7 +137,8 @@
    `(mu4e-cited-1-face ((,class (:foreground ,fg2))))
    `(mu4e-cited-7-face ((,class (:foreground ,fg3))))
    `(mu4e-header-marks-face ((,class (:foreground ,type))))
-   `(ffap ((,class (:foreground ,fg4))))
+
+   ;; javascript
    `(js2-private-function-call ((,class (:foreground ,const))))
    `(js2-jsdoc-html-tag-delimiter ((,class (:foreground ,str))))
    `(js2-jsdoc-html-tag-name ((,class (:foreground ,key2))))
@@ -134,17 +152,14 @@
    `(js3-function-param-face ((,class (:foreground ,key3))))
    `(js3-jsdoc-tag-face ((,class (:foreground ,keyword))))
    `(js3-instance-member-face ((,class (:foreground ,const))))
-   `(warning ((,class (:foreground ,warning))))
-   `(ac-completion-face ((,class (:underline t :foreground ,keyword))))
-   `(info-quoted-name ((,class (:foreground ,builtin))))
-   `(info-string ((,class (:foreground ,str))))
-   `(icompletep-determined ((,class :foreground ,builtin)))
+
+   ;; undo-tree
    `(undo-tree-visualizer-current-face ((,class :foreground ,builtin)))
    `(undo-tree-visualizer-default-face ((,class :foreground ,fg2)))
    `(undo-tree-visualizer-unmodified-face ((,class :foreground ,var)))
    `(undo-tree-visualizer-register-face ((,class :foreground ,type)))
-   `(slime-repl-inputed-output-face ((,class (:foreground ,type))))
-   `(trailing-whitespace ((,class :foreground nil :background ,warning)))
+
+   ;; rainbow-delimiters
    `(rainbow-delimiters-depth-1-face ((,class :foreground ,rainbow-1)))
    `(rainbow-delimiters-depth-2-face ((,class :foreground ,rainbow-2)))
    `(rainbow-delimiters-depth-3-face ((,class :foreground ,rainbow-3)))
@@ -153,6 +168,9 @@
    `(rainbow-delimiters-depth-6-face ((,class :foreground ,rainbow-6)))
    `(rainbow-delimiters-depth-7-face ((,class :foreground ,rainbow-7)))
    `(rainbow-delimiters-depth-8-face ((,class :foreground ,rainbow-8)))
+   `(rainbow-delimiters-unmatched-face ((,class :foreground ,warning)))
+
+   ;; MAGIT
    `(magit-item-highlight ((,class :background ,bg3)))
    `(magit-section-heading        ((,class (:foreground ,keyword :weight bold))))
    `(magit-hunk-heading           ((,class (:background ,bg3))))
@@ -167,7 +185,8 @@
    `(magit-log-author ((,class (:foreground ,fg3))))
    `(magit-hash ((,class (:foreground ,fg2))))
    `(magit-diff-file-header ((,class (:foreground ,fg2 :background ,bg3))))
-   `(lazy-highlight ((,class (:foreground ,fg2 :background ,bg3))))
+
+   ;; term
    `(term ((,class (:foreground ,fg1 :background ,bg1))))
    `(term-color-black ((,class (:foreground ,bg3 :background ,bg3))))
    `(term-color-blue ((,class (:foreground ,func :background ,func))))
@@ -177,7 +196,8 @@
    `(term-color-magenta ((,class (:foreground ,builtin :background ,builtin))))
    `(term-color-cyan ((,class (:foreground ,str :background ,str))))
    `(term-color-white ((,class (:foreground ,fg2 :background ,fg2))))
-   `(rainbow-delimiters-unmatched-face ((,class :foreground ,warning)))
+
+   ;; helm
    `(helm-header ((,class (:foreground ,fg2 :background ,bg1 :underline nil :box nil))))
    `(helm-source-header ((,class (:foreground ,keyword :background ,bg1 :underline nil :weight bold))))
    `(helm-selection ((,class (:background ,bg2 :underline nil))))
@@ -206,6 +226,11 @@
    `(helm-moccur-buffer ((,class (:foreground ,func :background ,bg1))))
    `(helm-source-go-package-godoc-description ((,class (:foreground ,str))))
    `(helm-bookmark-w3m ((,class (:foreground ,type))))
+
+   ;; auto-complete
+   `(ac-completion-face ((,class (:underline t :foreground ,keyword))))
+
+   ;; company
    `(company-echo-common ((,class (:foreground ,bg1 :background ,fg1))))
    `(company-preview ((,class (:background ,bg1 :foreground ,key2))))
    `(company-preview-common ((,class (:foreground ,bg2 :foreground ,fg3))))
@@ -219,6 +244,8 @@
    `(company-tooltip-mouse ((,class (:inherit highlight))))
    `(company-tooltip-selection ((,class (:background ,bg3 :foreground ,fg3))))
    `(company-template-field ((,class (:inherit region))))
+
+   ;; web-mode
    `(web-mode-builtin-face ((,class (:inherit ,font-lock-builtin-face))))
    `(web-mode-comment-face ((,class (:inherit ,font-lock-comment-face))))
    `(web-mode-constant-face ((,class (:inherit ,font-lock-constant-face))))
@@ -231,12 +258,16 @@
    `(web-mode-html-attr-value-face ((,class (:foreground ,keyword))))
    `(web-mode-warning-face ((,class (:inherit ,font-lock-warning-face))))
    `(web-mode-html-tag-face ((,class (:foreground ,builtin))))
+
+   ;; java
    `(jde-java-font-lock-package-face ((t (:foreground ,var))))
    `(jde-java-font-lock-public-face ((t (:foreground ,keyword))))
    `(jde-java-font-lock-private-face ((t (:foreground ,keyword))))
    `(jde-java-font-lock-constant-face ((t (:foreground ,const))))
    `(jde-java-font-lock-modifier-face ((t (:foreground ,key3))))
    `(jde-java-font-lock-number-face ((t (:foreground ,var))))
+
+   ;; ruby
    `(enh-ruby-op-face ((,class (:foreground ,keyword))))
    `(enh-ruby-heredoc-delimiter-face ((,class (:foreground ,str))))
    `(enh-ruby-string-delimiter-face ((,class (:foreground ,str))))
