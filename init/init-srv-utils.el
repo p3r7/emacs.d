@@ -74,16 +74,13 @@
 
 ;; (setq tramp-verbose 6)
 
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/vagrant-tramp-20140709.814"))
-(when (and
-       't
-       ;;(not (windows-nt-p))
-       ;; (prf/require-plugin 'vagrant-tramp)
-       (require 'vagrant-tramp)
-       )
- (eval-after-load 'tramp
-   '(vagrant-tramp-enable))
- )
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/vagrant-tramp-20140709.814"))
+;; (when
+    ;; (prf/require-plugin 'vagrant-tramp)
+  ;; (require 'vagrant-tramp)
+  ;; (eval-after-load 'tramp
+    ;; '(vagrant-tramp-enable))
+  ;; )
 
 (defun prf/tramp/convert-remoteFilePath-currentSrv (currentFilePath remoteFilePath)
   "Format a path using current server address prefix and remote server file location"
