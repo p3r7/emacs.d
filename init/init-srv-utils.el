@@ -25,7 +25,6 @@
   )
 (defun prf/tramp/shell/git-bash (&optional path)
   (interactive)
-  ;; (prf/tramp/shell path prf/tramp/local-shell-bin/bash '("-c" "export EMACS=; bash"))
   (prf/tramp/shell path prf/tramp/local-shell-bin/git-bash)
   )
 (defun prf/tramp/shell/cygwin-bash (&optional path)
@@ -33,7 +32,7 @@
   ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
   (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash (list "--init-file" (concat "/home/" (getenv "USERNAME") "/.bashrc")))
   )
-
+(defalias 'prf/tramp/shell/bash 'prf/tramp/shell/cygwin-bash)
 
 (prf/install-package 'hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
