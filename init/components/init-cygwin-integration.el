@@ -60,8 +60,8 @@
 ;; make Emacs understand Cygwin-style path
 
 ;;; Make Cygwin paths accessible
-(prf/require-plugin 'cygwin-mount)
-(cygwin-mount-activate)
+(when (prf/require-plugin 'cygwin-mount nil 'noerror)
+  (cygwin-mount-activate))
 
 
 ;; -------------------------------------------------------------------------
@@ -94,11 +94,9 @@ loaded as such.)"
 
 ;; cygwin pty compatibility layer
 
-(if (executable-find "fakecygpty")
-    (progn
-      (require 'fakecygpty)
-      (fakecygpty-activate)
-      ))
+(when (executable-find "fakecygpty")
+  (require 'fakecygpty)
+  (fakecygpty-activate))
 
 
 
