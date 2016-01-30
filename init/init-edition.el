@@ -9,7 +9,8 @@
 (global-set-key (kbd "C-d") 'duplicate-line-or-region)
 					; c-electric-delete-forward on recent emacs
 (define-key c-mode-map (kbd "C-d") 'duplicate-line-or-region)
-(define-key groovy-mode-map (kbd "C-d") 'duplicate-line-or-region)
+(when (prf/require-plugin 'groovy-mode nil 'noerror)
+  (define-key groovy-mode-map (kbd "C-d") 'duplicate-line-or-region))
 
 (global-set-key (kbd "C-<f8>") 'comment-or-uncomment-line-or-region)
 (global-set-key (kbd "<C-kp-divide>") 'comment-or-uncomment-line-or-region)
