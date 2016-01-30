@@ -11,10 +11,14 @@
        (global-set-key (kbd "<C-s-down>")      'split-window-vertically)
        (global-set-key (kbd "<C-s-right>")     'split-window-horizontally)
        (global-set-key (kbd "<C-s-left>")      'delete-other-windows)
-       (global-set-key (kbd "<C-s-up>")        'delete-window))
-     )
+       (global-set-key (kbd "<C-s-up>")        'delete-window)))
     ((darwin-p)
-     (windmove-default-keybindings 'super))
+     (progn
+       (windmove-default-keybindings 'super)
+       (global-set-key (kbd "<C-s-down>")      'split-window-vertically)
+       (global-set-key (kbd "<C-s-right>")     'split-window-horizontally)
+       (global-set-key (kbd "<C-s-left>")      'delete-other-windows)
+       (global-set-key (kbd "<C-s-up>")        'delete-window)))
     ((windows-nt-p)
      (progn
        (global-set-key (read-kbd-macro key-windmove-left)  'windmove-left)
