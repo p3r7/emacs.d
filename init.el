@@ -174,6 +174,7 @@
 (require 'init-sql)
 (require 'init-haskell)
 (require 'init-c-common)
+(require 'init-applescript)
 
 
 ;; - shell

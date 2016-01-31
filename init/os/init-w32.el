@@ -75,6 +75,16 @@
 
 
 ;; ------------------------------------------------------------------------
+;; SHELLS
+
+(when (prf/require-plugin 'prf-tramp nil 'noerror)
+  (setq prf/tramp/local-shell-bin/cmd shell-file-name)
+  (defun prf/tramp/shell/cmd (&optional path)
+    (interactive)
+    (prf/tramp/shell path prf/tramp/local-shell-bin/cmd)))
+
+
+;; ------------------------------------------------------------------------
 ;; WINDMOVE w/ AHK
 
 ;; function keys USED by Emacs (others can be used along AHK)

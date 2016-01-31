@@ -15,24 +15,6 @@
 ;; NB: solves copy & mv, but potentially crashes find-file
 
 (require 'prf-tramp)
-;; TODO: use http://www.khngai.com/emacs/cygwin.php
-(setq prf/tramp/local-shell-bin/cmd shell-file-name)
-(setq prf/tramp/local-shell-bin/git-bash "C:/Program Files (x86)/Git/bin/bash.exe")
-(setq prf/tramp/local-shell-bin/cygwin-bash "C:/cygwin64/bin/bash.exe")
-(defun prf/tramp/shell/cmd (&optional path)
-  (interactive)
-  (prf/tramp/shell path prf/tramp/local-shell-bin/cmd)
-  )
-(defun prf/tramp/shell/git-bash (&optional path)
-  (interactive)
-  (prf/tramp/shell path prf/tramp/local-shell-bin/git-bash)
-  )
-(defun prf/tramp/shell/cygwin-bash (&optional path)
-  (interactive)
-  ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
-  (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash (list "--init-file" (concat "/home/" (getenv "USERNAME") "/.bashrc")))
-  )
-(defalias 'prf/tramp/shell/bash 'prf/tramp/shell/cygwin-bash)
 
 (prf/install-package 'hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
@@ -149,14 +131,9 @@
   (interactive)
   (with-temp-buffer
     (cd "/sudo::")
-    (let (
-	  (current-prefix-arg '(4))
-	  )
-      (shell (generate-new-buffer-name "*root@localhost*"))
-      )
-    (cd dd-old)
-    )
-  )
+    (let ((current-prefix-arg '(4)))
+      (shell (generate-new-buffer-name "*root@localhost*")))
+    (cd dd-old)))
 
 ;;TODO: lotta stuff don't work as expected
 (add-hook 'shell-mode-hook
@@ -278,7 +255,6 @@
        "server utils"
        ("s" prf/tramp/shell "shell")
        ("r" prf/tramp/remote-shell "remote shell")
-       ("a" prf/tramp/shell/git-bash "alt local shell")
        ("#" local-root-shell "local root shell")
        ("q" nil "cancel"))
 

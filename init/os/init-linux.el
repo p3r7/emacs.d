@@ -1,12 +1,16 @@
 
-;; Fix copy/paste
+;; ------------------------------------------------------------------------
+;; CLIPBOARD
+
 ;; NB: might not be necessary if using autocutsel
 (setq
  x-select-enable-clipboard t
  interprogram-paste-function 'x-cut-buffer-or-selection-value
- save-interprogram-paste-before-kill t
- )
+ save-interprogram-paste-before-kill t)
 
+
+;; ------------------------------------------------------------------------
+;; FULLSCREEN
 
 ;; NOTE: does not work for some WM (e.g. xmonad)
 ;; BUG: tries to execute it on remote srv if tramp cnnx

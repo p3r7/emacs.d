@@ -35,6 +35,8 @@
 
 ;; shells
 
+;; TODO: use http://www.khngai.com/emacs/cygwin.php
+
 ;; (setq process-coding-system-alist '(("bash" . undecided-unix)))
 ;; (setq w32-quote-process-args ?\") ;; " @@@ IS THIS BETTER? ;@@@ WAS THIS BEFORE: (setq w32-quote-process-args t)
 
@@ -45,6 +47,18 @@
 ;; (setq ediff-shell shell-file-name)      ; Ediff shell
 ;; (setq explicit-shell-args '("--login" "-i"))
 ;;;;; (setq shell-command-switch "-ic") ; SHOULD THIS BE "-c" or "-ic"?
+
+(when (prf/require-plugin 'prf-tramp nil 'noerror)
+  (setq prf/tramp/local-shell-bin/git-bash "C:/Program Files (x86)/Git/bin/bash.exe")
+  (setq prf/tramp/local-shell-bin/cygwin-bash "C:/cygwin64/bin/bash.exe")
+  (defun prf/tramp/shell/git-bash (&optional path)
+    (interactive)
+    (prf/tramp/shell path prf/tramp/local-shell-bin/git-bash))
+  (defun prf/tramp/shell/cygwin-bash (&optional path)
+    (interactive)
+    ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
+    (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash (list "--init-file" (concat "/home/" (getenv "USERNAME") "/.bashrc"))))
+  (defalias 'prf/tramp/shell/bash 'prf/tramp/shell/cygwin-bash))
 
 
 ;; -------------------------------------------------------------------------
