@@ -1,9 +1,8 @@
 
 (setq lusty--completion-ignored-regexps '(
-					  "^\\*tramp/pscp.*\\*$"
+					  "^\\*tramp/.*\\*$"
 					  "^\\*Help\\*$"
 					  "^\\*Messages\\*$"
-					  "^\\*Completions\\*$"
 					  "^\\*Completions\\*$"
 					  "^\\*Bookmark List\\*$"
 					  "^\\*Ibuffer\\*$"
@@ -12,6 +11,7 @@
 					  "^\\*Occur\\*$"
 					  "^\\*vc\\*$"
 					  "^\\*helm M-x\\*$"
+					  "^\\*magit:.*$"
 					  ))
 
 ;; patched version to allow filtering of buffers
