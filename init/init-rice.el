@@ -92,7 +92,7 @@
 ;; -------------------------------------------------------------------------
 ;; ZOOM
 
-(if (<= emacs-major-version 24)
+(if (>= emacs-major-version 24)
     (progn
       (define-key global-map (kbd "C-+") 'text-scale-increase)
       ;; (define-key global-map (kbd "C--") 'text-scale-decrease)
@@ -105,10 +105,10 @@
       "with positive N, increase the font size, otherwise decrease it"
       (set-face-attribute 'default (selected-frame) :height
 			  (+ (face-attribute 'default :height) (* (if (> n 0) 1 -1) 10))))
-    (global-set-key (kbd "C-+")      '(lambda nil (interactive) (djcb-zoom 1)))
-    (global-set-key [C-kp-add]       '(lambda nil (interactive) (djcb-zoom 1)))
-    (global-set-key (kbd "C--")      '(lambda nil (interactive) (djcb-zoom -1)))
-    (global-set-key [C-kp-subtract]  '(lambda nil (interactive) (djcb-zoom -1)))
+    (global-set-key (kbd "C-+")      '(lambda nil (interactive) (zoom-emacs-pre24 1)))
+    (global-set-key [C-kp-add]       '(lambda nil (interactive) (zoom-emacs-pre24 1)))
+    (global-set-key (kbd "C--")      '(lambda nil (interactive) (zoom-emacs-pre24 -1)))
+    (global-set-key [C-kp-subtract]  '(lambda nil (interactive) (zoom-emacs-pre24 -1)))
     )
   )
 
@@ -121,6 +121,7 @@
   (defun prf/rainbow-mode-prog-mode-hook ()
     (rainbow-mode 1))
   (add-hook 'prog-mode-hook 'prf/rainbow-mode-prog-mode-hook)
+  (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook)
   )
 
 (provide 'init-rice)

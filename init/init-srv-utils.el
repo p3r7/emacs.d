@@ -124,6 +124,9 @@
 ;; ------------------------------------------------------------------------
 ;; SHELL
 
+(when (>= emacs-major-version 25)
+  (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window)))
+
 (defalias '_sh 'prf/tramp/shell)
 (defalias '_rsh 'prf/tramp/remote-shell)
 

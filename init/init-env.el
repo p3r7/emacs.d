@@ -43,7 +43,9 @@
 
 (setq homedir-truename (directory-file-name (file-truename "~")))
 
-(require (intern (concat "init-host-" system-name)))
+(require (intern
+	  (concat "init-host-"
+		  (if (windows-nt-p) (downcase system-name) system-name))))
 
 
 ;; ------------------------------------------------------------------------
