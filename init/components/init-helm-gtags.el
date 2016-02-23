@@ -1,3 +1,6 @@
+
+;; NOTE: https://github.com/syohex/emacs-helm-gtags/issues/17
+
 (setq
  helm-gtags-ignore-case t
  helm-gtags-auto-update t

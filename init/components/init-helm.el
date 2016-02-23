@@ -93,9 +93,8 @@
   ;; ----------------------------------------------------------------------
   ;; HELM GTAGS
 
-  (when (prf/require-plugin 'helm-gtags nil 'noerror)
-    (require 'init-helm-gtags)
-    )
+  ;; (when (prf/require-plugin 'helm-gtags nil 'noerror)
+    ;; (require 'init-helm-gtags))
 
 
   ;; ----------------------------------------------------------------------
