@@ -202,6 +202,7 @@
 
 (require 'init-edition)
 (require 'init-ac)
+(require 'init-aggressive-indent)
 (require 'init-ediff)
 
 
@@ -271,3 +272,4 @@
 
 ;; (message "Benchmark: .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
 					     ;; (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
+(put 'upcase-region 'disabled nil)
