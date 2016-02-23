@@ -27,9 +27,10 @@
 
 (defun prf/reset-frame-geometry ()
   (interactive)
-  (set-frame-size (selected-frame) 80 40)
-  )
+  (set-frame-size (selected-frame) 80 40))
 (defalias '_rfg 'prf/reset-frame-geometry)
+
+(prf/reset-frame-geometry)
 
 
 ;; -------------------------------------------------------------------------
