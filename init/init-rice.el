@@ -4,16 +4,15 @@
 
 (set-face-bold-p 'bold nil)
 
-(when (boundp 'prf/font)
+(when (boundp 'prf/rice/font)
   (if (windows-nt-p)
-      ;; (setq default-frame-alist (intern (concat"((font . " prf/font "))")))
-      (setq default-frame-alist '((font . "-outline-Consolas-normal-r-normal-normal-12-97-96-96-c-*-iso8859-1")))
-    (setq font-default prf/font)
-      )
+      (setq default-frame-alist `((font . ,(eval prf/rice/font))))
+    (setq font-default prf/rice/font)
+    )
   )
 
-(when (boundp 'prf/font-height)
-  (set-face-attribute 'default nil :height prf/font-height)
+(when (boundp 'prf/rice/font-height)
+  (set-face-attribute 'default nil :height prf/rice/font-height)
   )
 
 
