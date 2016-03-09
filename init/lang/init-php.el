@@ -3,10 +3,11 @@
 ;; https://github.com/ejmr/php-mode/
 ;;(prf/require-plugin 'php-mode)
 
-;(add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/nxhtml/related/php-mode.el"))
-(when (require 'php-mode nil 'noerror)
+;;(add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/nxhtml/related/php-mode.el"))
+;; (when (prf/require-plugin-from-file php-mode "~/.emacs.d/plugins-spe/nxhtml/related" nil 'noerror)
+(when (prf/require-plugin 'php-mode nil 'noerror)
   (add-to-list 'auto-mode-alist '("\\.php?\\'" . php-mode))
- )
+  )
 
 ;; alternative: https://github.com/echosa/phpplus-mode
 
