@@ -214,7 +214,7 @@
 
 (require 'init-buffer-navigation)
 (require 'init-file-navigation)
-;; (require 'init-projectile) ; slows down tramp
+(require 'init-projectile) ; slows down tramp
 ;; (require 'init-vcs) ; slows down tramp
 
 (require 'init-bookmarks)
