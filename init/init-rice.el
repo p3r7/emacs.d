@@ -6,14 +6,11 @@
 
 (when (boundp 'prf/rice/font)
   (if (windows-nt-p)
-      (setq default-frame-alist `((font . ,(eval prf/rice/font))))
-    (setq font-default prf/rice/font)
-    )
-  )
+      (setq default-frame-alist `((font . ,prf/rice/font))))
+  (setq font-default prf/rice/font))
 
 (when (boundp 'prf/rice/font-height)
-  (set-face-attribute 'default nil :height prf/rice/font-height)
-  )
+  (set-face-attribute 'default nil :height prf/rice/font-height))
 
 
 ;; -------------------------------------------------------------------------
