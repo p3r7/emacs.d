@@ -155,9 +155,10 @@
 	  (lambda()
 	    (local-set-key (kbd "<f8>")      '(lambda nil (interactive) (progn
 									  (shell-mode)
-									  (toggle-read-only)
-									  )))
-	    ) )
+									  ;; (toggle-read-only)
+									  (setq current-prefix-arg '(-1)) ; C-u
+									  (call-interactively 'read-only-mode))))
+	    ))
 
 
 ;; [[http://snarfed.org/why_i_run_shells_inside_emacs]]
