@@ -1,6 +1,8 @@
 ;; in emacs, Microsoft Windows is reffered to as either Win NT or w32
 ;; hard limit of 31 subprocesses to be spawned, see how to free old processes
 
+(require 'prf-string)
+
 ;; ------------------------------------------------------------------------
 ;; FORMAT
 
@@ -23,6 +25,17 @@
 ;; ------------------------------------------------------------------------
 ;; TOOLS
 
+(when (prf/require-plugin 'w32-browser nil 'noerror)
+  (defun prf/show-in-file-explorer ()
+    (interactive)
+    (let ((filename (if (equal major-mode 'dired-mode)
+			default-directory
+		      (buffer-file-name))))
+      ;; (shell-command (concat "explorer.exe " (prf/system/get-path-system-format filename)))
+      (w32explore (prf/system/get-path-system-format filename))))
+  (defalias '_exp 'prf/show-in-file-explorer))
+
+
 (setq prf/setup/app/bash
       (executable-find "bash"))
 ;; (if (> (length prf/setup/app/bash) 0)
@@ -32,20 +45,6 @@
 ;; (setq explicit-shell-file-name shell-file-name)
 ;; )
 ;; )
-
-
-;; TODO: IntelliJ IDEA interractions
-;; still WiP
-(defun prf/open-in-intellij-idea (filepath &optional line)
-  (let ((line (if line (int-to-string line) "0")))
-    (shell-command (concat "\"C:\\Progra~2\\JetBrains\\IntelliJ IDEA 12.0.3\\bin\\idea.exe\" --line " line " " filepath)) )
-  )
-
-
-(defun prf/show-in-file-explorer ()
-  (interactive)
-  (shell-command (concat "explorer.exe " (get-path-system-format default-directory)) ))
-(defalias '_exp 'prf/show-in-file-explorer)
 
 
 ;; ------------------------------------------------------------------------
