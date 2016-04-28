@@ -195,6 +195,7 @@
 (require 'init-doc)
 
 (require 'init-srv-utils)
+(require 'init-compilation)
 
 
 ;; { Edition }---------------------------------------------------------[[<#E]]
