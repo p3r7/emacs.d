@@ -88,12 +88,26 @@
   (add-to-list 'ibuffer-never-show-predicates "^\\*About GNU Emacs\\*$")
   (add-to-list 'ibuffer-never-show-predicates "^\\*Bookmark List\\*$")
 
+  (defun prf/ibuffer/switch-to-default-filter-group ()
+    (interactive)
+    (ibuffer-switch-to-saved-filter-groups "default"))
+
+  (when (prf/require-plugin 'ibuffer-tramp nil 'noerror)
+    (defun prf/ibuffer/switch-to-tramp-filter-group ()
+      (interactive)
+      (ibuffer-tramp-set-filter-groups-by-tramp-connection)
+      (ibuffer-do-sort-by-alphabetic))
+    (define-key ibuffer-mode-map (kbd "s t") 'prf/ibuffer/switch-to-tramp-filter-group)
+    (define-key ibuffer-mode-map (kbd "s d") 'prf/ibuffer/switch-to-default-filter-group))
+
+
   (add-hook 'ibuffer-mode-hook
 	    (lambda ()
 	      (ibuffer-auto-mode 1)
 	      (ibuffer-switch-to-saved-filter-groups "default")))
 
   (global-set-key (kbd "C-x B") 'ibuffer)
+
   )
 
 ;; TODO: https://github.com/svend/ibuffer-tramp/blob/master/ibuffer-tramp.el
