@@ -176,7 +176,6 @@
 (require 'init-c-common)
 (require 'init-applescript)
 
-
 ;; - shell
 (require 'init-dos)
 
@@ -215,7 +214,7 @@
 
 (require 'init-buffer-navigation)
 (require 'init-file-navigation)
-(require 'init-projectile) ; slows down tramp
+;; (require 'init-projectile)
 ;; (require 'init-vcs) ; slows down tramp
 
 (require 'init-bookmarks)
