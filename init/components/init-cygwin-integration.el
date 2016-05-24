@@ -23,12 +23,18 @@
 
 ;; exec-path enrichment
 
-(setenv "PATH" (concat
-		(prf/system/get-path-system-format cygwin-local-bin) ";"
-		(prf/system/get-path-system-format cygwin-bin) ";"
-		(getenv "PATH")))
-(setq exec-path (cons cygwin-bin exec-path))
-(setq exec-path (cons cygwin-local-bin exec-path))
+
+(defun prf/enrich-exec-path (dir)
+  (when (not (string-match-p
+	      (replace-regexp-in-string "\\\\" "\\\\\\\\" (downcase (prf/system/get-path-system-format dir)))
+	      (downcase (getenv "PATH"))))
+    (setenv "PATH" (concat
+		    (prf/system/get-path-system-format dir) ";"
+		    (getenv "PATH")))
+    (setq exec-path (cons dir exec-path))))
+
+(prf/enrich-exec-path cygwin-bin)
+(prf/enrich-exec-path cygwin-local-bin)
 
 
 ;; -------------------------------------------------------------------------
