@@ -152,7 +152,7 @@
 ;; -------------------------------------------------------------------------
 ;; SPLASH IMAGE
 
-(setq fancy-splash-image (expand-file-name "~/.emacs.d/resources/s3.xpm"))
+;; (setq fancy-splash-image (expand-file-name "~/.emacs.d/resources/s3.xpm"))
 
 
 
