@@ -39,11 +39,6 @@
 
 ;; TODO: theming AFTER languages, to support override faces
 
-;; TODO: C-d is currently c-electric-delete-forward, replace w/ copy-line
-
-;; upstream version of tramp
-;; http://www.gnu.org/software/tramp/#Installation
-
 ;; NOTE: case EOF, use check-parens
 ;; or to highlight parens contents
 ;; (show-paren-mode t)
@@ -196,6 +191,8 @@
 (require 'init-srv-utils)
 (require 'init-compilation)
 
+(require 'init-circe)
+
 
 ;; { Edition }---------------------------------------------------------[[<#E]]
 
@@ -223,11 +220,12 @@
 
 (require 'init-magit)
 
+(require 'init-macro)
 
 
 ;; Hydras ------------------------------------------------------------
 
-(require 'init-macro)
+(require 'init-hydra)
 
 (eval-after-load "hydra"
   '(progn
