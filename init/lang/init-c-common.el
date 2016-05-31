@@ -1,36 +1,27 @@
 
-(boundp 'hideshowvis-minor-mode)
+;; Auto-detect others' files indent style
+;; (require 'dtrt-indent)
+;; (dtrt-indent-mode t)
 
-(add-hook 'c-mode-common-hook
-	  (lambda()
-	    ;; Indent style
-	    (c-set-style "linux")
-	    (setq
-	     ;; indentation
-	     tab-width 4
-	     c-basic-offset 4
-	     ;; comments
-	     comment-start "//"
-	     comment-end   ""
-	     )
-	    ;; Auto-detect others' files indent style
-	    ;; (require 'dtrt-indent)
-	    ;; (dtrt-indent-mode t)
-	    ;; Block of code collapsing
-	    (when (boundp 'hideshowvis-minor-mode)
-	      (local-set-key (kbd "C-c <right>") 'hs-show-block)
-	      (local-set-key (kbd "C-c <left>")  'hs-hide-block)
-	      (local-set-key (kbd "C-c <up>")    'hs-hide-all)
-	      (local-set-key (kbd "C-c <down>")  'hs-show-all)
-	      (hs-minor-mode t)
-	      (hideshowvis-minor-mode t))
-	    ;; Switch between header/source
-	    (local-set-key  (kbd "C-c o") 'ff-find-other-file)
-	    ;; C-d for deleting
-	    (local-set-key (kbd "C-d") 'duplicate-line-or-region)
-	    ;; line numbers
-	    (linum-mode t)
-	    ))
+(defun prf/main-c-mode-common-hook ()
+  ;; Switch between header/source
+  (local-set-key  (kbd "C-c o") 'ff-find-other-file)
+  ;; C-d for deleting
+  (local-set-key (kbd "C-d") 'duplicate-line-or-region)
+  ;; line numbers
+  (linum-mode t)
+  (setq comment-start "//"
+	comment-end   ""))
+
+(defun prf/indentation-c-mode-common-hook ()
+  (c-set-style "linux")
+  (setq tab-width 4
+	c-basic-offset 4))
+
+
+(add-hook 'c-mode-common-hook 'prf/main-c-mode-common-hook)
+(add-hook 'c-mode-common-hook 'prf/indentation-c-mode-common-hook)
+
 
 ;; ------------------------------------------------------------------------
 ;; ECLIM
