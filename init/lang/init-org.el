@@ -18,6 +18,16 @@
 
 
 ;; ------------------------------------------------------------------------
+;; EXPORT
+
+(prf/require-plugin 'htmlize)
+;; TODO: https://github.com/fniessen/org-html-themes
+
+(setq org-export-with-section-numbers nil)
+(setq org-html-validation-link nil)
+
+
+;; ------------------------------------------------------------------------
 ;; CAPTURE
 
 (define-key global-map "\C-cc" 'org-capture)
