@@ -30,8 +30,8 @@
     (setq tramp-default-method "pscp")
     ;; tramp-default-method "ssh"
     ;; (if (executable-find "ssh")
-	;; (setq tramp-default-method "scpx")
-      ;; (setq tramp-default-method "pscp") )
+    ;; (setq tramp-default-method "scpx")
+    ;; (setq tramp-default-method "pscp") )
     (require 'init-w32)
     )
   )
@@ -43,9 +43,15 @@
 
 (setq homedir-truename (directory-file-name (file-truename "~")))
 
-(require (intern
-	  (concat "init-host-"
-		  (if (windows-nt-p) (downcase system-name) system-name))))
+(setq prf/init/host-feature
+      (intern
+       (concat "init-host-"
+	       (if (windows-nt-p) (downcase system-name) system-name))))
+
+(if (featurep prf/init/host-feature)
+    (require prf/init/host-feature)
+  (setq prf-backup-dir "~/.emacs.d/.saves"
+	prf-auto-save-dir "~/.emacs.d/.saves"))
 
 
 ;; ------------------------------------------------------------------------
