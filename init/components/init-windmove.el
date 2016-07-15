@@ -5,17 +5,17 @@
 (defvar prf/key-split-window-vertically "<C-s-down>")
 (defvar prf/key-split-window-horizontally "<C-s-right>")
 (defvar prf/key-delete-other-windows "<C-s-left>")
-(defvar prf/prf/key-delete-window "<C-s-up>")
+(defvar prf/key-delete-window "<C-s-up>")
 
 (require 'windmove)
 (eval-after-load "windmove"
   '(cond
     ((gnu/linux-p)
      (progn
-       (windmove-default-keybindings 'super)
+       (windmove-default-keybindings 'super)))
     ((darwin-p)
      (progn
-       (windmove-default-keybindings 'super)
+       (windmove-default-keybindings 'super)))
     ((windows-nt-p)
      (progn
        (global-set-key (read-kbd-macro key-windmove-left)  'windmove-left)
