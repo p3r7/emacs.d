@@ -48,7 +48,7 @@
        (concat "init-host-"
 	       (if (windows-nt-p) (downcase system-name) system-name))))
 
-(if (featurep prf/init/host-feature)
+(if (prf/plugin-available-locally-p prf/init/host-feature)
     (require prf/init/host-feature)
   (setq prf-backup-dir "~/.emacs.d/.saves"
 	prf-auto-save-dir "~/.emacs.d/.saves"))
