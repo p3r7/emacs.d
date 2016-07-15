@@ -201,6 +201,7 @@
 (require 'init-ac)
 (require 'init-aggressive-indent)
 (require 'init-ediff)
+(require 'init-origami)
 
 
 
@@ -230,6 +231,7 @@
 (eval-after-load "hydra"
   '(progn
 
+     ;; https://github.com/abo-abo/hydra/wiki/Conditional-Hydra
      (defhydra hydra-visual (:color blue)
        "visual"
        ("r" prf/reset-frame-geometry "reset-frame-geometry")
