@@ -164,6 +164,7 @@
 (require 'init-c)
 (require 'init-php)
 (require 'init-js)
+(require 'init-lua)
 (require 'init-groovy)
 (require 'init-scheme)
 (require 'init-sql)
