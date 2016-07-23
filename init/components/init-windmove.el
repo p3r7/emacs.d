@@ -2,44 +2,41 @@
 ;; ------------------------------------------------------------------------
 ;; WINDMOVE
 
+(defvar prf/key-split-window-vertically "<C-s-down>")
+(defvar prf/key-split-window-horizontally "<C-s-right>")
+(defvar prf/key-delete-other-windows "<C-s-left>")
+(defvar prf/key-delete-window "<C-s-up>")
+
 (require 'windmove)
 (eval-after-load "windmove"
   '(cond
     ((gnu/linux-p)
      (progn
-       (windmove-default-keybindings 'super)
-       (global-set-key (kbd "<C-s-down>")      'split-window-vertically)
-       (global-set-key (kbd "<C-s-right>")     'split-window-horizontally)
-       (global-set-key (kbd "<C-s-left>")      'delete-other-windows)
-       (global-set-key (kbd "<C-s-up>")        'delete-window)))
+       (windmove-default-keybindings 'super)))
     ((darwin-p)
      (progn
-       (windmove-default-keybindings 'super)
-       (global-set-key (kbd "<C-s-down>")      'split-window-vertically)
-       (global-set-key (kbd "<C-s-right>")     'split-window-horizontally)
-       (global-set-key (kbd "<C-s-left>")      'delete-other-windows)
-       (global-set-key (kbd "<C-s-up>")        'delete-window)))
+       (windmove-default-keybindings 'super)))
     ((windows-nt-p)
      (progn
        (global-set-key (read-kbd-macro key-windmove-left)  'windmove-left)
        (global-set-key (read-kbd-macro key-windmove-righ)  'windmove-right)
        (global-set-key (read-kbd-macro key-windmove-up)    'windmove-up)
-       (global-set-key (read-kbd-macro key-windmove-down)  'windmove-down)
-
-       (global-set-key (read-kbd-macro prf/key-split-window-vertically)   'split-window-vertically)
-       (global-set-key (read-kbd-macro prf/key-split-window-horizontally) 'split-window-horizontally)
-       (global-set-key (read-kbd-macro prf/key-delete-other-windows)      'delete-other-windows)
-       (global-set-key (read-kbd-macro prf/key-delete-window)             'delete-window)))
+       (global-set-key (read-kbd-macro key-windmove-down)  'windmove-down)))
     )
   )
+
+(global-set-key (read-kbd-macro prf/key-split-window-vertically)   'split-window-vertically)
+(global-set-key (read-kbd-macro prf/key-split-window-horizontally) 'split-window-horizontally)
+(global-set-key (read-kbd-macro prf/key-delete-other-windows)      'delete-other-windows)
+(global-set-key (read-kbd-macro prf/key-delete-window)             'delete-window)
 
 
 ;; ------------------------------------------------------------------------
 ;; FRAMEMOVE
 
 ;; (when (prf/require-plugin 'framemove nil 'noerror)
-  ;; (setq framemove-hook-into-windmove t)
-  ;; )
+;; (setq framemove-hook-into-windmove t)
+;; )
 
 ;; ------------------------------------------------------------------------
 ;; WINDOWS ROTATION

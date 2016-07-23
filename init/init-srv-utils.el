@@ -90,17 +90,19 @@
       (progn
 
 	;; - get current host buffer filename
-	(if (equal major-mode 'dired-mode)
-	    (setq my-current-filepath default-directory)
-	  (setq my-current-filepath (buffer-file-name)))
+	(if (and (buffer-file-name)
+		 (file-exists-p (buffer-file-name)))
+	    (setq my-current-filepath buffer-file-name)
+	  (setq my-current-filepath default-directory))
 
 	;; - go to sibbling host buffer
 	(other-window 1)
 
 	;; - get sibbling host buffer filepath
-	(if (equal major-mode 'dired-mode)
-	    (setq my-sibbling-filepath default-directory)
-	  (setq my-sibbling-filepath (buffer-file-name)))
+	(if (and (buffer-file-name)
+		 (file-exists-p (buffer-file-name)))
+	    (setq my-sibbling-filepath buffer-file-name)
+	  (setq my-sibbling-filepath default-directory))
 
 	;; - go back to current buffer
 	(other-window 1)

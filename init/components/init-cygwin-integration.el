@@ -110,6 +110,7 @@ loaded as such.)"
       )))
 (add-hook 'find-file-hooks 'follow-cygwin-symlink)
 
+
 ;; -------------------------------------------------------------------------
 
 ;; cygwin pty compatibility layer
