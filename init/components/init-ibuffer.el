@@ -67,6 +67,11 @@
 	      (mode . python-mode)
 	      (mode . emacs-lisp-mode)
 	      ))
+	    ("irc"
+	     (or
+	      (mode . circe-server-mode)
+	      (mode . circe-channel-mode)
+	      ))
 	    ("temp"
 	     (or
 	      (name . "^\\*tramp")
