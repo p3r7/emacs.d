@@ -216,7 +216,7 @@
 ;; (require 'init-projectile)
 ;; (require 'init-vcs) ; slows down tramp
 
-(require 'init-bookmarks)
+(require 'init-bookmark+)
 (require 'init-deft)
 (require 'init-neotree)
 
