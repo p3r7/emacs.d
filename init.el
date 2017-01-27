@@ -133,13 +133,21 @@
 
 (require 'init-test1)
 
+;; (setq same-window-regexps '("."))
+
+(defun prf/calc-eval-replace-selection ()
+  (interactive)
+  (when (use-region-p)
+    (let ((text (calc-eval (buffer-substring (region-beginning) (region-end)))))
+      (delete-region (region-beginning) (region-end))
+      (insert text))))
+
 
 ;; { Appearance }------------------------------------------------------[[<#A]]
 
 (require 'init-gui)
 (require 'init-rice)
-;(require 'init-speedbar) ;; craps since emacs 24.4 due to void-function ad-advised-definition-p
-
+;;(require 'init-speedbar) ;; craps since emacs 24.4 due to void-function ad-advised-definition-p
 
 
 ;; { Behaviour }-------------------------------------------------------[[<#B]]
@@ -149,7 +157,6 @@
 (require 'init-scrolling)
 (require 'init-helm)
 (require 'init-hydra)
-
 
 
 ;; { Langages }--------------------------------------------------------[[<#L]]
@@ -162,6 +169,7 @@
 
 ;; - dev
 (require 'init-c)
+(require 'init-go)
 (require 'init-php)
 (require 'init-js)
 (require 'init-lua)
@@ -171,12 +179,13 @@
 (require 'init-haskell)
 (require 'init-c-common)
 (require 'init-applescript)
+(require 'init-tickscript)
+(require 'init-ahk)
 
 ;; - shell
 (require 'init-dos)
 
 ;; - conf
-(require 'init-ahk)
 (require 'init-apache)
 ;;(require 'cisco-router-mode)
 
@@ -184,6 +193,7 @@
 (require 'init-json)
 (require 'init-xml)
 (require 'init-javaprop)
+(require 'init-yaml)
 ;; (require 'csv-mode)
 (require 'init-guitar-tab)
 
@@ -203,7 +213,6 @@
 (require 'init-aggressive-indent)
 (require 'init-ediff)
 (require 'init-origami)
-
 
 
 ;; { Navigation }------------------------------------------------------[[<#N]]
@@ -235,23 +244,31 @@
      ;; https://github.com/abo-abo/hydra/wiki/Conditional-Hydra
      (defhydra hydra-visual (:color blue)
        "visual"
-       ("r" prf/reset-frame-geometry "reset-frame-geometry")
+       ("r" prf/reset-frame-geometry "reset-default")
+       ("d" prf/double-default-frame-geometry "double")
        ("g" nil "cancel"))
 
+     (defhydra hydra-test (:color blue)
+       "test"
+       ("h" hydra-helm/body "helm")
+       ("g" nil "cancel"))
 
      ;; TODO: conditionnally append to hydra main
      (defhydra hydra-main (:color blue)
        "main"
-       ("h" hydra-helm/body "helm")
        ("s" hydra-srvUtils/body "server utils")
        ("v" hydra-visual/body "visual")
+       ("?" hydra-test/body "visual")
        ("g" nil "cancel"))
+
+     ;; http://kitchingroup.cheme.cmu.edu/blog/2015/06/24/Conditional-hydra-menus/
 
      (global-set-key (kbd "<apps>") 'hydra-main/body)
      (global-set-key (kbd "<menu>") 'hydra-main/body)
 
      )
   )
+
 
 ;; { Custom }----------------------------------------------------------[[<#C]]
 
