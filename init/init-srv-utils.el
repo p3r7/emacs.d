@@ -14,6 +14,7 @@
   )
 ;; NB: solves copy & mv, but potentially crashes find-file
 
+(prf/require-plugin 'tramp-term)
 (require 'prf-tramp)
 
 (prf/install-package 'hide-lines)
@@ -261,8 +262,10 @@
        "server utils"
        ("s" prf/tramp/shell "shell")
        ("r" prf/tramp/remote-shell "remote shell")
+       ("o" prf/tramp/visit-remoteFile-currentSrv "visit other version file")
+       ("e" ediff-toggle "toggle ediff")
        ("#" local-root-shell "local root shell")
-       ("q" nil "cancel"))
+       ("g" nil "cancel"))
 
      )
   )
