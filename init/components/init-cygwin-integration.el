@@ -23,10 +23,13 @@
 
 ;; exec-path enrichment
 
+(defun prf/escape-winnt-path (path)
+  (replace-regexp-in-string "\\\\" "\\\\\\\\" (downcase (prf/system/get-path-system-format path))))
 
 (defun prf/enrich-exec-path (dir)
   (when (not (string-match-p
-	      (replace-regexp-in-string "\\\\" "\\\\\\\\" (downcase (prf/system/get-path-system-format dir)))
+	      ;; (replace-regexp-in-string "\\\\" "\\\\\\\\" (downcase (prf/system/get-path-system-format dir)))
+	      (prf/escape-winnt-path dir)
 	      (downcase (getenv "PATH"))))
     (setenv "PATH" (concat
 		    (prf/system/get-path-system-format dir) ";"
@@ -35,6 +38,8 @@
 
 (prf/enrich-exec-path cygwin-bin)
 (prf/enrich-exec-path cygwin-local-bin)
+
+;; do undo in a let, typically before launching a shell: (replace-regexp-in-string (concat (prf/escape-winnt-path cygwin-bin) ";") "" (getenv "PATH"))
 
 
 ;; -------------------------------------------------------------------------
