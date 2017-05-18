@@ -179,7 +179,7 @@
 (require 'init-haskell)
 (require 'init-c-common)
 (require 'init-applescript)
-(require 'init-tickscript)
+;;(require 'init-tickscript)
 (require 'init-ahk)
 
 ;; - shell
@@ -194,6 +194,7 @@
 (require 'init-xml)
 (require 'init-javaprop)
 (require 'init-yaml)
+(require 'init-toml)
 ;; (require 'csv-mode)
 (require 'init-guitar-tab)
 
@@ -256,9 +257,10 @@
      ;; TODO: conditionnally append to hydra main
      (defhydra hydra-main (:color blue)
        "main"
+       ("m" magit-status "magit")
        ("s" hydra-srvUtils/body "server utils")
        ("v" hydra-visual/body "visual")
-       ("?" hydra-test/body "visual")
+       ("?" hydra-test/body "experimental")
        ("g" nil "cancel"))
 
      ;; http://kitchingroup.cheme.cmu.edu/blog/2015/06/24/Conditional-hydra-menus/
