@@ -2,7 +2,9 @@
 ;; -------------------------------------------------------------------------
 ;; GENERAL
 
+(setq x-stretch-cursor t)
 (blink-cursor-mode -1)
+
 (setq-default fill-column 75)
 (global-font-lock-mode t)
 
