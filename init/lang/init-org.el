@@ -11,10 +11,19 @@
  ;; org-default-notes-file (concat org-directory "/captures.org")
  ;; org-agenda-files (list (concat org-directory "/tasks.org")
  ;; (concat org-directory "/captures.org"))
- org-ellipsis "⤵"
  )
+
+
+;; ------------------------------------------------------------------------
+;; FORMAT
+
 ;; http://stackoverflow.com/questions/17621495/emacs-org-display-inline-images
 (org-display-inline-images t t)
+
+(setq
+ org-ellipsis "⤵"
+ org-highlight-latex-and-related '(latex)
+ )
 
 
 ;; ------------------------------------------------------------------------
