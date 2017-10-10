@@ -181,6 +181,8 @@
 (require 'init-applescript)
 ;;(require 'init-tickscript)
 (require 'init-ahk)
+(require 'init-r)
+(require 'init-python)
 
 ;; - shell
 (require 'init-dos)
