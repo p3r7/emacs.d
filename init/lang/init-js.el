@@ -16,11 +16,15 @@
 		  js3-lazy-operators t
 		  )
 	    (linum-mode 1)))
-;(add-to-list 'ac-modes 'js3-mode)
+;; (add-to-list 'ac-modes 'js3-mode)
 ;; (setq tern-command (cons (executable-find "tern") '()))
 ;; (eval-after-load 'tern
-  ;; '(progn
-	   ;; (require 'tern-auto-complete)
-     ;; (tern-ac-setup)))
+;; '(progn
+;; (require 'tern-auto-complete)
+;; (tern-ac-setup)))
+
+;; - jsx
+(prf/require-plugin 'rjsx-mode nil 'noerror)
+
 
 (provide 'init-js)
