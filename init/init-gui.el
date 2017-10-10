@@ -160,5 +160,12 @@
 ;; (setq fancy-splash-image (expand-file-name "~/.emacs.d/resources/s3.xpm"))
 
 
+;; -------------------------------------------------------------------------
+;; EMOJIS
+
+(when (prf/require-plugin 'emojify nil 't)
+  (setq emojify-emoji-styles '(unicode github))
+  (add-hook 'after-init-hook #'global-emojify-mode))
+
 
 (provide 'init-gui)
