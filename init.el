@@ -37,6 +37,7 @@
 ;; { Custom }-----------------------------------------------------------[[#C]]
 ;;============================================================================
 
+
 ;; TODO: theming AFTER languages, to support override faces
 
 ;; NOTE: case EOF, use check-parens
@@ -161,6 +162,8 @@
 
 ;; { Langages }--------------------------------------------------------[[<#L]]
 
+;; multilingual files
+(require 'init-mmm)
 
 ;; - descriptive
 (require 'init-org)
@@ -168,6 +171,7 @@
 (require 'init-html)
 
 ;; - dev
+(require 'init-c-common)
 (require 'init-c)
 (require 'init-go)
 (require 'init-php)
@@ -177,7 +181,6 @@
 (require 'init-scheme)
 (require 'init-sql)
 (require 'init-haskell)
-(require 'init-c-common)
 (require 'init-applescript)
 ;;(require 'init-tickscript)
 (require 'init-ahk)
@@ -205,6 +208,7 @@
 (require 'init-srv-utils)
 (require 'init-compilation)
 
+(require 'init-ansible)
 (require 'init-circe)
 
 
@@ -295,3 +299,4 @@
 ;; (message "Benchmark: .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
 					     ;; (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
