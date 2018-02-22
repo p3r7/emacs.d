@@ -2,7 +2,7 @@
 ;; -------------------------------------------------------------------------
 ;; GENERAL
 
-(setq x-stretch-cursor t)
+;; (setq x-stretch-cursor t)
 (blink-cursor-mode -1)
 
 (setq-default fill-column 75)
@@ -131,7 +131,7 @@
 ;; TODO: look for this [[http://www.emacswiki.org/emacs/download/fic-mode.el]]
 (make-face 'font-lock-warning-face-alt)
 (set-face-attribute 'font-lock-warning-face-alt nil :foreground "White" :background "Firebrick")
-(let ((pattern "\\<\\(FIXME\\|TODO\\|TEST\\|NOTE\\|NOTES\\|NB\\|WARNING\\|BUG\\|HACK\\|ASK\\|EYESORE\\|BAD\\):"))
+(let ((pattern "\\<\\(FIXME\\|TODO\\|TEST\\|NOTE\\|NOTES\\|NB\\|WARN\\|WARNING\\|BUG\\|HACK\\|ASK\\|EYESORE\\|BAD\\|FIXME\\|REVIEW\\):"))
   (mapc
    (lambda (mode)
      ;;     (font-lock-add-keywords mode `((,pattern 1 'font-lock-warning-face-alt prepend))))
