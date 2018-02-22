@@ -47,7 +47,7 @@
   (list
    ;; 'flatui
    'light-blue
-   					;'pink-bliss
+   ;; 'pink-bliss
    'plan9
    ;; 'soft-morning
    ;; 'soft-stone
