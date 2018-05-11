@@ -20,13 +20,15 @@
 (prf/install-package 'ample-theme)
 (prf/install-package 'plan9-theme)
 (prf/install-package 'dracula-theme)
+(prf/install-package 'flatui-theme)
 
 (defvar prf/theme/list/practical
   (list
    'dracula-mod
    'comidia-mod
    ;; 'gotham
-   ;;'light-blue
+   ;; 'light-blue
+   'flatui
    ))
 
 (defvar prf/theme/list/dark
