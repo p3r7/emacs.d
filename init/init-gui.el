@@ -93,11 +93,12 @@
 
 (setq show-paren-delay 0)
 (show-paren-mode t)
-					;(setq show-paren-style 'expression)
+;; (setq show-paren-style 'expression)
 (setq show-paren-style 'parenthesis)
-(set-face-background 'show-paren-match-face "#aaaaaa")
-(set-face-attribute 'show-paren-match-face nil
-		    :weight 'bold :underline nil :overline nil :slant 'normal)
+(when (facep 'show-paren-match-face)
+  (set-face-background 'show-paren-match-face "#aaaaaa")
+  (set-face-attribute 'show-paren-match-face nil
+		      :weight 'bold :underline nil :overline nil :slant 'normal))
 
 (when (prf/require-plugin 'rainbow-delimiters nil 't)
   ;; (global-rainbow-delimiters-mode)
