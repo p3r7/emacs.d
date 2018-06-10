@@ -19,23 +19,23 @@
 ;; -------------------------------------------------------------------------
 ;; FRAME
 
-(menu-bar-mode -1)
-(global-set-key (kbd "C-<f2>") 'menu-bar-mode)
-(tool-bar-mode -1)
-(global-set-key (kbd "M-<f2>") 'tool-bar-mode)
+(when (display-graphic-p)
+  (menu-bar-mode -1)
+  (global-set-key (kbd "C-<f2>") 'menu-bar-mode)
+  (tool-bar-mode -1)
+  (global-set-key (kbd "M-<f2>") 'tool-bar-mode)
 
-(set-scroll-bar-mode 'nil)
-;; (scroll-bar-mode -1)
+  (set-scroll-bar-mode 'nil)
+  ;; (scroll-bar-mode -1)
 
-(defun prf/reset-frame-geometry ()
-  (interactive)
-  (set-frame-size (selected-frame) 80 40))
-(defun prf/double-default-frame-geometry ()
-  (interactive)
-  (set-frame-size (selected-frame) 160 40))
-(defalias '_rfg 'prf/reset-frame-geometry)
-
-(prf/reset-frame-geometry)
+  (defun prf/reset-frame-geometry ()
+    (interactive)
+    (set-frame-size (selected-frame) 80 40))
+  (defun prf/double-default-frame-geometry ()
+    (interactive)
+    (set-frame-size (selected-frame) 160 40))
+  (defalias '_rfg 'prf/reset-frame-geometry)
+  (prf/reset-frame-geometry))
 
 
 ;; -------------------------------------------------------------------------
@@ -101,8 +101,7 @@
 
 (when (prf/require-plugin 'rainbow-delimiters nil 't)
   ;; (global-rainbow-delimiters-mode)
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-  )
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 
 ;; -------------------------------------------------------------------------
@@ -111,8 +110,7 @@
 ;; - [X] https://github.com/wasamasa/form-feed
 ;; - [ ] https://github.com/purcell/page-break-lines
 (when (prf/require-plugin 'form-feed nil 'noerror)
-  (add-hook 'prog-mode-hook 'form-feed-mode)
-  )
+  (add-hook 'prog-mode-hook 'form-feed-mode))
 
 ;; -------------------------------------------------------------------------
 ;; INVISIBLE CHARACTERS
