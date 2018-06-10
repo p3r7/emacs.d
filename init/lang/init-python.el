@@ -20,7 +20,11 @@
   (mmm-add-mode-ext-class 'toml-mode "\\.j2\\'" 'jinja2)
   ;; - yaml
   (add-to-list 'auto-mode-alist '("\\.\\(e?ya?\\|ra\\)ml\\.j2\\'" . yaml-mode))
-  (mmm-add-mode-ext-class 'yaml-mode "\\.j2\\'" 'jinja2))
+  (mmm-add-mode-ext-class 'yaml-mode "\\.j2\\'" 'jinja2)
+  ;; - shell scripts
+  (add-to-list 'auto-mode-alist '("\\.[ckz]?sh\\'\\|\\.shar\\'\\|/\\.z?profile\\.j2\\'" . sh-mode))
+  (mmm-add-mode-ext-class 'shell-script-mode "\\.j2\\'" 'jinja2)
+  )
 
 
 (provide 'init-python)
