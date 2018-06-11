@@ -19,9 +19,10 @@
 ;; -------------------------------------------------------------------------
 ;; FRAME
 
+(menu-bar-mode -1)
+(global-set-key (kbd "C-<f2>") 'menu-bar-mode)
+
 (when (display-graphic-p)
-  (menu-bar-mode -1)
-  (global-set-key (kbd "C-<f2>") 'menu-bar-mode)
   (tool-bar-mode -1)
   (global-set-key (kbd "M-<f2>") 'tool-bar-mode)
 
