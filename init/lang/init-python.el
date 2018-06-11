@@ -4,8 +4,8 @@
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode) )
 
-(when (prf/require-plugin 'ac-anaconda  nil 'noerror)
-  (add-hook 'python-mode-hook 'ac-anaconda-setup) )
+;; (when (prf/require-plugin 'ac-anaconda  nil 'noerror)
+;;   (add-hook 'python-mode-hook 'ac-anaconda-setup) )
 
 (when (prf/require-plugin 'mmm-jinja2  nil 'noerror)
   ;; - conf
