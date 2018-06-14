@@ -43,10 +43,18 @@
 
 (setq homedir-truename (directory-file-name (file-truename "~")))
 
+(setq prf/system-name system-name)
+
+;; case Android
+(when (and (string= system-name "localhost")
+	   (gnu/linux-p)
+	   (executable-find "getprop"))
+  (shell-command-to-string "getprop net.hostname"))
+
 (setq prf/init/host-feature
       (intern
        (concat "init-host-"
-	       (if (windows-nt-p) (downcase system-name) system-name))))
+	       (if (windows-nt-p) (downcase prf/system-name) prf/system-name))))
 
 (if (prf/plugin-available-locally-p prf/init/host-feature)
     (require prf/init/host-feature)
