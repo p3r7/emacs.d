@@ -25,10 +25,17 @@
 (add-to-list 'auto-mode-alist '("/var/log.*\\'" . syslog-mode))
 (add-to-list 'auto-mode-alist '("\\catalina.out\\'" . syslog-mode))
 
+;; ------------------------------------------------------------------------
+;; DIRED
+
+;; (prf/require-plugin-from-file 'dired+ "~/.emacs.d/plugins/dired+" 'noerror)
 (prf/require-plugin 'dired+)
 ;; (eval-after-load "dired-aux"
 ;;       '(require 'dired-async))
 ;; http://www.emacswiki.org/emacs/Sunrise_Commander
+
+(when (executable-find "busybox")
+  (setq dired-use-ls-dired nil))
 
 
 ;; ------------------------------------------------------------------------
