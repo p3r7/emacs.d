@@ -1,3 +1,7 @@
+
+(prf/require-plugin 's)
+
+
 ;; SHELL & TRAMP & DIRED
 
 ;; TODO: emacs function to get curren path and convert it to url if contains www
@@ -66,11 +70,17 @@
 
 ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/vagrant-tramp-20140709.814"))
 ;; (when
-    ;; (prf/require-plugin 'vagrant-tramp)
-  ;; (require 'vagrant-tramp)
-  ;; (eval-after-load 'tramp
-    ;; '(vagrant-tramp-enable))
-  ;; )
+;;     (prf/require-plugin 'vagrant-tramp)
+;;   (require 'vagrant-tramp)
+;;   (eval-after-load 'tramp
+;;     '(vagrant-tramp-enable))
+;;   )
+
+(defun prf/tramp/extract-remote-file-name (trampFilePath)
+  (if (string-match (concat "/" tramp-default-method ":") trampFilePath)
+      (car (cdr (cdr (split-string trampFilePath ":"))))
+    trampFilePath))
+
 
 (defun prf/tramp/convert-remoteFilePath-currentSrv (currentFilePath remoteFilePath)
   "Format a path using current server address prefix and remote server file location"
@@ -81,13 +91,9 @@
     )
 
   ;; suffix remoteFilePath
-  (if (string-match (concat "/" tramp-default-method ":") remoteFilePath)
-      (setq my-suffix (car (cdr (cdr (split-string remoteFilePath ":")))))
-    (setq my-suffix remoteFilePath)
-    )
+  (setq my-suffix (prf/tramp/extract-remote-file-name remoteFilePath))
 
-  (concat my-prefix my-suffix)
-  )
+  (concat my-prefix my-suffix))
 
 
 ;; TODO: make it work w/ shell buffers
@@ -248,16 +254,78 @@
 ;; ------------------------------------------------------------------------
 ;; FILESYSTEM HELPERS
 
-(defun prf/copy-filepath-to-clipboard ()
+
+(defun prf/get-buffer-filepath-complete ()
+  (if (equal major-mode 'dired-mode)
+      default-directory
+    (buffer-file-name)))
+
+(defun prf/get-buffer-filepath-clean ()
+  (let ((filename (prf/get-buffer-filepath-complete)))
+    (when filename
+      (prf/tramp/extract-remote-file-name filename))))
+
+(defun prf/get-buffer-filepath-with-exec ()
+  (let ((filename (prf/get-buffer-filepath-complete))
+	clean-filename)
+    (when filename
+      (setq clean-filename (prf/tramp/extract-remote-file-name filename))
+      (cond ((bound-and-true-p ansible) (concat "ansible-playbook " clean-filename)) ;; NB: ansible-mode is named `ansible` ...
+	    ((s-suffix? ".php" clean-filename) (concat "php " clean-filename))
+	    ((s-suffix? ".py" clean-filename) (concat "python " clean-filename))) ;; REVIEW: should ideally test if in virtual env
+      )))
+
+(defun prf/get-buffer-basepath ()
+  (let ((filename (prf/get-buffer-filepath-clean)))
+    (when filename
+      (file-name-directory filename))))
+
+(defun prf/get-buffer-filename ()
+  (let ((filename (prf/get-buffer-filepath-clean)))
+    (when filename
+      (file-name-nondirectory filename))))
+
+(defun prf/copy-buffer-filepath-to-clipboard-raw ()
+  "Copy the current buffer file path to the clipboard (no sanitization)."
+  (interactive)
+  (let ((filename (prf/get-buffer-filepath-complete)))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file path '%s' to the clipboard." filename))))
+
+(defun prf/copy-buffer-filepath-to-clipboard-clean ()
+  "Copy the current buffer file path to the clipboard (sanitized)."
+  (interactive)
+  (let ((filename (prf/get-buffer-filepath-clean)))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file path '%s' to the clipboard." filename))))
+
+(defun prf/copy-buffer-filepath-to-clipboard-with-exec ()
+  "Copy the current buffer file path to the clipboard, with exec prefix set."
+  (interactive)
+  (let ((filename (prf/get-buffer-filepath-with-exec)))
+    (when filename
+      (kill-new filename)
+      (message "Copied exec command '%s' to the clipboard." filename))))
+
+(defun prf/copy-buffer-basename-to-clipboard ()
+  "Copy the current buffer base name to the clipboard."
+  (interactive)
+  (let ((filename (prf/get-buffer-basepath)))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer base name '%s' to the clipboard." filename))))
+
+(defun prf/copy-buffer-filename-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
   (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
+  (let ((filename (prf/get-buffer-filename)))
     (when filename
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
-(defalias '_cfp 'prf/copy-filepath-to-clipboard)
+
+(defalias '_cfp 'prf/copy-buffer-filepath-to-clipboard-clean)
 
 
 ;; ------------------------------------------------------------------------
@@ -275,6 +343,14 @@
        ("#" local-root-shell "local root shell")
        ("g" nil "cancel"))
 
+     (defhydra hydra-copyPath (:color blue)
+       "copy path"
+       ("c" prf/copy-buffer-filepath-to-clipboard-clean "clean")
+       ("r" prf/copy-buffer-filepath-to-clipboard-raw "raw")
+       ("f" prf/copy-buffer-filename-to-clipboard "file")
+       ("b" prf/copy-buffer-basename-to-clipboard "base name")
+       ("e" prf/copy-buffer-filepath-to-clipboard-with-exec "exec")
+       ("g" nil "cancel"))
      )
   )
 
