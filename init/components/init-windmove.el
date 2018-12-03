@@ -18,12 +18,22 @@
        (windmove-default-keybindings 'super)))
     ((windows-nt-p)
      (progn
+       (global-set-key (read-kbd-macro "<s-left>")  'windmove-left)
+       (global-set-key (read-kbd-macro "<s-right>")  'windmove-right)
+       (global-set-key (read-kbd-macro "<s-up>")    'windmove-up)
+       (global-set-key (read-kbd-macro "<s-down>")  'windmove-down)
+
        (global-set-key (read-kbd-macro key-windmove-left)  'windmove-left)
        (global-set-key (read-kbd-macro key-windmove-righ)  'windmove-right)
        (global-set-key (read-kbd-macro key-windmove-up)    'windmove-up)
        (global-set-key (read-kbd-macro key-windmove-down)  'windmove-down)))
     )
   )
+
+(global-set-key (read-kbd-macro "<C-s-down>")   'split-window-vertically)
+(global-set-key (read-kbd-macro "<C-s-right>") 'split-window-horizontally)
+(global-set-key (read-kbd-macro "<C-s-left>")      'delete-other-windows)
+(global-set-key (read-kbd-macro "<C-s-up>")             'delete-window)
 
 (global-set-key (read-kbd-macro prf/key-split-window-vertically)   'split-window-vertically)
 (global-set-key (read-kbd-macro prf/key-split-window-horizontally) 'split-window-horizontally)
