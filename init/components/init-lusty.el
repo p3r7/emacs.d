@@ -15,7 +15,7 @@
 					  ))
 
 ;; patched version to allow filtering of buffers
-(prf/install-package 'noflet)
+(prf/require-plugin 'noflet)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/lusty-explorer-prf"))
 ;; (when (prf/require-plugin 'lusty-explorer nil 'noerror)
 (when (require 'lusty-explorer nil 'noerror)
