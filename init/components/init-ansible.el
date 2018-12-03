@@ -1,4 +1,6 @@
 
+;; could have also added: https://github.com/lunaryorn/ansible-doc.el
+
 (when (prf/require-plugin 'ansible nil 'noerror)
 
   (defun prf/yml-hook/enable-ansible-minor-mode ()
