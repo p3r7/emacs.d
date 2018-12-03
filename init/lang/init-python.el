@@ -21,6 +21,9 @@
   ;; - yaml
   (add-to-list 'auto-mode-alist '("\\.\\(e?ya?\\|ra\\)ml\\.j2\\'" . yaml-mode))
   (mmm-add-mode-ext-class 'yaml-mode "\\.j2\\'" 'jinja2)
+  ;; - .env
+  (add-to-list 'auto-mode-alist '("\\.env\\..*\\.j2\\'" . dotenv-mode))
+  (mmm-add-mode-ext-class 'dotenv-mode "\\.j2\\'" 'jinja2)
   ;; - shell scripts
   (add-to-list 'auto-mode-alist '("\\.[ckz]?sh\\'\\|\\.shar\\'\\|/\\.z?profile\\.j2\\'" . sh-mode))
   (mmm-add-mode-ext-class 'shell-script-mode "\\.j2\\'" 'jinja2)
