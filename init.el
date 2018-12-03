@@ -200,6 +200,7 @@
 (require 'init-javaprop)
 (require 'init-yaml)
 (require 'init-toml)
+(require 'init-dotenv)
 ;; (require 'csv-mode)
 (require 'init-guitar-tab)
 
@@ -264,6 +265,7 @@
      (defhydra hydra-main (:color blue)
        "main"
        ("m" magit-status "magit")
+       ("c" hydra-copyPath/body "copy path")
        ("s" hydra-srvUtils/body "server utils")
        ("v" hydra-visual/body "visual")
        ("?" hydra-test/body "experimental")
