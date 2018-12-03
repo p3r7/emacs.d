@@ -1,5 +1,14 @@
 ;; TODO: customize ibuffer-formats for larger name column
 
+(prf/require-plugin 's)
+
+;; gotten from https://emacs.stackexchange.com/a/2094
+(defun prf/ibuffer/ansible-buffer-p ()
+  (let ((fname (buffer-file-name)))
+    (or (bound-and-true-p ansible) ;; NB: ansible-mode is named `ansible` ...
+	(and fname
+	     (string-match-p (regexp-quote "ansible") fname)
+	     (s-suffix? ".j2" fname)))))
 
 (when (prf/require-plugin 'ibuffer nil 'noerror)
 
@@ -24,14 +33,15 @@
 	     (or (mode . shell-mode)
 		 (name . "^\\*\\(.*\\)@[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\\*\\(.*\\)$") )
 	     )
+
 	    ("dired"
-	     (mode . dired-mode)
-	     )
+	     (mode . dired-mode))
+
 	    ("org" ;; all org-related buffers
 	     (or
 	      (name . "^\\*Deft\\*$")
-	      (mode . org-mode))
-	     )
+	      (mode . org-mode)))
+
 	    ;; ("Mail"
 	    ;;   (or
 	    ;;    (mode . message-mode)
@@ -40,17 +50,24 @@
 
 	    ("config"
 	     (or (filename . ".emacs.d")
-		 (filename . "AutoHotkey.ahk")
-		 )
-	     )
+		 (filename . "AutoHotkey.ahk")))
+
+	    ("CRON"
+	     (or (filename . "/etc/crontab")
+		 (filename . "/etc/cron.d/")))
+
+	    ("ansible"
+	     (predicate . (prf/ibuffer/ansible-buffer-p)))
+
 	    ("XSLT"
-	     (filename . "\\.xsl$")
-	     )
+	     (filename . "\\.xsl$"))
+
 	    ;; ("MyProject1"
 	    ;;   (filename . "src/myproject1/"))
+
 	    ("provi"
-	     (filename . "^provi")
-	     )
+	     (filename . "^provi"))
+
 	    ("dev"
 	     (or
 	      (mode . c-mode)
@@ -65,13 +82,13 @@
 	      (mode . shell-script-mode)
 	      (mode . perl-mode)
 	      (mode . python-mode)
-	      (mode . emacs-lisp-mode)
-	      ))
+	      (mode . emacs-lisp-mode)))
+
 	    ("irc"
 	     (or
 	      (mode . circe-server-mode)
-	      (mode . circe-channel-mode)
-	      ))
+	      (mode . circe-channel-mode)))
+
 	    ("temp"
 	     (or
 	      (name . "^\\*tramp")
@@ -79,8 +96,7 @@
 	      (name . "^\\*Apropos\\*$")
 	      (name . "^\\*Messages\\*$")
 	      (name . "^\\*Completions\\*$")
-	      (name . "^\\*Help\\*$")
-	      ))
+	      (name . "^\\*Help\\*$")))
 	    ;; ("ERC"   (mode . erc-mode))
 	    ))))
 
