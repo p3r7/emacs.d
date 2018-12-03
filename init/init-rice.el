@@ -24,11 +24,11 @@
 
 (defvar prf/theme/list/practical
   (list
+   'flatui
    'dracula-mod
    'comidia-mod
    ;; 'gotham
    ;; 'light-blue
-   'flatui
    ))
 
 (defvar prf/theme/list/dark
@@ -112,8 +112,7 @@
 
 
 ;; -------------------------------------------------------------------------
-
-;; visual enhancements
+;; VISUAL ENHANCEMENTS
 
 (when (prf/require-plugin 'rainbow-mode nil 'noerror)
   (defun prf/rainbow-mode-prog-mode-hook ()
@@ -121,5 +120,20 @@
   (add-hook 'prog-mode-hook 'prf/rainbow-mode-prog-mode-hook)
   (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook)
   )
+
+;; Preview faces at their definition
+;; - [X] https://github.com/Fanael/highlight-defined
+;;   Additionally provides faces for defined symbols.
+;; - [ ] https://github.com/Fuco1/fontify-face
+(when (prf/require-plugin 'highlight-defined nil 'noerror)
+  (setq highlight-defined-face-use-itself 't))
+
+
+;; -------------------------------------------------------------------------
+;; DARKROOM
+
+(require 'init-darkroom)
+
+
 
 (provide 'init-rice)
