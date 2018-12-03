@@ -4,6 +4,7 @@
 
 ;; ------------------------------------------------------------------------
 ;; BASIC
+
 (setq
  org-directory default-directory
  ;; org-hide-leading-stars t
@@ -35,6 +36,7 @@
 (setq org-export-with-section-numbers nil)
 (setq org-html-validation-link nil)
 
+(prf/require-plugin 'ox-slack)
 
 ;; ------------------------------------------------------------------------
 ;; CAPTURE
