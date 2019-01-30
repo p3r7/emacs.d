@@ -166,9 +166,10 @@
 (require 'init-mmm)
 
 ;; - descriptive
+(require 'init-html)
 (require 'init-org)
 (require 'init-markdown)
-(require 'init-html)
+(require 'init-md-org-shiatsu)
 
 ;; - dev
 (require 'init-c-common)
