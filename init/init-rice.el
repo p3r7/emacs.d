@@ -132,8 +132,8 @@
 ;; -------------------------------------------------------------------------
 ;; WRITEROOM / DARKROOM
 
-(require 'init-darkroom)
-
+(when (display-graphic-p)
+  (require 'init-darkroom))
 
 
 (provide 'init-rice)
