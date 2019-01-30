@@ -2,6 +2,7 @@
 ;; hard limit of 31 subprocesses to be spawned, see how to free old processes
 
 (require 'prf-string)
+(require 'dired)
 
 ;; ------------------------------------------------------------------------
 ;; FORMAT
@@ -33,7 +34,11 @@
 		      (buffer-file-name))))
       ;; (shell-command (concat "explorer.exe " (prf/system/get-path-system-format filename)))
       (w32explore (prf/system/get-path-system-format filename))))
-  (defalias '_exp 'prf/show-in-file-explorer))
+  (defalias '_exp 'prf/show-in-file-explorer)
+
+  (define-key dired-mode-map (kbd "Z") 'dired-w32-browser)
+  (define-key dired-mode-map (kbd "E") 'prf/show-in-file-explorer)
+  )
 
 
 (setq prf/setup/app/bash
@@ -120,11 +125,11 @@
 ;; Fullscreen in windows
 ;; - method 1 using AHK (bound to f11)
 ;; - method 2, kinda crappy, has to be tweaked
-(defun toggle-full-screen () (interactive) (shell-command "C:/Users/jordan.besly/AppData/Roaming/.emacs.d/emacs_fullscreen.exe"))
-(global-set-key (kbd "C-<f11>") 'toggle-full-screen)
-(defun toggle-full-screen-topmost () (interactive) (shell-command "C:/Users/jordan.besly/AppData/Roaming/.emacs.d/emacs_fullscreen.exe --topmost"))
-(global-set-key (kbd "M-<f11>") 'toggle-full-screen-topmost)
-
+;; (defun toggle-full-screen () (interactive) (shell-command "C:/Users/jordan.besly/AppData/Roaming/.emacs.d/emacs_fullscreen.exe"))
+;; (global-set-key (kbd "C-<f11>") 'toggle-full-screen)
+;; (defun toggle-full-screen-topmost () (interactive) (shell-command "C:/Users/jordan.besly/AppData/Roaming/.emacs.d/emacs_fullscreen.exe --topmost"))
+;; (global-set-key (kbd "M-<f11>") 'toggle-full-screen-topmost)
+;; - method  3, use toggle-frame-fullscreen from frame.el
 
 ;; ------------------------------------------------------------------------
 ;; EMACS DAEMON
