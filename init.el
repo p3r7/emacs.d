@@ -117,6 +117,8 @@
 (require 'prf-require)
 (prf/require-plugin 'esup nil 'noerror)
 
+(require 'init-auto-compile)
+
 
 
 ;; { Custom Utils }----------------------------------------------------[[<#U]]
