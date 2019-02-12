@@ -1,6 +1,8 @@
 
 ;; could have also added: https://github.com/lunaryorn/ansible-doc.el
 
+;; alternative for jinja2 integration: http://melpa.org/#/poly-ansible
+
 (when (prf/require-plugin 'ansible nil 'noerror)
 
   (defun prf/yml-hook/enable-ansible-minor-mode ()
