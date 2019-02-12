@@ -233,7 +233,8 @@
 
 (require 'init-buffer-navigation)
 (require 'init-file-navigation)
-;; (require 'init-projectile)
+(require 'init-grep)
+(require 'init-projectile)
 ;; (require 'init-vcs) ; slows down tramp
 
 (require 'init-bookmark+)
