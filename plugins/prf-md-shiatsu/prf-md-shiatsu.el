@@ -91,6 +91,7 @@
 (setq prf/md-shiatsu/keywords/chinese
       '("Qi"
 	"Jing"
+	"Tsing"
 	"Jing Qi"
 	"Shen"
 	"Shen Qi"
@@ -126,6 +127,19 @@
 	"Re"
 
 	"Jin Ye"
+
+	;; O/V
+	"Xin"
+	"Xiao Chang"
+	"Da Chang"
+	"Fei"
+	"Gan"
+	"Dan"
+	"Shen"
+	"Wei"
+	"Pi"
+
+	"Ming Men"
 
 	;; clair / souillé
 	"qing"
@@ -168,6 +182,48 @@
 	"Xi"
 	"Hsi"
 	"Tsri"
+	;; - Su Antique
+	"Ting"
+	"Iong"
+	"Iu"
+	"King"
+	"Ho"
+	;; - 4 Mers
+	"Si Hai"
+	"Si Hai Xue"
+
+	;; méridiens
+	;; - MTM
+	"Tsing Kann"
+	"Tching Kann"
+	"Jing Kan"
+	"Jing Jin"
+
+	;; E
+	;; - comburatoire
+	"Yeung Qi"
+	"Qing Qi"
+	;; - alimentaire
+	"Gu Qi"
+	;; - comubro-alimentaire / essentielle
+	"Zhong Qi"
+	;; - de défense
+	"Wei Qi"
+	"Oé Qi"
+	;; - trophique
+	"Iong Qi"
+	"Ying Qi"
+	;; - congénitale
+	"Xian Tian Zhi Qi"
+	;; - ancestrale
+	"Yuan Qi"
+	"shen zhong jing qi"
+
+	;; pouls
+	"Oé"
+	"Cheu"
+	"Seu"
+	"Wang Chou Houo"
 	))
 
 (setq prf/md-shiatsu/keywords/japanese
@@ -176,8 +232,12 @@
 	"Do"
 	"Kuatsu"
 
+	"hara"
+
 	;; points
 	"Iu Ketsu"
+	"Mo"
+	"Bo Ketsu"
 	;; - Xi
 	"Geki"
 	"Gekki"
@@ -191,6 +251,7 @@
 	"Nei King"
 	"Huangdi Neijing"
 	"Suwen"
+	"So Ouenn"
 	"Lingshu"
 
 	"Nan Jing"
