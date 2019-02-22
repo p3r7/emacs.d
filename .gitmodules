@@ -1,6 +1,9 @@
 [submodule "plugins/fakecygpty"]
 	path = plugins/fakecygpty
 	url = https://github.com/d5884/fakecygpty
+[submodule "plugins/pico8-mode"]
+	path = plugins/pico8-mode
+	url = https://github.com/Kaali/pico8-mode
 [submodule "plugins/prf-theme"]
 	path = plugins/prf-theme
 	url = https://github.com/p3r7/prf-theme
