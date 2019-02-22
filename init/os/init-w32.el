@@ -136,6 +136,15 @@
 
 ;; Pseudo emacs-daemon behaviour
 ;;(require 'server-mode) ;; unecessary ?
+
+;; (setq server-auth-dir (concat (getenv "APPDATA") "/.emacs.d/server"))
+;; (make-directory server-auth-dir t)
+
+(defadvice server-ensure-safe-dir
+    (around my-around-server-ensure-safe-dir activate)
+  "Ignores any errors raised from server-ensure-safe-dir"
+  (ignore-errors ad-do-it))
+
 (server-start)
 ;; (unless (server-running-p) (server-start)) ;; doesn't seem to work
 (defun xy/done ()
