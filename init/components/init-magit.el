@@ -1,4 +1,4 @@
 
-(prf/require-plugin 'magit)
+(use-package magit)
 
 (provide 'init-magit)

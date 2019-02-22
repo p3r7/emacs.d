@@ -1,11 +1,10 @@
 
-(when (prf/require-plugin 'ace-jump-mode nil 'noerror)
-  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-  (define-key global-map (kbd "C-c C-SPC") 'ace-jump-mode)
-  (add-hook 'org-mode-hook
-	    '(lambda()
-	       (define-key org-mode-map (kbd "C-c SPC") 'ace-jump-mode)
-	       (define-key org-mode-map (kbd "C-c C-SPC") 'ace-jump-mode)
-	       )))
+(use-package ace-jump-mode
+  :after (org)
+  :bind (("C-c SPC" . ace-jump-mode)
+	 ("C-c C-SPC" . ace-jump-mode)
+	 :map org-mode-map
+	 ("C-c SPC" . ace-jump-mode)
+	 ("C-c C-SPC" . ace-jump-mode)))
 
 (provide 'init-ace-jump)

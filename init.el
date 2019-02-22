@@ -68,7 +68,7 @@
 
 ;; TODO: choose which of /plugins or elpa/ has biggest priority -> add to load path in correct order
 
-;; (setq package-check-signature nil)
+(setq package-check-signature nil)
 
 ;; locations for features:
 ;; - init/ : initialization features (manually defined)
@@ -116,7 +116,11 @@
   )
 
 (require 'prf-require)
-(prf/require-plugin 'esup nil 'noerror)
+(prf/require-plugin 'use-package)
+(setq use-package-always-ensure t)
+
+(use-package esup)
+(use-package noflet)
 
 (require 'init-auto-compile)
 

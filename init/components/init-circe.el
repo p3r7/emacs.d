@@ -1,5 +1,5 @@
 
-(prf/require-plugin 'circe)
+(use-package circe)
 
 
 (provide 'init-circe)

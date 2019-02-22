@@ -1,5 +1,6 @@
 
-(when (prf/require-plugin 'mmm-mode nil 'noerror)
+(use-package mmm-mode
+  :init
   (setq mmm-global-mode 'maybe))
 
 

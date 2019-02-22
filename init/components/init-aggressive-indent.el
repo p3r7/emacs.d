@@ -1,7 +1,5 @@
 
-(when (prf/require-plugin 'aggressive-indent nil 'noerror)
-  ;; (global-aggressive-indent-mode 1)
-  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
-  )
+(use-package aggressive-indent
+  :hook emacs-lisp-mode-hook)
 
 (provide 'init-aggressive-indent)

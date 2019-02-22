@@ -1,9 +1,8 @@
 
-
 (setq load-prefer-newer t)
 
-(when (prf/require-plugin 'auto-compile nil 'noerror)
-  (require 'auto-compile)
+(use-package auto-compile
+  :config
   (auto-compile-on-load-mode)
   (auto-compile-on-save-mode))
 

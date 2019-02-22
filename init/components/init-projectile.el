@@ -1,9 +1,13 @@
 
-;; (prf/require-plugin 'grizzl nil 'noerror)
+;; (use-package 'grizzl)
 
-(require 's)
+;; ------------------------------------------------------------------------
+;; PROJECTILE
 
-(when (prf/require-plugin 'projectile nil 'noerror)
+(use-package projectile
+  :after (s)
+
+  :config
 
   ;; https://github.com/bbatsov/projectile/pull/444
   ;; (setq projectile-file-exists-remote-cache-expire nil)
@@ -12,22 +16,21 @@
 
   (projectile-global-mode)
 
+  (projectile-register-project-type
+   'laravel '("composer.json" "artisan" "app")
+   :compile "composer dump-autoload"
+   :test "phpunit -c app "
+   :test-suffix "Test")
+
+  ;; (projectile-register-project-type
+  ;;  'jupyter '("composer.json" "artisan" "app")
+  ;;  :compile "composer dump-autoload"
+  ;;  :test "phpunit -c app "
+  ;;  :test-suffix "Test")
+
   ;; (if (featurep 'grizzl)
-  ;; (setq projectile-completion-system 'grizzl)
-  ;; )
+  ;;     (setq projectile-completion-system 'grizzl))
 
-
-  (projectile-register-project-type 'laravel '("composer.json" "artisan" "app")
-  				    :compile "composer dump-autoload"
-				    :test "phpunit -c app "
-				    :test-suffix "Test")
-
-  ;; (projectile-register-project-type 'jupyter '("composer.json" "artisan" "app")
-  ;; 				    :compile "composer dump-autoload"
-  ;; 				    :test "phpunit -c app "
-  ;; 				    :test-suffix "Test")
-
-  ;; https://www.reddit.com/r/emacs/comments/9jvn0f/projectile_gets_a_turboalien_indexing_mode/
   (when (executable-find "fd")
 
     (setq prf/projectile/fdignore '("\".git/\"" "\"**/.gitkeep\"" "\"**/.gitignore\""))
@@ -39,27 +42,24 @@
 
     (setq projectile-indexing-method 'alien
 	  projectile-generic-command (concat "fd . -H --ignore-file .projectile -t f -0 " (prf/projectile/build-fdignore))
-	  projectile-git-command (concat "fd . -H -t f -0 " (prf/projectile/build-fdignore))))
-
-  ;; ----------------------------------------------------------------------
-  ;; HELM PROJECTILE
-
-  (when (featurep 'projectile)
-    (prf/require-plugin 'helm-projectile nil 'noerror)
-
-    (cond
-     ((featurep 'helm-rg)
-      (global-set-key (kbd "C-S-f") 'helm-projectile-rg))
-     ((executable-find "ag")
-      (global-set-key (kbd "C-S-f") 'helm-projectile-ag))
-     (t
-      (global-set-key (kbd "C-S-f") 'helm-projectile)))
-
-    (global-set-key (kbd "C-S-n") 'helm-projectile-find-file))
-
-  )
+	  projectile-git-command (concat "fd . -H -t f -0 " (prf/projectile/build-fdignore)))))
 
 
 ;; ------------------------------------------------------------------------
+;; HELM PROJECTILE
 
-  (provide 'init-projectile)
+(use-package helm-projectile
+  :after (helm projectile)
+  :bind (("C-S-n" . helm-projectile-find-file))
+  :config
+  (cond
+   ((featurep 'helm-rg)
+    (global-set-key (kbd "C-S-f") 'helm-projectile-rg))
+   ((executable-find "ag")
+    (global-set-key (kbd "C-S-f") 'helm-projectile-ag))
+   (t
+    (global-set-key (kbd "C-S-f") 'helm-projectile))))
+
+
+
+(provide 'init-projectile)

@@ -1,6 +1,6 @@
 
-(when (prf/require-plugin 'origami nil 'noerror)
-
+(use-package origami
+  :config
   (defun prf/origami-prog-mode-hook ()
     (origami-mode)
     (local-set-key (kbd "C-c <right>") 'origami-show-node)
