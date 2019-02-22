@@ -56,7 +56,6 @@
 
 ;; { Init }------------------------------------------------------------[[<#I]]
 
-
 (defun edit-dot-emacs () (interactive)
   (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-<f1>") 'edit-dot-emacs)
@@ -68,6 +67,8 @@
 ;; { Packages }--------------------------------------------------------[[<#P]]
 
 ;; TODO: choose which of /plugins or elpa/ has biggest priority -> add to load path in correct order
+
+;; (setq package-check-signature nil)
 
 ;; locations for features:
 ;; - init/ : initialization features (manually defined)
