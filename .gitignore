@@ -1,3 +1,6 @@
+# Network Security Manager
+network-security.data
+
 # compiled & binary files
 **.elc
 **.exe
@@ -24,6 +27,9 @@ recentf
 smex.save
 tramp
 .saves
+
+# magit
+transient/
 
 # private folders
 auto-save-list/
