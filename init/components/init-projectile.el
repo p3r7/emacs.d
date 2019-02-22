@@ -45,11 +45,21 @@
   ;; HELM PROJECTILE
 
   (when (featurep 'projectile)
-    (prf/require-plugin 'helm-projectile nil 'noerror))
+    (prf/require-plugin 'helm-projectile nil 'noerror)
+
+    (cond
+     ((featurep 'helm-rg)
+      (global-set-key (kbd "C-S-f") 'helm-projectile-rg))
+     ((executable-find "ag")
+      (global-set-key (kbd "C-S-f") 'helm-projectile-ag))
+     (t
+      (global-set-key (kbd "C-S-f") 'helm-projectile)))
+
+    (global-set-key (kbd "C-S-n") 'helm-projectile-find-file))
 
   )
 
 
 ;; ------------------------------------------------------------------------
 
-(provide 'init-projectile)
+  (provide 'init-projectile)
