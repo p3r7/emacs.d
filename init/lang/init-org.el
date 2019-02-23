@@ -1,4 +1,5 @@
 ;;TODO: [[http://orgmode.org/worg/org-faq.html#load-org-after-setting-variables]]
+
 (require 'org-install)
 (require 'org-habit)
 
@@ -30,13 +31,16 @@
 ;; ------------------------------------------------------------------------
 ;; EXPORT
 
-(prf/require-plugin 'htmlize)
 ;; TODO: https://github.com/fniessen/org-html-themes
+
+(use-package htmlize
+  :after (org))
 
 (setq org-export-with-section-numbers nil)
 (setq org-html-validation-link nil)
 
-(prf/require-plugin 'ox-slack)
+;; (prf/require-plugin 'ox-slack)
+
 
 ;; ------------------------------------------------------------------------
 ;; CAPTURE

@@ -1,5 +1,6 @@
 
 (require 'ansi-color)
+
 (defun endless/colorize-compilation ()
   "Colorize from `compilation-filter-start' to `point'."
   (let ((inhibit-read-only t))

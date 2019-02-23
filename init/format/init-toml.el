@@ -1,4 +1,4 @@
 
-(prf/require-plugin 'toml-mode)
+(use-package toml-mode)
 
 (provide 'init-toml)

@@ -9,11 +9,11 @@
 ;; (add-to-list 'auto-mode-alist '("\\.ahk$" . xahk-mode)))
 
 ;; - [X] https://github.com/ralesi/ahk-mode
-(when (prf/require-plugin 'ahk-mode nil 'noerror)
+(use-package ahk-mode
+  ;; :mode "\\.ahk$"
+  :config
   (add-hook 'ahk-mode-hook
 	    (lambda()
 	      (local-set-key (kbd "C-c C-e") 'ahk-run-script))))
-;; (when (prf/require-plugin 'ahk-mode noerror 'noerror)
-;; (add-to-list 'auto-mode-alist '("\\.ahk$" . ahk-mode)))
 
   (provide 'init-ahk)

@@ -13,11 +13,10 @@
   )
 
 
-(when (prf/require-plugin-from-file 'php-mode "~/.emacs.d/plugins-spe/nxhtml/related" 'noerror)
-  ;; (when (prf/require-plugin 'php-mode nil 'noerror)
-  (add-to-list 'auto-mode-alist '("\\.php?\\'" . php-mode))
-
-
+(use-package php-mode
+  :load-path "~/.emacs.d/plugins-spe/nxhtml/related"
+  :mode "\\.php?\\'"
+  ;; :config
   ;; (add-hook 'php-mode-hook 'prf/indentation-php-mode-hook)
   )
 

@@ -1,6 +1,5 @@
 
-(prf/require-plugin 's)
-
+(require 's)
 
 ;; SHELL & TRAMP & DIRED
 
@@ -18,24 +17,27 @@
   )
 ;; NB: solves copy & mv, but potentially crashes find-file
 
-(prf/require-plugin 'tramp-term)
-(require 'prf-tramp)
+(use-package tramp-term)
+(use-package prf-tramp
+  :load-path "~/.emacs.d/plugins/prf-tramp")
 
-(prf/install-package 'hide-lines)
+(use-package hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
-(require 'syslog-mode)
-(add-to-list 'auto-mode-alist '(".*\.log'" . syslog-mode))
-(add-to-list 'auto-mode-alist '(".*\.log\..*\.gz'" . syslog-mode))
-(add-to-list 'auto-mode-alist '("/var/log.*\\'" . syslog-mode))
-(add-to-list 'auto-mode-alist '("\\catalina.out\\'" . syslog-mode))
+(use-package syslog-mode
+  :load-path "~/.emacs.d/plugins-spe/syslog-mode-prf"
+  :mode (".*\.log'" ".*\.log\..*\.gz'" "/var/log.*\\'"
+	 "\\catalina.out\\'"))
 
 ;; ------------------------------------------------------------------------
 ;; DIRED
 
-;; (prf/require-plugin-from-file 'dired+ "~/.emacs.d/plugins/dired+" 'noerror)
-(prf/require-plugin 'dired+)
-;; (eval-after-load "dired-aux"
-;;       '(require 'dired-async))
+(use-package dired+
+  :load-path "~/.emacs.d/plugins/dired+"
+  ;; :config
+  ;; (eval-after-load "dired-aux"
+  ;;     '(require 'dired-async))
+  )
+
 ;; http://www.emacswiki.org/emacs/Sunrise_Commander
 
 (when (executable-find "busybox")
@@ -51,13 +53,11 @@
  comint-input-ring-size 5000 ;; history size
  ;; comint-completion-addsuffix t ;; might conflict w/ autocomplete
  comint-buffer-maximum-size 20000
- comint-scroll-to-bottom-on-input t
- )
+ comint-scroll-to-bottom-on-input t)
 
 
 ;; ------------------------------------------------------------------------
 ;; TRAMP
-
 
 ;; disable vc for remote files (speed increase)
 (setq vc-ignore-dir-regexp

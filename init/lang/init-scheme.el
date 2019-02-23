@@ -1,17 +1,19 @@
-(when (require 'quack nil 'noerror)
+(use-package quack
+  :init
   ;;(setq scheme-program-name "scm")
   (setq quack-programs (quote ("scm" "bigloo" "csi" "csi -hygienic" "gosh" "gsi" "gsi ~~/syntax-case.scm -" "guile" "kawa" "mit-scheme" "mred -z" "mzscheme" "mzscheme -il r6rs" "mzscheme -il typed-scheme" "mzscheme -M errortrace" "mzscheme3m" "mzschemecgc" "rs" "scheme" "scheme48" "scsh" "sisc" "stklos" "sxi")))
   (setq quack-default-program "scm")
+
+  :config
   (fset 'scheme-evaluate-buffer
 	"\C-xh\C-c\C-r\M->")
 
-  (add-hook 'scheme-mode-hook ;; no need of a progn ????
+  (add-hook 'scheme-mode-hook
 	    (lambda()
 	      (local-set-key  (kbd "C-<f3>") 'run-scheme)
 	      (local-set-key (kbd "C-j") 'scheme-send-region)
 	      (local-set-key (kbd "M-j") 'scheme-evaluate-buffer)
-	      (linium-mode)
-	      ))
+	      (linium-mode)))
 
   ;; TODO: define it for only scheme-mode ???
   (defadvice scheme-send-region (before slickcopy activate compile)

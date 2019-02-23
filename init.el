@@ -45,6 +45,17 @@
 ;; (show-paren-mode t)
 ;; (setq show-paren-style 'expression)
 
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+(defvar prf/file-name-handler-alist file-name-handler-alist)
+(setq file-name-handler-alist nil)
+
+(add-hook 'after-init-hook #'(lambda ()
+                               ;; restore after startup
+                               (setq gc-cons-threshold 16777216
+				     gc-cons-percentage 0.1
+				     file-name-handler-alist prf/file-name-handler-alist)))
+
 (require 'cl)
 (require 'org)
 
@@ -106,7 +117,7 @@
 
 (when (require 'package nil 'noerror)
   ;; still some issues w/ marmalade's certif https://github.com/nicferrier/elmarmalade/issues/55
-  (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
@@ -117,9 +128,20 @@
 
 (require 'prf-require)
 (prf/require-plugin 'use-package)
-(setq use-package-always-ensure t)
+(setq use-package-always-ensure t
+      use-package-verbose t)
+(setq garbage-collection-messages t)
+
+(use-package quelpa)
+(use-package quelpa-use-package
+  :config
+  (quelpa-use-package-activate-advice))
+
 
 (use-package esup)
+
+(use-package s)
+(use-package dash)
 (use-package noflet)
 
 (require 'init-auto-compile)
@@ -240,13 +262,11 @@
 (require 'init-file-navigation)
 (require 'init-grep)
 (require 'init-projectile)
-;; (require 'init-vcs) ; slows down tramp
+(require 'init-vcs)
 
 (require 'init-bookmark+)
 (require 'init-deft)
 (require 'init-neotree)
-
-(require 'init-magit)
 
 (require 'init-macro)
 

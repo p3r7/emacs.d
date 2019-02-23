@@ -101,9 +101,10 @@
   (set-face-attribute 'show-paren-match-face nil
 		      :weight 'bold :underline nil :overline nil :slant 'normal))
 
-(when (prf/require-plugin 'rainbow-delimiters nil 't)
+(use-package rainbow-delimiters
+  ;; :config
   ;; (global-rainbow-delimiters-mode)
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  :hook (prog-mode-hook . rainbow-delimiters-mode))
 
 
 ;; -------------------------------------------------------------------------

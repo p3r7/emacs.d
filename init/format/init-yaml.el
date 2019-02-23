@@ -1,5 +1,4 @@
 
-
-(prf/require-plugin 'yaml-mode)
+(use-package yaml-mode)
 
 (provide 'init-yaml)

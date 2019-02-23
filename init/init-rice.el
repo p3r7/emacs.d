@@ -16,15 +16,21 @@
 ;; -------------------------------------------------------------------------
 ;; THEMES
 
-(prf/install-package 'gotham-theme)
-(prf/install-package 'ample-theme)
-(prf/install-package 'plan9-theme)
-(prf/install-package 'dracula-theme)
-(prf/install-package 'flatui-theme)
+(use-package gotham-theme
+  :defer t)
+(use-package ample-theme
+  :defer t)
+(use-package plan9-theme
+  :defer t)
+(use-package dracula-theme
+  :defer t)
+(use-package flatui-theme
+  :defer t)
 
 (defvar prf/theme/list/practical
   (list
    'flatui
+   'plan9
    'dracula-mod
    'comidia-mod
    ;; 'gotham
@@ -56,13 +62,15 @@
    'tango
    ))
 
-(when (require 'prf-theme nil 'noerror)
+(use-package prf-theme
+  :load-path "~/.emacs.d/plugins/prf-theme"
+  :bind ([f12] . prf/theme/cycle-theme)
+  :init
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
   (setq prf/theme/theme-list prf/theme/list/practical)
   ;; (setq prf/theme/theme-list prf/theme/list/retro-light)
-  (prf/theme/initialize)
-  (global-set-key [f12] 'prf/theme/cycle-theme)
-  )
+  :config
+  (prf/theme/initialize))
 
 
 ;; -------------------------------------------------------------------------
@@ -114,18 +122,19 @@
 ;; -------------------------------------------------------------------------
 ;; VISUAL ENHANCEMENTS
 
-(when (prf/require-plugin 'rainbow-mode nil 'noerror)
+(use-package rainbow-mode
+  :config
   (defun prf/rainbow-mode-prog-mode-hook ()
     (rainbow-mode 1))
   (add-hook 'prog-mode-hook 'prf/rainbow-mode-prog-mode-hook)
-  (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook)
-  )
+  (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook))
 
 ;; Preview faces at their definition
 ;; - [X] https://github.com/Fanael/highlight-defined
 ;;   Additionally provides faces for defined symbols.
 ;; - [ ] https://github.com/Fuco1/fontify-face
-(when (prf/require-plugin 'highlight-defined nil 'noerror)
+(use-package highlight-defined
+  :init
   (setq highlight-defined-face-use-itself 't))
 
 

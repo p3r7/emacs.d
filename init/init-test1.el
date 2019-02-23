@@ -1,9 +1,11 @@
-(prf/require-plugin 'noflet)
+(require 'noflet)
 
-(when (prf/require-plugin 'multi-scratch nil 'no-error)
+(use-package multi-scratch
+  :disabled
+  :init
   (setq multi-scratch-buffer-name "scratch")
-  (defalias '_msn 'multi-scratch-new)
-  )
+  :config
+  (defalias '_msn 'multi-scratch-new))
 
 (defun prf/thing-at-point (THING)
   "wrapper around thing-at-point to support other types"

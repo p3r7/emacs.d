@@ -1,19 +1,23 @@
 
-(prf/require-plugin 'prf-smart-edit)
-
-(global-set-key (kbd "M-w") 'copy-line-or-region)
-(define-key org-mode-map (kbd "M-w") 'copy-line-or-region-org)
-(global-set-key (kbd "C-w") 'cut-line-or-region)
-(define-key org-mode-map (kbd "C-w") 'cut-line-or-region-org)
-
-(global-set-key (kbd "C-d") 'duplicate-line-or-region)
-					; c-electric-delete-forward on recent emacs
-(define-key c-mode-map (kbd "C-d") 'duplicate-line-or-region)
-(when (prf/require-plugin 'groovy-mode nil 'noerror)
-  (define-key groovy-mode-map (kbd "C-d") 'duplicate-line-or-region))
-
-(global-set-key (kbd "C-<f8>") 'comment-or-uncomment-line-or-region)
-(global-set-key (kbd "<C-kp-divide>") 'comment-or-uncomment-line-or-region)
+(use-package prf-smart-edit
+  :load-path "~/.emacs.d/plugins/prf-smart-edit"
+  ;; :after (org groovy-mode)
+  :after (org)
+  :demand
+  :bind (
+	 ("M-w" . copy-line-or-region)
+	 ("C-w" . cut-line-or-region)
+	 ("C-d" . duplicate-line-or-region)
+	 ("C-<f8>" . comment-or-uncomment-line-or-region)
+	 ("<C-kp-divide>" . comment-or-uncomment-line-or-region)
+	 :map org-mode-map
+	 ("M-w" . copy-line-or-region-org)
+	 ("C-w" . cut-line-or-region-org)
+	 ;; :map groovy-mode-map
+	 ;; ("C-d" . duplicate-line-or-region)
+	 )
+  )
+;; REVIEW: what about c-electric-delete-forward on recent emacs versions
 
 
 ;; ------------------------------------------------------------------------
@@ -22,20 +26,16 @@
 ;; - brackets completion
 ;; http://emacs-fu.blogspot.fr/2010/06/automatic-pairing-of-brackets-and.html
 ;; - [X] autopair
-(when (prf/require-plugin 'autopair nil 'noerror)
-  (eval-after-load "autopair"
-    '(progn
-       (autopair-global-mode 1)
-       (if (and (<= emacs-major-version 24)
-		(<= emacs-minor-version 3))
-	   (progn
-	     (setq autopair-autowrap t)
-	     (put 'autopair-backspace 'cua-selection 'supersede)
-	     )
-	 (prf/require-plugin 'wrap-region) ;; replacement for autopair-autowrap
-	 )
-       ))
-  )
+(use-package autopair
+  :config
+  (autopair-global-mode 1)
+  (if (and (<= emacs-major-version 24)
+	   (<= emacs-minor-version 3))
+      (progn
+	(setq autopair-autowrap t)
+	(put 'autopair-backspace 'cua-selection 'supersede))
+    (use-package wrap-region) ;; replacement for autopair-autowrap
+    ))
 ;; - [ ] electric-pair
 ;; http://xahlee.blogspot.fr/2012/06/emacs-24-feature-electric-pair-mode.html
 
@@ -83,13 +83,11 @@ See help of `format-time-string' for possible replacements")
 (defun prf/insert-current-date-compact ()
   "insert the current date into the current buffer."
   (interactive)
-  (insert (format-time-string date-format-compact (current-time)))
-  )
+  (insert (format-time-string date-format-compact (current-time))))
 (defun prf/insert-current-datetime-compact ()
   "insert the current date into the current buffer."
   (interactive)
-  (insert (format-time-string datetime-format-compact (current-time)))
-  )
+  (insert (format-time-string datetime-format-compact (current-time))))
 
 
 
