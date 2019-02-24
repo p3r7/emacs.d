@@ -2,6 +2,7 @@
 (setq Buffer-menu-name-width 40)
 
 (use-package bookmark+
+  :defer t
   :load-path "~/.emacs.d/plugins/bookmark+"
   :bind (("<f10>" . list-bookmarks)
 	 ("C-<f10>" . bookmark-set))

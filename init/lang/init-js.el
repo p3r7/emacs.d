@@ -24,7 +24,8 @@
 ;; (tern-ac-setup)))
 
 ;; - jsx
-(use-package rjsx-mode)
+(use-package rjsx-mode
+  :defer t)
 
 
 (provide 'init-js)

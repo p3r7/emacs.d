@@ -17,9 +17,11 @@
   )
 ;; NB: solves copy & mv, but potentially crashes find-file
 
-(use-package tramp-term)
+(use-package tramp-term
+  :defer t)
 (use-package prf-tramp
-  :load-path "~/.emacs.d/plugins/prf-tramp")
+  :load-path "~/.emacs.d/plugins/prf-tramp"
+  :defer t)
 
 (use-package hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
@@ -33,6 +35,7 @@
 
 (use-package dired+
   :load-path "~/.emacs.d/plugins/dired+"
+  :defer t
   ;; :config
   ;; (eval-after-load "dired-aux"
   ;;     '(require 'dired-async))

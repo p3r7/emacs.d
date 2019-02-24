@@ -1,5 +1,6 @@
 
-(use-package go-mode)
+(use-package go-mode
+  :defer t)
 
 (use-package go-autocomplete
   :after (go))
