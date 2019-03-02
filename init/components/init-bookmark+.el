@@ -12,7 +12,8 @@
   )
 
 ;; (use-package bookmark+
-;;   :load-path "~/.emacs.d/plugins/bookmark+"
+;;   ;; :load-path "~/.emacs.d/plugins/bookmark+"
+;;   :quelpa (bookmark+ :fetcher github :repo "emacsmirror/bookmark-plus"))
 ;;   :bind (("<f10>" . list-bookmarks)
 ;; 	 ("C-<f10>" . bookmark-set))
 ;;   :init
