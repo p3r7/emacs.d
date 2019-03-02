@@ -129,10 +129,15 @@
 (require 'prf-require)
 (prf/require-plugin 'use-package)
 (setq use-package-always-ensure t
-      use-package-verbose t)
-(setq garbage-collection-messages t)
+      ;; use-package-verbose t
+      )
+;; (setq garbage-collection-messages t)
 
-(use-package quelpa)
+(use-package quelpa
+  ;; :config
+  ;; (setq quelpa-dir "/home/jordan.besly/.emacs.d/quelpa"
+  ;; 	quelpa-build-dir "/home/jordan.besly/.emacs.d/quelpa/build")
+  )
 (use-package quelpa-use-package
   :config
   (quelpa-use-package-activate-advice))

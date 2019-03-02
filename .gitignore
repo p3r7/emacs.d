@@ -8,6 +8,7 @@ network-security.data
 
 # packages
 elpa/
+quelpa/
 
 # private source files
 custom.el
