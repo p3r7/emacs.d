@@ -77,11 +77,8 @@
 ;; ------------------------------------------------------------------------
 ;; SHELLS
 
-(use-package prf-tramp
-  :load-path "~/.emacs.d/plugins/prf-tramp"
-  :init
+(with-eval-after-load 'prf-tramp
   (setq prf/tramp/local-shell-bin/cmd shell-file-name)
-  :config
   (defun prf/tramp/shell/cmd (&optional path)
     (interactive)
     (prf/tramp/shell path prf/tramp/local-shell-bin/cmd)))

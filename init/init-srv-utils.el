@@ -19,9 +19,6 @@
 
 (use-package tramp-term
   :defer t)
-(use-package prf-tramp
-  :load-path "~/.emacs.d/plugins/prf-tramp"
-  :defer t)
 
 (use-package hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
@@ -146,9 +143,14 @@
 (when (>= emacs-major-version 25)
   (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window)))
 
-(if (not (fboundp '_sh))
-    (defalias '_sh 'prf/tramp/shell))
-(defalias '_rsh 'prf/tramp/remote-shell)
+(require 'prf-tramp)
+;; (use-package prf-tramp
+;;   :load-path "~/.emacs.d/plugins/prf-tramp"
+;;   :config
+(with-eval-after-load 'prf-tramp
+  (if (not (fboundp '_sh))
+      (defalias '_sh 'prf/tramp/shell))
+  (defalias '_rsh 'prf/tramp/remote-shell))
 
 (defun local-root-shell ()
   (interactive)
