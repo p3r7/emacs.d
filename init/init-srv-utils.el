@@ -143,11 +143,9 @@
 (when (>= emacs-major-version 25)
   (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window)))
 
-(require 'prf-tramp)
-;; (use-package prf-tramp
-;;   :load-path "~/.emacs.d/plugins/prf-tramp"
-;;   :config
-(with-eval-after-load 'prf-tramp
+(use-package prf-tramp
+  :load-path "~/.emacs.d/plugins/prf-tramp"
+  :config
   (if (not (fboundp '_sh))
       (defalias '_sh 'prf/tramp/shell))
   (defalias '_rsh 'prf/tramp/remote-shell))
