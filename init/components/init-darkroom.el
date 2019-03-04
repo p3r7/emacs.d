@@ -1,15 +1,4 @@
 
-
-
-;; writeroom
-
-(when (prf/require-plugin 'writeroom-mode nil 'noerror)
-  )
-
-
-
-;; darkroom
-
 ;; (if (bound-and-true-p darkroom-mode)
 ;;     (message "darkroom is on")
 ;;   (message "darkroom is off"))

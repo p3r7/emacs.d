@@ -21,7 +21,8 @@
 (use-package ample-theme
   :defer t)
 (use-package plan9-theme
-  :defer t)
+  ;; :defer t
+  )
 (use-package dracula-theme
   :defer t)
 (use-package flatui-theme
@@ -29,8 +30,8 @@
 
 (defvar prf/theme/list/practical
   (list
-   'flatui
    'plan9
+   'flatui
    'dracula-mod
    'comidia-mod
    ;; 'gotham
@@ -142,7 +143,7 @@
 ;; WRITEROOM / DARKROOM
 
 (when (display-graphic-p)
-  (require 'init-darkroom))
+  (require 'init-writeroom))
 
 
 (provide 'init-rice)
