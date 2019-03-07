@@ -27,6 +27,7 @@
 ;; http://emacs-fu.blogspot.fr/2010/06/automatic-pairing-of-brackets-and.html
 ;; - [X] autopair
 (use-package autopair
+  :delight
   :config
   (autopair-global-mode 1)
   (if (and (<= emacs-major-version 24)

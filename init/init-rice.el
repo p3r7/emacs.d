@@ -124,6 +124,7 @@
 ;; VISUAL ENHANCEMENTS
 
 (use-package rainbow-mode
+  :delight
   :config
   (defun prf/rainbow-mode-prog-mode-hook ()
     (rainbow-mode 1))
