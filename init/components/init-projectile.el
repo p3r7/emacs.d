@@ -7,6 +7,16 @@
 (use-package projectile
   :after (s)
 
+  ;; REVIEW: cleaner defintion w/ let*
+  :delight '(:eval (if (string= "-" (projectile-project-name))
+		       ""
+		     (concat
+		      " P"
+		      "[" (projectile-project-name)
+		      (when (not (string= "generic" (symbol-name (projectile-project-type))))
+			(concat ":" (symbol-name (projectile-project-type))))
+		      "]")))
+
   :config
 
   ;; https://github.com/bbatsov/projectile/pull/444
