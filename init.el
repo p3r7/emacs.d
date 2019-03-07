@@ -142,12 +142,14 @@
   :config
   (quelpa-use-package-activate-advice))
 
+(use-package delight)
 
 (use-package esup)
 
 (use-package s)
 (use-package dash)
 (use-package noflet)
+
 
 (require 'init-auto-compile)
 
