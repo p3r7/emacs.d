@@ -50,11 +50,11 @@
 (defvar prf/file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 
-(add-hook 'after-init-hook #'(lambda ()
-                               ;; restore after startup
-                               (setq gc-cons-threshold 16777216
-				     gc-cons-percentage 0.1
-				     file-name-handler-alist prf/file-name-handler-alist)))
+(add-hook 'after-init-hook (lambda ()
+                             ;; restore after startup
+                             (setq gc-cons-threshold 16777216
+				   gc-cons-percentage 0.1
+				   file-name-handler-alist prf/file-name-handler-alist)))
 
 (require 'cl)
 (require 'org)
