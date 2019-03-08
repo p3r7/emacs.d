@@ -30,19 +30,9 @@
 ;; ------------------------------------------------------------------------
 ;; DIRED
 
-(use-package dired+
-  :load-path "~/.emacs.d/plugins/dired+"
-  :defer t
-  ;; :config
-  ;; (eval-after-load "dired-aux"
-  ;;     '(require 'dired-async))
-  )
-
 ;; http://www.emacswiki.org/emacs/Sunrise_Commander
 
-(when (executable-find "busybox")
-  (setq dired-use-ls-dired nil))
-
+(require 'init-dired)
 
 ;; ------------------------------------------------------------------------
 ;; GENERAL COMINT
@@ -201,9 +191,7 @@
 
 (add-hook 'eshell-mode-hook
 	  (lambda ()
-	    (setq
-	     global-hl-line-mode nil)
-	    ))
+	    (setq global-hl-line-mode nil)))
 
 
 
@@ -224,34 +212,6 @@
   (term-char-mode)
   (term-set-escape-char ?\C-x)
   (switch-to-buffer term-ansi-buffer-name))
-
-
-
-;; ------------------------------------------------------------------------
-;; DIRED
-
-;; [[http://www.emacswiki.org/emacs/DiredTweaks]]
-(setq
- dired-dwim-target t ;; if other window -> set as default dir for copy
- ls-lisp-dirs-first t ;; display dirs 1st
- dired-listing-switches "-alh"
- diredp-hide-details-initially-flag nil
- diredp-hide-details-propagate-flag nil
- )
-;; http://stackoverflow.com/questions/14602291/dired-how-to-get-really-human-readable-output-find-ls-option
-;; http://stackoverflow.com/questions/4115465/emacs-dired-too-much-information
-
-(put 'dired-find-alternate-file 'disabled nil)
-
-(add-hook 'dired-mode-hook ;; do not create other dired buffers when navigating
-	  ;; TODO: far from being perfect (closes all dired windows, not just current)
-	  (lambda ()
-	    (define-key dired-mode-map (kbd "<return>")
-	      'dired-find-alternate-file) ; was dired-advertised-find-file
-	    (define-key dired-mode-map (kbd "^")
-	      (lambda () (interactive) (find-alternate-file "..")))
-					; was dired-up-directory
-	    ))
 
 
 ;; ------------------------------------------------------------------------
