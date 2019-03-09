@@ -56,9 +56,6 @@
 				   gc-cons-percentage 0.1
 				   file-name-handler-alist prf/file-name-handler-alist)))
 
-(require 'cl)
-(require 'org)
-
 ;; (defvar *emacs-load-start* (current-time))
 ;; (setq stack-trace-on-error t) ;; DEBUG
 
@@ -70,9 +67,6 @@
 (defun edit-dot-emacs () (interactive)
   (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-<f1>") 'edit-dot-emacs)
-
-;; (require 'async)
-;; (require 'async-file)
 
 
 ;; { Packages }--------------------------------------------------------[[<#P]]
@@ -145,19 +139,12 @@
 (use-package delight)
 
 (use-package esup)
-
-(use-package s)
-(use-package dash)
-(use-package noflet)
-
-
 (require 'init-auto-compile)
-
 
 
 ;; { Custom Utils }----------------------------------------------------[[<#U]]
 
-(require 'prf-string)
+(require 'init-libs)
 
 
 ;; { OS Specific Stuff }-----------------------------------------------[[<#O]]
@@ -237,6 +224,7 @@
 (require 'init-xml)
 (require 'init-javaprop)
 (require 'init-yaml)
+(require 'init-ansible)
 (require 'init-toml)
 (require 'init-dotenv)
 ;; (require 'csv-mode)
@@ -247,7 +235,6 @@
 (require 'init-srv-utils)
 (require 'init-compilation)
 
-(require 'init-ansible)
 (require 'init-circe)
 
 
