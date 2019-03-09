@@ -203,6 +203,7 @@
 
 ;; - descriptive
 (require 'init-html)
+(require 'init-text-common)
 (require 'init-org)
 (require 'init-markdown)
 (require 'init-md-org-shiatsu)
