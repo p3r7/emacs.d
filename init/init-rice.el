@@ -4,13 +4,23 @@
 
 (set-face-bold-p 'bold nil)
 
+;; alt way to test: (when (find-font (font-spec :name "DejaVu Sans Mono") ...)
+
+(when (and (boundp 'prf/rice/font-family)
+	   (member prf/rice/font-family (font-family-list)))
+  (set-face-attribute 'default nil :family prf/rice/font-family))
+
+(when (and (boundp 'prf/rice/variable-pitch-font-family)
+	   (member prf/rice/variable-pitch-font-family (font-family-list)))
+  (set-face-attribute 'default nil :family prf/rice/variable-pitch-font-family))
+
 (when (boundp 'prf/rice/font)
-  (if (windows-nt-p)
-      (setq default-frame-alist `((font . ,prf/rice/font))))
-  (setq font-default prf/rice/font))
+  ;; (setq default-frame-alist `((font . ,prf/rice/font)))
+  (set-face-attribute 'default nil :font prf/rice/font))
 
 (when (boundp 'prf/rice/font-height)
-  (set-face-attribute 'default nil :height prf/rice/font-height))
+  (set-face-attribute 'default nil :height prf/rice/font-height)
+  (set-face-attribute 'variable-pitch nil :height prf/rice/font-height))
 
 
 ;; -------------------------------------------------------------------------
