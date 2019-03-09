@@ -9,6 +9,11 @@
 	 ("C-h o" . helpful-at-point)
 	 ("C-h F" . helpful-function)))
 
+(use-package which-key
+  :delight
+  :config
+  (which-key-mode))
+
 ;; -------------------------------------------------------------------------
 ;; INFO
 
