@@ -67,8 +67,19 @@
 ;; -------------------------------------------------------------------------
 ;; LINUM
 
-(autoload 'linum-mode "linum" "toggle line numbers on/off" t)
-(global-set-key (kbd "C-<f5>") 'linum-mode)
+(if (boundp 'display-line-numbers-mode)
+    (progn
+      (face-spec-set
+       'line-number
+       '((t :inherit fringe))
+       'face-defface-spec)
+      (face-spec-set
+       'line-number-current-line
+       '((t :inherit 'line-number :foreground "Firebrick"))
+       'face-defface-spec)
+      (global-set-key (kbd "C-<f5>") 'display-line-numbers-mode))
+  (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
+  (global-set-key (kbd "C-<f5>") 'linum-mode))
 
 
 ;; -------------------------------------------------------------------------

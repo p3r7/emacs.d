@@ -9,7 +9,9 @@
   ;; C-d for deleting
   (local-set-key (kbd "C-d") 'duplicate-line-or-region)
   ;; line numbers
-  (linum-mode t)
+  ;; (if (boundp display-line-numbers-mode)
+  ;;     (display-line-numbers-mode 1)
+  ;;   (linum-mode 1))
   (setq comment-start "//"
 	comment-end   ""))
 

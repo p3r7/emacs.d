@@ -23,6 +23,8 @@
   (add-hook 'web-mode-hook
 	    (lambda()
 	      (setq tab-width 4)
-	      (linum-mode t))))
+	      (if (fboundp 'display-line-numbers-mode)
+		  (display-line-numbers-mode 1)
+		(linum-mode 1)))))
 
 (provide 'init-html)
