@@ -150,6 +150,9 @@
   :init
   (setq highlight-defined-face-use-itself 't))
 
+(when (fboundp 'prettify-symbols-mode)
+  (setq prettify-symbols-unprettify-at-point 'right-edge))
+
 
 ;; -------------------------------------------------------------------------
 ;; WRITEROOM / DARKROOM
