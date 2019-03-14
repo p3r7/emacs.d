@@ -8,10 +8,6 @@
   (local-set-key  (kbd "C-c o") 'ff-find-other-file)
   ;; C-d for deleting
   (local-set-key (kbd "C-d") 'duplicate-line-or-region)
-  ;; line numbers
-  ;; (if (boundp display-line-numbers-mode)
-  ;;     (display-line-numbers-mode 1)
-  ;;   (linum-mode 1))
   (setq comment-start "//"
 	comment-end   ""))
 
