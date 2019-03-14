@@ -136,6 +136,7 @@
   :config
   (quelpa-use-package-activate-advice))
 
+(use-package paradox)
 (use-package delight)
 
 (use-package esup)
