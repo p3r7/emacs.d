@@ -102,9 +102,9 @@
 		      :weight 'bold :underline nil :overline nil :slant 'normal))
 
 (use-package rainbow-delimiters
-  ;; :config
-  ;; (global-rainbow-delimiters-mode)
-  :hook (prog-mode-hook . rainbow-delimiters-mode))
+  ;; :hook (prog-mode-hook . rainbow-delimiters-mode)
+  :config
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 
 ;; -------------------------------------------------------------------------
