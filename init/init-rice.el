@@ -12,15 +12,16 @@
 
 (when (and (boundp 'prf/rice/variable-pitch-font-family)
 	   (member prf/rice/variable-pitch-font-family (font-family-list)))
-  (set-face-attribute 'default nil :family prf/rice/variable-pitch-font-family))
+  (set-face-attribute 'variable-pitch nil :family prf/rice/variable-pitch-font-family))
 
 (when (boundp 'prf/rice/font)
   ;; (setq default-frame-alist `((font . ,prf/rice/font)))
   (set-face-attribute 'default nil :font prf/rice/font))
 
 (when (boundp 'prf/rice/font-height)
-  (set-face-attribute 'default nil :height prf/rice/font-height)
-  (set-face-attribute 'variable-pitch nil :height prf/rice/font-height))
+  (set-face-attribute 'default nil :height prf/rice/font-height))
+(when (boundp 'prf/rice/variable-pitch-font-height)
+  (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))
 
 
 ;; -------------------------------------------------------------------------
