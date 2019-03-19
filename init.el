@@ -248,6 +248,7 @@
 (require 'init-aggressive-indent)
 (require 'init-ediff)
 (require 'init-origami)
+(require 'init-yasnippet)
 
 
 ;; { Navigation }------------------------------------------------------[[<#N]]
