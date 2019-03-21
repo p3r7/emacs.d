@@ -67,7 +67,7 @@
 ;; -------------------------------------------------------------------------
 ;; LINUM
 
-(if (boundp 'display-line-numbers-mode)
+(if (fboundp 'display-line-numbers-mode)
     (progn
       (face-spec-set
        'line-number
