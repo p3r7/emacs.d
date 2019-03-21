@@ -45,6 +45,8 @@
          . (lambda ()
              (unbind-key "<C-left>" paredit-mode-map)
              (unbind-key "<C-right>" paredit-mode-map)
+             (unbind-key "C-M-p" paredit-mode-map)
+             (unbind-key "C-M-n" paredit-mode-map)
              (unbind-key "C-d" paredit-mode-map)
              (unbind-key "M-r" paredit-mode-map)
              (unbind-key "M-s" paredit-mode-map)))
