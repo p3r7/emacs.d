@@ -28,7 +28,6 @@
 
 (defun prf/enrich-exec-path (dir)
   (when (not (string-match-p
-	      ;; (replace-regexp-in-string "\\\\" "\\\\\\\\" (downcase (prf/system/get-path-system-format dir)))
 	      (prf/escape-winnt-path dir)
 	      (downcase (getenv "PATH"))))
     (setenv "PATH" (concat
