@@ -237,6 +237,7 @@
 (require 'init-doc)
 
 (require 'init-srv-utils)
+(require 'init-comint)
 (require 'init-compilation)
 
 (require 'init-circe)
