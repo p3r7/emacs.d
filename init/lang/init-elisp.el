@@ -30,6 +30,11 @@
     (set-syntax-table emacs-lisp-mode-syntax-table)
     (paredit-mode)))
 
+(use-package elisp-slime-nav
+  :diminish
+  :commands (elisp-slime-nav-mode
+             elisp-slime-nav-find-elisp-thing-at-point))
+
 
 ;; TODO: highlight-cl from quelpa
 
