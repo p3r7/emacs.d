@@ -19,7 +19,7 @@
 	  ;; TODO: far from being perfect (closes all dired windows, not just current)
 	  (lambda ()
 	    (define-key dired-mode-map (kbd "<return>")
-	      'dired-find-alternate-file) ; was dired-advertised-find-file
+	      #'dired-find-alternate-file) ; was dired-advertised-find-file
 	    (define-key dired-mode-map (kbd "^")
 	      (lambda () (interactive) (find-alternate-file "..")))
 					; was dired-up-directory
