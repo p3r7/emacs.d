@@ -53,22 +53,23 @@
 	    ;;    (mode . mail-mode)
 	    ;;    ))
 
-	    ("config"
-	     (or (filename . ".emacs.d")
-		 (filename . "AutoHotkey.ahk")))
+	    ("ansible"
+	     (predicate . (prf/ibuffer/ansible-buffer-p)))
 
 	    ("CRON"
 	     (or (filename . "/etc/crontab")
 		 (filename . "/etc/cron.d/")))
 
-	    ("ansible"
-	     (predicate . (prf/ibuffer/ansible-buffer-p)))
+	    ("logs"
+	     (mode . syslog-mode))
+
+	    ("config"
+	     (or (filename . ".emacs.d")
+		 (filename . "AutoHotkey.ahk")
+		 (mode . yaml-mode)))
 
 	    ("XSLT"
 	     (filename . "\\.xsl$"))
-
-	    ;; ("MyProject1"
-	    ;;   (filename . "src/myproject1/"))
 
 	    ("provi"
 	     (filename . "^provi"))
