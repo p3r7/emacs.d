@@ -25,7 +25,10 @@
 	 ("C-l" . helm-locate-library)
 	 ("r" . helm-info-emacs)
 	 :map minibuffer-local-map
-	 ("M-p" . helm-minibuffer-history))
+	 ("M-p" . helm-minibuffer-history)
+	 :map overriding-terminal-local-map
+	 ;; replace isearch-yank-pop, REVIEW: not working...
+	 ("M-y" . helm-show-kill-ring)	 )
 
   :init
   (setq helm-command-prefix (kbd "C-c h"))
