@@ -262,7 +262,7 @@
 (require 'init-buffer-navigation)
 (require 'init-file-navigation)
 (require 'init-grep)
-(require 'init-projectile)
+;; (require 'init-projectile)
 (require 'init-vcs)
 
 (require 'init-bookmark+)
