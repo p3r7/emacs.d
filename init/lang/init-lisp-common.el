@@ -43,6 +43,7 @@
   :bind (:map emacs-lisp-mode-map ("<return>" . paredit-newline))
   :hook (paredit-mode
          . (lambda ()
+	     ;; REVIEW: could use instead of a hook (define-key paredit-mode-map <tab> nil)
              (unbind-key "<C-left>" paredit-mode-map)
              (unbind-key "<C-right>" paredit-mode-map)
              (unbind-key "C-M-p" paredit-mode-map)
