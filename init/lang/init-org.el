@@ -55,6 +55,9 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((C . t)))
+  (when (executable-find "python")
+    (org-babel-do-load-languages
+     'org-babel-load-languages '((python . t))))
 
   ;; TIME TRACKING
   ;; [[http://orgmode.org/manual/Clocking-work-time.html]]
