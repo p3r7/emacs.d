@@ -1,5 +1,6 @@
 
-(prf/require-plugin 'circe)
+(use-package circe
+  :defer t)
 
 
 (provide 'init-circe)

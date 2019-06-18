@@ -28,7 +28,6 @@
 
 (defun prf/enrich-exec-path (dir)
   (when (not (string-match-p
-	      ;; (replace-regexp-in-string "\\\\" "\\\\\\\\" (downcase (prf/system/get-path-system-format dir)))
 	      (prf/escape-winnt-path dir)
 	      (downcase (getenv "PATH"))))
     (setenv "PATH" (concat
@@ -59,12 +58,15 @@
 ;; (setq explicit-shell-args '("--login" "-i"))
 ;;;;; (setq shell-command-switch "-ic") ; SHOULD THIS BE "-c" or "-ic"?
 
-(when (prf/require-plugin 'prf-tramp nil 'noerror)
-  (setq prf/tramp/local-shell-bin/git-bash "C:/Program Files (x86)/Git/bin/bash.exe")
-  (setq prf/tramp/local-shell-bin/cygwin-bash "C:/cygwin64/bin/bash.exe")
+
+(with-eval-after-load 'prf-tramp
+  (setq prf/tramp/local-shell-bin/git-bash "C:/Program Files (x86)/Git/bin/bash.exe"
+	prf/tramp/local-shell-bin/cygwin-bash "C:/cygwin64/bin/bash.exe")
+
   (defun prf/tramp/shell/git-bash (&optional path)
     (interactive)
     (prf/tramp/shell path prf/tramp/local-shell-bin/git-bash))
+
   (defun prf/tramp/shell/cygwin-bash (&optional path)
     (interactive)
     ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
@@ -83,15 +85,6 @@
 ;; -------------------------------------------------------------------------
 
 ;; make Emacs understand Cygwin-style path
-
-;;; Make Cygwin paths accessible
-(when (prf/require-plugin 'cygwin-mount nil 'noerror)
-  (cygwin-mount-activate))
-
-
-;; -------------------------------------------------------------------------
-
-;; make Emacs follow Cygwin symlinks
 
 ;;; Handles old-style (text file) symlinks and new-style (.lnk file) symlinks.
 ;;; (Non-Cygwin-symlink .lnk files, such as desktop shortcuts, are still loaded as such.)
@@ -113,17 +106,23 @@ loaded as such.)"
             (re-search-forward "!<symlink>\\(.*\\)\0")
             (find-alternate-file (match-string 1))))
       )))
-(add-hook 'find-file-hooks 'follow-cygwin-symlink)
+
+;;; Make Cygwin paths accessible
+(use-package cygwin-mount
+  :config
+  (cygwin-mount-activate)
+  (add-hook 'find-file-hooks 'follow-cygwin-symlink))
 
 
 ;; -------------------------------------------------------------------------
 
 ;; cygwin pty compatibility layer
 
-(when (executable-find "fakecygpty")
-  (require 'fakecygpty)
+(use-package fakecygpty
+  :load-path "~/.emacs.d/plugins/fakecygpty"
+  :if (executable-find "fakecygpty")
+  :config
   (fakecygpty-activate))
-
 
 
 ;; -------------------------------------------------------------------------

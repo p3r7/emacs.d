@@ -96,6 +96,10 @@
 	     ))
 
 (global-subword-mode t)
+(use-package emacs
+  :ensure nil
+  :delight
+  (subword-mode))
 
 
 ;; -------------------------------------------------------------------------

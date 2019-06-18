@@ -45,8 +45,16 @@
 ;; (show-paren-mode t)
 ;; (setq show-paren-style 'expression)
 
-(require 'cl)
-(require 'org)
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+(defvar prf/file-name-handler-alist file-name-handler-alist)
+(setq file-name-handler-alist nil)
+
+(add-hook 'after-init-hook (lambda ()
+			     ;; restore after startup
+                             (setq gc-cons-threshold 16777216
+				   gc-cons-percentage 0.1
+				   file-name-handler-alist prf/file-name-handler-alist)))
 
 ;; (defvar *emacs-load-start* (current-time))
 ;; (setq stack-trace-on-error t) ;; DEBUG
@@ -60,15 +68,12 @@
   (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-<f1>") 'edit-dot-emacs)
 
-;; (require 'async)
-;; (require 'async-file)
-
 
 ;; { Packages }--------------------------------------------------------[[<#P]]
 
 ;; TODO: choose which of /plugins or elpa/ has biggest priority -> add to load path in correct order
 
-;; (setq package-check-signature nil)
+(setq package-check-signature nil)
 
 ;; locations for features:
 ;; - init/ : initialization features (manually defined)
@@ -106,8 +111,9 @@
 
 (when (require 'package nil 'noerror)
   ;; still some issues w/ marmalade's certif https://github.com/nicferrier/elmarmalade/issues/55
-  (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  (add-to-list 'package-archives '("bagolyodu" . "https://bagolyodu.dyndns.hu/emacs-packages/") t)
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
   (package-initialize)
@@ -116,15 +122,31 @@
   )
 
 (require 'prf-require)
-(prf/require-plugin 'esup nil 'noerror)
+(prf/require-plugin 'use-package)
+(setq use-package-always-ensure t
+      ;; use-package-verbose t
+      )
+;; (setq garbage-collection-messages t)
 
+(use-package quelpa
+  ;; :config
+  ;; (setq quelpa-dir "/home/jordan.besly/.emacs.d/quelpa"
+  ;; 	quelpa-build-dir "/home/jordan.besly/.emacs.d/quelpa/build")
+  )
+(use-package quelpa-use-package
+  :config
+  (quelpa-use-package-activate-advice))
+
+(use-package paradox)
+(use-package delight)
+
+(use-package esup)
 (require 'init-auto-compile)
-
 
 
 ;; { Custom Utils }----------------------------------------------------[[<#U]]
 
-(require 'prf-string)
+(require 'init-libs)
 
 
 ;; { OS Specific Stuff }-----------------------------------------------[[<#O]]
@@ -170,11 +192,15 @@
 
 ;; - descriptive
 (require 'init-html)
+(require 'init-text-common)
 (require 'init-org)
 (require 'init-markdown)
 (require 'init-md-org-shiatsu)
 
 ;; - dev
+(require 'init-prog-common)
+(require 'init-lisp-common)
+(require 'init-elisp)
 (require 'init-c-common)
 (require 'init-c)
 (require 'init-go)
@@ -196,6 +222,7 @@
 
 ;; - conf
 (require 'init-apache)
+(require 'init-syslog-ng)
 ;;(require 'cisco-router-mode)
 
 ;; - format
@@ -203,6 +230,7 @@
 (require 'init-xml)
 (require 'init-javaprop)
 (require 'init-yaml)
+(require 'init-ansible)
 (require 'init-toml)
 (require 'init-dotenv)
 ;; (require 'csv-mode)
@@ -211,9 +239,9 @@
 (require 'init-doc)
 
 (require 'init-srv-utils)
+(require 'init-comint)
 (require 'init-compilation)
 
-(require 'init-ansible)
 (require 'init-circe)
 
 
@@ -225,6 +253,7 @@
 (require 'init-aggressive-indent)
 (require 'init-ediff)
 (require 'init-origami)
+(require 'init-yasnippet)
 
 
 ;; { Navigation }------------------------------------------------------[[<#N]]
@@ -235,14 +264,12 @@
 (require 'init-buffer-navigation)
 (require 'init-file-navigation)
 (require 'init-grep)
-(require 'init-projectile)
-;; (require 'init-vcs) ; slows down tramp
+;; (require 'init-projectile)
+(require 'init-vcs)
 
 (require 'init-bookmark+)
 (require 'init-deft)
 (require 'init-neotree)
-
-(require 'init-magit)
 
 (require 'init-macro)
 

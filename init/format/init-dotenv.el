@@ -1,5 +1,5 @@
 
-(when (prf/require-plugin 'dotenv-mode nil 'noerror)
-  (add-to-list 'auto-mode-alist '("\\.env\\..*\\'" . dotenv-mode)))
+(use-package dotenv-mode
+  :mode "\\.env\\..*\\'")
 
 (provide 'init-dotenv)

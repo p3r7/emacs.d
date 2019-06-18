@@ -1,7 +1,8 @@
 
 
-(when (prf/require-plugin 'prf-md-shiatsu nil 'noerror)
-
+(use-package prf-md-shiatsu
+  :load-path "~/.emacs.d/plugins/prf-md-shiatsu"
+  :config
   (defun prf/md-hook/enable-md-shiatsu-minor-mode ()
     (when (string-match-p (regexp-quote "shiatsu") default-directory)
       (when (executable-find "multimarkdown")

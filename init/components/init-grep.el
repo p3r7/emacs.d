@@ -1,6 +1,11 @@
 
-(when (executable-find "rg")
-  (prf/require-plugin 'helm-rg nil 'noerror)
-  (prf/require-plugin 'deadgrep nil 'noerror))
+(use-package helm-rg
+  :after (helm)
+  :if (executable-find "rg")
+  :defer t)
+
+(use-package deadgrep
+  :if (executable-find "rg")
+  :defer t)
 
 (provide 'init-grep)

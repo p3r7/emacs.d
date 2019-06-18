@@ -4,8 +4,10 @@
 ;; https://gist.github.com/doitian/1571162
 ;; (require 'hideshow-fringe)
 
-(when (prf/require-plugin 'hideshowvis nil 'noerror)
+(use-package hideshowvis
+  :init
   (setq hideshowvis-ignore-same-line t) ;; breaks stuff
+  :config
   (hideshowvis-symbols) ;; same code as hideshow-fringe, but kinda breaks stuff
 
   (defun prf/hideshowvis-c-mode-common-hook ()

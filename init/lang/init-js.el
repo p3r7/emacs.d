@@ -24,7 +24,8 @@
 ;; (tern-ac-setup)))
 
 ;; - jsx
-(prf/require-plugin 'rjsx-mode nil 'noerror)
+(use-package rjsx-mode
+  :defer t)
 
 
 (provide 'init-js)

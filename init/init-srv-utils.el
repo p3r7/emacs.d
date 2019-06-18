@@ -1,46 +1,24 @@
 
-(prf/require-plugin 's)
+(require 's)
 
+;; ------------------------------------------------------------------------
+;; various
 
-;; SHELL & TRAMP & DIRED
+(use-package hide-lines)
 
-;; TODO: emacs function to get curren path and convert it to url if contains www
-
-;; manually downloaded and configured upstream versions of tramp
-;; http://www.gnu.org/software/tramp/#Installation
-(if (and (= emacs-major-version 24)
-	 (= emacs-minor-version 3))
-    (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.11/lisp")
-  )
-(if (and (= emacs-major-version 24)
-	 (= emacs-minor-version 5))
-    (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.12/lisp")
-  )
-;; NB: solves copy & mv, but potentially crashes find-file
-
-(prf/require-plugin 'tramp-term)
-(require 'prf-tramp)
-
-(prf/install-package 'hide-lines)
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
-(require 'syslog-mode)
-(add-to-list 'auto-mode-alist '(".*\.log'" . syslog-mode))
-(add-to-list 'auto-mode-alist '(".*\.log\..*\.gz'" . syslog-mode))
-(add-to-list 'auto-mode-alist '("/var/log.*\\'" . syslog-mode))
-(add-to-list 'auto-mode-alist '("\\catalina.out\\'" . syslog-mode))
+(use-package syslog-mode
+  :load-path "~/.emacs.d/plugins-spe/syslog-mode-prf"
+  :mode (".*\.log'" ".*\.log\..*\.gz'" "/var/log.*\\'"
+	 "\\catalina.out\\'"))
+
 
 ;; ------------------------------------------------------------------------
 ;; DIRED
 
-;; (prf/require-plugin-from-file 'dired+ "~/.emacs.d/plugins/dired+" 'noerror)
-(prf/require-plugin 'dired+)
-;; (eval-after-load "dired-aux"
-;;       '(require 'dired-async))
 ;; http://www.emacswiki.org/emacs/Sunrise_Commander
 
-(when (executable-find "busybox")
-  (setq dired-use-ls-dired nil))
-
+(require 'init-dired)
 
 ;; ------------------------------------------------------------------------
 ;; GENERAL COMINT
@@ -51,30 +29,13 @@
  comint-input-ring-size 5000 ;; history size
  ;; comint-completion-addsuffix t ;; might conflict w/ autocomplete
  comint-buffer-maximum-size 20000
- comint-scroll-to-bottom-on-input t
- )
+ comint-scroll-to-bottom-on-input t)
 
 
 ;; ------------------------------------------------------------------------
 ;; TRAMP
 
-
-;; disable vc for remote files (speed increase)
-(setq vc-ignore-dir-regexp
-      (format "\\(%s\\)\\|\\(%s\\)"
-              vc-ignore-dir-regexp
-              tramp-file-name-regexp))
-
-
-;; (setq tramp-verbose 6)
-
-;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/vagrant-tramp-20140709.814"))
-;; (when
-;;     (prf/require-plugin 'vagrant-tramp)
-;;   (require 'vagrant-tramp)
-;;   (eval-after-load 'tramp
-;;     '(vagrant-tramp-enable))
-;;   )
+(require 'init-tramp)
 
 (defun prf/tramp/extract-remote-file-name (trampFilePath)
   (if (string-match (concat "/" tramp-default-method ":") trampFilePath)
@@ -143,9 +104,12 @@
 (when (>= emacs-major-version 25)
   (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window)))
 
-(if (not (fboundp '_sh))
-    (defalias '_sh 'prf/tramp/shell))
-(defalias '_rsh 'prf/tramp/remote-shell)
+(use-package prf-tramp
+  :load-path "~/.emacs.d/plugins/prf-tramp"
+  :config
+  (if (not (fboundp '_sh))
+      (defalias '_sh 'prf/tramp/shell))
+  (defalias '_rsh 'prf/tramp/remote-shell))
 
 (defun local-root-shell ()
   (interactive)
@@ -157,25 +121,22 @@
 
 ;;TODO: lotta stuff don't work as expected
 (add-hook 'shell-mode-hook
-	  (lambda()
-	    (local-set-key (kbd "<f8>")      '(lambda nil (interactive) (syslog-mode)))
-	    (local-set-key (kbd "<f7>")      '(erase-buffer))
-	    (local-set-key (kbd "<f6>")      '(lambda nill (interactive) (progn
-									   (move-beginning-of-line)
-									   (set-mark)
-									   (move-end-of-line)
-									   (json-format)
-									   )))
-	    ) )
+	  (lambda ()
+	    (local-set-key (kbd "<f8>") (lambda nil (interactive) (syslog-mode)))
+	    (local-set-key (kbd "<f7>") (erase-buffer))
+	    (local-set-key (kbd "<f6>") (lambda nill (interactive) (progn
+								(move-beginning-of-line)
+								(set-mark)
+								(move-end-of-line)
+								(json-format))))))
 
 (add-hook 'syslog-mode-hook
-	  (lambda()
-	    (local-set-key (kbd "<f8>")      '(lambda nil (interactive) (progn
-									  (shell-mode)
-									  ;; (toggle-read-only)
-									  (setq current-prefix-arg '(-1)) ; C-u
-									  (call-interactively 'read-only-mode))))
-	    ))
+	  (lambda ()
+	    (local-set-key (kbd "<f8>") (lambda nil (interactive) (progn
+							       (shell-mode)
+							       ;; (toggle-read-only)
+							       (setq current-prefix-arg '(-1)) ; C-u
+							       (call-interactively 'read-only-mode))))))
 
 
 ;; [[http://snarfed.org/why_i_run_shells_inside_emacs]]
@@ -198,57 +159,7 @@
 
 (add-hook 'eshell-mode-hook
 	  (lambda ()
-	    (setq
-	     global-hl-line-mode nil)
-	    ))
-
-
-
-;; ------------------------------------------------------------------------
-;; TERM
-
-;; http://www.emacswiki.org/emacs/AnsiTermHints#toc4
-;; http://stackoverflow.com/questions/12802236/emacs-keyboard-shortcut-to-run-ansi-term-with-a-specific-shell
-;; TODO: test more
-(defun remote-term (new-buffer-name cmd &rest switches)
-  ""
-  (interactive)
-  (setq term-ansi-buffer-name (concat "*" new-buffer-name "*"))
-  (setq term-ansi-buffer-name (generate-new-buffer-name term-ansi-buffer-name))
-  (setq term-ansi-buffer-name (apply 'make-term term-ansi-buffer-name cmd nil switches))
-  (set-buffer term-ansi-buffer-name)
-  (term-mode)
-  (term-char-mode)
-  (term-set-escape-char ?\C-x)
-  (switch-to-buffer term-ansi-buffer-name))
-
-
-
-;; ------------------------------------------------------------------------
-;; DIRED
-
-;; [[http://www.emacswiki.org/emacs/DiredTweaks]]
-(setq
- dired-dwim-target t ;; if other window -> set as default dir for copy
- ls-lisp-dirs-first t ;; display dirs 1st
- dired-listing-switches "-alh"
- diredp-hide-details-initially-flag nil
- diredp-hide-details-propagate-flag nil
- )
-;; http://stackoverflow.com/questions/14602291/dired-how-to-get-really-human-readable-output-find-ls-option
-;; http://stackoverflow.com/questions/4115465/emacs-dired-too-much-information
-
-(put 'dired-find-alternate-file 'disabled nil)
-
-(add-hook 'dired-mode-hook ;; do not create other dired buffers when navigating
-	  ;; TODO: far from being perfect (closes all dired windows, not just current)
-	  (lambda ()
-	    (define-key dired-mode-map (kbd "<return>")
-	      'dired-find-alternate-file) ; was dired-advertised-find-file
-	    (define-key dired-mode-map (kbd "^")
-	      (lambda () (interactive) (find-alternate-file "..")))
-					; was dired-up-directory
-	    ))
+	    (setq global-hl-line-mode nil)))
 
 
 ;; ------------------------------------------------------------------------
@@ -325,7 +236,16 @@
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
 
-(defalias '_cfp 'prf/copy-buffer-filepath-to-clipboard-clean)
+(defalias '_cfp #'prf/copy-buffer-filepath-to-clipboard-clean)
+
+(defun prf/find-file-at-point ()
+  "Find file at point if it exists."
+  (interactive)
+  (let ((file (ffap-guess-file-name-at-point)))
+    (when file
+      (find-file file))))
+
+(defalias '_ffap #'prf/find-file-at-point)
 
 
 ;; ------------------------------------------------------------------------
@@ -340,6 +260,7 @@
        ("r" prf/tramp/remote-shell "remote shell")
        ("o" prf/tramp/visit-remoteFile-currentSrv "visit other version file")
        ("e" ediff-toggle "toggle ediff")
+       ("f" prf/find-file-at-point "find at point")
        ("#" local-root-shell "local root shell")
        ("g" nil "cancel"))
 

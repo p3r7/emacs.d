@@ -1,6 +1,7 @@
 
-(when (prf/require-plugin 'ein nil 'noerror)
-  (require 'ein-loaddefs)
+(use-package ein
+  :config
+  ;; (require 'ein-loaddefs)
   (require 'ein-notebook)
   (require 'ein-subpackages))
 

@@ -4,26 +4,44 @@
 
 (set-face-bold-p 'bold nil)
 
+;; alt way to test: (when (find-font (font-spec :name "DejaVu Sans Mono") ...)
+
+(when (and (boundp 'prf/rice/font-family)
+	   (member prf/rice/font-family (font-family-list)))
+  (set-face-attribute 'default nil :family prf/rice/font-family))
+
+(when (and (boundp 'prf/rice/variable-pitch-font-family)
+	   (member prf/rice/variable-pitch-font-family (font-family-list)))
+  (set-face-attribute 'variable-pitch nil :family prf/rice/variable-pitch-font-family))
+
 (when (boundp 'prf/rice/font)
-  (if (windows-nt-p)
-      (setq default-frame-alist `((font . ,prf/rice/font))))
-  (setq font-default prf/rice/font))
+  ;; (setq default-frame-alist `((font . ,prf/rice/font)))
+  (set-face-attribute 'default nil :font prf/rice/font))
 
 (when (boundp 'prf/rice/font-height)
   (set-face-attribute 'default nil :height prf/rice/font-height))
+(when (boundp 'prf/rice/variable-pitch-font-height)
+  (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))
 
 
 ;; -------------------------------------------------------------------------
 ;; THEMES
 
-(prf/install-package 'gotham-theme)
-(prf/install-package 'ample-theme)
-(prf/install-package 'plan9-theme)
-(prf/install-package 'dracula-theme)
-(prf/install-package 'flatui-theme)
+(use-package gotham-theme
+  :defer t)
+(use-package ample-theme
+  :defer t)
+(use-package plan9-theme
+  ;; :defer t
+  )
+(use-package dracula-theme
+  :defer t)
+(use-package flatui-theme
+  :defer t)
 
 (defvar prf/theme/list/practical
   (list
+   'plan9
    'flatui
    'dracula-mod
    'comidia-mod
@@ -56,13 +74,15 @@
    'tango
    ))
 
-(when (require 'prf-theme nil 'noerror)
+(use-package prf-theme
+  :load-path "~/.emacs.d/plugins/prf-theme"
+  :bind ([f12] . prf/theme/cycle-theme)
+  :init
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
   (setq prf/theme/theme-list prf/theme/list/practical)
   ;; (setq prf/theme/theme-list prf/theme/list/retro-light)
-  (prf/theme/initialize)
-  (global-set-key [f12] 'prf/theme/cycle-theme)
-  )
+  :config
+  (prf/theme/initialize))
 
 
 ;; -------------------------------------------------------------------------
@@ -114,26 +134,31 @@
 ;; -------------------------------------------------------------------------
 ;; VISUAL ENHANCEMENTS
 
-(when (prf/require-plugin 'rainbow-mode nil 'noerror)
+(use-package rainbow-mode
+  :delight
+  :config
   (defun prf/rainbow-mode-prog-mode-hook ()
     (rainbow-mode 1))
   (add-hook 'prog-mode-hook 'prf/rainbow-mode-prog-mode-hook)
-  (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook)
-  )
+  (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook))
 
 ;; Preview faces at their definition
 ;; - [X] https://github.com/Fanael/highlight-defined
 ;;   Additionally provides faces for defined symbols.
 ;; - [ ] https://github.com/Fuco1/fontify-face
-(when (prf/require-plugin 'highlight-defined nil 'noerror)
+(use-package highlight-defined
+  :init
   (setq highlight-defined-face-use-itself 't))
+
+(when (fboundp 'prettify-symbols-mode)
+  (setq prettify-symbols-unprettify-at-point 'right-edge))
 
 
 ;; -------------------------------------------------------------------------
 ;; WRITEROOM / DARKROOM
 
 (when (display-graphic-p)
-  (require 'init-darkroom))
+  (require 'init-writeroom))
 
 
 (provide 'init-rice)

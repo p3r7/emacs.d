@@ -1,14 +1,16 @@
 ;; [[http://jblevins.org/projects/markdown-mode/]]
-(when (prf/require-plugin 'markdown-mode nil 'noerror)
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+
+(use-package markdown-mode
+  :mode ("\\.md\\'" "\\.markdown\\'" "README\\.md\\'")
+
+  :init
+  (when (executable-find "pandoc")
+    (setq markdown-command "pandoc -t html5 --mathjax --highlight-style pygments --standalone"))
+
+  :config
 
   ;; ----------------------------------------------------------------------
   ;; export
-
-  (when (executable-find "pandoc")
-    (setq markdown-command "pandoc -t html5 --mathjax --highlight-style pygments --standalone"))
 
   (defun prf/markdown-export-no-save (&optional output-file)
     "Run Markdown on the current buffer, save to file, and return the filename.

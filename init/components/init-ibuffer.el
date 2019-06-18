@@ -1,7 +1,5 @@
 ;; TODO: customize ibuffer-formats for larger name column
 
-(prf/require-plugin 's)
-
 ;; gotten from https://emacs.stackexchange.com/a/2094
 (defun prf/ibuffer/ansible-buffer-p ()
   (let ((fname (buffer-file-name)))
@@ -10,8 +8,15 @@
 	     (string-match-p (regexp-quote "ansible") fname)
 	     (s-suffix? ".j2" fname)))))
 
-(when (prf/require-plugin 'ibuffer nil 'noerror)
 
+;; http://www.emacswiki.org/emacs/IbufferMode
+
+(use-package ibuffer
+  :after (s)
+
+  :bind (("C-x B" . ibuffer))
+
+  :init
   (setq
    ibuffer-formats
    '((mark modified read-only " "
@@ -48,22 +53,23 @@
 	    ;;    (mode . mail-mode)
 	    ;;    ))
 
-	    ("config"
-	     (or (filename . ".emacs.d")
-		 (filename . "AutoHotkey.ahk")))
+	    ("ansible"
+	     (predicate . (prf/ibuffer/ansible-buffer-p)))
 
 	    ("CRON"
 	     (or (filename . "/etc/crontab")
 		 (filename . "/etc/cron.d/")))
 
-	    ("ansible"
-	     (predicate . (prf/ibuffer/ansible-buffer-p)))
+	    ("logs"
+	     (mode . syslog-mode))
+
+	    ("config"
+	     (or (filename . ".emacs.d")
+		 (filename . "AutoHotkey.ahk")
+		 (mode . yaml-mode)))
 
 	    ("XSLT"
 	     (filename . "\\.xsl$"))
-
-	    ;; ("MyProject1"
-	    ;;   (filename . "src/myproject1/"))
 
 	    ("provi"
 	     (filename . "^provi"))
@@ -100,6 +106,7 @@
 	    ;; ("ERC"   (mode . erc-mode))
 	    ))))
 
+  :config
   (require 'ibuf-ext)
   (add-to-list 'ibuffer-never-show-predicates "^\\*tramp")
   (add-to-list 'ibuffer-never-show-predicates "^\\*magit:")
@@ -113,25 +120,25 @@
     (interactive)
     (ibuffer-switch-to-saved-filter-groups "default"))
 
-  (when (prf/require-plugin 'ibuffer-tramp nil 'noerror)
-    (defun prf/ibuffer/switch-to-tramp-filter-group ()
-      (interactive)
-      (ibuffer-tramp-set-filter-groups-by-tramp-connection)
-      (ibuffer-do-sort-by-alphabetic))
-    (define-key ibuffer-mode-map (kbd "s t") 'prf/ibuffer/switch-to-tramp-filter-group)
-    (define-key ibuffer-mode-map (kbd "s d") 'prf/ibuffer/switch-to-default-filter-group))
-
-
   (add-hook 'ibuffer-mode-hook
 	    (lambda ()
 	      (ibuffer-auto-mode 1)
-	      (ibuffer-switch-to-saved-filter-groups "default")))
+	      (ibuffer-switch-to-saved-filter-groups "default"))))
 
-  (global-set-key (kbd "C-x B") 'ibuffer)
-
-  )
 
 ;; TODO: https://github.com/svend/ibuffer-tramp/blob/master/ibuffer-tramp.el
-;; http://www.emacswiki.org/emacs/IbufferMode
+(use-package ibuffer-tramp
+  :after (ibuffer)
+  :config
+
+  (defun prf/ibuffer/switch-to-tramp-filter-group ()
+    (interactive)
+    (ibuffer-tramp-set-filter-groups-by-tramp-connection)
+    (ibuffer-do-sort-by-alphabetic))
+
+  (define-key ibuffer-mode-map (kbd "s t") 'prf/ibuffer/switch-to-tramp-filter-group)
+  (define-key ibuffer-mode-map (kbd "s d") 'prf/ibuffer/switch-to-default-filter-group))
+
+
 
 (provide 'init-ibuffer)

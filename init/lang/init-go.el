@@ -1,7 +1,8 @@
 
-(when (prf/require-plugin 'go-mode nil 'noerror)
-  ;; eventually ad stuff
-  (prf/require-plugin 'go-autocomplete)
-  )
+(use-package go-mode
+  :defer t)
+
+(use-package go-autocomplete
+  :after (go))
 
 (provide 'init-go)

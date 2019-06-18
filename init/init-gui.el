@@ -67,8 +67,19 @@
 ;; -------------------------------------------------------------------------
 ;; LINUM
 
-(autoload 'linum-mode "linum" "toggle line numbers on/off" t)
-(global-set-key (kbd "C-<f5>") 'linum-mode)
+(if (fboundp 'display-line-numbers-mode)
+    (progn
+      (face-spec-set
+       'line-number
+       '((t :inherit fringe))
+       'face-defface-spec)
+      (face-spec-set
+       'line-number-current-line
+       '((t :inherit 'line-number :foreground "Firebrick"))
+       'face-defface-spec)
+      (global-set-key (kbd "C-<f5>") 'display-line-numbers-mode))
+  (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
+  (global-set-key (kbd "C-<f5>") 'linum-mode))
 
 
 ;; -------------------------------------------------------------------------
@@ -101,8 +112,9 @@
   (set-face-attribute 'show-paren-match-face nil
 		      :weight 'bold :underline nil :overline nil :slant 'normal))
 
-(when (prf/require-plugin 'rainbow-delimiters nil 't)
-  ;; (global-rainbow-delimiters-mode)
+(use-package rainbow-delimiters
+  ;; :hook (prog-mode-hook . rainbow-delimiters-mode)
+  :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 

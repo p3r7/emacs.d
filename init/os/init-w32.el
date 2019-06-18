@@ -26,7 +26,8 @@
 ;; ------------------------------------------------------------------------
 ;; TOOLS
 
-(when (prf/require-plugin 'w32-browser nil 'noerror)
+(use-package w32-browser
+  :config
   (defun prf/show-in-file-explorer ()
     (interactive)
     (let ((filename (if (equal major-mode 'dired-mode)
@@ -35,10 +36,8 @@
       ;; (shell-command (concat "explorer.exe " (prf/system/get-path-system-format filename)))
       (w32explore (prf/system/get-path-system-format filename))))
   (defalias '_exp 'prf/show-in-file-explorer)
-
   (define-key dired-mode-map (kbd "Z") 'dired-w32-browser)
-  (define-key dired-mode-map (kbd "E") 'prf/show-in-file-explorer)
-  )
+  (define-key dired-mode-map (kbd "E") 'prf/show-in-file-explorer))
 
 
 (setq prf/setup/app/bash
@@ -60,8 +59,7 @@
 (if (executable-find "cygpath")
     (progn
       (setq cygwin-root (replace-regexp-in-string "/bin/cygpath.exe" "" (executable-find "cygpath")))
-      (require 'init-cygwin-integration)
-      ))
+      (require 'init-cygwin-integration)))
 
 
 ;; ------------------------------------------------------------------------
@@ -79,7 +77,7 @@
 ;; ------------------------------------------------------------------------
 ;; SHELLS
 
-(when (prf/require-plugin 'prf-tramp nil 'noerror)
+(with-eval-after-load 'prf-tramp
   (setq prf/tramp/local-shell-bin/cmd shell-file-name)
   (defun prf/tramp/shell/cmd (&optional path)
     (interactive)
