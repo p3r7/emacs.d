@@ -3,10 +3,15 @@
 ;; http://stackoverflow.com/questions/14602291/dired-how-to-get-really-human-readable-output-find-ls-option
 ;; http://stackoverflow.com/questions/4115465/emacs-dired-too-much-information
 
+;; TODO: hide username / group when on windows NT
+;; could use https://emacs.stackexchange.com/questions/35676/customize-direds-display
+;; or get inspired by dired-hide-details-mode
+
 (setq
- dired-dwim-target t ;; if other window -> set as default dir for copy
+ dired-dwim-target t  ;; if other window -> set as default dir for copy
  ls-lisp-dirs-first t ;; display dirs 1st
  dired-listing-switches "-alh"
+ ;; dired-listing-switches "-alDphgG"
  diredp-hide-details-initially-flag nil
  diredp-hide-details-propagate-flag nil)
 
