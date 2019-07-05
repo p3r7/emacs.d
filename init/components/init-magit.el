@@ -11,6 +11,7 @@
 	      ("C-x g" . magit-status))
   :init
   (setq magit-auto-revert-mode 1
-	magit-last-seen-setup-instructions "1.4.0"))
+	magit-last-seen-setup-instructions "1.4.0")
+  (add-to-list 'display-buffer-alist '("^magit:\\(.*\\)$" display-buffer-same-window)))
 
 (provide 'init-magit)
