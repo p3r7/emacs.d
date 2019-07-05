@@ -26,8 +26,8 @@
 
 
 (use-package paredit
-  :delight
-  :hook ((lisp-mode emacs-lisp-mode scheme-mode) . paredit-mode)
+  ;; :delight
+  ;; :hook ((lisp-mode emacs-lisp-mode scheme-mode) . paredit-mode)
   :bind (:map paredit-mode-map
               ("[")
               ("<M-left>"   . paredit-backward-slurp-sexp)
