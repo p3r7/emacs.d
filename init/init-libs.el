@@ -20,6 +20,17 @@
 (use-package pickling
   :load-path "~/.emacs.d/plugins/pickling")
 
+;; NB: deferred is now buggy and no more maintained
+;; async is better but bases itself on a new emcs process wo/ all the plugins / vars loaded
+;; aio (async-io) seems to be better
+(use-package deferred)
+(use-package async)
+(use-package aio)
+
+(use-package request)
+(use-package request-deferred
+  :after (request))
+
 ;; https://github.com/kiwanami/emacs-ctable
 
 ;; https://github.com/plexus/a.el

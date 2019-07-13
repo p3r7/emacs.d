@@ -29,6 +29,9 @@ smex.save
 tramp
 .saves
 
+# requests
+request/
+
 # magit
 transient/
 
