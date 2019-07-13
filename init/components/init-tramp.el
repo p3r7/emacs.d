@@ -41,7 +41,7 @@
 
 
 ;; -------------------------------------------------------------------------
-;; Supplementary methods
+;; Supplementary Cnnx Methods
 
 ;; Vagrant
 (when (and (executable-find "vagrant")
@@ -57,5 +57,27 @@
   (use-package tramp-kitty
     :load-path "~/.emacs.d/plugins/tramp-kitty"))
 
+;; PuTTY w/ SSH key support
+(use-package tramp-plinki
+  :load-path "~/.emacs.d/plugins/tramp-plinki")
 
-  (provide 'init-tramp)
+
+;; -------------------------------------------------------------------------
+;; HELPER UTILS
+
+(use-package prf-tramp
+  :load-path "~/.emacs.d/plugins/prf-tramp"
+  :config
+  (if (not (fboundp '_sh))
+      (defalias '_sh 'prf/tramp/shell))
+  (defalias '_rsh 'prf/tramp/remote-shell))
+
+(use-package ansible-tramp
+  :after (request-deferred prf-tramp)
+  :load-path "~/.emacs.d/plugins/ansible-tramp"
+  :config
+  (ansible-tramp-set-inventory-cache-http))
+
+
+
+(provide 'init-tramp)

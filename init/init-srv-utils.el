@@ -38,23 +38,36 @@
 (require 'init-tramp)
 
 (defun prf/tramp/extract-remote-file-name (trampFilePath)
-  (if (string-match (concat "/" tramp-default-method ":") trampFilePath)
-      (car (cdr (cdr (split-string trampFilePath ":"))))
-    trampFilePath))
+  (let (vec localname)
+    (setq vec (tramp-dissect-file-name trampFilePath))
+    (if vec
+	(tramp-file-name-localname vec)
+      ;; REVIEW: returning path unchanged instead of nil if not valid remote
+      .. do we really want this ?!
+      trampFilePath)))
 
 
 (defun prf/tramp/convert-remoteFilePath-currentSrv (currentFilePath remoteFilePath)
   "Format a path using current server address prefix and remote server file location"
   ;; prefix current srv
-  (if (string-match (concat "/" tramp-default-method ":") currentFilePath)
-      (setq my-prefix (concat "/" tramp-default-method ":" (car (cdr (split-string currentFilePath ":"))) ":"))
-    (setq my-prefix "")
-    )
 
-  ;; suffix remoteFilePath
-  (setq my-suffix (prf/tramp/extract-remote-file-name remoteFilePath))
+  (let (my-prefix my-suffix
+		  vec-current method-current user-current host-current localname-current
+		  vec-remote method-remote user-remote host-remote localname-remote)
+    (setq vec-current (tramp-dissect-file-name currentFilePath))
+    (setq vec-remote (tramp-dissect-file-name remoteFilePath))
 
-  (concat my-prefix my-suffix))
+    (when (and vec-current vec-remote)
+      (setq method-current (tramp-file-name-method vec-current))
+      (setq user-current (tramp-file-name-user vec-current))
+      (setq host-current (tramp-file-name-host vec-current))
+
+      (setq localname-remote (tramp-file-name-localname vec-remote))
+
+      (setq my-prefix (concat "/" method-current ":" (string-join (remove nil `(,user-current ,host-current)) "@") ":"))
+      (setq my-suffix localname-remote)
+
+      (concat my-prefix my-suffix))))
 
 
 ;; TODO: make it work w/ shell buffers
@@ -85,16 +98,17 @@
 	;; - calculate filepath for current host
 	(setq my-new-filepath (prf/tramp/convert-remoteFilePath-currentSrv my-current-filepath my-sibbling-filepath))
 
-	;; - validate file exists
-	(if (file-exists-p my-new-filepath)
-	    ;; - go to file
-	    (if (file-directory-p my-new-filepath)
-		(dired my-new-filepath)
-	      (find-file my-new-filepath))
-	  (message "buffer not a file") )
-	)
-    (message "invalid number of visible buffers") )
-  )
+	(if my-new-filepath
+	    (progn
+	      ;; - validate file exists
+	      (if (file-exists-p my-new-filepath)
+		  ;; - go to file
+		  (if (file-directory-p my-new-filepath)
+		      (dired my-new-filepath)
+		    (find-file my-new-filepath))
+		(message "buffer not a file")))
+	  (message "one of buffers not a remote file")))
+    (message "invalid number of visible buffers")))
 (defalias '_t/vrm 'prf/tramp/visit-remoteFile-currentSrv)
 
 
@@ -103,13 +117,6 @@
 
 (when (>= emacs-major-version 25)
   (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window)))
-
-(use-package prf-tramp
-  :load-path "~/.emacs.d/plugins/prf-tramp"
-  :config
-  (if (not (fboundp '_sh))
-      (defalias '_sh 'prf/tramp/shell))
-  (defalias '_rsh 'prf/tramp/remote-shell))
 
 (defun local-root-shell ()
   (interactive)
@@ -186,7 +193,7 @@
 	    ((s-suffix? ".py" clean-filename) (concat "python " clean-filename))) ;; REVIEW: should ideally test if in virtual env
       )))
 
-(defun prf/get-buffer-basepath ()
+(defun prf/get-buffer-dirname ()
   (let ((filename (prf/get-buffer-filepath-clean)))
     (when filename
       (file-name-directory filename))))
@@ -223,7 +230,7 @@
 (defun prf/copy-buffer-basename-to-clipboard ()
   "Copy the current buffer base name to the clipboard."
   (interactive)
-  (let ((filename (prf/get-buffer-basepath)))
+  (let ((filename (prf/get-buffer-dirname)))
     (when filename
       (kill-new filename)
       (message "Copied buffer base name '%s' to the clipboard." filename))))
