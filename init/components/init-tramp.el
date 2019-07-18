@@ -76,7 +76,8 @@
   :after (request-deferred prf-tramp)
   :load-path "~/.emacs.d/plugins/ansible-tramp"
   :config
-  (ansible-tramp-set-inventory-cache-http))
+  (when ansible-tramp-inventory-http-url
+    (ansible-tramp-set-inventory-cache-http)))
 
 
 
