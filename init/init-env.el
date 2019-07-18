@@ -57,9 +57,12 @@
 	       (if (windows-nt-p) (downcase prf/system-name) prf/system-name))))
 
 (if (prf/plugin-available-locally-p prf/init/host-feature)
-    (require prf/init/host-feature)
-  (setq prf-backup-dir "~/.emacs.d/.saves"
-	prf-auto-save-dir "~/.emacs.d/.saves"))
+    (require prf/init/host-feature))
+
+(unless (boundp 'prf-backup-dir)
+  (setq prf-backup-dir "~/.emacs.d/.saves"))
+(unless (boundp 'prf-auto-save-dir)
+  (setq prf-auto-save-dir "~/.emacs.d/.saves"))
 
 
 ;; ------------------------------------------------------------------------
