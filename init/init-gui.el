@@ -20,23 +20,32 @@
 ;; FRAME
 
 (customize-set-variable 'menu-bar-mode nil)
-;; (menu-bar-mode -1)
 (global-set-key (kbd "C-<f2>") 'menu-bar-mode)
 
 (customize-set-variable 'tool-bar-mode nil)
-(customize-set-variable 'scroll-bar-mode nil)
-(customize-set-variable 'horizontal-scroll-bar-mode nil)
-
 (global-set-key (kbd "M-<f2>") 'tool-bar-mode)
+
+(defvar prf/frame/width-default 80)
+(defvar prf/frame/height-default 40)
 
 (defun prf/reset-frame-geometry ()
   (interactive)
-  (set-frame-size (selected-frame) 80 40))
+  (set-frame-size (selected-frame) prf/frame/width-default prf/frame/height-default))
 (defun prf/double-default-frame-geometry ()
   (interactive)
-  (set-frame-size (selected-frame) 160 40))
+  (set-frame-size (selected-frame) (* 2 prf/frame/width-default) prf/frame/height-default))
 (defalias '_rfg 'prf/reset-frame-geometry)
 (prf/reset-frame-geometry)
+
+(setq initial-frame-alist
+      `((width . ,prf/frame/width-default)
+        (height . ,prf/frame/height-default)
+        (vertical-scroll-bars . nil)))
+(setq default-frame-alist
+      `((width . ,prf/frame/width-default)
+        (height . ,prf/frame/height-default)
+	(vertical-scroll-bars . nil)
+	(horizontal-scroll-bar . nil)))
 
 
 ;; -------------------------------------------------------------------------
