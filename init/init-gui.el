@@ -19,24 +19,24 @@
 ;; -------------------------------------------------------------------------
 ;; FRAME
 
-(menu-bar-mode -1)
+(customize-set-variable 'menu-bar-mode nil)
+;; (menu-bar-mode -1)
 (global-set-key (kbd "C-<f2>") 'menu-bar-mode)
 
-(when (display-graphic-p)
-  (tool-bar-mode -1)
-  (global-set-key (kbd "M-<f2>") 'tool-bar-mode)
+(customize-set-variable 'tool-bar-mode nil)
+(customize-set-variable 'scroll-bar-mode nil)
+(customize-set-variable 'horizontal-scroll-bar-mode nil)
 
-  (set-scroll-bar-mode 'nil)
-  ;; (scroll-bar-mode -1)
+(global-set-key (kbd "M-<f2>") 'tool-bar-mode)
 
-  (defun prf/reset-frame-geometry ()
-    (interactive)
-    (set-frame-size (selected-frame) 80 40))
-  (defun prf/double-default-frame-geometry ()
-    (interactive)
-    (set-frame-size (selected-frame) 160 40))
-  (defalias '_rfg 'prf/reset-frame-geometry)
-  (prf/reset-frame-geometry))
+(defun prf/reset-frame-geometry ()
+  (interactive)
+  (set-frame-size (selected-frame) 80 40))
+(defun prf/double-default-frame-geometry ()
+  (interactive)
+  (set-frame-size (selected-frame) 160 40))
+(defalias '_rfg 'prf/reset-frame-geometry)
+(prf/reset-frame-geometry)
 
 
 ;; -------------------------------------------------------------------------
