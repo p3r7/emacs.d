@@ -3,10 +3,10 @@
 
 (use-package magit
   :defer 2
-  :custom
+  ;; :custom
   ;; (magit-git-executable "C:/cygwin64/usr/libexec/git-core/git.exe")
   ;; (magit-git-executable "c:/cygwin64/bin/git.exe")
-  (magit-git-executable "C:/Program Files/Git/cmd/git.EXE")
+  ;; (magit-git-executable "C:/Program Files/Git/cmd/git.EXE")
   :bind (:map dired-mode-map
 	      ("C-x g" . magit-status))
   :init
