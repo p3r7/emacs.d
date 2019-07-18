@@ -12,7 +12,13 @@
   (cond
    ((gnu/linux-p)
     (progn
-      (windmove-default-keybindings 'super)))
+      (windmove-default-keybindings 'super)
+
+      (global-set-key (read-kbd-macro prf/key-split-window-vertically)   'split-window-vertically)
+      (global-set-key (read-kbd-macro prf/key-split-window-horizontally) 'split-window-horizontally)
+      (global-set-key (read-kbd-macro prf/key-delete-other-windows)      'delete-other-windows)
+      (global-set-key (read-kbd-macro prf/key-delete-window)             'delete-window)
+      ))
    ((darwin-p)
     (progn
       (windmove-default-keybindings 'super)))
