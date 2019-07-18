@@ -201,6 +201,7 @@
 (require 'init-prog-common)
 (require 'init-lisp-common)
 (require 'init-elisp)
+(require 'init-clojure)
 (require 'init-c-common)
 (require 'init-c)
 (require 'init-go)
