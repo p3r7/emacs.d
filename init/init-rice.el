@@ -88,6 +88,19 @@
   (prf/theme/initialize))
 
 
+(use-package space-theming
+  :load-path "~/.emacs.d/plugins/space-theming"
+  :after (prf-theme)
+  :init
+  (setq theming-modifications
+	'((chocolate
+	   (primary-selection :background "#C77497")
+	   (region :background "#C77497"))
+	  ))
+  :config
+  (theming/init-theming))
+
+
 ;; -------------------------------------------------------------------------
 ;; TRANSPARENCY
 
