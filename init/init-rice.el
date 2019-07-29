@@ -38,6 +38,8 @@
   :defer t)
 (use-package flatui-theme
   :defer t)
+(use-package chocolate-theme
+  :defer t)
 
 (defvar prf/theme/list/practical
   (list
@@ -45,6 +47,7 @@
    'flatui
    'dracula-mod
    'comidia-mod
+   'chocolate
    ;; 'gotham
    ;; 'light-blue
    ))
