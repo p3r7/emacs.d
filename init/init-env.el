@@ -1,16 +1,13 @@
 
 ;; ------------------------------------------------------------------------
-;; OS SELECTION
+;; OS DETECTION
 
 (defun windows-nt-p ()
-  (string-equal system-type "windows-nt")
-  )
+  (string-equal system-type "windows-nt"))
 (defun darwin-p ()
-  (string-equal system-type "darwin")
-  )
+  (string-equal system-type "darwin"))
 (defun gnu/linux-p ()
-  (string-equal system-type "gnu/linux")
-  )
+  (string-equal system-type "gnu/linux"))
 
 
 ;; ------------------------------------------------------------------------
