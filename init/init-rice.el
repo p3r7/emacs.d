@@ -94,9 +94,14 @@
   :init
   (setq theming-modifications
 	'((chocolate
-	   (primary-selection :background "#C77497")
-	   (region :background "#C77497"))
+	   (region :background "#C77497" :foreground "black") ; VS primary-selection ?
+	   (mode-line :background "#594A3B") ; chocolate-dark-yellow
+	   (mode-line-inactive :background "#2b241d") ; darker derivative of chocolate-dark-yellow
+	   (fringe :background "#2b241d") ; same as mode-line-inactive
+	   (bmkp-local-directory :foreground "#45AFBD")
+	   (bmkp-remote-file :foreground "#C55D67"))
 	  ))
+  ;; to reload: (spacemacs/update-theme)
   :config
   (theming/init-theming))
 
