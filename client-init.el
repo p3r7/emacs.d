@@ -3,5 +3,5 @@
 
 ;; -e doesn't appear to work, need to use --eval w/ a load-file http://stackoverflow.com/questions/2803037/emacsclient-eval-insert-something-is-not-working-for-me
 
-(set-scroll-bar-mode 'nil)
-(prf/reset-frame-geometry)
+(when (dec-vt100-compatible-term-p)
+  (prf/hw/set-dec-term-keys))

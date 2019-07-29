@@ -36,6 +36,47 @@
 
 
 ;; ------------------------------------------------------------------------
+;; HW DETECTION
+
+(defun dec-vt100-compatible-term-p ()
+  (fboundp 'vt100-wide-mode))
+
+(defun dec-term-p ()
+  (let ((term (getenv "TERM")))
+    (member term '("vt100" "vt102" "vt125"
+		   "vt200" "vt201" "vt220" "vt240"
+		   "vt300" "vt320"
+		   "vt400" "vt420"))))
+
+
+;; ------------------------------------------------------------------------
+;; HW-related customs
+
+(defun prf/hw/set-dec-term-keys ()
+  (interactive)
+  ;; works
+  (define-key input-decode-map "	" (kbd "TAB"))
+
+  ;; NB: do C-q then the keypresses, than translate appropraitely
+  ;; e.g. <C-up> gives [1;5A] that corresponds to \e[1;5A
+
+  (define-key input-decode-map "\e[1;5P" (kbd "<C-f1>"))
+  (define-key input-decode-map "\e[15;5~" (kbd "<C-f5>"))
+  (define-key input-decode-map "\e[21;5~" (kbd "<C-f10>"))
+
+  (define-key input-decode-map "\e[1;5A" (kbd "<C-up>"))
+  (define-key input-decode-map "\e[1;5B" (kbd "<C-down>"))
+  (define-key input-decode-map "\e[1;5D" (kbd "<C-left>"))
+  (define-key input-decode-map "\e[1;5C" (kbd "<C-right>"))
+
+  (define-key input-decode-map "\e[1;3D" (kbd "<M-left>"))
+  (define-key input-decode-map "\e[1;3C" (kbd "<M-right>")))
+
+(when (dec-vt100-compatible-term-p)
+  (prf/hw/set-dec-term-keys))
+
+
+;; ------------------------------------------------------------------------
 ;; LOCAL SETUP
 
 (setq homedir-truename (directory-file-name (file-truename "~")))
