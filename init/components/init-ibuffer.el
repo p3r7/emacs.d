@@ -56,6 +56,12 @@
 	    ("ansible"
 	     (predicate . (prf/ibuffer/ansible-buffer-p)))
 
+	    ("Clojure"
+	     (or
+	      (name . "^\\*cider-repl")
+	      (name . "^\\*cider-error\\*$")
+	      (mode . clojure-mode)))
+
 	    ("CRON"
 	     (or (filename . "/etc/crontab")
 		 (filename . "/etc/cron.d/")))
@@ -63,9 +69,11 @@
 	    ("logs"
 	     (mode . syslog-mode))
 
+	    ("config: emacs"
+	     (filename . ".emacs.d"))
+
 	    ("config"
-	     (or (filename . ".emacs.d")
-		 (filename . "AutoHotkey.ahk")
+	     (or (filename . "AutoHotkey.ahk")
 		 (mode . yaml-mode)))
 
 	    ("XSLT"
@@ -95,14 +103,21 @@
 	      (mode . circe-server-mode)
 	      (mode . circe-channel-mode)))
 
+	    ("temp: standard"
+	     (or
+	      (name . "^\\*scratch\\*$")
+	      (name . "^\\*Messages\\*$")))
 	    ("temp"
 	     (or
 	      (name . "^\\*tramp")
 	      (name . "^\\*magit:")
-	      (name . "^\\*Apropos\\*$")
-	      (name . "^\\*Messages\\*$")
+	      (name . "^\\*Error")
+	      (name . "^\\*Packages\\*$")
+	      (name . "^\\*Compile-Log\\*$")
 	      (name . "^\\*Completions\\*$")
-	      (name . "^\\*Help\\*$")))
+	      (name . "^\\*Help\\*$")
+	      (name . "^\\*helpful")
+	      (name . "^\\*Apropos\\*$")))
 	    ;; ("ERC"   (mode . erc-mode))
 	    ))))
 
