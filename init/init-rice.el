@@ -93,7 +93,19 @@
   :after (prf-theme)
   :init
   (setq theming-modifications
-	'((chocolate
+	'((comidia-mod
+	   (org-block :inherit default)
+	   (bmkp-local-directory :foreground "#00ffff")
+	   (bmkp-remote-file :foreground "#ffc0cb"))
+	  (flatui
+	   (org-block :inherit default))
+	  (dracula
+	   (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
+	   (bmkp-remote-file :foreground "#ff79c6")) ; rainbow-4
+	  (chocolate
+	   (org-block :inherit default)
+	   (org-block-begin-line :foreground "#594A3B")
+	   (org-block-end-line :foreground "#594A3B")
 	   (region :background "#C77497" :foreground "black") ; VS primary-selection ?
 	   (mode-line :background "#594A3B") ; chocolate-dark-yellow
 	   (mode-line-inactive :background "#2b241d") ; darker derivative of chocolate-dark-yellow
