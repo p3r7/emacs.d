@@ -45,6 +45,8 @@
 ;; (show-paren-mode t)
 ;; (setq show-paren-style 'expression)
 
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
 (defvar prf/file-name-handler-alist file-name-handler-alist)
