@@ -108,6 +108,22 @@
 ;; TODO: make it frame local as well to disable case in term
 ;; do (add-hook 'some-mode-hook (lambda () (setq global-hl-line-mode nil)))
 
+(defun prf/face-at-point ()
+  (let ((face (get-text-property (point) 'face)))
+    (or (and (face-list-p face)
+             (car face))
+        (and (symbolp face)
+             face))))
+
+(defun prf/describe-face (&rest ignore)
+  (interactive (list (read-face-name "Describe face"
+                                     (or (prf/face-at-point) 'default)
+                                     t)))
+  ;; This only needs to change the `interactive` spec, so:
+  nil)
+
+(eval-after-load "hl-line"
+  '(advice-add 'describe-face :before #'prf/describe-face))
 
 ;; -------------------------------------------------------------------------
 ;; PARENS
