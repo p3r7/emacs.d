@@ -5,37 +5,37 @@
 ;;                           ~|P3R7's .emacs|~
 ;;
 ;; INDEX
-;; { Init }-------------------------------------------------------------[[#I]]
+;; { Init }----------------------------------------------------------[[#I]]
 ;;   - emacs-related config that HAS TO be done 1st
-;; { Packages }---------------------------------------------------------[[#P]]
+;; { Packages }------------------------------------------------------[[#P]]
 ;;   - activate packages.el (aka ELPA)
-;; { Custom Utils }----------------------------------------------------[[<#U]]
+;; { Custom Utils }--------------------------------------------------[[#U]]
 ;;   - lib of custom functions to ease elisp dev
-;; { OS Specific Stuff }------------------------------------------------[[#O]]
+;; { OS Specific Stuff }---------------------------------------------[[#O]]
 ;;   - windows/linux specific customizations
-;; { Test Bench Start }------------------------------------------------[[#?s]]
+;; { Test Bench Start }---------------------------------------------[[#?s]]
 ;;   - in validation (major modes)
-;; { Appearance }-------------------------------------------------------[[#A]]
+;; { Appearance }----------------------------------------------------[[#A]]
 ;;   - alters elements/geometry of the frame
-;; { Langages }---------------------------------------------------------[[#L]]
+;; { Langages }------------------------------------------------------[[#L]]
 ;;   - adds langages/filetype support
-;; { Shells }-----------------------------------------------------------[[#S]]
+;; { Shells }--------------------------------------------------------[[#S]]
 ;;   - tramp
 ;;   - dired + more file system interactions
 ;;   - shells
-;; { Behaviour }--------------------------------------------------------[[#B]]
+;; { Behaviour }-----------------------------------------------------[[#B]]
 ;;   - more general emacs-related config
-;; { Edition }----------------------------------------------------------[[#E]]
+;; { Edition }-------------------------------------------------------[[#E]]
 ;;   - improves edition
 ;;   - improves syntax higlighting
-;; { Navigation }-------------------------------------------------------[[#N]]
+;; { Navigation }----------------------------------------------------[[#N]]
 ;;   - window manipulation
 ;;   - buffer/file switching
 ;;   - in-file navigation
-;; { Test Bench End }--------------------------------------------------[[#?e]]
+;; { Test Bench End }-----------------------------------------------[[#?e]]
 ;;   - in validation
-;; { Custom }-----------------------------------------------------------[[#C]]
-;;============================================================================
+;; { Custom }--------------------------------------------------------[[#C]]
+;;=========================================================================
 
 
 ;; TODO: theming AFTER languages, to support override faces
@@ -113,6 +113,7 @@
 
 (when (require 'package nil 'noerror)
   ;; still some issues w/ marmalade's certif https://github.com/nicferrier/elmarmalade/issues/55
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
   (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
   (add-to-list 'package-archives '("bagolyodu" . "https://bagolyodu.dyndns.hu/emacs-packages/") t)
@@ -146,18 +147,18 @@
 (require 'init-auto-compile)
 
 
-;; { Custom Utils }----------------------------------------------------[[<#U]]
+;; { Custom Utils }-----------------------------------------------[[<#U]]
 
 (require 'init-libs)
 
 
-;; { OS Specific Stuff }-----------------------------------------------[[<#O]]
+;; { OS Specific Stuff }------------------------------------------[[<#O]]
 
 
 (require 'init-env)
 
 
-;; { Test Bench Start }-----------------------------------------------[[<#?s]]
+;; { Test Bench Start }------------------------------------------[[<#?s]]
 
 (require 'init-test1)
 
@@ -171,14 +172,14 @@
       (insert text))))
 
 
-;; { Appearance }------------------------------------------------------[[<#A]]
+;; { Appearance }-------------------------------------------------[[<#A]]
 
 (require 'init-gui)
 (require 'init-rice)
 ;;(require 'init-speedbar) ;; craps since emacs 24.4 due to void-function ad-advised-definition-p
 
 
-;; { Behaviour }-------------------------------------------------------[[<#B]]
+;; { Behaviour }--------------------------------------------------[[<#B]]
 
 
 (require 'init-main)
@@ -187,7 +188,7 @@
 (require 'init-hydra)
 
 
-;; { Langages }--------------------------------------------------------[[<#L]]
+;; { Langages }---------------------------------------------------[[<#L]]
 
 ;; multilingual files
 (require 'init-mmm)
@@ -248,7 +249,7 @@
 (require 'init-circe)
 
 
-;; { Edition }---------------------------------------------------------[[<#E]]
+;; { Edition }----------------------------------------------------[[<#E]]
 
 
 (require 'init-edition)
@@ -259,7 +260,7 @@
 (require 'init-yasnippet)
 
 
-;; { Navigation }------------------------------------------------------[[<#N]]
+;; { Navigation }-------------------------------------------------[[<#N]]
 
 
 (require 'init-windmove)
@@ -315,14 +316,14 @@
   )
 
 
-;; { Custom }----------------------------------------------------------[[<#C]]
+;; { Custom }-----------------------------------------------------[[<#C]]
 
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
 
-;;----------------------------------------------------------------------------
+;;--------------------------------------------------------------
 
 
 ;|     .-.

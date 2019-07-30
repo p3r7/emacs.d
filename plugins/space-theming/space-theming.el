@@ -24,8 +24,6 @@ same size, or the symbol `all'.")
   "A list of themes where all headings should be bold,
 or the symbol `all'.")
 
-(defvar spacemacs--theming-modified-faces '())
-
 (defvar spacemacs--theming-header-faces
   '(font-latex-sectioning-0-face
     font-latex-sectioning-1-face
@@ -63,34 +61,28 @@ or the symbol `all'.")
 (defun spacemacs//in-or-all (key seq)
   (or (eq 'all seq) (memq key seq)))
 
+
 (defun spacemacs//theming (theme &optional no-confirm no-enable)
   "Removes existing user theming and applies customizations for the given
 theme."
   (unless no-enable
 
-    ;; Remove existing modifications
-    (dolist (face spacemacs--theming-modified-faces)
-      (custom-set-faces `(,face ((t ())))))
-    (setq spacemacs--theming-modified-faces nil)
-
     ;; Headings
-    (let ((mods nil))
-      (when (spacemacs//in-or-all theme theming-headings-inherit-from-default)
-        (setq mods (plist-put mods :inherit 'default)))
-      (when (spacemacs//in-or-all theme theming-headings-same-size)
-        (setq mods (plist-put mods :height 1.0)))
-      (when (spacemacs//in-or-all theme theming-headings-bold)
-        (setq mods (plist-put mods :weight 'bold)))
-      (when mods
-        (dolist (face spacemacs--theming-header-faces)
-          (custom-set-faces `(,face ((t ,mods))))
-          (push face spacemacs--theming-modified-faces))))
+    ;; (let ((mods nil))
+    ;;   (when (spacemacs//in-or-all theme theming-headings-inherit-from-default)
+    ;;     (setq mods (plist-put mods :inherit 'default)))
+    ;;   (when (spacemacs//in-or-all theme theming-headings-same-size)
+    ;;     (setq mods (plist-put mods :height 1.0)))
+    ;;   (when (spacemacs//in-or-all theme theming-headings-bold)
+    ;;     (setq mods (plist-put mods :weight 'bold)))
+    ;;   (when mods
+    ;;     (dolist (face spacemacs--theming-header-faces)
+    ;;       (custom-set-faces `(,face ((t ,mods)))))))
 
     ;; Add new modifications
     (dolist (spec (append (cdr (assq theme theming-modifications))
                           (cdr (assq t theming-modifications))))
-      (custom-set-faces `(,(car spec) ((t ,(cdr spec)))))
-      (push (car spec) spacemacs--theming-modified-faces))))
+      (custom-theme-set-faces theme `(,(car spec) ((t ,(cdr spec))))))))
 
 (defun spacemacs/update-theme ()
   (interactive)
@@ -102,7 +94,7 @@ theme."
 
 (defun theming/init-theming ()
   ;; Apply theme customizations after any call to load-theme
-  (advice-add 'load-theme :after 'spacemacs//theming)
+  (advice-add 'load-theme :after #'spacemacs//theming)
   ;; Apply the initial customizations now, because load-theme has already been called
   (spacemacs//theming prf/theme/current-theme))
 
