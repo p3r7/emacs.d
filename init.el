@@ -58,20 +58,31 @@
 				   gc-cons-percentage 0.1
 				   file-name-handler-alist prf/file-name-handler-alist)))
 
+;; make helm and lusty more snappy
+;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+(defun my-minibuffer-setup-hook ()
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold 800000))
+
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+
 ;; (defvar *emacs-load-start* (current-time))
 ;; (setq stack-trace-on-error t) ;; DEBUG
 
-;(setq warning-suppress-types '('(mule))
+;; (setq warning-suppress-types '('(mule))
 
 
-;; { Init }------------------------------------------------------------[[<#I]]
+ ;; { Init }-------------------------------------------------------[[<#I]]
 
 (defun edit-dot-emacs () (interactive)
-  (find-file "~/.emacs.d/init.el"))
+       (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-<f1>") 'edit-dot-emacs)
 
 
-;; { Packages }--------------------------------------------------------[[<#P]]
+;; { Packages }---------------------------------------------------[[<#P]]
 
 ;; TODO: choose which of /plugins or elpa/ has biggest priority -> add to load path in correct order
 
@@ -336,5 +347,3 @@
 
 ;; (message "Benchmark: .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
 					     ;; (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
