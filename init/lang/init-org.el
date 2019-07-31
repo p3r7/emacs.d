@@ -58,6 +58,10 @@
   (when (executable-find "python")
     (org-babel-do-load-languages
      'org-babel-load-languages '((python . t))))
+  (setq org-src-fontify-natively t
+	org-src-tab-acts-natively t
+	org-confirm-babel-evaluate nil
+	org-edit-src-content-indentation 0)
 
   ;; TIME TRACKING
   ;; [[http://orgmode.org/manual/Clocking-work-time.html]]

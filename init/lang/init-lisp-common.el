@@ -64,4 +64,6 @@
   :hook ((lisp-mode emacs-lisp-mode scheme-mode) . redshank-mode))
 
 
+(use-package eval-sexp-fu)
+
 (provide 'init-lisp-common)

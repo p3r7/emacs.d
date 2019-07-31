@@ -15,10 +15,16 @@
   (which-key-mode))
 
 ;; -------------------------------------------------------------------------
-;; INFO
+;; TEXINFO
 
 ;; TODO: http://ergoemacs.org/emacs/emacs_adding_browser_keys.html
 (add-to-list 'Info-default-directory-list "~/.emacs.d/info")
+
+
+;; -------------------------------------------------------------------------
+;; EPUB
+
+(require 'init-nov)
 
 
 ;; -------------------------------------------------------------------------
