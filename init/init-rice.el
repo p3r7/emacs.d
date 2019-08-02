@@ -32,8 +32,7 @@
 (use-package ample-theme
   :defer t)
 (use-package plan9-theme
-  ;; :defer t
-  )
+  :defer t)
 (use-package dracula-theme
   :defer t)
 (use-package flatui-theme
@@ -79,6 +78,7 @@
 
 (use-package prf-theme
   :load-path "~/.emacs.d/plugins/prf-theme"
+  :demand
   :bind ([f12] . prf/theme/cycle-theme)
   :init
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
