@@ -100,28 +100,34 @@
 ;; HELM INTEGRATION
 
 ;; http://kitchingroup.cheme.cmu.edu/blog/2015/01/30/More-adventures-in-helm-more-than-one-action/
+
 (setq ansible-tramp-helm-source
-      `((name . "Connect to Ansible host")
-        (candidates . ansible-tramp-get-inventory-hostnames)
-        (action . (("shell" .
-		    (lambda (candidate)
-		      (let ((host-address (ansible-tramp-get-inventory-address-for-host candidate)))
-			(prf/tramp/remote-shell host-address)
-			)))
-		   ("dired" .
-		    (lambda (candidate)
-		      (let ((host-address (ansible-tramp-get-inventory-address-for-host candidate)))
-			(prf/tramp/remote-shell host-address ))))
-		   ("debug" .
-		    (lambda (candidate)
-		      (let ((hostname candidate)
-			    (host-address (ansible-tramp-get-inventory-address-for-host candidate)))
-			(message-box "selected: %s (%s)" hostname host-address))))))))
+      (helm-build-sync-source "Connect to Ansible host"
+	:candidates #'ansible-tramp-get-inventory-hostnames
+	:fuzzy-match t
+	:action '(("shell" .
+		  (lambda (candidate)
+		    (let ((host-address (ansible-tramp-get-inventory-address-for-host candidate)))
+		      (prf/tramp/remote-shell host-address))))
+		 ("dired" .
+		  (lambda (candidate)
+		    (let ((host-address (ansible-tramp-get-inventory-address-for-host candidate)))
+		      (prf/tramp/remote-shell host-address ))))
+		 ("debug" .
+		  (lambda (candidate)
+		    (let ((hostname candidate)
+			  (host-address (ansible-tramp-get-inventory-address-for-host candidate)))
+		      (message-box "selected: %s (%s)" hostname host-address)))))))
+
 
 (eval-after-load "helm"
   '(defun helm-ansible-inventory-host-connect ()
      (interactive)
-     (helm :sources '(ansible-tramp-helm-source))))
+     (let ((helm-candidate-number-limit 10000))
+       (helm :sources '(ansible-tramp-helm-source)
+	     :input (let ((tap (thing-at-point 'symbol)))
+		      (when tap tap))
+	     :buffer "*helm Tramp Shell Ansible*"))))
 
 
 ;; ------------------------------------------------------------------------

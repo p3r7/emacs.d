@@ -32,8 +32,7 @@
 (use-package ample-theme
   :defer t)
 (use-package plan9-theme
-  ;; :defer t
-  )
+  :defer t)
 (use-package dracula-theme
   :defer t)
 (use-package flatui-theme
@@ -41,13 +40,14 @@
 (use-package chocolate-theme
   :defer t)
 
+
 (defvar prf/theme/list/practical
   (list
+   'chocolate
    'plan9
    'flatui
    'dracula-mod
    'comidia-mod
-   'chocolate
    ;; 'gotham
    ;; 'light-blue
    ))
@@ -79,6 +79,7 @@
 
 (use-package prf-theme
   :load-path "~/.emacs.d/plugins/prf-theme"
+  :demand
   :bind ([f12] . prf/theme/cycle-theme)
   :init
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
@@ -110,6 +111,8 @@
 	   (mode-line :background "#594A3B") ; chocolate-dark-yellow
 	   (mode-line-inactive :background "#2b241d") ; darker derivative of chocolate-dark-yellow
 	   (fringe :background "#2b241d") ; same as mode-line-inactive
+	   (show-paren-match :background "white" :foreground "black")
+	   (show-paren-mismatch :background "red" :foreground "white")
 	   (bmkp-local-directory :foreground "#45AFBD")
 	   (bmkp-remote-file :foreground "#C55D67"))
 	  ))

@@ -1,4 +1,10 @@
 
+;; ------------------------------------------------------------------------
+;; GENERAL
+
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
 (use-package prf-smart-edit
   :load-path "~/.emacs.d/plugins/prf-smart-edit"
   ;; :after (org groovy-mode)
@@ -65,8 +71,6 @@
 ;; ------------------------------------------------------------------------
 ;; TIMESTAMPS
 
-;; NOTE: all these unused / untested
-
 ;; Smart timestamps
 (setq
  time-stamp-active t          ; do enable time-stamps
@@ -89,6 +93,27 @@ See help of `format-time-string' for possible replacements")
   "insert the current date into the current buffer."
   (interactive)
   (insert (format-time-string datetime-format-compact (current-time))))
+
+
+;; -------------------------------------------------------------------------
+;; URL
+
+(require 'url-util)
+
+(defun prf/url/encode (begin end)
+  "URL-encode selected region."
+  (interactive "r")
+  (atomic-change-group
+    (let ((txt (delete-and-extract-region begin end)))
+      (insert (url-encode-url txt)))))
+(defun prf/url/decode (begin end)
+  "URL-decode selected region."
+  (interactive "r")
+  (atomic-change-group
+    (let ((txt (delete-and-extract-region begin end)))
+      (insert (decode-coding-string (url-unhex-string txt) 'utf-8)))))
+
+
 
 
 

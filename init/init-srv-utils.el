@@ -181,13 +181,15 @@
 (defun prf/get-buffer-filepath-clean ()
   (let ((filename (prf/get-buffer-filepath-complete)))
     (when filename
-      (prf/tramp/extract-remote-file-name filename))))
+      (when (file-remote-p filename)
+	(prf/tramp/extract-remote-file-name filename))
+	filename)))
 
 (defun prf/get-buffer-filepath-with-exec ()
-  (let ((filename (prf/get-buffer-filepath-complete))
-	clean-filename)
-    (when filename
-      (setq clean-filename (prf/tramp/extract-remote-file-name filename))
+  (let ((clean-filename (prf/get-buffer-filepath-complete)))
+    (when clean-filename
+      (when (file-remote-p clean-filename)
+	(setq clean-filename (prf/tramp/extract-remote-file-name clean-filename)))
       (cond ((bound-and-true-p ansible) (concat "ansible-playbook " clean-filename)) ;; NB: ansible-mode is named `ansible` ...
 	    ((s-suffix? ".php" clean-filename) (concat "php " clean-filename))
 	    ((s-suffix? ".py" clean-filename) (concat "python " clean-filename))) ;; REVIEW: should ideally test if in virtual env

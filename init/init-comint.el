@@ -1,5 +1,10 @@
 
 
+(setq comint-input-ignoredups t         ; no duplicate history
+      comint-input-ring-size 5000       ; history size
+      comint-buffer-maximum-size 20000
+      comint-scroll-to-bottom-on-input t)
+
 ;;
 ;; https://oremacs.com/2019/03/24/shell-apt/
 
