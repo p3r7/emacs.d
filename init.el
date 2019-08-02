@@ -75,7 +75,7 @@
 ;; (setq warning-suppress-types '('(mule))
 
 
- ;; { Init }-------------------------------------------------------[[<#I]]
+ ;; { Init }------------------------------------------------------[[<#I]]
 
 (defun edit-dot-emacs () (interactive)
        (find-file "~/.emacs.d/init.el"))
