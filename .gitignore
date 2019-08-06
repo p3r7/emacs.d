@@ -35,6 +35,9 @@ request/
 # magit
 transient/
 
+# nov.el
+nov-places
+
 # private folders
 auto-save-list/
 eshell/
