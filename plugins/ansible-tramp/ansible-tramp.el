@@ -126,7 +126,7 @@
      (let ((helm-candidate-number-limit 10000))
        (helm :sources '(ansible-tramp-helm-source)
 	     :input (let ((tap (thing-at-point 'symbol)))
-		      (when tap tap))
+		      (when (member tap (ansible-tramp-get-inventory-hostnames)) tap))
 	     :buffer "*helm Tramp Shell Ansible*"))))
 
 
