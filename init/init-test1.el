@@ -21,6 +21,18 @@
 
 
 ;; -------------------------------------------------------------------------
+
+(defun perf/buffer-local-set-key (key command)
+  (interactive "KSet key buffer-locally: \nCSet key %s buffer-locally to command: ")
+  (let ((oldmap (current-local-map))
+        (newmap (make-sparse-keymap)))
+    (when oldmap
+      (set-keymap-parent newmap oldmap))
+    (define-key newmap key command)
+    (use-local-map newmap)))
+
+
+;; -------------------------------------------------------------------------
 ;; VAGRANT local / ssh toggle
 
 ;; either do a `vagrant global-status' or look at file ~/.vagrant.d/data/machine-index/index
