@@ -33,5 +33,16 @@
 (defalias 'man 'woman)
 (setq woman-use-own-frame nil)
 
+(use-package tldr
+  :init
+  (setq tldr-enabled-categories '("common" "linux")))
+
+(use-package tldr-ext
+  :load-path "~/.emacs.d/plugins/tldr-ext"
+  :after (tldr)
+  :config
+  (tldr-ext-activate))
+
+
 
 (provide 'init-doc)
