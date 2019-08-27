@@ -32,7 +32,7 @@
 
 (use-package dired+
   :load-path "~/.emacs.d/plugins/dired+"
-  :defer t
+  :demand
   ;; :config
   ;; (eval-after-load "dired-aux"
   ;;     '(require 'dired-async))
