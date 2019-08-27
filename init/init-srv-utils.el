@@ -247,6 +247,7 @@
 
 (defalias '_cfp #'prf/copy-buffer-filepath-to-clipboard-clean)
 
+; REVIEW: could use directly find-file-at-point aka ffap
 (defun prf/find-file-at-point ()
   "Find file at point if it exists."
   (interactive)
