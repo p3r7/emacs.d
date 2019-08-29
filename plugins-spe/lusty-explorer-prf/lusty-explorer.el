@@ -1,7 +1,8 @@
 ;;; lusty-explorer.el --- Dynamic filesystem explorer and buffer switcher -*- mode: emacs-lisp -*-
 ;;
 ;; PATCHED VERSION, search ###PRF
-;; TODO: continue dev to support shell, function lusty-open-this
+;; TODO: continue dev to support shell, fun `lusty-launch-shell'
+;; hard to do, as deciding the action is done in fun `lusty-file-explorer' based on what is returned by either `lusty-select-current-name' or `lusty-launch-dired'
 ;;
 ;; Copyright (C) 2008 Stephen Bach <http://items.sjbach.com/about>
 ;;
@@ -94,6 +95,7 @@
 (when (require 'noflet nil 'noerror)
   (defalias 'lusty--flet 'noflet))
 
+(require 's)
 
 (declaim (optimize (speed 3) (safety 0)))
 
@@ -195,6 +197,8 @@ buffer names in the matches window; 0.10 = %10."
 (defvar lusty--matrix-column-widths '())
 (defvar lusty--matrix-truncated-p nil)
 
+(defvar lusty--shell-open-here-fun nil)
+
 (when lusty--wrapping-ido-p
   (require 'ido))
 (defvar ido-text) ; silence compiler warning
@@ -263,11 +267,23 @@ Uses the faces `lusty-directory-face', `lusty-slash-face', and
             ;; argument.  Set it explicitly to "" so if lusty-launch-dired is
             ;; called in the directory we start at, the result is that directory
             ;; instead of the name of the current buffer.
-            (lusty--run 'read-file-name default-directory "")))
+            (lusty--run 'read-file-name default-directory ""))
+	   (action :file-open))
       (when file
-        (switch-to-buffer
-         (find-file-noselect
-          (expand-file-name file)))))))
+	(when (s-contains? "!!!lusty!!!" file)
+	  (pcase-let ((`(,file-tmp ,action-tmp) (s-split "!!!lusty!!!" file)))
+	    (setq file file-tmp
+		  action (intern (concat ":" action-tmp)))))
+	(cond
+	 ((eq action :file-open) (switch-to-buffer
+				  (find-file-noselect
+				   (expand-file-name file))))
+	 ((eq action :launch-shell) (if lusty--shell-open-here-fun
+					(progn
+					  (cd (expand-file-name file))
+					  (funcall lusty--shell-open-here-fun))
+				      (message "No `lusty--shell-open-here-fun' defined")))
+	 (t (message "unsupported action")))))))
 
 ;;;###autoload
 (defun lusty-buffer-explorer ()
@@ -465,7 +481,7 @@ and recency information."
   (when (eq lusty--active-mode :file-explorer)
     (let* ((path (minibuffer-contents-no-properties))
            (dir (lusty-normalize-dir (file-name-directory path))))
-      (lusty-set-minibuffer-text dir)
+      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" "launch-shell"))
       (exit-minibuffer))))
 
 
