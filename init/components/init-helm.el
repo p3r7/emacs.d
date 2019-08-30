@@ -18,8 +18,11 @@
 	 ("C-c h" . helm-execute-persistent-action) ; rebind tab to do persistent action
 	 ("C-i" . helm-execute-persistent-action) ; make TAB works in terminal
 	 ("C-z" . helm-select-action)
+	 ("<C-left>" . 'helm-previous-source)
+	 ("<C-right>" . 'helm-next-source)
 	 ("C-r" . helm-previous-line)
 	 ("C-s" . helm-next-line) ;; REVIEW: not working ?
+	 ("DEL" . prf/helm-backspace)
 	 :map help-command
 	 ;; ("C-f" . helm-apropos)
 	 ("C-l" . helm-locate-library)
@@ -28,7 +31,7 @@
 	 ("M-p" . helm-minibuffer-history)
 	 :map overriding-terminal-local-map
 	 ;; replace isearch-yank-pop, REVIEW: not working...
-	 ("M-y" . helm-show-kill-ring)	 )
+	 ("M-y" . helm-show-kill-ring))
 
   :init
   (setq helm-command-prefix (kbd "C-c h"))
@@ -42,8 +45,16 @@
    helm-ff-file-name-history-use-recentf t
    helm-move-to-line-cycle-in-source t ; move to end or beginning of source when reaching top or bottom of source.
    helm-buffers-fuzzy-matching t
-   helm-recentf-fuzzy-match t
-   )
+   helm-recentf-fuzzy-match t)
+
+  (defun prf/helm-backspace ()
+    "Forward to `backward-delete-char'.
+On error (read-only), quit without selecting."
+    (interactive)
+    (condition-case nil
+	(backward-delete-char 1)
+      (error
+       (helm-keyboard-quit))))
 
   :config
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
