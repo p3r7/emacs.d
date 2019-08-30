@@ -4,6 +4,9 @@
 (require 'init-ibuffer)
 (require 'init-uniquify)
 
+(use-package shackle
+  :demand)
+
 ;; jump to source
 (global-set-key (kbd "C-h C-f") 'find-function)
 
