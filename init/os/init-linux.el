@@ -21,7 +21,7 @@
     (progn
       (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen")))
   (global-set-key (kbd "<f11>")  'prf/toggle-fullscreen-wmctrl)
-  (defalias '_sh 'toggle-frame-fullscreen))
+  (defalias 'toggle-frame-fullscreen 'prf/toggle-fullscreen-wmctrl))
 
 
 ;; ------------------------------------------------------------------------
