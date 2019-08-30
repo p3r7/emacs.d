@@ -38,6 +38,9 @@ transient/
 # nov.el
 nov-places
 
+# tldr
+tldr-master/
+
 # private folders
 auto-save-list/
 eshell/

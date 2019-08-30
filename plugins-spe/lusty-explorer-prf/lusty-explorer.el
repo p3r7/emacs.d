@@ -1,7 +1,8 @@
 ;;; lusty-explorer.el --- Dynamic filesystem explorer and buffer switcher -*- mode: emacs-lisp -*-
 ;;
 ;; PATCHED VERSION, search ###PRF
-;; TODO: continue dev to support shell, function lusty-open-this
+;; added following additional actions for `lusty-file-explorer': `lusty-launch-shell', `lusty-shell-command', `lusty-M-x'
+
 ;;
 ;; Copyright (C) 2008 Stephen Bach <http://items.sjbach.com/about>
 ;;
@@ -94,6 +95,7 @@
 (when (require 'noflet nil 'noerror)
   (defalias 'lusty--flet 'noflet))
 
+(require 's)
 
 (declaim (optimize (speed 3) (safety 0)))
 
@@ -195,6 +197,10 @@ buffer names in the matches window; 0.10 = %10."
 (defvar lusty--matrix-column-widths '())
 (defvar lusty--matrix-truncated-p nil)
 
+(defvar lusty--shell-open-here-fun nil)
+(defvar lusty--shell-command-fun #'shell-command)
+(defvar lusty--M-x-fun #'execute-extended-command)
+
 (when lusty--wrapping-ido-p
   (require 'ido))
 (defvar ido-text) ; silence compiler warning
@@ -263,11 +269,33 @@ Uses the faces `lusty-directory-face', `lusty-slash-face', and
             ;; argument.  Set it explicitly to "" so if lusty-launch-dired is
             ;; called in the directory we start at, the result is that directory
             ;; instead of the name of the current buffer.
-            (lusty--run 'read-file-name default-directory "")))
+            (lusty--run 'read-file-name default-directory ""))
+	   (action :file-open))
       (when file
-        (switch-to-buffer
-         (find-file-noselect
-          (expand-file-name file)))))))
+	(when (s-contains? "!!!lusty!!!" file)
+	  (pcase-let ((`(,file-tmp ,action-tmp) (s-split "!!!lusty!!!" file)))
+	    (setq file file-tmp
+		  action (intern (concat ":" action-tmp)))))
+	(cond
+	 ((eq action :file-open) (switch-to-buffer
+				  (find-file-noselect
+				   (expand-file-name file))))
+	 ((eq action :launch-shell) (if lusty--shell-open-here-fun
+					(progn
+					  (cd (expand-file-name file))
+					  (funcall lusty--shell-open-here-fun))
+				      (message "No `lusty--shell-open-here-fun' defined")))
+	 ((eq action :shell-command) (if lusty--shell-open-here-fun
+					 (progn
+					   (cd (expand-file-name file))
+					   (call-interactively lusty--shell-command-fun))
+				       (message "No `lusty--shell-command-fun' defined")))
+	 ((eq action :M-x) (if lusty--shell-open-here-fun
+			       (progn
+				 (cd (expand-file-name file))
+				 (call-interactively lusty--M-x-fun))
+			     (message "No `lusty--M-x-fun' defined")))
+	 (t (message "unsupported action")))))))
 
 ;;;###autoload
 (defun lusty-buffer-explorer ()
@@ -465,7 +493,29 @@ and recency information."
   (when (eq lusty--active-mode :file-explorer)
     (let* ((path (minibuffer-contents-no-properties))
            (dir (lusty-normalize-dir (file-name-directory path))))
-      (lusty-set-minibuffer-text dir)
+      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" "launch-shell"))
+      (exit-minibuffer))))
+
+;; ###PRF
+;;;###autoload
+(defun lusty-shell-command ()
+  "Launch shell at the current directory."
+  (interactive)
+  (when (eq lusty--active-mode :file-explorer)
+    (let* ((path (minibuffer-contents-no-properties))
+           (dir (lusty-normalize-dir (file-name-directory path))))
+      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" "shell-command"))
+      (exit-minibuffer))))
+
+;; ###PRF
+;;;###autoload
+(defun lusty-M-x ()
+  "Launch M-x at the current directory."
+  (interactive)
+  (when (eq lusty--active-mode :file-explorer)
+    (let* ((path (minibuffer-contents-no-properties))
+           (dir (lusty-normalize-dir (file-name-directory path))))
+      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" "M-x"))
       (exit-minibuffer))))
 
 
@@ -1032,6 +1082,8 @@ does not begin with '.'."
     (define-key map "\C-xe" 'lusty-select-current-name)
     ;; ###PRF
     (define-key map "\C-xs" 'lusty-launch-shell)
+    (define-key map "\M-x" 'lusty-M-x)
+    (define-key map "\M-!" 'lusty-shell-command)
     (setq lusty-mode-map map))
   (run-hooks 'lusty-setup-hook))
 

@@ -85,6 +85,7 @@
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
   (setq prf/theme/theme-list prf/theme/list/practical)
   ;; (setq prf/theme/theme-list prf/theme/list/retro-light)
+  ;; (setq prf/theme/theme-list prf/theme/list/retro-dark)
   :config
   (prf/theme/initialize))
 
@@ -104,6 +105,8 @@
 	   (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
 	   (bmkp-remote-file :foreground "#ff79c6")) ; rainbow-4
 	  (chocolate
+	   ;; NB: file face fore dired is `default'
+	   (dired-directory :foreground "#EAEAFE") ; chocolate-hue-2
 	   (org-block :inherit default)
 	   (org-block-begin-line :foreground "#594A3B")
 	   (org-block-end-line :foreground "#594A3B")
@@ -136,7 +139,7 @@
 ;; increase opacity (== decrease transparency) => (djcb-opacity-modify)
 (global-set-key (kbd "M-°") '(lambda()(interactive)(djcb-opacity-modify)))
 ;; decrease opacity (== increase transparency => (djcb-opacity-modify t)
-(global-set-key (kbd "M-+") '(lambda()(interactive)(djcb-opacity-modify t)))
+(global-set-key (kbd "C-M-+") '(lambda()(interactive)(djcb-opacity-modify t)))
 ;; return the state to normal
 (global-set-key (kbd "M-=") '(lambda()(interactive)
                                (modify-frame-parameters nil `((alpha . 100)))))

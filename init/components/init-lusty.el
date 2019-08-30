@@ -13,7 +13,9 @@
 					    "^\\*Occur\\*$"
 					    "^\\*vc\\*$"
 					    "^\\*helm M-x\\*$"
-					    "^\\*magit:.*$"))
+					    "^\\*magit:.*$")
+	lusty--shell-open-here-fun #'prf/tramp/shell
+	lusty--M-x-fun #'helm-M-x)
   :bind (("C-x C-f" . lusty-file-explorer)
 	 ("C-x f" . lusty-file-explorer)
 	 ("C-x b" . lusty-buffer-explorer)

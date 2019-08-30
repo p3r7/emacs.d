@@ -21,14 +21,14 @@
 ;; MODE
 
 (use-package ansible
+  :demand
   :bind (:map ansible-key-map
 	      ("C-c h" . prf/ansible/open-ansible-module-doc-at-point)
 	      ("C-c C-h" . prf/ansible/open-ansible-module-doc-at-point))
   :init
   (defun prf/yml-hook/enable-ansible-minor-mode ()
-    (if (string-match-p (regexp-quote "ansible") default-directory)
-	(when (string-match-p (regexp-quote "ansible") default-directory)
-	  (ansible 1))))
+    (when (string-match-p (regexp-quote "ansible") default-directory)
+      (ansible 1)))
   :config
   (add-hook 'yaml-mode-hook #'prf/yml-hook/enable-ansible-minor-mode))
 

@@ -45,7 +45,9 @@
 ;; (show-paren-mode t)
 ;; (setq show-paren-style 'expression)
 
-;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(when (and (>= libgnutls-version 30603)
+	   (version<= emacs-version "26.2"))
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
@@ -127,7 +129,7 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
   (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-  (add-to-list 'package-archives '("bagolyodu" . "https://bagolyodu.dyndns.hu/emacs-packages/") t)
+  ;; (add-to-list 'package-archives '("bagolyodu" . "https://bagolyodu.dyndns.hu/emacs-packages/") t)
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
   (package-initialize)
