@@ -4,6 +4,9 @@
 
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+(put 'erase-buffer 'disabled nil)
+
+(global-set-key (kbd "C-c E") #'erase-buffer)
 
 (use-package prf-smart-edit
   :load-path "~/.emacs.d/plugins/prf-smart-edit"
