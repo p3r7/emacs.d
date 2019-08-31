@@ -43,11 +43,12 @@
 	   (<= emacs-minor-version 3))
       (progn
 	(setq autopair-autowrap t)
-	(put 'autopair-backspace 'cua-selection 'supersede))
-    (use-package wrap-region) ;; replacement for autopair-autowrap
-    ))
+	(put 'autopair-backspace 'cua-selection 'supersede))))
 ;; - [ ] electric-pair
 ;; http://xahlee.blogspot.fr/2012/06/emacs-24-feature-electric-pair-mode.html
+
+;; does this totally replace autopair-autowrap ?
+(require 'init-wrap-region)
 
 
 ;; ------------------------------------------------------------------------
@@ -68,6 +69,7 @@
 
 ;; ------------------------------------------------------------------------
 ;; MANUAL HIGHLIGHTING
+
 (require 'init-highlighting)
 
 
