@@ -32,8 +32,8 @@
 
 (defun tldr-ext-activate ()
   (interactive)
-  (if (file-directory-p tldr-ext-directory-path)
-
+  (if (and tldr-ext-directory-path
+	   (file-directory-p tldr-ext-directory-path))
       (defadvice tldr-get-commands-list (around tldr-get-commands-list-with-ext activate)
 	(let ((command-list ad-do-it))
 	  (let* ((tldr-directory-path tldr-ext-directory-path)
