@@ -5,6 +5,13 @@
       comint-buffer-maximum-size 20000
       comint-scroll-to-bottom-on-input t)
 
+(defun prf/comint-clear-buffer ()
+  (interactive)
+  (let ((comint-buffer-maximum-size 0))
+    (comint-truncate-buffer)))
+
+(define-key comint-mode-map (kbd "C-c E") #'prf/comint-clear-buffer)
+
 ;;
 ;; https://oremacs.com/2019/03/24/shell-apt/
 
