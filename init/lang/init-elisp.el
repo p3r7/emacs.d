@@ -1,29 +1,22 @@
 
-
-;; stolen from John Wiegley (https://github.com/jwiegley/dot-emacs/blob/master/init.el)
-;; REVIEW: most of those have a global scope and not an elisp scope, should move them somewhere else
-(bind-key "C-c e b" #'eval-buffer)
-(bind-key "C-c e e" #'toggle-debug-on-error)
-(bind-key "C-c e f" #'emacs-lisp-byte-compile)
-(bind-key "C-c e r" #'eval-region)
-(bind-key "C-c e s" #'scratch)
-
-(define-prefix-command 'prf/lisp-find-map)
-(bind-key "C-h e" #'prf/lisp-find-map)
-(bind-key "C-h e e" #'view-echo-area-messages)
-(bind-key "C-h e f" #'find-function)
-(bind-key "C-h e k" #'find-function-on-key)
-(bind-key "C-h e l" #'find-library)
-(bind-key "C-h e v" #'find-variable)
-(bind-key "C-h e V" #'apropos-value)
-
-;; REVIEW: I'vs seen this in others' config
-;; (use-package lisp-mode
-;;   :commands emacs-lisp-mode)
-
-(use-package emacs-lisp-mode
+(use-package lisp-mode
   :ensure nil
-  :interpreter ("emacs" . emacs-lisp-mode))
+  :demand
+  :commands emacs-lisp-mode
+  ;; :interpreter ("emacs" . emacs-lisp-mode)
+  :bind (;; stolen from John Wiegley
+	 ("C-c e b" . eval-buffer)
+	 ("C-c e e" . toggle-debug-on-error)
+	 ("C-c e f" . emacs-lisp-byte-compile)
+	 ("C-c e r" . eval-region)
+	 ("C-c e s" . prf/scratch))
+  :init
+  (defun prf/scratch nil
+    "create a scratch buffer"
+    (interactive)
+    (switch-to-buffer (get-buffer-create "*scratch*"))
+    (insert initial-scratch-message)
+    (lisp-interaction-mode)))
 
 (use-package macrostep
   :after (emacs-lisp-mode)
