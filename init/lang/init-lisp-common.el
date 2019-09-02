@@ -13,7 +13,7 @@
 (use-package lisp-mode
   :defer t
   :ensure nil
-  :hook `((lisp-mode emacs-lisp-mode scheme-mode)
+  :hook `(,prf/lisp-file-modes
           . (lambda () (add-hook 'after-save-hook 'check-parens nil t)))
   :init
   (dolist (mode prf/lisp-modes)
