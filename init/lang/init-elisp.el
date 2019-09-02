@@ -1,8 +1,9 @@
 
-(use-package lisp-mode
+(use-package elisp-mode
   :ensure nil
   :demand
   :commands emacs-lisp-mode
+  :delight (emacs-lisp-mode "Elisp")
   ;; :interpreter ("emacs" . emacs-lisp-mode)
   :bind (;; stolen from John Wiegley
 	 ("C-c e b" . eval-buffer)
@@ -14,9 +15,12 @@
   (defun prf/scratch nil
     "create a scratch buffer"
     (interactive)
-    (switch-to-buffer (get-buffer-create "*scratch*"))
-    (insert initial-scratch-message)
-    (lisp-interaction-mode)))
+    (let ((scratch-buffer (get-buffer "*scratch*")))
+      (if scratch-buffer
+	  (switch-to-buffer scratch-buffer)
+	(switch-to-buffer (get-buffer-create "*scratch*"))
+	(insert initial-scratch-message)
+	(lisp-interaction-mode)))))
 
 (use-package macrostep
   :after (emacs-lisp-mode)
@@ -38,7 +42,9 @@
   :commands (elisp-slime-nav-mode
              elisp-slime-nav-find-elisp-thing-at-point))
 
-
 ;; TODO: highlight-cl from quelpa
+;; (use-package highlight-cl
+;;   :hook (emacs-lisp-mode . highlight-cl-add-font-lock-keywords))
+
 
 (provide 'init-elisp)
