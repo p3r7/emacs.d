@@ -122,6 +122,18 @@
 (use-package ox-slack
   :after (org))
 
+(defun prf/org-export-to-doc ()
+  (interactive)
+  (let* ((org-export-odt-preferred-output-format "doc")
+	 (org-odt-preferred-output-format "doc")
+	 (soffice-cmd (executable-find "soffice"))
+	 (org-export-odt-convert-processes `(("LibreOffice" ,(concat "\"" soffice-cmd "\" --headless --convert-to %f%x --outdir %d %i"))))
+	 (org-odt-convert-processes `(("LibreOffice" ,(concat "\"" soffice-cmd "\" --headless --convert-to %f%x --outdir %d %i")))))
+    (if (and (file-exists-p soffice-cmd)
+	     (executable-find "zip"))
+	(org-odt-export-to-odt)
+      (message "Missing either soffice and/or zip program(s)."))))
+
 
 ;; ------------------------------------------------------------------------
 ;; CAPTURE
