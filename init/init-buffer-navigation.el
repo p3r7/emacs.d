@@ -5,7 +5,8 @@
 (use-package goto-line-preview
   :bind ([remap goto-line] . goto-line-preview))
 
-(require 'init-ace-jump)
+;; (require 'init-ace-jump)
+(require 'init-avy)
 
 
 ;; ------------------------------------------------------------------------
