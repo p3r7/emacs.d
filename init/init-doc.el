@@ -1,6 +1,6 @@
 
 ;; -------------------------------------------------------------------------
-;; HELP / DESCRIBE
+;; HELP / DESCRIBE (EMACS)
 
 (use-package helpful
   :bind (("C-h f" . helpful-callable)
@@ -9,10 +9,21 @@
 	 ("C-h o" . helpful-at-point)
 	 ("C-h F" . helpful-function)))
 
+;; stolen from John Wiegley
+(define-prefix-command 'prf/lisp-find-map)
+(bind-key "C-h e" #'prf/lisp-find-map)
+(bind-key "C-h e e" #'view-echo-area-messages)
+(bind-key "C-h e f" #'find-function)
+(bind-key "C-h e k" #'find-function-on-key)
+(bind-key "C-h e l" #'find-library)
+(bind-key "C-h e v" #'find-variable)
+(bind-key "C-h e V" #'apropos-value)
+
 (use-package which-key
   :delight
   :config
   (which-key-mode))
+
 
 ;; -------------------------------------------------------------------------
 ;; TEXINFO

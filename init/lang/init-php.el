@@ -9,16 +9,13 @@
   ;; it interprets indent-tabs-mode as indenting w/ spaces...
   (setq tab-width 4
 	indent-tabs-mode t)
-  (c-set-style "symfony2")
-  )
+  (c-set-style "symfony2"))
 
 
 (use-package php-mode
-  :load-path "~/.emacs.d/plugins-spe/nxhtml/related"
+  ;; :load-path "~/.emacs.d/plugins-spe/nxhtml/related"
   :mode "\\.php?\\'"
-  ;; :config
-  ;; (add-hook 'php-mode-hook 'prf/indentation-php-mode-hook)
-  )
+  :hook (php-mode #'php-enable-default-coding-style))
 
 ;; alternative: https://github.com/echosa/phpplus-mode
 

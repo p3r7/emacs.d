@@ -13,7 +13,9 @@
 ;; OBJECT MANIPULATION
 (use-package f)
 (use-package s)
-(use-package dash)
+(use-package dash
+  :config
+  (dash-enable-font-lock))
 ;; (use-package ht)
 (use-package prf-string
   :load-path "~/.emacs.d/plugins/prf-string")

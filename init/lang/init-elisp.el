@@ -1,29 +1,35 @@
 
-(eval-after-load "dash" '(dash-enable-font-lock))
-
-;; stolen from John Wiegley
-(bind-key "C-c e b" #'eval-buffer)
-(bind-key "C-c e e" #'toggle-debug-on-error)
-(bind-key "C-c e f" #'emacs-lisp-byte-compile)
-(bind-key "C-c e r" #'eval-region)
-(bind-key "C-c e s" #'scratch)
-
-(define-prefix-command 'prf/lisp-find-map)
-(bind-key "C-h e" #'prf/lisp-find-map)
-(bind-key "C-h e e" #'view-echo-area-messages)
-(bind-key "C-h e f" #'find-function)
-(bind-key "C-h e k" #'find-function-on-key)
-(bind-key "C-h e l" #'find-library)
-(bind-key "C-h e v" #'find-variable)
-(bind-key "C-h e V" #'apropos-value)
+(use-package elisp-mode
+  :ensure nil
+  :demand
+  :commands emacs-lisp-mode
+  :delight (emacs-lisp-mode "Elisp")
+  ;; :interpreter ("emacs" . emacs-lisp-mode)
+  :bind (;; stolen from John Wiegley
+	 ("C-c e b" . eval-buffer)
+	 ("C-c e e" . toggle-debug-on-error)
+	 ("C-c e f" . emacs-lisp-byte-compile)
+	 ("C-c e r" . eval-region)
+	 ("C-c e s" . prf/scratch))
+  :init
+  (defun prf/scratch nil
+    "create a scratch buffer"
+    (interactive)
+    (let ((scratch-buffer (get-buffer "*scratch*")))
+      (if scratch-buffer
+	  (switch-to-buffer scratch-buffer)
+	(switch-to-buffer (get-buffer-create "*scratch*"))
+	(insert initial-scratch-message)
+	(lisp-interaction-mode)))))
 
 (use-package macrostep
+  :after (emacs-lisp-mode)
   :bind (:map emacs-lisp-mode-map
 	      ("C-c e m" . macrostep-expand)))
 
 (use-package eval-expr
-  :bind ("M-:" . eval-expr)
   :after (paredit)
+  :bind ("M-:" . eval-expr)
   :config
   (defun eval-expr-minibuffer-setup ()
     (local-set-key (kbd "<tab>") #'lisp-complete-symbol)
@@ -31,11 +37,14 @@
     (paredit-mode)))
 
 (use-package elisp-slime-nav
+  :after (paredit)
   :diminish
   :commands (elisp-slime-nav-mode
              elisp-slime-nav-find-elisp-thing-at-point))
 
-
 ;; TODO: highlight-cl from quelpa
+;; (use-package highlight-cl
+;;   :hook (emacs-lisp-mode . highlight-cl-add-font-lock-keywords))
+
 
 (provide 'init-elisp)
