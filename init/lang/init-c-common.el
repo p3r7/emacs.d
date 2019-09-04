@@ -15,24 +15,5 @@
 	comment-end   ""))
 
 (add-hook 'c-mode-common-hook 'prf/main-c-mode-common-hook)
-(add-hook 'c-mode-common-hook 'prf/indentation-c-mode-common-hook)
-
-
-;; ------------------------------------------------------------------------
-;; ECLIM
-
-;; (require 'emacs-eclim))
-;; (setq
-;;  eclim-auto-save t
-;;  eclim-executable "/opt/eclipse/juno/eclim")
-;; (require 'eclim)
-;; (require 'eclimd)
-;; (global-eclim-mode)
-;; NB: needs to be defined here, overwise it gets overriden by the above statements
-;; (add-hook 'c-mode-common-hook
-;; 	(lambda () (local-set-key (kbd "RET") 'newline-and-indent)))
-
-
-;; ------------------------------------------------------------------------
 
 (provide 'init-c-common)
