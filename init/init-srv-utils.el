@@ -161,13 +161,7 @@
 ;; ------------------------------------------------------------------------
 ;; ESHELL
 
-;; TODO: em-smart ? plan9 concepts ported to emacs shells
-;; http://www.opensource.apple.com/source/emacs/emacs-51/emacs/lisp/eshell/em-smart.el
-
-(add-hook 'eshell-mode-hook
-	  (lambda ()
-	    (setq global-hl-line-mode nil)))
-
+(require 'init-eshell)
 
 ;; ------------------------------------------------------------------------
 ;; FILESYSTEM HELPERS
