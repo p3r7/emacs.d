@@ -5,9 +5,11 @@
   :after (clojure-mode)
   :bind (:map cider-mode-map
 	      ("C-h f" . cider-doc)
+	      ("C-h F" . cider-clojuredocs-web)
 	      ("C-h C-f" . cider-find-var)
 	      :map cider-repl-mode-map
 	      ("C-h f" . cider-doc)
+	      ("C-h F" . cider-clojuredocs-web)
 	      ("C-h C-f" . cider-find-var)
 	      ("C-c E" . cider-repl-clear-buffer)
 	      ("C-x k" . cider-quit)
