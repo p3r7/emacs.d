@@ -2,6 +2,9 @@
 ;; ------------------------------------------------------------------------
 ;; GENERAL
 
+(setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 (put 'erase-buffer 'disabled nil)
