@@ -281,6 +281,7 @@
 (require 'init-vcs)
 
 (require 'init-bookmark+)
+(require 'init-register)
 (require 'init-deft)
 (require 'init-neotree)
 
