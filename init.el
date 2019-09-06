@@ -81,7 +81,7 @@
 
 (defun edit-dot-emacs () (interactive)
        (find-file "~/.emacs.d/init.el"))
-(global-set-key (kbd "C-<f1>") 'edit-dot-emacs)
+(global-set-key (kbd "C-<f1>") #'edit-dot-emacs)
 
 
 ;; { Packages }---------------------------------------------------[[<#P]]
@@ -110,14 +110,10 @@
 
 (defun prf/recursive-add-to-load-path (dir)
   "Add directory and all child directories to load path"
-  (let (
-	(default-directory dir)
-	)
+  (let ((default-directory dir))
     ;; (setq load-path (cons dir load-path))
     (normal-top-level-add-to-load-path (list dir))
-    (normal-top-level-add-subdirs-to-load-path)
-    )
-  )
+    (normal-top-level-add-subdirs-to-load-path)))
 
 (prf/recursive-add-to-load-path "~/.emacs.d/plugins/")
 ;; TODO: custom load-path for those, w/ custom require function to access them
