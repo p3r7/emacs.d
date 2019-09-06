@@ -1,5 +1,6 @@
 
-(use-package auto-complete)
+(use-package auto-complete
+  :demand)
 
 (use-package auto-complete-config
   :ensure nil
