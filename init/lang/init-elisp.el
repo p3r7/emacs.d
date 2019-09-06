@@ -1,4 +1,9 @@
 
+(setq prf/elisp-modes '(emacs-lisp-mode
+                        inferior-emacs-lisp-mode
+                        lisp-interaction-mode
+                        ielm-mode))
+
 (use-package elisp-mode
   :ensure nil
   :demand
@@ -12,6 +17,16 @@
 	 ("C-c e r" . eval-region)
 	 ("C-c e s" . prf/scratch))
   :init
+  ;; ERT
+  (dolist (mode prf/elisp-modes)
+    (font-lock-add-keywords
+     mode
+     '(("(\\(ert-deftest\\)\\>[         '(]*\\(setf[    ]+\\sw+\\|\\sw+\\)?"
+        (1 font-lock-keyword-face)
+        (2 font-lock-function-name-face
+           nil t)))))
+
+                                        ; *scratch* buffer
   (defun prf/scratch nil
     "create a scratch buffer"
     (interactive)
@@ -32,7 +47,8 @@
   :bind ("M-:" . eval-expr)
   :config
   (defun eval-expr-minibuffer-setup ()
-    (local-set-key (kbd "<tab>") #'lisp-complete-symbol)
+    ;; (local-set-key (kbd "<tab>") #'lisp-complete-symbol)
+    (local-set-key (kbd "<tab>") #'completion-at-point)
     (set-syntax-table emacs-lisp-mode-syntax-table)
     (paredit-mode)))
 
@@ -46,5 +62,6 @@
 ;; (use-package highlight-cl
 ;;   :hook (emacs-lisp-mode . highlight-cl-add-font-lock-keywords))
 
+(require 'init-eldoc)
 
 (provide 'init-elisp)

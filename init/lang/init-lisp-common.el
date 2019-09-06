@@ -1,30 +1,27 @@
 
-(setq prf/lisp-modes '(ielm-mode
-                       inferior-emacs-lisp-mode
+(setq prf/lisp-modes '(lisp-mode
                        inferior-lisp-mode
+                       emacs-lisp-mode
+                       inferior-emacs-lisp-mode
                        lisp-interaction-mode
-                       lisp-mode
-                       emacs-lisp-mode))
+                       ielm-mode
+                       scheme-mode
+                       clojure-mode
+                       cider-repl-mode))
 
 (setq prf/lisp-file-modes '(lisp-mode
 			    emacs-lisp-mode
-			    scheme-mode))
+			    scheme-mode
+                            clojure-mode))
 
 (use-package lisp-mode
   :defer t
   :ensure nil
   :hook `(,prf/lisp-file-modes
-          . (lambda () (add-hook 'after-save-hook 'check-parens nil t)))
-  :init
-  (dolist (mode prf/lisp-modes)
-    (font-lock-add-keywords
-     mode
-     '(("(\\(ert-deftest\\)\\>[         '(]*\\(setf[    ]+\\sw+\\|\\sw+\\)?"
-        (1 font-lock-keyword-face)
-        (2 font-lock-function-name-face
-           nil t))))))
+          . (lambda () (add-hook 'after-save-hook 'check-parens nil t))))
 
-(require 'init-paredit)
+;; (require 'init-paredit)
+(require 'init-lispy)
 
 (use-package redshank
   :delight
