@@ -4,6 +4,7 @@
                         lisp-interaction-mode
                         ielm-mode))
 
+
 (use-package elisp-mode
   :ensure nil
   :demand
@@ -37,13 +38,15 @@
 	(insert initial-scratch-message)
 	(lisp-interaction-mode)))))
 
+
 (use-package macrostep
-  :after (emacs-lisp-mode)
+  :after (elisp-mode)
   :bind (:map emacs-lisp-mode-map
 	      ("C-c e m" . macrostep-expand)))
 
+
 (use-package eval-expr
-  :after (paredit)
+  :after (elisp-mode)
   :bind ("M-:" . eval-expr)
   :config
   (defun eval-expr-minibuffer-setup ()
@@ -52,16 +55,25 @@
     (set-syntax-table emacs-lisp-mode-syntax-table)
     (paredit-mode)))
 
+
 (use-package elisp-slime-nav
-  :after (paredit)
+  :after (elisp-mode)
   :diminish
   :commands (elisp-slime-nav-mode
              elisp-slime-nav-find-elisp-thing-at-point))
 
-;; TODO: highlight-cl from quelpa
-;; (use-package highlight-cl
-;;   :hook (emacs-lisp-mode . highlight-cl-add-font-lock-keywords))
+(use-package lisp-extra-font-lock
+  :after (elisp-mode)
+  :hook (emacs-lisp-mode . lisp-extra-font-lock-mode))
+
+
+(use-package highlight-cl
+  :after (elisp-mode)
+  :load-path "~/.emacs.d/plugins/highlight-cl"
+  :hook (emacs-lisp-mode . highlight-cl-add-font-lock-keywords))
+
 
 (require 'init-eldoc)
+
 
 (provide 'init-elisp)
