@@ -67,10 +67,54 @@
   :hook (emacs-lisp-mode . lisp-extra-font-lock-mode))
 
 
-(use-package highlight-cl
+(use-package cl-lib-highlight
   :after (elisp-mode)
-  :load-path "~/.emacs.d/plugins/highlight-cl"
-  :hook (emacs-lisp-mode . highlight-cl-add-font-lock-keywords))
+  :config
+
+  (defvar prf/cl-lib-highlight-valid 'prf/cl-lib-highlight-valid
+    "Face name to use for valid cl-lib keywords.")
+
+  (defvar prf/cl-lib-highlight-valid-warning 'prf/cl-lib-highlight-valid-warning
+    "Face name to use for valid warning cl-lib keywords.")
+
+  (defface prf/cl-lib-highlight-valid
+    '((t :inherit font-lock-keyword-face :underline "steel blue"))
+    "Face for deprecated cl functions and macros."
+    :group 'cl-lib-highlight)
+
+  (defface prf/cl-lib-highlight-valid-warning
+    '((t :inherit font-lock-warning-face :underline "steel blue"))
+    "Face for deprecated cl functions and macros."
+    :group 'cl-lib-highlight)
+
+  (custom-set-faces
+   ;; use underline, like in highlight-cl package
+   '(cl-lib-highlight-deprecated
+     ((t (:inherit font-lock-keyword-face :underline "red")))))
+
+  (defun prf/cl-lib-highlight-initialize ()
+    "Add all cl-lib font lock highlighting to `emacs-lisp-mode'."
+    (interactive)
+    (cl-labels ((opt (syms) (regexp-opt (mapcar #'symbol-name syms) t)))
+      (let ((defs (list (concat "(" (opt cl-lib-highlight-defs) "\\_>"
+                                "\\s-*" "\\(\\(?:\\sw\\|\\s_\\)+\\)?")
+                        '(1 prf/cl-lib-highlight-valid)
+                        '(2 font-lock-function-name-face nil t)))
+            (types (list (concat "(" (opt cl-lib-highlight-types) "\\_>"
+                                 "\\s-*" "\\(\\(?:\\sw\\|\\s_\\)+\\)?")
+                         '(1 prf/cl-lib-highlight-valid)
+                         '(2 font-lock-type-face nil t)))
+            (warnings (list (concat "(" (opt cl-lib-highlight-warnings) "\\_>")
+                            '(1 prf/cl-lib-highlight-valid-warning)))
+            (keywords (list (concat "(" (opt cl-lib-highlight-keywords) "\\_>")
+                            '(1 prf/cl-lib-highlight-valid))))
+        (font-lock-add-keywords 'emacs-lisp-mode
+                                (list defs types warnings keywords))
+        (font-lock-add-keywords 'lisp-interaction-mode
+                                (list defs types warnings keywords)))))
+
+  (prf/cl-lib-highlight-initialize)
+  (cl-lib-highlight-warn-cl-initialize))
 
 
 (require 'init-eldoc)
