@@ -1,8 +1,8 @@
 
-(setq prf/elisp-modes '(emacs-lisp-mode
-                        inferior-emacs-lisp-mode
-                        lisp-interaction-mode
-                        ielm-mode))
+(defvar prf/elisp-modes '(emacs-lisp-mode
+                          inferior-emacs-lisp-mode
+                          lisp-interaction-mode
+                          ielm-mode))
 
 
 (use-package elisp-mode
