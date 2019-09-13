@@ -1,4 +1,13 @@
 
+(require 'dash)
+
+;; ------------------------------------------------------------------------
+;;  VARS
+
+(defvar tramp-kitty-session-map-cache nil)
+(defvar tramp-kitty-session-map-cache-set-time nil)
+
+
 ;; ------------------------------------------------------------------------
 ;; NEW TRAMP METHODS
 
@@ -57,18 +66,67 @@
 ;; ------------------------------------------------------------------------
 ;; UTILS FUNCTIONS
 
-(defun tramp-kitty-get-session-list-from-conf-dir ()
-  (let ((kitty-bin-path (executable-find "kitty"))
-	(kitty-dir)
-	(session-list))
+(defun tramp-kitty-get-kitty-session-dir ()
+  (let ((kitty-bin-path (executable-find "kitty")))
     (when kitty-bin-path
-      (setq kitty-dir (file-name-directory kitty-bin-path))
+      (file-name-directory kitty-bin-path))))
+
+(defun tramp-kitty-get-session-list-from-conf-dir ()
+  (let ((kitty-dir (tramp-kitty-get-kitty-session-dir))
+        (session-list))
+    (when kitty-dir
       (setq session-list (directory-files (concat kitty-dir "/Sessions")))
       (setq session-list (delete "."  session-list))
       (setq session-list (delete ".."  session-list))
       (setq session-list (delete "Default%20Settings"  session-list))
       session-list)))
 
+(defun tramp-kitty-get-session-map-from-conf-dir ()
+  (let ((kitty-dir (tramp-kitty-get-kitty-session-dir))
+        (session-list (tramp-kitty-get-session-list-from-conf-dir)))
+    (mapcar
+     (lambda (session)
+       `(,session . ,(tramp-kitty-parse-conf-file (concat kitty-dir "/Sessions/" session))))
+     session-list)))
+
+(defun tramp-kitty-parse-conf-file (filePath)
+  "Return a list of lines of a file at filePath."
+  (with-temp-buffer
+    (insert-file-contents filePath)
+    (let ((confLines (split-string (buffer-string) "\n" t)))
+      (mapcar #'tramp-kitty-parse-conf-line confLines))))
+
+(defun tramp-kitty-parse-conf-line (confLine)
+  "Parse a line of kitty conf."
+  (when (string-match (concat "^\\(.*\\)" (regexp-quote "\\") "\\(.*\\)" (regexp-quote "\\")) confLine)
+    `(,(match-string 1 confLine) . ,(match-string 2 confLine))))
+
+(defun tramp-kitty-get-all-props-for-session (sessionMap session)
+  (cdr (assoc session sessionMap)))
+
+(defun tramp-kitty-get-session-prop (sessionPropMap prop)
+  (cdr (assoc prop sessionPropMap)))
+
+(defun tramp-kitty-get-prop-for-session (sessionMap session prop)
+  (tramp-kitty-get-session-prop (tramp-kitty-get-all-props-for-session session sessionMap) prop))
+
+(defun tramp-kitty-set-session-map-cache ()
+  (setq tramp-kitty-session-map-cache (tramp-kitty-get-session-map-from-conf-dir)
+        tramp-kitty-session-map-cache-set-time (current-time))
+  (message "KiTTY Sessions cache set"))
+
+(defun tramp-kitty-get-all-props-for-session-from-cache (session)
+  (tramp-kitty-get-all-props-for-session tramp-kitty-session-map-cache))
+
+(defun tramp-kitty-get-prop-for-session-from-cache (session prop)
+  (tramp-kitty-get-prop-for-session tramp-kitty-session-map-cache session prop))
+
+(defun tramp-kitty-get-sessions-in-cache-matching-vec (vec)
+  (let* ((user (tramp-file-name-user vec))
+         (host (tramp-file-name-host vec))
+         (kitty-sess-hostname (string-join (remove nil `(,user ,host)) "@")))
+    (-filter (lambda (session) (equal kitty-sess-hostname (tramp-kitty-get-session-prop (cdr session) "HostName")))
+             tramp-kitty-session-map-cache)))
 
 ;; ------------------------------------------------------------------------
 ;; HELM INTEGRATION
@@ -77,7 +135,7 @@
 ;; http://kitchingroup.cheme.cmu.edu/blog/2015/01/30/More-adventures-in-helm-more-than-one-action/
 (setq tramp-kitty-session-helm-source
       `((name . "Open KiTTY session")
-        (candidates . tramp-kitty-get-session-list)
+        (candidates . tramp-kitty-get-session-list-from-conf-dir)
         (action . (
 		   ("dired" .
 		    (lambda (candidate)

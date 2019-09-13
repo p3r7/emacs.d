@@ -55,7 +55,9 @@
 (when (and (executable-find "kscp")
 	   (executable-find "klink"))
   (use-package tramp-kitty
-    :load-path "~/.emacs.d/plugins/tramp-kitty"))
+    :load-path "~/.emacs.d/plugins/tramp-kitty")
+  :config
+  (tramp-kitty-set-session-map-cache))
 
 ;; PuTTY w/ SSH key support
 (use-package tramp-plinki
