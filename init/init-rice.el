@@ -174,12 +174,15 @@
 ;; VISUAL ENHANCEMENTS
 
 (use-package rainbow-mode
+  :hook
+  ((prog-mode conf-mode) . rainbow-mode)
   :delight
-  :config
-  (defun prf/rainbow-mode-prog-mode-hook ()
-    (rainbow-mode 1))
-  (add-hook 'prog-mode-hook 'prf/rainbow-mode-prog-mode-hook)
-  (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook))
+  ;; :config
+  ;; (defun prf/rainbow-mode-prog-mode-hook ()
+  ;;   (rainbow-mode 1))
+  ;; (add-hook 'prog-mode-hook 'prf/rainbow-mode-prog-mode-hook)
+  ;; (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook)
+  )
 
 ;; Preview faces at their definition
 ;; - [X] https://github.com/Fanael/highlight-defined
