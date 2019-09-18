@@ -27,25 +27,31 @@
 ;; -------------------------------------------------------------------------
 ;; THEMES
 
+;; dark
+(use-package chocolate-theme
+  :defer t)
 (use-package gotham-theme
-  :defer t)
-(use-package ample-theme
-  :defer t)
-(use-package plan9-theme
   :defer t)
 (use-package dracula-theme
   :defer t)
+
+;; light
+(use-package white-sand-theme
+  :defer t)
+(use-package plan9-theme
+  :defer t)
+(use-package ample-theme
+  :defer t)
 (use-package flatui-theme
   :defer t)
-(use-package chocolate-theme
-  :defer t)
+
 
 
 (defvar prf/theme/list/practical
   (list
    'chocolate
    'plan9
-   'flatui
+   'white-sand-theme
    'dracula-mod
    'comidia-mod
    ;; 'gotham
