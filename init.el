@@ -300,6 +300,7 @@
        "visual"
        ("r" prf/reset-frame-geometry "reset-default")
        ("d" prf/double-default-frame-geometry "double")
+       ("t" prf/tiny-frame-geometry "tiny")
        ("g" nil "cancel"))
 
      (defhydra hydra-test (:color blue)

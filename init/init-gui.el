@@ -31,17 +31,24 @@
 (defun prf/reset-frame-geometry ()
   (interactive)
   (set-frame-size (selected-frame) prf/frame/width-default prf/frame/height-default))
+(defalias '_rfg 'prf/reset-frame-geometry)
+
 (defun prf/double-default-frame-geometry ()
   (interactive)
   (set-frame-size (selected-frame) (* 2 prf/frame/width-default) prf/frame/height-default))
-(defalias '_rfg 'prf/reset-frame-geometry)
-(prf/reset-frame-geometry)
 
+(defun prf/tiny-frame-geometry ()
+  (interactive)
+  (set-frame-size (selected-frame) prf/frame/width-default (/ prf/frame/height-default 2)))
+
+;; first frame
+(prf/reset-frame-geometry)
+;; subsequent frames
 (setq initial-frame-alist
       `((width . ,prf/frame/width-default)
         (height . ,prf/frame/height-default)
-        (vertical-scroll-bars . nil)))
-(setq default-frame-alist
+        (vertical-scroll-bars . nil))
+      default-frame-alist
       `((width . ,prf/frame/width-default)
         (height . ,prf/frame/height-default)
 	(vertical-scroll-bars . nil)
