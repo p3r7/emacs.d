@@ -102,26 +102,4 @@ See help of `format-time-string' for possible replacements")
   (insert (format-time-string datetime-format-compact (current-time))))
 
 
-;; -------------------------------------------------------------------------
-;; URL
-
-(require 'url-util)
-
-(defun prf/url/encode (begin end)
-  "URL-encode selected region."
-  (interactive "r")
-  (atomic-change-group
-    (let ((txt (delete-and-extract-region begin end)))
-      (insert (url-encode-url txt)))))
-(defun prf/url/decode (begin end)
-  "URL-decode selected region."
-  (interactive "r")
-  (atomic-change-group
-    (let ((txt (delete-and-extract-region begin end)))
-      (insert (decode-coding-string (url-unhex-string txt) 'utf-8)))))
-
-
-
-
-
 (provide 'init-edition)
