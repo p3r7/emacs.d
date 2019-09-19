@@ -95,6 +95,8 @@
   :config
   (prf/theme/initialize))
 
+(use-package tame-fruit-salad
+  :load-path "~/.emacs.d/plugins/tame-fruit-salad")
 
 (use-package space-theming
   :load-path "~/.emacs.d/plugins/space-theming"
