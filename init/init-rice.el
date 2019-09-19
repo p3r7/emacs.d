@@ -201,6 +201,11 @@
 (when (fboundp 'prettify-symbols-mode)
   (setq prettify-symbols-unprettify-at-point 'right-edge))
 
+(use-package mwe-color-box
+  :load-path "~/.emacs.d/plugins/mwe-color-box"
+  :init
+  (setq mwe:color-box-hide-parens nil))
+;; REVIEW: might be better to use https://github.com/istib/rainbow-blocks or https://github.com/alphapapa/prism.el
 
 ;; -------------------------------------------------------------------------
 ;; WRITEROOM / DARKROOM
