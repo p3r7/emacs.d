@@ -1,5 +1,7 @@
 
 (require 'dash)
+(require 'prf-string)
+
 
 ;; ------------------------------------------------------------------------
 ;;  VARS
@@ -99,7 +101,7 @@
 (defun tramp-kitty-parse-conf-line (confLine)
   "Parse a line of kitty conf."
   (when (string-match (concat "^\\(.*\\)" (regexp-quote "\\") "\\(.*\\)" (regexp-quote "\\")) confLine)
-    `(,(match-string 1 confLine) . ,(match-string 2 confLine))))
+    `(,(match-string 1 confLine) . ,(prf/url/decode (match-string 2 confLine)))))
 
 (defun tramp-kitty-get-all-props-for-session (sessionMap session)
   (cdr (assoc session sessionMap)))
@@ -121,11 +123,22 @@
 (defun tramp-kitty-get-prop-for-session-from-cache (session prop)
   (tramp-kitty-get-prop-for-session tramp-kitty-session-map-cache session prop))
 
-(defun tramp-kitty-get-sessions-in-cache-matching-vec (vec)
+(defmacro tramp-kitty--make-vec-match-predicate (vec)
   (let* ((user (tramp-file-name-user vec))
          (host (tramp-file-name-host vec))
          (kitty-sess-hostname (string-join (remove nil `(,user ,host)) "@")))
-    (-filter (lambda (session) (equal kitty-sess-hostname (tramp-kitty-get-session-prop (cdr session) "HostName")))
+    `(lambda (session)
+       (equal ,kitty-sess-hostname (tramp-kitty-get-session-prop (cdr session) "HostName")))))
+
+;; (defun tramp-kitty--make-vec-match-predicate (vec)
+;;   (let* ((user (tramp-file-name-user vec))
+;;          (host (tramp-file-name-host vec))
+;;          (kitty-sess-hostname (string-join (remove nil `(,user ,host)) "@")))
+;;     (lambda (session) (equal kitty-sess-hostname (tramp-kitty-get-session-prop (cdr session) "HostName")))))
+
+(defun tramp-kitty-get-sessions-in-cache-matching-vec (vec)
+  (noflet ((predicate (tramp-kitty--make-vec-match-predicate vec)))
+    (-filter #'predicate
              tramp-kitty-session-map-cache)))
 
 ;; ------------------------------------------------------------------------
