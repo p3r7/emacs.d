@@ -162,7 +162,7 @@
 
 (setq
  prf/font "-outline-Consolas-normal-r-normal-normal-12-97-96-96-c-*-iso8859-1"
- )
+ inhibit-compacting-font-caches t)
 
 ;; ------------------------------------------------------------------------
 
