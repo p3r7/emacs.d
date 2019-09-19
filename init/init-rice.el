@@ -51,7 +51,7 @@
   (list
    'chocolate
    'plan9
-   'white-sand-theme
+   'white-sand
    'dracula-mod
    'comidia-mod
    ;; 'gotham
