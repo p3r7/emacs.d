@@ -38,8 +38,14 @@
 ;; ------------------------------------------------------------------------
 ;; HW DETECTION
 
+(defun prf/current-frame-terminal-type ()
+  "Return the type of the current display terminal for frame.
+See the documentation of `framep' for possible return values."
+  (terminal-live-p (frame-terminal)))
+
 (defun dec-vt100-compatible-term-p ()
-  (fboundp 'vt100-wide-mode))
+  (or (fboundp 'vt100-wide-mode)
+      (dec-term-p)))
 
 (defun dec-term-p ()
   (let ((term (getenv "TERM")))
@@ -72,8 +78,17 @@
   (define-key input-decode-map "\e[1;3D" (kbd "<M-left>"))
   (define-key input-decode-map "\e[1;3C" (kbd "<M-right>")))
 
-(when (dec-vt100-compatible-term-p)
-  (prf/hw/set-dec-term-keys))
+;; NB: TTY detection is based on value of (getenv "TERM")
+;; It is pretty old-school elisp code, the entry point is
+;; `tty-run-terminal-initialization'.
+;; It get runs in lisp/startup.el as well as in
+;; lisp/faces.el.
+
+(defun prf/tty-setup-hook ()
+  (when (dec-vt100-compatible-term-p)
+    (prf/hw/set-dec-term-keys)))
+
+(add-hook 'tty-setup-hook #'prf/tty-setup-hook)
 
 
 ;; ------------------------------------------------------------------------
