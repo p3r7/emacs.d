@@ -15,17 +15,14 @@
     ad-do-it))
 
 (global-set-key (kbd "C-z")
-		(lambda()(interactive)
-		  (unless window-system (suspend-frame))
-		  ))
+		(lambda () (interactive)
+                  (unless window-system (suspend-frame))))
 
 (global-set-key (kbd "\C-x\C-z")
-		(lambda()(interactive)
-		  (unless window-system (suspend-frame))
-		  ))
+		(lambda () (interactive)
+		  (unless window-system (suspend-frame))))
 
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 
 ;; http://stackoverflow.com/questions/7031051/emacs-notify-when-a-file-has-been-modified-externally
@@ -33,9 +30,7 @@
 (defun auto-revert-remote-file ()
   (interactive)
   (if (&& (file-remote-p (buffer-file-name (current-buffer)) (buffer-modified-p (buffer-file-name (current-buffer)))))
-      (revert-buffer t t)
-    )
-  )
+      (revert-buffer t t)))
 
 (defun prf/revert-buffer-no-confirm ()
   "Revert buffer without confirmation."
@@ -50,13 +45,6 @@
     (setenv "GPG_AGENT_INFO" nil)
     ad-do-it
     (setenv "GPG_AGENT_INFO" agent)))
-
-;; automatic display of local help
-;; used to display errors of eclim in mb
-(setq help-at-pt-display-when-idle t)
-(setq help-at-pt-timer-delay 0.1)
-(help-at-pt-set-timer)
-
 
 
 ;; -------------------------------------------------------------------------
@@ -91,9 +79,8 @@
 
 ;; FIXME: doesn't work
 (add-hook 'org-mode-hook
-	  '(lambda()
-	     (define-key org-mode-map (kbd "C-RET") 'org-insert-heading-respect-content)
-	     ))
+	  '(lambda ()
+	     (define-key org-mode-map (kbd "C-RET") 'org-insert-heading-respect-content)))
 
 (global-subword-mode t)
 (use-package emacs
@@ -116,6 +103,7 @@
 ;; not perfect, see [[http://stackoverflow.com/questions/6512086/emacs-reverts-buffer-to-weird-previous-state-with-git-rebase]]
 ;; doesn't work on remote servers: [[http://newsgroups.derkeiler.com/Archive/Comp/comp.emacs/2005-08/msg00104.html]]
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq require-final-newline t)           ;; end files with a newline
 
 (mouse-avoidance-mode 'animate)

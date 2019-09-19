@@ -37,6 +37,7 @@ More stable than default `kill-this-buffer'"
   (kill-buffer (current-buffer)))
 
 (global-set-key (kbd "C-x k") #'prf/kill-this-buffer)
+(global-set-key "\C-x\C-k" #'prf/kill-this-buffer)
 
 
 (provide 'init-buffer-navigation)

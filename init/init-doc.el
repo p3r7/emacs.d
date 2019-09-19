@@ -2,6 +2,12 @@
 ;; -------------------------------------------------------------------------
 ;; HELP / DESCRIBE (EMACS)
 
+;; automatic display of local help
+;; used to display errors of eclim in mb
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+
 (use-package helpful
   :bind (("C-h f" . helpful-callable)
 	 ("C-h v" . helpful-variable)
