@@ -22,6 +22,14 @@
 
   :config
 
+  ;; from https://github.com/MaskRay/ccls/wiki/eglot
+  (defun prf/projectile-project-find-function (dir)
+    (let* ((root (projectile-project-root dir)))
+      (and root (cons 'transient root))))
+  (with-eval-after-load 'project
+    (add-to-list 'project-find-functions 'prf/projectile-project-find-function))
+
+
   ;; https://github.com/bbatsov/projectile/pull/444
   ;; (setq projectile-file-exists-remote-cache-expire nil)
   ;; (defadvice projectile-project-root (around ignore-remote first activate)
