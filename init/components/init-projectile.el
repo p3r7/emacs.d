@@ -4,9 +4,12 @@
 ;; ------------------------------------------------------------------------
 ;; PROJECTILE
 
+(defun prf/enable-projectile-p ()
+  nil)
+
 (use-package projectile
   :after (s)
-
+  :if (prf/enable-projectile-p)
   ;; REVIEW: cleaner defintion w/ let*
   :delight '(:eval (if (string= "-" (projectile-project-name))
 		       ""
