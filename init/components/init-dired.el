@@ -63,10 +63,15 @@
 
 
 (use-package dired-git-info
-  :defer t
   :bind (
          :map dired-mode-map
          (")" . dired-git-info-mode)))
 
+;; BUG: doesn't work w/ dired+
+(use-package dired-hide-dotfiles
+  :disabled
+  :bind (
+         :map dired-mode-map
+         ("M-." . dired-hide-dotfiles-mode)))
 
 (provide 'init-dired)
