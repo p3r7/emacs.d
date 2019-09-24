@@ -58,4 +58,11 @@
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
 
 
+(use-package dired-git-info
+  :defer t
+  :bind (
+         :map dired-mode-map
+         (")" . dired-git-info-mode)))
+
+
 (provide 'init-dired)
