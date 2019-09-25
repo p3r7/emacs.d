@@ -56,6 +56,7 @@
   ;;     '(require 'dired-async))
   )
 
+;; NB: alternative https://oremacs.com/2016/02/24/dired-rsync/
 (use-package dired-rsync
   :after (dired)
   :config
