@@ -1,4 +1,6 @@
 
+(require 'dash)
+
 ;; -------------------------------------------------------------------------
 ;; INTERRACTIONS
 
@@ -45,6 +47,17 @@
     (setenv "GPG_AGENT_INFO" nil)
     ad-do-it
     (setenv "GPG_AGENT_INFO" agent)))
+
+(file-exists-p "~/.authinfo")
+
+(defvar prf/auth-sources
+  (-filter #'file-exists-p '("~/.authinfo" "~/.netrc")))
+
+(use-package auth-source
+  :demand
+  :no-require t
+  :config
+  (setq auth-sources prf/auth-sources))
 
 
 ;; -------------------------------------------------------------------------
