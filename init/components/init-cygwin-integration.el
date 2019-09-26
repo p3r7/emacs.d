@@ -47,10 +47,10 @@
 
 ;; NB: cygwin's git misbehave w/ quelpa under Windows
 ;; thus we use git bash version by default instead, by putting it at the front of `exec-path'
-(when (file-exists-p git-bash-cmd-root)
-  (when (member git-bash-cmd-root exec-path)
-    (setq exec-path (delete git-bash-cmd-root exec-path)))
-  (setq exec-path (cons git-bash-cmd-root exec-path)))
+;; (when (file-exists-p git-bash-cmd-root)
+;;   (when (member git-bash-cmd-root exec-path)
+;;     (setq exec-path (delete git-bash-cmd-root exec-path)))
+;;   (setq exec-path (cons git-bash-cmd-root exec-path)))
 
 ;; likewise, quelpa only works well with MinGW's tar
 ;; (when (file-exists-p mingw-msys-bin-root)
