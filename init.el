@@ -140,12 +140,9 @@
       )
 ;; (setq garbage-collection-messages t)
 
-(use-package quelpa
-  ;; :config
-  ;; (setq quelpa-dir "/home/jordan.besly/.emacs.d/quelpa"
-  ;; 	quelpa-build-dir "/home/jordan.besly/.emacs.d/quelpa/build")
-  )
+(use-package quelpa)
 (use-package quelpa-use-package
+  :after (quelpa)
   :config
   (quelpa-use-package-activate-advice))
 

@@ -7,6 +7,11 @@
 
 (defvar cygwin-root "c:/cygwin64")
 
+(defvar mingw-bin-root "C:/MinGW/bin")
+(defvar mingw-msys-bin-root "C:/MinGW/msys/1.0/bin")
+(defvar git-bash-cmd-root "C:/Program Files/Git/cmd") ; contains only git
+(defvar git-bash-bin-root "C:/Program Files/Git/bin") ; contains only git + bash
+
 (setq
  ;; cygwin-bin (concat cygwin-root "/usr/bin")
  cygwin-bin (concat cygwin-root "/bin")
@@ -40,6 +45,19 @@
 
 ;; do undo in a let, typically before launching a shell: (replace-regexp-in-string (concat (prf/escape-winnt-path cygwin-bin) ";") "" (getenv "PATH"))
 
+;; NB: cygwin's git misbehave w/ quelpa under Windows
+;; thus we use git bash version by default instead, by putting it at the front of `exec-path'
+(when (file-exists-p git-bash-cmd-root)
+  (when (member git-bash-cmd-root exec-path)
+    (setq exec-path (delete git-bash-cmd-root exec-path)))
+  (setq exec-path (cons git-bash-cmd-root exec-path)))
+
+;; likewise, quelpa only works well with MinGW's tar
+;; (when (file-exists-p mingw-msys-bin-root)
+;;   (when (member mingw-msys-bin-root exec-path)
+;;     (setq exec-path (delete mingw-msys-bin-root exec-path)))
+;;   (setq exec-path (cons mingw-msys-bin-root exec-path)))
+
 
 ;; -------------------------------------------------------------------------
 
@@ -60,8 +78,8 @@
 
 
 (with-eval-after-load 'prf-tramp
-  (setq prf/tramp/local-shell-bin/git-bash "C:/Program Files (x86)/Git/bin/bash.exe"
-	prf/tramp/local-shell-bin/cygwin-bash "C:/cygwin64/bin/bash.exe")
+  (setq prf/tramp/local-shell-bin/git-bash (concat git-bash-bin-root "/bash.exe")
+	prf/tramp/local-shell-bin/cygwin-bash (concat cygwin-bin "/bash.exe"))
 
   (defun prf/tramp/shell/git-bash (&optional path)
     (interactive)

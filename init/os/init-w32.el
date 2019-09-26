@@ -22,6 +22,10 @@
   (aset buffer-display-table ?\^M []))
 ;; (add-hook 'text-mode-hook 'prf/hide-dos-eol)
 
+(defvar prf/quelpa-tar-executable "C:/MinGW/msys/1.0/bin/tar.exe")
+
+(when (file-exists-p prf/quelpa-tar-executable)
+  (setq quelpa-build-tar-executable prf/quelpa-tar-executable))
 
 ;; ------------------------------------------------------------------------
 ;; TOOLS
