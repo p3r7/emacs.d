@@ -12,7 +12,7 @@
 (global-set-key (kbd "C-c E") #'erase-buffer)
 
 (use-package prf-smart-edit
-  :load-path "~/.emacs.d/plugins/prf-smart-edit"
+  :quelpa (prf-smart-edit :fetcher github :repo "p3r7/prf-smart-edit")
   ;; :after (org groovy-mode)
   :after (org)
   :demand
@@ -35,22 +35,13 @@
 ;; ------------------------------------------------------------------------
 ;; SMART PARENTHESIS
 
-;; - brackets completion
-;; http://emacs-fu.blogspot.fr/2010/06/automatic-pairing-of-brackets-and.html
-;; - [X] autopair
-(use-package autopair
-  :delight
-  :config
-  (autopair-global-mode 1)
-  (when (and (<= emacs-major-version 24)
-             (<= emacs-minor-version 3))
-    (setq autopair-autowrap t)
-    (put 'autopair-backspace 'cua-selection 'supersede)))
-;; - [ ] electric-pair
-;; http://xahlee.blogspot.fr/2012/06/emacs-24-feature-electric-pair-mode.html
+;; https://www.emacswiki.org/emacs/AutoPairs
 
-;; does this totally replace autopair-autowrap ?
-(require 'init-wrap-region)
+(require 'init-smartparens)
+;; (require 'init-autopair)
+;; (require 'init-wrap-region)
+;; NB: conflict betweenwrap-region and autopair-autowrap
+
 
 
 ;; ------------------------------------------------------------------------

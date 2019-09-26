@@ -1,4 +1,6 @@
 
+(require 'dash)
+
 ;; -------------------------------------------------------------------------
 ;; INTERRACTIONS
 
@@ -38,13 +40,23 @@
 
 (defalias '_rb 'prf/revert-buffer-no-confirm)
 
-
 ;; Do not use gpg agent when runing in terminal -> doesn't work on winnt
 (defadvice epg--start (around advice-epg-disable-agent activate)
   (let ((agent (getenv "GPG_AGENT_INFO")))
     (setenv "GPG_AGENT_INFO" nil)
     ad-do-it
     (setenv "GPG_AGENT_INFO" agent)))
+
+(file-exists-p "~/.authinfo")
+
+(defvar prf/auth-sources
+  (-filter #'file-exists-p '("~/.authinfo" "~/.netrc")))
+
+(use-package auth-source
+  :demand
+  :no-require t
+  :config
+  (setq auth-sources prf/auth-sources))
 
 
 ;; -------------------------------------------------------------------------
@@ -99,12 +111,22 @@
 ;; -------------------------------------------------------------------------
 ;; INDEPENDANT BEHAVIOURS
 
-(global-auto-revert-mode 1)
+(use-package files
+  :ensure nil
+  :custom
+  (require-final-newline t)
+  (enable-local-variables :all)
+  (enable-local-eval t))
+
+(use-package autorevert
+  :ensure nil
+  :hook
+  (after-init-hook . global-auto-revert-mode))
+
 ;; not perfect, see [[http://stackoverflow.com/questions/6512086/emacs-reverts-buffer-to-weird-previous-state-with-git-rebase]]
 ;; doesn't work on remote servers: [[http://newsgroups.derkeiler.com/Archive/Comp/comp.emacs/2005-08/msg00104.html]]
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(setq require-final-newline t)           ;; end files with a newline
 
 (mouse-avoidance-mode 'animate)
 

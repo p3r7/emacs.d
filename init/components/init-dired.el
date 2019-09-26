@@ -11,13 +11,17 @@
 (use-package dired
   :ensure nil
   :demand
-  :bind (:map dired-mode-map
-	      ("C-c C" . prf/dired-do-copy-not-dwin)
-	      ("C-c R" . prf/dired-do-rename-not-dwin)
-	      ;; do not create other dired buffers when navigating
-	      ;; TODO: far from being perfect (closes all dired windows, not just current)
-	      ("<return>" . dired-find-alternate-file)
-	      ("^" . (lambda () (interactive) (find-alternate-file ".."))))
+  :bind (
+         :map dired-mode-map
+	 ("C-c C" . prf/dired-do-copy-not-dwin)
+	 ("C-c R" . prf/dired-do-rename-not-dwin)
+         ;; do not create other dired buffers when navigating
+         ;; TODO: far from being perfect (closes all dired windows, not just current)
+	 ("<return>" . dired-find-alternate-file)
+	 ("^" . (lambda () (interactive) (find-alternate-file ".."))))
+  :custom
+  (dired-recursive-copies 'always "Never prompt for recursive copies of a directory")
+  (dired-recursive-deletes 'always "Never prompt for recursive deletes of a directory")
   :init
   (setq
    dired-dwim-target t	;; if other window -> set as default dir for copy
@@ -52,10 +56,23 @@
   ;;     '(require 'dired-async))
   )
 
+;; NB: alternative https://oremacs.com/2016/02/24/dired-rsync/
 (use-package dired-rsync
   :after (dired)
   :config
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
 
+
+(use-package dired-git-info
+  :bind (
+         :map dired-mode-map
+         (")" . dired-git-info-mode)))
+
+;; BUG: doesn't work w/ dired+
+(use-package dired-hide-dotfiles
+  :disabled
+  :bind (
+         :map dired-mode-map
+         ("M-." . dired-hide-dotfiles-mode)))
 
 (provide 'init-dired)

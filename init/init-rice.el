@@ -83,8 +83,9 @@
    'tango
    ))
 
+;; NB: could alternatively have used DoReMi
 (use-package prf-theme
-  :load-path "~/.emacs.d/plugins/prf-theme"
+  :quelpa (prf-theme :fetcher github :repo "p3r7/prf-theme")
   :demand
   :bind ([f12] . prf/theme/cycle-theme)
   :init
@@ -95,6 +96,8 @@
   :config
   (prf/theme/initialize))
 
+;; NB: also implemented in DoReMi, specifically `doremi-all-faces-fg' and
+;;     `doremi-face-fg' from `doremi-frm'.
 (use-package tame-fruit-salad
   :load-path "~/.emacs.d/plugins/tame-fruit-salad")
 

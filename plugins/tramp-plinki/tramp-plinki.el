@@ -1,11 +1,43 @@
 
+(require 'dash)
+
 (defvar tramp-plinki-ppk nil)
 
 
 ;; ------------------------------------------------------------------------
-;; NEW TRAMP METHODS
+;; MODIFY EXISTING TRAMP METHODS
 
-(defun tramp-plinki--register ()
+(defun tramp-plinki--add-certificate-login-arg (tramp-login-args)
+  (let ((login-args (car (cdr tramp-login-args))))
+    (if (string= "" tramp-plinki-ppk)
+        tramp-login-args
+      (add-to-list 'login-args `("-i" ,(concat "\"" tramp-plinki-ppk "\"")))
+      `(tramp-login-args ,login-args))))
+
+;; REVIEW: seems to eval whole method-def-args, which is unwanted
+(defun tramp-plinki--add-certificate-login-arg-to-method (tramp-method-def)
+  (let ((method-name (car tramp-method-def))
+        (method-def-args (cdr tramp-method-def)))
+    (cons method-name
+          (-map-when
+           (lambda (e) (equal (car e) 'tramp-login-args))
+           #'tramp-plinki--add-certificate-login-arg
+           method-def-args))))
+
+(defun tramp-plinki--get-enriched-tramp-methods ()
+  (-map-when
+   (lambda (e) (member (car e) '("pscp" "plink")))
+   #'tramp-plinki--add-certificate-login-arg-to-method
+   tramp-methods))
+
+(defun tramp-plinki-enrich-existing ()
+  (setq tramp-methods (tramp-plinki--get-enriched-tramp-methods)))
+
+
+;; ------------------------------------------------------------------------
+;; REGISTER NEW TRAMP METHODS
+
+(defun tramp-plinki-register-new ()
   (when (not tramp-plinki-ppk)
     (error "empty value for tramp-plinki-ppk"))
 

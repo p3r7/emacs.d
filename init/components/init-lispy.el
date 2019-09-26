@@ -22,6 +22,7 @@
         (unbind-key "}" lispy-mode-map-lispy)
         (unbind-key "\"" lispy-mode-map-lispy)
         (unbind-key "\"" lispy-mode-map-lispy)
+        (unbind-key "M-m" lispy-mode-map-lispy)
 
         (unbind-key "M-m" lispy-mode-map-lispy) ; lispy-mark-symbol
         (unbind-key "C-d" lispy-mode-map-lispy)

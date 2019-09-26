@@ -10,4 +10,8 @@
       (setq lua-indent-level 1)))
   (add-hook 'lua-mode-hook 'p8-hook))
 
+(use-package pico8-mode
+  :after (lua-mode)
+  :quelpa (pico8-mode :fetcher github :repo "Kaali/pico8-mode"))
+
 (provide 'init-lua)

@@ -4,9 +4,12 @@
 ;; ------------------------------------------------------------------------
 ;; PROJECTILE
 
+(defun prf/enable-projectile-p ()
+  nil)
+
 (use-package projectile
   :after (s)
-
+  :if (prf/enable-projectile-p)
   ;; REVIEW: cleaner defintion w/ let*
   :delight '(:eval (if (string= "-" (projectile-project-name))
 		       ""
@@ -18,6 +21,14 @@
 		      "]")))
 
   :config
+
+  ;; from https://github.com/MaskRay/ccls/wiki/eglot
+  (defun prf/projectile-project-find-function (dir)
+    (let* ((root (projectile-project-root dir)))
+      (and root (cons 'transient root))))
+  (with-eval-after-load 'project
+    (add-to-list 'project-find-functions 'prf/projectile-project-find-function))
+
 
   ;; https://github.com/bbatsov/projectile/pull/444
   ;; (setq projectile-file-exists-remote-cache-expire nil)
