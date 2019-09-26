@@ -85,7 +85,7 @@
 
 ;; NB: could alternatively have used DoReMi
 (use-package prf-theme
-  :load-path "~/.emacs.d/plugins/prf-theme"
+  :quelpa (prf-theme :fetcher github :repo "p3r7/prf-theme")
   :demand
   :bind ([f12] . prf/theme/cycle-theme)
   :init

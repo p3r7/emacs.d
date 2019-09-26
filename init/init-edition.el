@@ -12,7 +12,7 @@
 (global-set-key (kbd "C-c E") #'erase-buffer)
 
 (use-package prf-smart-edit
-  :load-path "~/.emacs.d/plugins/prf-smart-edit"
+  :quelpa (prf-smart-edit :fetcher github :repo "p3r7/prf-smart-edit")
   ;; :after (org groovy-mode)
   :after (org)
   :demand

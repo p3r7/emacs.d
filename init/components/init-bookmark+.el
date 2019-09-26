@@ -24,13 +24,9 @@
 ;; ------------------------------------------------------------------------
 ;; BOOKMARK+
 
-(if (windows-nt-p)
-    (use-package bookmark+
-      :load-path "~/.emacs.d/plugins/bookmark+"
-      :after (bookmark))
-  (use-package bookmark+
-    :quelpa (bookmark+ :fetcher github :repo "emacsmirror/bookmark-plus")
-    :after (bookmark)))
+(use-package bookmark+
+  :quelpa (bookmark+ :fetcher github :repo "emacsmirror/bookmark-plus")
+  :after (bookmark))
 
 
 ;; ------------------------------------------------------------------------

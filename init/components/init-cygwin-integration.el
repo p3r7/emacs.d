@@ -137,7 +137,7 @@ loaded as such.)"
 ;; cygwin pty compatibility layer
 
 (use-package fakecygpty
-  :load-path "~/.emacs.d/plugins/fakecygpty"
+  :quelpa (fakecygpty :fetcher github :repo "d5884/fakecygpty")
   :if (executable-find "fakecygpty")
   :config
   (fakecygpty-activate))

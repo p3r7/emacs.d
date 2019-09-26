@@ -18,7 +18,7 @@
   (dash-enable-font-lock))
 ;; (use-package ht)
 (use-package prf-string
-  :load-path "~/.emacs.d/plugins/prf-string")
+  :quelpa (prf-string :fetcher github :repo "p3r7/prf-string"))
 (use-package pickling
   :load-path "~/.emacs.d/plugins/pickling")
 
