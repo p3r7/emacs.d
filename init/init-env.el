@@ -58,6 +58,35 @@ See the documentation of `framep' for possible return values."
 ;; ------------------------------------------------------------------------
 ;; HW-related customs
 
+(defun prf/customize-helm-tty-faces (&optional current-frame)
+  (let ((current-frame (if current-frame current-frame (selected-frame))))
+    (set-face-attribute 'helm-selection (selected-frame)
+                        :inverse-video t
+                        :background nil
+                        :foreground nil
+                        :distant-foreground nil)))
+
+(defun prf/customize-helm-tty-faces-maybe (&optional current-frame)
+  (if (facep 'helm-selection)
+      (prf/customize-helm-tty-faces current-frame)
+    ;; REVIEW: test? (featurep 'helm)
+    (eval-after-load 'helm
+      (prf/customize-helm-tty-faces current-frame))))
+
+(defun prf/customize-tty-faces (&optional current-frame)
+  (let ((current-frame (if current-frame current-frame (selected-frame))))
+    (prf/customize-helm-tty-faces-maybe current-frame)
+    (set-face-attribute 'font-lock-function-name-face current-frame
+                        :inverse-video nil)
+    (set-face-attribute 'hl-line current-frame
+                        :inherit nil)
+    (set-face-attribute 'region current-frame
+                        :foreground nil
+                        :background nil
+                        :inverse-video t)
+    (set-face-attribute 'font-lock-constant-face current-frame
+                        :underline nil)))
+
 (defun prf/hw/set-dec-term-keys ()
   (interactive)
   ;; works
@@ -67,6 +96,7 @@ See the documentation of `framep' for possible return values."
   ;; e.g. <C-up> gives [1;5A] that corresponds to \e[1;5A
 
   (define-key input-decode-map "\e[1;5P" (kbd "<C-f1>"))
+  ;; (define-key input-decode-map "\e[1;5q" (kbd "<C-f2>"))
   (define-key input-decode-map "\e[15;5~" (kbd "<C-f5>"))
   (define-key input-decode-map "\e[21;5~" (kbd "<C-f10>"))
 
@@ -88,7 +118,11 @@ See the documentation of `framep' for possible return values."
   (when (dec-vt100-compatible-term-p)
     (prf/hw/set-dec-term-keys)))
 
+(defun prf/tty-setup-frame-hook (&optional current-frame)
+  (prf/customize-tty-faces current-frame))
+
 (add-hook 'tty-setup-hook #'prf/tty-setup-hook)
+(add-hook 'after-make-frame-functions #'prf/tty-setup-frame-hook)
 
 
 ;; ------------------------------------------------------------------------
