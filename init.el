@@ -259,11 +259,16 @@
 
 
 (require 'init-edition)
-(require 'init-ac)
 (require 'init-aggressive-indent)
 (require 'init-ediff)
 (require 'init-origami)
 (require 'init-yasnippet)
+
+(require 'init-eglot)
+
+(require 'init-ac)
+(require 'init-company)
+
 
 
 ;; { Navigation }-------------------------------------------------[[<#N]]
