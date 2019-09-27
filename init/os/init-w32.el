@@ -5,6 +5,12 @@
 (require 'dired)
 
 ;; ------------------------------------------------------------------------
+;; TRAMP
+
+(when (executable-find "pscp")
+  (setq tramp-default-method "pscp"))
+
+;; ------------------------------------------------------------------------
 ;; FORMAT
 
 ;; DONE: defautl coding system tramp -> unix

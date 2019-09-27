@@ -15,24 +15,9 @@
 
 (cond
  ((gnu/linux-p)
-  (progn
-    (setq
-     tramp-default-method "ssh"
-     )
-    (require 'init-linux)
-    )
-  )
+  (require 'init-linux))
  ((windows-nt-p)
-  (progn
-    (setq tramp-default-method "pscp")
-    ;; tramp-default-method "ssh"
-    ;; (if (executable-find "ssh")
-    ;; (setq tramp-default-method "scpx")
-    ;; (setq tramp-default-method "pscp") )
-    (require 'init-w32)
-    )
-  )
- )
+  (require 'init-w32)))
 
 
 ;; ------------------------------------------------------------------------
