@@ -5,6 +5,10 @@
   :config
   (setenv "no_proxy" "127.0.0.1"))
 
+(use-package pyvenv
+  :config
+  (setenv "WORKON_HOME" "C:/ProgramData/Anaconda2/envs"))
+
 ;; (use-package ac-anaconda
 ;;   :hook (python-mode-hook . ac-anaconda-setup))
 
