@@ -7,9 +7,6 @@
 [submodule "plugins/prf-require"]
 	path = plugins/prf-require
 	url = https://github.com/p3r7/prf-require
-[submodule "plugins/prf-tramp"]
-	path = plugins/prf-tramp
-	url = https://github.com/p3r7/prf-tramp
 [submodule "plugins/vagrant-tramp"]
 	path = plugins/vagrant-tramp
 	url = https://github.com/p3r7/vagrant-tramp
