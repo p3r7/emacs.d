@@ -13,6 +13,3 @@
 [submodule "plugins/vagrant-tramp"]
 	path = plugins/vagrant-tramp
 	url = https://github.com/p3r7/vagrant-tramp
-[submodule "plugins/tickscript-mode"]
-	path = plugins/tickscript-mode
-	url = https://github.com/whatyouhide/tickscript-mode
