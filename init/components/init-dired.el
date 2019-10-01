@@ -7,6 +7,7 @@
 ;; could use https://emacs.stackexchange.com/questions/35676/customize-direds-display
 ;; or get inspired by dired-hide-details-mode
 
+(defvar prf/dired-listing-switches "-alh")
 
 (use-package dired
   :ensure nil
@@ -26,8 +27,7 @@
   (setq
    dired-dwim-target t	;; if other window -> set as default dir for copy
    ls-lisp-dirs-first t ;; display dirs 1st
-   dired-listing-switches "-alh"
-   ;; dired-listing-switches "-alDphgG"
+   dired-listing-switches prf/dired-listing-switches
    diredp-hide-details-initially-flag nil
    diredp-hide-details-propagate-flag nil)
 

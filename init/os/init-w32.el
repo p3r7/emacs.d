@@ -5,6 +5,14 @@
 (require 'dired)
 
 ;; ------------------------------------------------------------------------
+;; DIRED
+
+;; NB: `G' not taken into account for remote dirs but interpreted locally (on Windows at least)
+;; this might be a bug of feature, due to either TRAMP or dired+
+;; to see actual value for a dired buffer, look at `dired-actual-switches'
+(setq prf/dired-listing-switches "-alhG")
+
+;; ------------------------------------------------------------------------
 ;; TRAMP
 
 (when (executable-find "pscp")
