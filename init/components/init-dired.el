@@ -48,7 +48,7 @@
 
 
 (use-package dired+
-  :load-path "~/.emacs.d/plugins/dired+"
+  :quelpa (dired+ :fetcher github :repo "emacsmirror/dired-plus")
   :after (dired)
   :demand
   ;; :config
