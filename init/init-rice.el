@@ -96,6 +96,8 @@
   :config
   (prf/theme/initialize))
 
+(require 'init-doremi)
+
 ;; NB: also implemented in DoReMi, specifically `doremi-all-faces-fg' and
 ;;     `doremi-face-fg' from `doremi-frm'.
 (use-package tame-fruit-salad
