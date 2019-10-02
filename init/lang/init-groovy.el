@@ -2,8 +2,8 @@
 (use-package groovy-mode
   :mode (
 	 "\.groovy$"
-	 "groovy"
-	 ;; "\.template$"
+	 ;; "groovy"
+	 "\.template$"
 	 )
   :config
   (autoload 'groovy-mode "groovy-mode" "Groovy editing mode." t))
