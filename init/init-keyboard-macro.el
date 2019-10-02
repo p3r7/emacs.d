@@ -9,4 +9,4 @@
       (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([1 124 32 5 M-left 124 32 5 32 124 down] 0 "%d")) arg)))
 
 
-(provide 'init-macro)
+(provide 'init-keyboard-macro)

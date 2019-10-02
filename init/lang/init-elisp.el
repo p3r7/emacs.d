@@ -1,9 +1,14 @@
 
+
+;; VARS
+
 (defvar prf/elisp-modes '(emacs-lisp-mode
                           inferior-emacs-lisp-mode
                           lisp-interaction-mode
                           ielm-mode))
 
+
+;; MAIN
 
 (use-package elisp-mode
   :ensure nil
@@ -27,7 +32,6 @@
         (2 font-lock-function-name-face
            nil t)))))
 
-                                        ; *scratch* buffer
   (defun prf/scratch nil
     "create a scratch buffer"
     (interactive)
@@ -39,11 +43,23 @@
 	(lisp-interaction-mode)))))
 
 
+
+;; NAVIGATION / REFACTORING HELPERS
+
 (use-package macrostep
   :after (elisp-mode)
   :bind (:map emacs-lisp-mode-map
 	      ("C-c e m" . macrostep-expand)))
 
+(use-package elisp-slime-nav
+  :after (elisp-mode)
+  :diminish
+  :commands (elisp-slime-nav-mode
+             elisp-slime-nav-find-elisp-thing-at-point))
+
+
+
+;; EVALUATION
 
 (use-package eval-expr
   :after (elisp-mode)
@@ -56,11 +72,8 @@
     (paredit-mode)))
 
 
-(use-package elisp-slime-nav
-  :after (elisp-mode)
-  :diminish
-  :commands (elisp-slime-nav-mode
-             elisp-slime-nav-find-elisp-thing-at-point))
+
+;; FONT LOCK
 
 (use-package lisp-extra-font-lock
   :after (elisp-mode)
@@ -117,7 +130,11 @@
   (cl-lib-highlight-warn-cl-initialize))
 
 
+
+
 (require 'init-eldoc)
 
+
+
 
 (provide 'init-elisp)

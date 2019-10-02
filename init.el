@@ -4,53 +4,14 @@
 ;;                            ---------------
 ;;                           ~|P3R7's .emacs|~
 ;;
-;; INDEX
-;; { Init }----------------------------------------------------------[[#I]]
-;;   - emacs-related config that HAS TO be done 1st
-;; { Packages }------------------------------------------------------[[#P]]
-;;   - activate packages.el (aka ELPA)
-;; { Custom Utils }--------------------------------------------------[[#U]]
-;;   - lib of custom functions to ease elisp dev
-;; { OS Specific Stuff }---------------------------------------------[[#O]]
-;;   - windows/linux specific customizations
-;; { Test Bench Start }---------------------------------------------[[#?s]]
-;;   - in validation (major modes)
-;; { Appearance }----------------------------------------------------[[#A]]
-;;   - alters elements/geometry of the frame
-;; { Langages }------------------------------------------------------[[#L]]
-;;   - adds langages/filetype support
-;; { Shells }--------------------------------------------------------[[#S]]
-;;   - tramp
-;;   - dired + more file system interactions
-;;   - shells
-;; { Behaviour }-----------------------------------------------------[[#B]]
-;;   - more general emacs-related config
-;; { Edition }-------------------------------------------------------[[#E]]
-;;   - improves edition
-;;   - improves syntax higlighting
-;; { Navigation }----------------------------------------------------[[#N]]
-;;   - window manipulation
-;;   - buffer/file switching
-;;   - in-file navigation
-;; { Test Bench End }-----------------------------------------------[[#?e]]
-;;   - in validation
-;; { Custom }--------------------------------------------------------[[#C]]
-;;=========================================================================
 
-
-;; TODO: theming AFTER languages, to support override faces
-
-;; NOTE: case EOF, use check-parens
-;; or to highlight parens contents
-;; (show-paren-mode t)
-;; (setq show-paren-style 'expression)
-
-(when (and (>= libgnutls-version 30603)
-	   (version<= emacs-version "26.2"))
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+
+;; OPTIMIZATIONS
 
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
+;; (setq garbage-collection-messages t)
+
 (defvar prf/file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 
@@ -77,18 +38,24 @@
 ;; (setq warning-suppress-types '('(mule))
 
 
- ;; { Init }------------------------------------------------------[[<#I]]
+
+;; FALLBACK
 
 (defun edit-dot-emacs () (interactive)
        (find-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-<f1>") #'edit-dot-emacs)
 
 
-;; { Packages }---------------------------------------------------[[<#P]]
+
+;; PACKAGES
 
-;; TODO: choose which of /plugins or elpa/ has biggest priority -> add to load path in correct order
+;; TODO: choose which of /plugins or /elpa has biggest priority -> add to load path in correct order
 
 (setq package-check-signature nil)
+
+(when (and (>= libgnutls-version 30603)
+	   (version<= emacs-version "26.2"))
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 ;; locations for features:
 ;; - init/ : initialization features (manually defined)
@@ -135,10 +102,10 @@
 
 (require 'prf-require)
 (prf/require-plugin 'use-package)
-(setq use-package-always-ensure t
-      ;; use-package-verbose t
-      )
-;; (setq garbage-collection-messages t)
+(setq use-package-always-ensure t)
+;; (setq use-package-verbose t)
+
+
 
 (use-package quelpa)
 (use-package quelpa-use-package
@@ -153,18 +120,20 @@
 (require 'init-auto-compile)
 
 
-;; { Custom Utils }-----------------------------------------------[[<#U]]
+
+;; LIBS
 
 (require 'init-libs)
 
 
-;; { OS Specific Stuff }------------------------------------------[[<#O]]
-
+
+;; OS / HW
 
 (require 'init-env)
 
 
-;; { Test Bench Start }------------------------------------------[[<#?s]]
+
+;; TEST BENCH (START)
 
 (require 'init-test1)
 
@@ -178,14 +147,14 @@
       (insert text))))
 
 
-;; { Appearance }-------------------------------------------------[[<#A]]
+
+;; APPEARANCE
 
 (require 'init-gui)
 (require 'init-rice)
-;;(require 'init-speedbar) ;; craps since emacs 24.4 due to void-function ad-advised-definition-p
 
 
-;; { Behaviour }--------------------------------------------------[[<#B]]
+;; GENERAL BEHAVIOUR
 
 
 (require 'init-main)
@@ -194,7 +163,7 @@
 (require 'init-hydra)
 
 
-;; { Langages }---------------------------------------------------[[<#L]]
+;; LANGUAGES & FORMATS
 
 ;; multilingual files
 (require 'init-mmm)
@@ -235,7 +204,7 @@
 (require 'init-syslog-ng)
 ;;(require 'cisco-router-mode)
 
-;; - format
+;; - formats
 (require 'init-json)
 (require 'init-xml)
 (require 'init-javaprop)
@@ -246,17 +215,23 @@
 ;; (require 'csv-mode)
 (require 'init-guitar-tab)
 
-(require 'init-doc)
+(require 'init-compilation)
+
+
+
+;; SHELLS
 
 (require 'init-srv-utils)
 (require 'init-comint)
-(require 'init-compilation)
+
+
+
+;; SOCIAL
 
 (require 'init-circe)
 
 
-;; { Edition }----------------------------------------------------[[<#E]]
-
+;; EDITION
 
 (require 'init-edition)
 (require 'init-aggressive-indent)
@@ -264,33 +239,37 @@
 (require 'init-origami)
 (require 'init-yasnippet)
 
-(require 'init-eglot)
-
 (require 'init-ac)
 (require 'init-company)
 
+(require 'init-eglot)
 
 
-;; { Navigation }-------------------------------------------------[[<#N]]
-
+;; FILE / BUFFER / POJECT NAVIGATION
 
 (require 'init-windmove)
 
 (require 'init-buffer-navigation)
+
 (require 'init-file-navigation)
-(require 'init-grep)
+(require 'init-neotree)
+;; (require 'init-speedbar) ;; craps since emacs 24.4 due to void-function ad-advised-definition-p
+
 ;; (require 'init-projectile)
+
+(require 'init-grep)
 (require 'init-vcs)
+
+(require 'init-doc)
 
 (require 'init-bookmark+)
 (require 'init-register)
 (require 'init-deft)
-(require 'init-neotree)
-
-(require 'init-macro)
 
 
-;; Hydras ------------------------------------------------------------
+;; SHORTCUTS
+
+(require 'init-keyboard-macro)
 
 (require 'init-hydra)
 
@@ -329,23 +308,22 @@
   )
 
 
-;; { Custom }-----------------------------------------------------[[<#C]]
-
+
+;; CUSTOM
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
 
 
-;;--------------------------------------------------------------
+
 
-
-;|     .-.
-;|    /   \         .-.
-;|   /     \       /   \       .-.     .-.     _   _
-;+--/-------\-----/-----\-----/---\---/---\---/-\-/-\/\/---
-;| /         \   /       \   /     '-'     '-'
-;|/           '-'         '-'
+;;|     .-.
+;;|    /   \         .-.
+;;|   /     \       /   \       .-.     .-.     _   _
+;;+--/-------\-----/-----\-----/---\---/---\---/-\-/-\/\/---
+;;| /         \   /       \   /     '-'     '-'
+;;|/           '-'         '-'
 
 
 ;; (message "Benchmark: .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
-					     ;; (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
+;; (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
