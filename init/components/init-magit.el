@@ -2,7 +2,7 @@
 ;; (magit-debug-git-executable)
 
 (use-package magit
-  :defer 2
+  :defer 5
   ;; :custom
   ;; (magit-git-executable "C:/cygwin64/usr/libexec/git-core/git.exe")
   ;; (magit-git-executable "c:/cygwin64/bin/git.exe")
