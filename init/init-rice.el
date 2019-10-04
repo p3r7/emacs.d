@@ -129,9 +129,9 @@
 	   (fringe :background "#2b241d") ; same as mode-line-inactive
 	   (show-paren-match :background "white" :foreground "black")
 	   (show-paren-mismatch :background "red" :foreground "white")
+	   (form-feed-line :strike-through "#705B5F") ;; :foreground of `font-lock-comment-delimiter-face'
 	   (bmkp-local-directory :foreground "#45AFBD")
-	   (bmkp-remote-file :foreground "#C55D67"))
-	  ))
+	   (bmkp-remote-file :foreground "#C55D67"))))
   ;; to reload: (spacemacs/update-theme)
   :config
   (theming/init-theming))
