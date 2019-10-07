@@ -197,6 +197,8 @@ buffer names in the matches window; 0.10 = %10."
 (defvar lusty--matrix-column-widths '())
 (defvar lusty--matrix-truncated-p nil)
 
+(defvar lusty--custom-explorer-actions (make-hash-table :test 'equal))
+(defvar lusty--custom-explorer-actions-keys (make-hash-table :test 'equal))
 (defvar lusty--shell-open-here-fun nil)
 (defvar lusty--shell-command-fun #'shell-command)
 (defvar lusty--async-shell-command-fun #'async-shell-command)
@@ -277,36 +279,44 @@ Uses the faces `lusty-directory-face', `lusty-slash-face', and
 	  (pcase-let ((`(,file-tmp ,action-tmp) (s-split "!!!lusty!!!" file)))
 	    (setq file file-tmp
 		  action (intern (concat ":" action-tmp)))))
-	(cond
-	 ((eq action :file-open)
-	  (switch-to-buffer
-	   (find-file-noselect
-	    (expand-file-name file))))
-	 ((eq action :launch-shell)
-	  (if lusty--shell-open-here-fun
-	      (progn
-		(cd (expand-file-name file))
-		(funcall lusty--shell-open-here-fun))
-	    (message "No `lusty--shell-open-here-fun' defined")))
-	 ((eq action :shell-command)
-	  (if lusty--shell-command-fun
-	      (progn
-		(cd (expand-file-name file))
-		(call-interactively lusty--shell-command-fun))
-	    (message "No `lusty--shell-command-fun' defined")))
-	 ((eq action :async-shell-command)
-	  (if lusty--async-shell-command-fun
-	      (progn
-		(cd (expand-file-name file))
-		(call-interactively lusty--async-shell-command-fun))
-	    (message "No `lusty--async-shell-command-fun' defined")))
-	 ((eq action :M-x)
-	  (if lusty--M-x-fun
-	      (progn
-		(cd (expand-file-name file))
-		(call-interactively lusty--M-x-fun))
-	    (message "No `lusty--M-x-fun' defined")))
-	 (t (message "unsupported action")))))))
+        (setq file (expand-file-name file))
+
+        (if (eq action :file-open)
+            (switch-to-buffer (find-file-noselect file))
+          (cd file)
+          (call-interactively (gethash action lusty--custom-explorer-actions)))
+
+        ;; (cond
+        ;;  ((eq action :file-open)
+        ;;   (switch-to-buffer
+        ;;    (find-file-noselect
+        ;;     (expand-file-name file))))
+        ;;  ((eq action :launch-shell)
+        ;;   (if lusty--shell-open-here-fun
+        ;;       (progn
+        ;; 	(cd (expand-file-name file))
+        ;; 	(call-interactively lusty--shell-open-here-fun))
+        ;;     (message "No `lusty--shell-open-here-fun' defined")))
+        ;;  ((eq action :shell-command)
+        ;;   (if lusty--shell-command-fun
+        ;;       (progn
+        ;; 	(cd (expand-file-name file))
+        ;; 	(call-interactively lusty--shell-command-fun))
+        ;;     (message "No `lusty--shell-command-fun' defined")))
+        ;;  ((eq action :async-shell-command)
+        ;;   (if lusty--async-shell-command-fun
+        ;;       (progn
+        ;; 	(cd (expand-file-name file))
+        ;; 	(call-interactively lusty--async-shell-command-fun))
+        ;;     (message "No `lusty--async-shell-command-fun' defined")))
+        ;;  ((eq action :M-x)
+        ;;   (if lusty--M-x-fun
+        ;;       (progn
+        ;; 	(cd (expand-file-name file))
+        ;; 	(call-interactively lusty--M-x-fun))
+        ;;     (message "No `lusty--M-x-fun' defined")))
+        ;;  (t (message "unsupported action")))
+        ))))
 
 ;;;###autoload
 (defun lusty-buffer-explorer ()
@@ -498,49 +508,38 @@ and recency information."
 
 ;; ###PRF
 ;;;###autoload
-(defun lusty-launch-shell ()
+(defun lusty-custom-explorer-action (action)
   "Launch shell at the current directory."
   (interactive)
   (when (eq lusty--active-mode :file-explorer)
     (let* ((path (minibuffer-contents-no-properties))
            (dir (lusty-normalize-dir (file-name-directory path))))
-      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" "launch-shell"))
+      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" action))
       (exit-minibuffer))))
 
-;; ###PRF
-;;;###autoload
-(defun lusty-shell-command ()
-  "Launch shell at the current directory."
-  (interactive)
-  (when (eq lusty--active-mode :file-explorer)
-    (let* ((path (minibuffer-contents-no-properties))
-           (dir (lusty-normalize-dir (file-name-directory path))))
-      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" "shell-command"))
-      (exit-minibuffer))))
+(defun lusty-custom-explorer-action-fun-name (keyword)
+  (concat "lusty-custom-explorer-action-" keyword))
 
-;; ###PRF
-;;;###autoload
-(defun lusty-async-shell-command ()
-  "Launch shell at the current directory."
-  (interactive)
-  (when (eq lusty--active-mode :file-explorer)
-    (let* ((path (minibuffer-contents-no-properties))
-           (dir (lusty-normalize-dir (file-name-directory path))))
-      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" "async-shell-command"))
-      (exit-minibuffer))))
+(defmacro lusty-register-custom-explorer-action-defun (my-keyword)
+  ;; NB: this allows handling case of let-bound var passed as argument
+  ;; NB: had to rename first from keyword to prevent issues
+  (when (symbolp my-keyword)
+    (setq my-keyword (symbol-value my-keyword)))
 
-;; ###PRF
-;;;###autoload
-(defun lusty-M-x ()
-  "Launch M-x at the current directory."
-  (interactive)
-  (when (eq lusty--active-mode :file-explorer)
-    (let* ((path (minibuffer-contents-no-properties))
-           (dir (lusty-normalize-dir (file-name-directory path))))
-      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" "M-x"))
-      (exit-minibuffer))))
+  (let* ((fun-name (lusty-custom-explorer-action-fun-name my-keyword))
+         (fun-symbol (intern fun-name)))
+    `(defun ,fun-symbol ()
+       (interactive)
+       (lusty-custom-explorer-action ,my-keyword))))
 
+(defun lusty-register-custom-explorer-action (keyword action key)
+  (lusty-register-custom-explorer-action-defun keyword)
 
+  (puthash (intern (concat ":" keyword)) action lusty--custom-explorer-actions)
+
+  (let* ((fun-name (lusty-custom-explorer-action-fun-name keyword))
+         (fun-symbol (intern fun-name)))
+    (puthash key fun-symbol lusty--custom-explorer-actions-keys)))
 
 (defun lusty-sort-by-fuzzy-score (strings abbrev)
   ;; TODO: case-sensitive when abbrev contains capital letter
@@ -1103,10 +1102,8 @@ does not begin with '.'."
     (define-key map "\C-xd" 'lusty-launch-dired)
     (define-key map "\C-xe" 'lusty-select-current-name)
     ;; ###PRF
-    (define-key map "\C-xs" 'lusty-launch-shell)
-    (define-key map "\M-x" 'lusty-M-x)
-    (define-key map "\M-!" 'lusty-shell-command)
-    (define-key map "\M-&" 'lusty-async-shell-command)
+    (maphash (lambda (k v) (define-key map (kbd k) v))
+             lusty--custom-explorer-actions-keys)
     (setq lusty-mode-map map))
   (run-hooks 'lusty-setup-hook))
 

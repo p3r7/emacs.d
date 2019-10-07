@@ -1,6 +1,10 @@
 
 (use-package lusty-explorer
   :load-path "~/.emacs.d/plugins-spe/lusty-explorer-prf"
+  :bind (("C-x C-f" . lusty-file-explorer)
+	 ("C-x f" . lusty-file-explorer)
+	 ("C-x b" . lusty-buffer-explorer)
+	 ("C-x C-b" . lusty-buffer-explorer))
   :init
   (setq lusty--completion-ignored-regexps '("^\\*tramp/.*\\*$"
 					    "^\\*Help\\*$"
@@ -16,9 +20,10 @@
 					    "^\\*magit:.*$")
 	lusty--shell-open-here-fun #'prf/tramp/shell
 	lusty--M-x-fun #'helm-M-x)
-  :bind (("C-x C-f" . lusty-file-explorer)
-	 ("C-x f" . lusty-file-explorer)
-	 ("C-x b" . lusty-buffer-explorer)
-	 ("C-x C-b" . lusty-buffer-explorer)))
+  :config
+  (lusty-register-custom-explorer-action "launch-shell" #'prf/tramp/shell "C-x s")
+  (lusty-register-custom-explorer-action "shell-command" #'shell-command "M-!")
+  (lusty-register-custom-explorer-action "async-shell-command" #'async-shell-command "M-&")
+  (lusty-register-custom-explorer-action "M-x" #'helm-M-x "M-x"))
 
 (provide 'init-lusty)
