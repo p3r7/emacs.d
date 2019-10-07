@@ -1,5 +1,5 @@
 
-;; -------------------------------------------------------------------------
+
 ;; FONT
 
 (set-face-bold-p 'bold nil)
@@ -24,8 +24,7 @@
   (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))
 
 
-;; -------------------------------------------------------------------------
-;; THEMES
+;; THEMES
 
 ;; dark
 (use-package chocolate-theme
@@ -44,7 +43,6 @@
   :defer t)
 (use-package flatui-theme
   :defer t)
-
 
 
 (defvar prf/theme/list/practical
@@ -109,12 +107,18 @@
   :init
   (setq theming-modifications
 	'((comidia-mod
+           (form-feed-line :strike-through "chocolate1")
 	   (org-block :inherit default)
 	   (bmkp-local-directory :foreground "#00ffff")
 	   (bmkp-remote-file :foreground "#ffc0cb"))
+          (plan9
+           (form-feed-line :strike-through "#40883f"))
+          (white-sand
+           (form-feed-line :strike-through "#a9a9a9"))
 	  (flatui
 	   (org-block :inherit default))
 	  (dracula
+           (form-feed-line :strike-through "#6272a4")
 	   (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
 	   (bmkp-remote-file :foreground "#ff79c6")) ; rainbow-4
 	  (chocolate
@@ -137,8 +141,7 @@
   (theming/init-theming))
 
 
-;; -------------------------------------------------------------------------
-;; TRANSPARENCY
+;; TRANSPARENCY
 
 (defun djcb-opacity-modify (&optional dec)
   "modify the transparency of the emacs frame; if DEC is t,
@@ -159,8 +162,7 @@
 
 
 
-;; -------------------------------------------------------------------------
-;; ZOOM
+;; ZOOM
 
 (if (>= emacs-major-version 24)
     (progn
@@ -183,8 +185,7 @@
   )
 
 
-;; -------------------------------------------------------------------------
-;; VISUAL ENHANCEMENTS
+;; VISUAL ENHANCEMENTS
 
 (use-package rainbow-mode
   :hook
@@ -214,8 +215,8 @@
   (setq mwe:color-box-hide-parens nil))
 ;; REVIEW: might be better to use https://github.com/istib/rainbow-blocks or https://github.com/alphapapa/prism.el
 
-;; -------------------------------------------------------------------------
-;; WRITEROOM / DARKROOM
+
+ ;; WRITEROOM / DARKROOM
 
 (when (display-graphic-p)
   (require 'init-writeroom))
