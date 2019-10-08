@@ -11,6 +11,8 @@
          ("M-!" . prf/bmkp-bmenu-shell-command)
          ("M-&" . prf/bmkp-bmenu-async-shell-command)
          ("M-:" . prf/bmkp-bmenu-eval-expression)
+         ("C-x f" . prf/bmkp-bmenu-lusty-explorer)
+         ("C-x C-f" . prf/bmkp-bmenu-lusty-explorer)
          ("C-c M-x" . prf/bmkp-bmenu-M-x))
   :init
   (setq
@@ -73,6 +75,10 @@ Function inspired by `bmkp-jump-1' from bookmark+."
 (defun prf/bmkp-bmenu-M-x (&optional flip-use-region-p)
   (interactive "P")
   (prf/bmkp-bmenu-action #'helm-M-x flip-use-region-p))
+
+(defun prf/bmkp-bmenu-lusty-explorer (&optional flip-use-region-p)
+  (interactive "P")
+  (prf/bmkp-bmenu-action #'lusty-file-explorer flip-use-region-p))
 
 
 
