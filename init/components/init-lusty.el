@@ -24,6 +24,7 @@
   (lusty-register-custom-explorer-action "launch-shell" #'prf/tramp/shell "C-x s")
   (lusty-register-custom-explorer-action "shell-command" #'shell-command "M-!")
   (lusty-register-custom-explorer-action "async-shell-command" #'async-shell-command "M-&")
-  (lusty-register-custom-explorer-action "M-x" #'helm-M-x "M-x"))
+  (lusty-register-custom-explorer-action "M-x" #'helm-M-x "M-x")
+  (lusty-register-custom-explorer-action "magit-status" #'prf/magit-status-maybe "C-x g"))
 
 (provide 'init-lusty)
