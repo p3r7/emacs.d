@@ -11,6 +11,8 @@
   :bind (
          :map dired-mode-map
          ("C-x g" . prf/magit-status-maybe)
+         :map comint-mode-map
+         ("C-x g" . prf/magit-status-maybe)
          :map with-editor-mode-map
          ("C-x k" . with-editor-cancel)
          ("C-x C-k" . with-editor-cancel))
