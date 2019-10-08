@@ -44,7 +44,7 @@ Function inspired by `bookmark-bmenu-this-window' from bookmark+."
 (defun prf/bmkp-jump-action (bookmark action-function display-function &optional flip-use-region-p)
   "Helper function for `prf/bmkp-bmenu-action' commands.
 Function inspired by `bmkp-jump-1' from bookmark+."
-  (setq bookmark  (bookmark-get-bookmark bookmark 'NOERROR))
+  (setq bookmark (bookmark-get-bookmark bookmark 'NOERROR))
   (unless bookmark (error "No bookmark specified"))
   (run-hooks 'bmkp-before-jump-hook)
   (bookmark-maybe-historicize-string (bmkp-bookmark-name-from-record bookmark))
