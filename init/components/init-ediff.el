@@ -1,6 +1,9 @@
 
 ;; http://trey-jackson.blogspot.fr/2010/10/emacs-tip-38-automatically-diff-binary.html
 
+
+;; EDIFF
+
 (use-package ediff
   :after (s)
   :init
@@ -27,11 +30,42 @@
 	  (ediff
 	   (buffer-file-name (window-buffer (car (window-list))))
 	   (buffer-file-name (window-buffer (car (cdr (window-list)))))))
-      (message "invalid number of visible buffers"))))
+      (message "invalid number of visible buffers (expected 2)"))))
 
 
+
+;; ZTREE
 
-;; (use-package 'ediff-trees)
+(use-package ztree
+  :config
+  (defun ztree-toggle ()
+    (interactive)
+    (if (= (length (window-list)) 2)
+        (let (dir-A dir-B)
 
+          (if (and (buffer-file-name)
+                   (file-exists-p (buffer-file-name)))
+              (setq dir-A buffer-file-name)
+            (setq dir-A default-directory))
+
+          (other-window 1)
+
+          (if (and (buffer-file-name)
+                   (file-exists-p (buffer-file-name)))
+              (setq dir-B buffer-file-name)
+            (setq dir-B default-directory))
+
+          (other-window 1)
+
+          (if (and (file-directory-p dir-A)
+                   (file-directory-p dir-B))
+              (ztree-diff dir-A dir-B)
+            (message "not all buffers directories")))
+      (message "invalid number of visible buffers (expected 2)"))))
+
+;; NB: Old way to do this was w/ `ediff-trees', but `ztree' seems more
+;; maintained.
+
+
 
 (provide 'init-ediff)
