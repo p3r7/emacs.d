@@ -17,6 +17,7 @@
 ;; FAST-SCROLL
 
 (use-package fast-scroll
+  :disabled
   :config
   (fast-scroll-config)
   (fast-scroll-mode 1))
