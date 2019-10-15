@@ -9,19 +9,25 @@
     (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.12/lisp"))
 ;; NB: solves copy & mv, but potentially crashes find-file
 
-;; (setq tramp-verbose 6)
 
-;; disable vc for remote files (speed increase)
-(setq vc-ignore-dir-regexp
-      (format "\\(%s\\)\\|\\(%s\\)"
-              vc-ignore-dir-regexp
-              tramp-file-name-regexp))
+
+(use-package tramp
+  :demand
+  :config
+  ;; (setq tramp-verbose 6)
+
+  ;; disable vc for remote files (speed increase)
+  (setq vc-ignore-dir-regexp
+        (format "\\(%s\\)\\|\\(%s\\)"
+                vc-ignore-dir-regexp
+                tramp-file-name-regexp)))
 
 
 ;; -------------------------------------------------------------------------
 ;; SHELL & TERM
 
 (use-package tramp-term
+  :after (tramp)
   :defer t)
 
 ;; http://www.emacswiki.org/emacs/AnsiTermHints#toc4
@@ -43,41 +49,52 @@
 ;; -------------------------------------------------------------------------
 ;; Supplementary Cnnx Methods
 
+;; Docker
+(use-package docker-tramp
+  :after (tramp))
+
 ;; Vagrant
-(when (and (executable-find "vagrant")
-	   (not (windows-nt-p)))
-  (use-package vagrant-tramp
-    :config
-    (eval-after-load 'tramp
-      '(vagrant-tramp-enable))))
+;; (use-package vagrant-tramp
+;;   :if (and (executable-find "vagrant")
+;;            (not (windows-nt-p)))
+;;   :config
+;;   (eval-after-load 'tramp
+;;     '(vagrant-tramp-enable)))
 
 ;; KiTTY
 (when (and (executable-find "kscp")
 	   (executable-find "klink"))
   (use-package tramp-kitty
-    :load-path "~/.emacs.d/plugins/tramp-kitty")
-  :config
-  (tramp-kitty-set-session-map-cache))
+    :load-path "~/.emacs.d/plugins/tramp-kitty"
+    :after (tramp)
+    :config
+    (tramp-kitty-set-session-map-cache)))
+
+;; SSH w/ key support
+(use-package tramp-sshi
+  :load-path "~/.emacs.d/plugins/tramp-sshi"
+  :after (tramp))
 
 ;; PuTTY w/ SSH key support
 (use-package tramp-plinki
-  :load-path "~/.emacs.d/plugins/tramp-plinki")
+  :load-path "~/.emacs.d/plugins/tramp-plinki"
+  :after (tramp))
 
 
 ;; -------------------------------------------------------------------------
 ;; HELPER UTILS
 
 (use-package prf-tramp
-  ;; :load-path "~/.emacs.d/plugins/prf-tramp"
   :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
+  :after (tramp)
   :config
   (if (not (fboundp '_sh))
       (defalias '_sh 'prf/tramp/shell))
   (defalias '_rsh 'prf/tramp/remote-shell))
 
 (use-package ansible-tramp
-  :after (request-deferred prf-tramp)
   :load-path "~/.emacs.d/plugins/ansible-tramp"
+  :after (request-deferred prf-tramp)
   :config
   (when ansible-tramp-inventory-http-url
     (ansible-tramp-set-inventory-cache-http)))
