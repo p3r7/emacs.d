@@ -141,7 +141,20 @@
   (theming/init-theming))
 
 
-;; TRANSPARENCY
+
+;; HIGHLIGHT CURRENT WINDOW
+
+(use-package dimmer
+  :config
+  (dimmer-mode))
+
+;; alternatives:
+;; - https://github.com/kriyative/highlight-focus
+;; - https://github.com/emacsmirror/auto-dim-other-buffers
+;; - https://amitp.blogspot.com/2013/05/emacs-highlight-active-buffer.html
+
+
+ ;; TRANSPARENCY
 
 (defun djcb-opacity-modify (&optional dec)
   "modify the transparency of the emacs frame; if DEC is t,
