@@ -12,12 +12,15 @@
     (cond
      (eglot--managed-mode
       (company-mode 1)
-      (auto-complete-mode -1))
+      (funcall prf/fav-completion-at-point-mode -1))
      (t
       (company-mode -1)
-      (auto-complete-mode 1))))
+      (funcall prf/fav-completion-at-point-mode 1))))
 
-  (add-hook 'eglot--managed-mode-hook #'prf/hook/prog-mode/company-when-eglot))
+  (when (not (eq prf/fav-completion-at-point 'company))
+    (add-hook 'eglot--managed-mode-hook #'prf/hook/prog-mode/company-when-eglot)))
 
+
+
 
 (provide 'init-eglot)
