@@ -1,10 +1,10 @@
 
 (use-package lusty-explorer
   :load-path "~/.emacs.d/plugins-spe/lusty-explorer-prf"
-  :bind (("C-x C-f" . lusty-file-explorer)
-	 ("C-x f" . lusty-file-explorer)
-	 ("C-x b" . lusty-buffer-explorer)
-	 ("C-x C-b" . lusty-buffer-explorer))
+  ;; :bind (("C-x C-f" . lusty-file-explorer)
+  ;;        ("C-x f" . lusty-file-explorer)
+  ;;        ("C-x b" . lusty-buffer-explorer)
+  ;;        ("C-x C-b" . lusty-buffer-explorer))
   :init
   (setq lusty--completion-ignored-regexps '("^\\*tramp/.*\\*$"
 					    "^\\*Help\\*$"

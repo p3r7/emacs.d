@@ -4,7 +4,8 @@
 (use-package helm-config
   :ensure nil
   :after (helm hydra)
-  :bind (("M-x" . helm-M-x)
+  :bind (
+         ;; ("M-x" . helm-M-x)
 	 ("M-y" . helm-show-kill-ring)
 	 ("C-h SPC" . helm-all-mark-rings)
 	 ("C-c h o" . helm-occur)

@@ -156,11 +156,11 @@
 
 ;; GENERAL BEHAVIOUR
 
-
 (require 'init-main)
 (require 'init-scrolling)
-(require 'init-helm)
 (require 'init-hydra)
+(require 'init-completion-at-point)
+(require 'init-completion-system)
 
 
 ;; LANGUAGES & FORMATS

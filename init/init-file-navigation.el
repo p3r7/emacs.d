@@ -3,7 +3,6 @@
 ;; ------------------------------------------------------------------------
 ;; FILE / BUFFER NAVIGATION
 
-(require 'init-lusty)
 (require 'init-ibuffer)
 (require 'init-uniquify)
 
