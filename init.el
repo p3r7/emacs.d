@@ -239,9 +239,6 @@
 (require 'init-origami)
 (require 'init-yasnippet)
 
-(require 'init-ac)
-(require 'init-company)
-
 (require 'init-eglot)
 
 
