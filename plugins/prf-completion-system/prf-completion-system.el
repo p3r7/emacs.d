@@ -2,6 +2,7 @@
 (defvar prf/M-x-completion-system nil)
 (defvar prf/find-file-completion-system nil)
 (defvar prf/switch-to-buffer-completion-system nil)
+(defvar prf/occur-completion-system nil)
 
 
 
@@ -24,6 +25,12 @@
    ((member prf/M-x-completion-system '(ivy counsel)) #'counsel-M-x)
    (t #'execute-extended-command)))
 
+(defun prf/get-occur-fun ()
+  (cond
+   ((eq prf/occur-completion-system 'helm) #'helm-occur)
+   ((member prf/occur-completion-system '(ivy counsel swiper)) #'swiper)
+   (t #'occur)))
+
 
 
 (defun prf/find-file-fun ()
@@ -37,6 +44,10 @@
 (defun prf/M-x-fun ()
   (interactive)
   (call-interactively (prf/get-M-x-fun)))
+
+(defun prf/occur-fun ()
+  (interactive)
+  (call-interactively (prf/get-occur-fun)))
 
 
 
