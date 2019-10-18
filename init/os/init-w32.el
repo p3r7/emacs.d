@@ -76,17 +76,16 @@
 
 
 
-(if (executable-find "cygpath")
-    (progn
-      (setq cygwin-root (replace-regexp-in-string "/bin/cygpath.exe" "" (executable-find "cygpath")))
-      (require 'init-cygwin-integration)))
+(when (executable-find "cygpath")
+  (setq cygwin-root (replace-regexp-in-string "/bin/cygpath.exe" "" (executable-find "cygpath")))
+  (require 'init-cygwin-integration))
 
 
 ;; ------------------------------------------------------------------------
 ;; KEYS
 
 (setq w32-pass-lwindow-to-system nil
-      w32-pass-rwindow-to-system nil
+      ;; w32-pass-rwindow-to-system nil
       w32-pass-apps-to-system nil
       w32-lwindow-modifier 'super ; Left Windows key
       ;; w32-rwindow-modifier 'super ; Right Windows key
@@ -94,6 +93,12 @@
       )
 
 (w32-register-hot-key [s-])
+
+;; pass-through some practical commands
+(w32-unregister-hot-key (kbd "<s-r>"))
+(w32-unregister-hot-key (kbd "<s-n>"))
+(w32-unregister-hot-key (kbd "<s-t>"))
+
 
 ;; ------------------------------------------------------------------------
 ;; SHELLS
@@ -104,25 +109,6 @@
     (interactive)
     (prf/tramp/shell path prf/tramp/local-shell-bin/cmd)))
 
-
-;; ------------------------------------------------------------------------
-;; WINDMOVE w/ AHK
-
-;; function keys USED by Emacs (others can be used along AHK)
-;; <f1>		help-command
-;; <f10>	list-bookmarks
-;; <f12>	my-theme-cycle
-;; <f16>	clipboard-kill-ring-save
-;; <f18>	clipboard-yank
-;; <f2>		2C-command
-;; <f20>	clipboard-kill-region
-;; <f3>		kmacro-start-macro-or-insert-counter
-;; <f4>		kmacro-end-or-call-macro
-;; <f9>		deft
-
-;; good to use: f15, f17, f19, f21
-
-;; NOTE: moved this config inside host config, as very dependant on keyboard / Windows version
 
 ;; ------------------------------------------------------------------------
 ;; CONFIG FILES
