@@ -138,7 +138,16 @@
 	   (bmkp-remote-file :foreground "#C55D67"))))
   ;; to reload: (spacemacs/update-theme)
   :config
-  (theming/init-theming))
+  ;; current frame
+  (theming/init-theming)
+
+  ;; future frames
+  ;; NB: not working, might not be the appropriate hook
+  ;; running it in client-init.el instead
+  ;; (add-hook 'after-make-frame-functions (lambda (_current-frame)
+  ;;
+  ;;                                         (spacemacs/update-theme)))
+  )
 
 
 
