@@ -74,8 +74,8 @@ On error (read-only), quit without selecting."
     ("g" nil "cancel"))
 
   ;; do not make it ubuiquous, as would conflict w/ lusty, among others
-  ;; (helm-mode 1)
-  )
+  (when (eq prf/fav-completion-system 'helm)
+    (helm-mode 1)))
 
 (use-package helm-grep
   :ensure nil

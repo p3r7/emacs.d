@@ -1,7 +1,7 @@
 
 ;; ABOUT: Those provite minibuffer completion + advanced features.
 
-(defvar prf/fav-completion-system 'helm)
+(defvar prf/fav-completion-system nil)
 
 
 ;; WRAPPER
