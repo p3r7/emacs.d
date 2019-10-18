@@ -17,6 +17,7 @@
                               scheme-mode
                               clojure-mode))
 
+
 
 ;; MAIN
 
@@ -29,6 +30,7 @@
 ;; NOTE: USEFUL case EOF, in addition to check-parens: highlight parens contents
 ;; (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
+
 
 
 ;; NAVIGATION / REFACTORING HELPERS
@@ -45,6 +47,12 @@
 ;; EVALUATION
 
 (use-package eval-sexp-fu)
+
+
+
+;; VISIBILITY
+
+(use-package lisp-butt-mode)
 
 
 
