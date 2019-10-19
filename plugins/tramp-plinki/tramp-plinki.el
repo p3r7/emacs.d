@@ -26,7 +26,7 @@
 
 (defun tramp-plinki--get-enriched-tramp-methods ()
   (-map-when
-   (lambda (e) (member (car e) '("pscp" "plink")))
+   (lambda (e) (member (car e) '("pscp" "plink" "plinkx")))
    #'tramp-plinki--add-certificate-login-arg-to-method
    tramp-methods))
 

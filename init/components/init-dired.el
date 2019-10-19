@@ -3,11 +3,14 @@
 ;; http://stackoverflow.com/questions/14602291/dired-how-to-get-really-human-readable-output-find-ls-option
 ;; http://stackoverflow.com/questions/4115465/emacs-dired-too-much-information
 
-;; TODO: hide username / group when on windows NT
-;; could use https://emacs.stackexchange.com/questions/35676/customize-direds-display
-;; or get inspired by dired-hide-details-mode
+
+
 
 (defvar prf/dired-listing-switches "-alh")
+
+
+
+;; DIRED
 
 (use-package dired
   :ensure nil
@@ -47,6 +50,9 @@
   (put 'dired-find-alternate-file 'disabled nil))
 
 
+
+;; EXTRA FACES
+
 (use-package dired+
   :quelpa (dired+ :fetcher github :repo "emacsmirror/dired-plus")
   :after (dired)
@@ -56,11 +62,17 @@
   ;;     '(require 'dired-async))
   )
 
-;; NB: alternative https://oremacs.com/2016/02/24/dired-rsync/
+;; NB: alternative if we only wanted extra coloring https://github.com/purcell/diredfl
+
+
+
+;; EXTRA COMMANDS
+
 (use-package dired-rsync
   :after (dired)
   :config
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
+;; NB: alternative https://oremacs.com/2016/02/24/dired-rsync/
 
 
 (use-package dired-git-info
@@ -74,5 +86,8 @@
   :bind (
          :map dired-mode-map
          ("M-." . dired-hide-dotfiles-mode)))
+
+
+
 
 (provide 'init-dired)

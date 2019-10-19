@@ -3,7 +3,9 @@
 ;; TODO: also analyze this config http://stackoverflow.com/a/2078367
 ;; NOTE: might also need other tweaks http://zzamboni.org/blog/making-cygwin-windows-and-emacs-understand-th/
 
-;; -------------------------------------------------------------------------
+
+
+;; VARS
 
 (defvar cygwin-root "c:/cygwin64")
 
@@ -24,9 +26,7 @@
 ;; - cygwin's /usr/local/bin is <cygwin-root>\usr\local\bin\
 
 
-;; -------------------------------------------------------------------------
-
-;; exec-path enrichment
+;; EXEC-PATH ENRICHMENT
 
 (defun prf/escape-winnt-path (path)
   (replace-regexp-in-string "\\\\" "\\\\\\\\" (downcase (prf/system/get-path-system-format path))))
@@ -59,9 +59,8 @@
 ;;   (setq exec-path (cons mingw-msys-bin-root exec-path)))
 
 
-;; -------------------------------------------------------------------------
-
-;; shells
+
+;; SHELLS
 
 ;; TODO: use http://www.khngai.com/emacs/cygwin.php
 
@@ -92,17 +91,15 @@
   (defalias 'prf/tramp/shell/bash 'prf/tramp/shell/cygwin-bash))
 
 
-;; -------------------------------------------------------------------------
-
-;; default coding style
+
+;; CODING STYLE
 
 ;;; Use Unix-style line endings.
 ;; (setq-default buffer-file-coding-system 'undecided-unix)
 
 
-;; -------------------------------------------------------------------------
-
-;; make Emacs understand Cygwin-style path
+
+;; CYGPATH
 
 ;;; Handles old-style (text file) symlinks and new-style (.lnk file) symlinks.
 ;;; (Non-Cygwin-symlink .lnk files, such as desktop shortcuts, are still loaded as such.)
@@ -132,17 +129,45 @@ loaded as such.)"
   (add-hook 'find-file-hooks 'follow-cygwin-symlink))
 
 
-;; -------------------------------------------------------------------------
-
-;; cygwin pty compatibility layer
+
+;; CYGWIN PTY COMPATIBILITY LAYER
 
 (use-package fakecygpty
   :quelpa (fakecygpty :fetcher github :repo "d5884/fakecygpty")
   :if (executable-find "fakecygpty")
+  :after (tramp)
   :config
-  (fakecygpty-activate))
+  (fakecygpty-activate)
+
+  (defun tramp-cywgin-ssh--replace-login-program-of-method (tramp-method-def)
+    (let ((method-name (car tramp-method-def))
+          (method-def-args (cdr tramp-method-def)))
+      (cons method-name
+            (-map-when
+             (lambda (e) (equal (car e) 'tramp-login-program))
+             (lambda (_e) '(tramp-login-program "fakecygpty ssh"))
+             method-def-args))))
+
+  (defun tramp-cywgin-ssh--get-enriched-tramp-methods ()
+    (-map-when
+     (lambda (e) (member (car e) '("ssh" "sshx")))
+     #'tramp-cywgin-ssh--replace-login-program-of-method
+     tramp-methods))
+
+  (defun tramp-cywgin-ssh-enrich-existing ()
+
+    (message "JB: tramp-cywgin-ssh-enrich-existing")
+
+    (if (executable-find "fakecygpty")
+        (progn
+          (message "JB: setting tramp methods")
+
+          (setq tramp-methods (tramp-cywgin-ssh--get-enriched-tramp-methods)))
+      (message "Missing program `fakecygpty'")))
+
+  (tramp-cywgin-ssh-enrich-existing))
 
 
-;; -------------------------------------------------------------------------
+
 
 (provide 'init-cygwin-integration)

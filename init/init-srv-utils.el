@@ -159,6 +159,13 @@
 
 
 ;; ------------------------------------------------------------------------
+;; TEMP SHELL BUFFERS
+
+(add-to-list 'display-buffer-alist '("^Shell Command Output\\(.*\\)$" display-buffer-same-window))
+(add-to-list 'display-buffer-alist '("^Async Shell Command\\(.*\\)$" display-buffer-same-window))
+
+
+;; ------------------------------------------------------------------------
 ;; ESHELL
 
 (require 'init-eshell)
