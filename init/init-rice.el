@@ -117,7 +117,7 @@
            (form-feed-line :strike-through "#a9a9a9"))
 	  (flatui
 	   (org-block :inherit default))
-	  (dracula
+	  (dracula-mod
            (form-feed-line :strike-through "#6272a4")
 	   (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
 	   (bmkp-remote-file :foreground "#ff79c6")) ; rainbow-4
