@@ -68,7 +68,6 @@
 ;; HELPER UTILS
 
 (use-package prf-tramp
-  ;; :load-path "~/.emacs.d/plugins/prf-tramp"
   :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
   :config
   (if (not (fboundp '_sh))
