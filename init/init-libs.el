@@ -21,6 +21,8 @@
   :quelpa (prf-string :fetcher github :repo "p3r7/prf-string"))
 (use-package pickling
   :load-path "~/.emacs.d/plugins/pickling")
+(use-package buffer-grid
+  :load-path "~/.emacs.d/plugins/buffer-grid")
 
 ;; NB: deferred is now buggy and no more maintained
 ;; async is better but bases itself on a new emcs process wo/ all the plugins / vars loaded
