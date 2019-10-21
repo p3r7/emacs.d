@@ -26,10 +26,18 @@
 ;; async is better but bases itself on a new emcs process wo/ all the plugins / vars loaded
 ;; aio (async-io) seems to be better
 (use-package deferred)
-(use-package async)
+(use-package async
+  ;; :hook
+  ;; (dired-mode-hook . dired-async-mode)
+  :config
+  (async-bytecomp-package-mode 1))
 (use-package aio)
 
-(use-package request)
+(use-package request
+  :config
+  (when (string= "c:/windows/system32/curl.exe" (executable-find request-curl))
+    ;; NB: doesn't play nice w/ Windows 10 default cUrl
+    (setq request-backend 'url-retrieve)))
 (use-package request-deferred
   :after (request))
 
