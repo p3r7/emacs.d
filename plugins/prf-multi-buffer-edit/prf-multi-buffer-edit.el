@@ -1,4 +1,5 @@
 
+(require 'buffer-grid)
 
 ;; https://emacs.stackexchange.com/a/21478
 
@@ -7,6 +8,15 @@
 ;; (with-current-buffer "init.el"
 ;;   (goto-char 42)
 ;;   (point))
+
+;; TODO: get inspired by `mc/prompt-for-inclusion-in-whitelist', `mc/execute-this-command-for-all-cursors-1'
+
+;; (progn
+;;   (message "this-command-keys=%S" (this-command-keys))
+;;   (message "this-single-command-keys=%S" (this-single-command-keys))
+;;   (message "this-command-keys-vector=%S" (this-command-keys-vector))
+;;   (message "this-single-command-raw-keys=%S" (this-single-command-raw-keys))
+;;   (message "this-command-keys-shift-translated=%S" this-command-keys-shift-translated))
 
 
 
@@ -34,7 +44,7 @@
   "major mode for editing multiple buffers at once."
 
   (setq prf-multi-buffer-mode-map (make-sparse-keymap))
-  ;; (define-key prf-multi-buffer-mode-map [remap self-insert-command] #'prf-multi-buffer-mode--self-insert-command)
+  (define-key prf-multi-buffer-mode-map [remap self-insert-command] #'prf-multi-buffer-mode--self-insert-command)
   (define-key prf-multi-buffer-mode-map (kbd "C-h k") #'helpful-key)
   (define-key prf-multi-buffer-mode-map (kbd "C-h v") #'helpful-variable)
   (define-key prf-multi-buffer-mode-map (kbd "C-h o") #'helpful-at-point)
@@ -94,31 +104,9 @@ Inspired by `ediff-setup' (called by `ediff-files-internal')
       (goto-char (point-min))
       (skip-chars-forward ediff-whitespace))
 
-    (setq nb-cells (length buf-list)
-          nb-cols (min nb-cells prf-multi-buffer--max-columns)
-          nb-rows (ceiling (/ (float nb-cells) prf-multi-buffer--max-columns)))
-
     (other-window 1)
-    (switch-to-buffer (car buf-list))
-    (setq wind-A (selected-window))
 
-    (setq wind-width
-          (/ (window-width wind-A) nb-cols))
-    (setq wind-height
-          (/ (window-height wind-A) nb-rows))
-
-    (message "Cell dimensions: %d x %d" wind-width wind-height)
-
-    (let ((trans (lambda (e)
-                   (let ((wind (selected-window)))
-                     (when (% i prf-multi-buffer--max-columns)
-                       (split-window-vertically wind-height))
-                     (split-window-horizontally wind-width)
-                     (if (eq (selected-window) wind-A)
-                         (other-window 1))
-                     (switch-to-buffer e))
-                   (setq i (+ i 1)))))
-      (mapc trans (cdr buf-list)))
+    (buffer-grid-diplay buf-list nil prf-multi-buffer--max-columns)
 
     (ediff-select-lowest-window)))
 
@@ -162,12 +150,7 @@ Inspired by `ediff-setup' (called by `ediff-files-internal')
 
 (defun prf-multi-buffer-mode--self-insert-command ()
   (interactive)
-  (let (key)
-
-    (setq key
-          (cond
-           ((symbolp last-input-event) last-input-event)
-           (t (key-binding (vector last-input-event)))))
+  (let ((key (this-command-keys)))
     (prf-multi-buffer-edit--insert-all key prf-multi-buffer-mode--buffer-list)
     ))
 
