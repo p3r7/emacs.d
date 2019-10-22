@@ -68,7 +68,11 @@
     :load-path "~/.emacs.d/plugins/tramp-kitty"
     :after (tramp)
     :config
-    (tramp-kitty-set-session-map-cache)))
+    (tramp-kitty-set-session-map-cache)
+    (with-eval-after-load "putty-open"
+      (add-to-list putty-open-putty--session-methods "klinkx")
+      (add-to-list putty-open-putty--ssh-methods "kscp")
+      (add-to-list putty-open-putty--ssh-methods "klink"))))
 
 ;; SSH w/ key support
 (use-package tramp-sshi
@@ -79,6 +83,14 @@
 (use-package tramp-plinki
   :load-path "~/.emacs.d/plugins/tramp-plinki"
   :after (tramp))
+
+;; open in putty / kitty
+(use-package putty-open
+  :load-path "~/.emacs.d/plugins/putty-open"
+  :after (tramp)
+  :init
+  (when (executable-find "kitty")
+    (setq putty-open-putty-exec "kitty")))
 
 
 ;; -------------------------------------------------------------------------
