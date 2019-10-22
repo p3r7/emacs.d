@@ -155,13 +155,8 @@ loaded as such.)"
      tramp-methods))
 
   (defun tramp-cywgin-ssh-enrich-existing ()
-
-    (message "JB: tramp-cywgin-ssh-enrich-existing")
-
     (if (executable-find "fakecygpty")
         (progn
-          (message "JB: setting tramp methods")
-
           (setq tramp-methods (tramp-cywgin-ssh--get-enriched-tramp-methods)))
       (message "Missing program `fakecygpty'")))
 
