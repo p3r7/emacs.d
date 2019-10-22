@@ -95,6 +95,7 @@
 (w32-register-hot-key [s-])
 
 ;; pass-through some practical commands
+(w32-unregister-hot-key (kbd "<s-d>"))
 (w32-unregister-hot-key (kbd "<s-r>"))
 (w32-unregister-hot-key (kbd "<s-n>"))
 (w32-unregister-hot-key (kbd "<s-t>"))
