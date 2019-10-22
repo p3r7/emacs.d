@@ -3,15 +3,13 @@
 (require 'prf-string)
 
 
-;; ------------------------------------------------------------------------
-;;  VARS
+;;  VARS
 
 (defvar tramp-kitty-session-map-cache nil)
 (defvar tramp-kitty-session-map-cache-set-time nil)
 
 
-;; ------------------------------------------------------------------------
-;; NEW TRAMP METHODS
+;; NEW TRAMP METHODS
 
 (add-to-list 'tramp-methods
 	     `("klink"
@@ -65,8 +63,7 @@
      (tramp-set-completion-function "kscp" tramp-completion-function-alist-ssh)))
 
 
-;; ------------------------------------------------------------------------
-;; UTILS FUNCTIONS
+;; UTILS FUNCTIONS
 
 (defun tramp-kitty-get-kitty-session-dir ()
   (let ((kitty-bin-path (executable-find "kitty")))
@@ -141,22 +138,24 @@
     (-filter #'predicate
              tramp-kitty-session-map-cache)))
 
-;; ------------------------------------------------------------------------
-;; HELM INTEGRATION
+
+;; HELM INTEGRATION
 
 ;; TODO: allow both dired and shell
 ;; http://kitchingroup.cheme.cmu.edu/blog/2015/01/30/More-adventures-in-helm-more-than-one-action/
 (setq tramp-kitty-session-helm-source
       `((name . "Open KiTTY session")
         (candidates . tramp-kitty-get-session-list-from-conf-dir)
-        (action . (
-		   ("dired" .
+        (action . (("dired" .
 		    (lambda (candidate)
 		      (dired (concat "/klinkx:" candidate ":/"))))
 		   ;; NB: not working
 		   ("shell" .
 		    (lambda (candidate)
-		      (prf/tramp/remote-shell (concat "/klinkx:" candidate ":/"))))
+		      (prf/tramp/shell (concat "/klinkx:" candidate ":/"))))
+                   ("kitty" .
+		    (lambda (candidate)
+		      (start-process (concat "kitty<" candidate ">") nil "kitty" "-load" candidate)))
 		   ("debug" .
 		    (lambda (candidate)
 		      (message-box (concat "selected: %s" candidate))))))))
@@ -166,5 +165,7 @@
      (interactive)
      (helm :sources '(tramp-kitty-session-helm-source))))
 
+
+
 
 (provide 'tramp-kitty)
