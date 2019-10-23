@@ -68,8 +68,7 @@
   (defun eval-expr-minibuffer-setup ()
     ;; (local-set-key (kbd "<tab>") #'lisp-complete-symbol)
     (local-set-key (kbd "<tab>") #'completion-at-point)
-    (set-syntax-table emacs-lisp-mode-syntax-table)
-    (paredit-mode)))
+    (set-syntax-table emacs-lisp-mode-syntax-table)))
 
 
 
