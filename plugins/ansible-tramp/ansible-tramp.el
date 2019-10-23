@@ -3,6 +3,8 @@
 (require 'request-deferred)
 (require 's)
 (require 'subr-x)
+(require 'buffer-grid)
+
 
 ;; (when (executable-find "ansible")
 ;;   )
@@ -110,13 +112,14 @@
           :action '(("shell" .
                      (lambda (candidate)
                        (let* ((marked-candidates (helm-marked-candidates))
-                              (nb-marked-candidates (length marked-candidates)))
-                         ;; (when (< 1 nb-marked-candidates)
-                         ;;   (delete-other-windows))
+                              (nb-marked-candidates (length marked-candidates))
+                              buf-list)
                          (mapc
                           (lambda (e)
-                            (prf/tramp/remote-shell (ansible-tramp-get-inventory-address-for-host e)))
-                          marked-candidates))))
+                            (add-to-list 'buf-list (prf/tramp/remote-shell (ansible-tramp-get-inventory-address-for-host e)) 't))
+                          marked-candidates)
+                         (when (< 1 nb-marked-candidates)
+                           (buffer-grid-diplay buf-list 't)))))
                     ("dired" .
                      (lambda (candidate)
                        (let ((host-address (ansible-tramp-get-inventory-address-for-host candidate)))
