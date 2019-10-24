@@ -45,11 +45,12 @@
       (lispy-space)))
 
   ;; enable in minibuffer
-  ;; TODO: use `eval-expression-minibuffer-setup-hook' instead
-  (defun lispy-minibuffer-eval-expr-hook ()
-    (when (member this-command '(eval-expression eval-expr))
-      (lispy-mode 1)))
-  (add-hook 'minibuffer-setup-hook #'lispy-minibuffer-eval-expr-hook)
+  (defun prf/lispy-enable-hook ()
+    (lispy-mode 1))
+  (add-hook 'eval-expression-minibuffer-setup-hook #'prf/lispy-enable-hook)
+  (with-eval-after-load "eval-expr"
+    (add-hook 'prf/eval-expr-minibuffer-setup-hook #'prf/lispy-enable-hook))
+
   ;; disable when region active
   (advice-add 'delete-selection-pre-hook :around 'lispy--delsel-advice))
 

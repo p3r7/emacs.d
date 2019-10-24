@@ -65,10 +65,13 @@
   :after (elisp-mode)
   :bind ("M-:" . eval-expr)
   :config
+  (defvar prf/eval-expr-minibuffer-setup-hook nil)
+
   (defun eval-expr-minibuffer-setup ()
     ;; (local-set-key (kbd "<tab>") #'lisp-complete-symbol)
     (local-set-key (kbd "<tab>") #'completion-at-point)
-    (set-syntax-table emacs-lisp-mode-syntax-table)))
+    (set-syntax-table emacs-lisp-mode-syntax-table)
+    (run-hooks 'prf/eval-expr-minibuffer-setup-hook)))
 
 
 

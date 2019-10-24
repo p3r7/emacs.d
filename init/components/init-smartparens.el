@@ -7,11 +7,11 @@
   (smartparens-global-mode 1)
 
   ;; enable in minibuffer
-  ;; TODO: use `eval-expression-minibuffer-setup-hook' instead
-  (defun sp-minibuffer-eval-expr-hook ()
-    (when (member this-command '(eval-expression eval-expr))
-      (smartparens-mode 1)))
-  (add-hook 'minibuffer-setup-hook #'sp-minibuffer-eval-expr-hook))
+  (defun prf/sp-enable-hook ()
+    (smartparens-mode 1))
+  (add-hook 'eval-expression-minibuffer-setup-hook #'prf/sp-enable-hook)
+  (with-eval-after-load "eval-expr"
+    (add-hook 'prf/eval-expr-minibuffer-setup-hook #'prf/sp-enable-hook)))
 
 
 (provide 'init-smartparens)
