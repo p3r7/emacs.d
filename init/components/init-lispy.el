@@ -33,17 +33,21 @@
          :map lispy-mode-map-lispy
          ("C-c DEL" . lispy-delete-backward)
          ;; disable when region active
-         ("SPC" . prf/lispy-space-no-selection))
+         :map lispy-mode-map
+         ([remap lispy-space] . prf/lispy-space-no-selection))
 
   :init
   (setq lispy-compat '(edebug macrostep cider))
 
   :config
-  (defun prf/lispy-space-no-selection ()
-    (interactive)
+  (defun prf/lispy-space-no-selection (arg)
+    (interactive "p")
     (if (region-active-p)
-        (insert "")
-      (lispy-space)))
+        (progn
+          (call-interactively #'delete-region)
+          ;; (insert " ")
+          (lispy-space arg))
+      (lispy-space arg)))
 
   ;; enable in minibuffer
   (defun prf/lispy-enable-hook ()
