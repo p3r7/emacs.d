@@ -98,6 +98,15 @@
 	      (mode . python-mode)
 	      (mode . emacs-lisp-mode)))
 
+	    ("mail"
+	     (or
+	      (mode . message-mode)
+              ;; notmuch
+              (mode . notmuch-hello-mode)
+              (mode . notmuch-search-mode)
+	      (mode . notmuch-show-mode)
+              (mode . notmuch-message-mode)))
+
 	    ("irc"
 	     (or
 	      (mode . circe-server-mode)
