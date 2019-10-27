@@ -107,7 +107,8 @@ See the documentation of `framep' for possible return values."
   (prf/customize-tty-faces current-frame))
 
 (add-hook 'tty-setup-hook #'prf/tty-setup-hook)
-(add-hook 'after-make-frame-functions #'prf/tty-setup-frame-hook)
+;; BUG: not working, done in client-init.el instead
+;; (add-hook 'after-make-frame-functions #'prf/tty-setup-frame-hook)
 
 
 ;; ------------------------------------------------------------------------
