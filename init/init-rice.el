@@ -154,6 +154,7 @@
 ;; HIGHLIGHT CURRENT WINDOW
 
 (use-package dimmer
+  :disabled
   :config
   (dimmer-mode))
 
