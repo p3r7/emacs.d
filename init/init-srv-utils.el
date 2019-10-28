@@ -269,6 +269,7 @@
        "server utils"
        ("s" prf/tramp/shell "shell")
        ("r" prf/tramp/remote-shell "remote shell")
+       ("a" helm-ansible-inventory-host-connect "remote shell (Ansible)")
        ("o" prf/tramp/visit-remoteFile-currentSrv "visit other version file")
        ("e" ediff-toggle "toggle ediff")
        ("f" prf/find-file-at-point "find at point")
