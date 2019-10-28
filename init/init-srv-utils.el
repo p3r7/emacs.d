@@ -41,9 +41,9 @@
   (let (vec localname)
     (setq vec (tramp-dissect-file-name trampFilePath))
     (if vec
-	(tramp-file-name-localname vec)
+        (tramp-file-name-localname vec)
       ;; REVIEW: returning path unchanged instead of nil if not valid remote
-      .. do we really want this ?!
+      ;; .. do we really want this ?!
       trampFilePath)))
 
 
@@ -175,16 +175,16 @@
 
 
 (defun prf/get-buffer-filepath-complete ()
-  (if (equal major-mode 'dired-mode)
+  (if (member major-mode '(dired-mode shell-mode))
       default-directory
     (buffer-file-name)))
 
 (defun prf/get-buffer-filepath-clean ()
   (let ((filename (prf/get-buffer-filepath-complete)))
     (when filename
-      (when (file-remote-p filename)
-	(prf/tramp/extract-remote-file-name filename))
-	filename)))
+      (if (file-remote-p filename)
+          (prf/tramp/extract-remote-file-name filename)
+        filename))))
 
 (defun prf/get-buffer-filepath-with-exec ()
   (let ((clean-filename (prf/get-buffer-filepath-complete)))
