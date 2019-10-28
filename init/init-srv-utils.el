@@ -262,29 +262,27 @@
 ;; ------------------------------------------------------------------------
 ;; HYDRAS
 
-(eval-after-load "hydra"
-  '(progn
+(with-eval-after-load "hydra"
+  (defhydra hydra-srvUtils (:color blue)
+    "server utils"
+    ("s" prf/tramp/shell "shell")
+    ("r" prf/tramp/remote-shell "remote shell")
+    ("a" helm-ansible-inventory-host-connect "remote shell (Ansible)")
+    ("o" prf/tramp/visit-remoteFile-currentSrv "visit other version file")
+    ("e" ediff-toggle "toggle ediff")
+    ("f" prf/find-file-at-point "find at point")
+    ("#" local-root-shell "local root shell")
+    ("g" nil "cancel"))
 
-     (defhydra hydra-srvUtils (:color blue)
-       "server utils"
-       ("s" prf/tramp/shell "shell")
-       ("r" prf/tramp/remote-shell "remote shell")
-       ("a" helm-ansible-inventory-host-connect "remote shell (Ansible)")
-       ("o" prf/tramp/visit-remoteFile-currentSrv "visit other version file")
-       ("e" ediff-toggle "toggle ediff")
-       ("f" prf/find-file-at-point "find at point")
-       ("#" local-root-shell "local root shell")
-       ("g" nil "cancel"))
+  (defhydra hydra-copyPath (:color blue)
+    "copy path"
+    ("c" prf/copy-buffer-filepath-to-clipboard-clean "clean")
+    ("r" prf/copy-buffer-filepath-to-clipboard-raw "raw")
+    ("f" prf/copy-buffer-filename-to-clipboard "file")
+    ("b" prf/copy-buffer-basename-to-clipboard "base name")
+    ("e" prf/copy-buffer-filepath-to-clipboard-with-exec "exec")
+    ("g" nil "cancel")))
 
-     (defhydra hydra-copyPath (:color blue)
-       "copy path"
-       ("c" prf/copy-buffer-filepath-to-clipboard-clean "clean")
-       ("r" prf/copy-buffer-filepath-to-clipboard-raw "raw")
-       ("f" prf/copy-buffer-filename-to-clipboard "file")
-       ("b" prf/copy-buffer-basename-to-clipboard "base name")
-       ("e" prf/copy-buffer-filepath-to-clipboard-with-exec "exec")
-       ("g" nil "cancel"))
-     )
-  )
+
 
 (provide 'init-srv-utils)
