@@ -1,8 +1,9 @@
 
 (require 's)
 
-;; ------------------------------------------------------------------------
-;; various
+
+
+;; VARIOUS
 
 (use-package hide-lines)
 
@@ -13,26 +14,21 @@
 	 "\\catalina.out\\'"))
 
 
-;; ------------------------------------------------------------------------
+
 ;; DIRED
 
 ;; http://www.emacswiki.org/emacs/Sunrise_Commander
 
 (require 'init-dired)
 
-;; ------------------------------------------------------------------------
-;; GENERAL COMINT
 
-(setq
- ;; comint-completion-autolist t ;; ???
- comint-input-ignoredups t ;; no duplicate history
- comint-input-ring-size 5000 ;; history size
- ;; comint-completion-addsuffix t ;; might conflict w/ autocomplete
- comint-buffer-maximum-size 20000
- comint-scroll-to-bottom-on-input t)
+
+;; COMINT
+
+(require 'init-comint)
 
 
-;; ------------------------------------------------------------------------
+
 ;; TRAMP
 
 (require 'init-tramp)
@@ -112,7 +108,7 @@
 (defalias '_t/vrm 'prf/tramp/visit-remoteFile-currentSrv)
 
 
-;; ------------------------------------------------------------------------
+
 ;; SHELL
 
 (when (>= emacs-major-version 25)
@@ -157,22 +153,21 @@
 ;;       comint-process-echoes t)
 
 
-
-;; ------------------------------------------------------------------------
+
 ;; TEMP SHELL BUFFERS
 
 (add-to-list 'display-buffer-alist '("^Shell Command Output\\(.*\\)$" display-buffer-same-window))
 (add-to-list 'display-buffer-alist '("^Async Shell Command\\(.*\\)$" display-buffer-same-window))
 
 
-;; ------------------------------------------------------------------------
+
 ;; ESHELL
 
 (require 'init-eshell)
 
-;; ------------------------------------------------------------------------
-;; FILESYSTEM HELPERS
 
+
+;; FILESYSTEM HELPERS
 
 (defun prf/get-buffer-filepath-complete ()
   (if (member major-mode '(dired-mode shell-mode))
@@ -284,5 +279,6 @@
     ("g" nil "cancel")))
 
 
+
 
 (provide 'init-srv-utils)

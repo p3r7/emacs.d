@@ -2,6 +2,8 @@
 
 (setq comint-input-ignoredups t         ; no duplicate history
       comint-input-ring-size 5000       ; history size
+      ;; comint-completion-addsuffix t ;; might conflict w/ autocomplete
+      ;; NB: we might want to set `comint-completion-autolist' to t
       comint-buffer-maximum-size 20000
       comint-scroll-to-bottom-on-input t)
 

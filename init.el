@@ -222,7 +222,6 @@
 ;; SHELLS
 
 (require 'init-srv-utils)
-(require 'init-comint)
 
 
 
