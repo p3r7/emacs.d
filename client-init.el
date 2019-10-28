@@ -4,3 +4,4 @@
 ;; -e doesn't appear to work, need to use --eval w/ a load-file http://stackoverflow.com/questions/2803037/emacsclient-eval-insert-something-is-not-working-for-me
 
 (spacemacs/update-theme)
+(prf/tty-setup-frame-hook)

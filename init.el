@@ -228,6 +228,7 @@
 
 ;; SOCIAL
 
+(require 'init-mail)
 (require 'init-circe)
 
 

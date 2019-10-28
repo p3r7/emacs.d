@@ -210,9 +210,9 @@
 ;; -------------------------------------------------------------------------
 ;; EMOJIS
 
-;; (when (prf/require-plugin 'emojify nil 't)
-;; (setq emojify-emoji-styles '(unicode github))
-;; (add-hook 'after-init-hook #'global-emojify-mode))
+(use-package emojify
+  :init
+  (setq emojify-emoji-styles '(unicode github)))
 
 
 (provide 'init-gui)

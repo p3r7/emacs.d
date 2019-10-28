@@ -114,6 +114,7 @@
           (plan9
            (form-feed-line :strike-through "#40883f"))
           (white-sand
+           (cursor :background "#585858")
            (form-feed-line :strike-through "#a9a9a9"))
 	  (flatui
 	   (org-block :inherit default))
@@ -154,6 +155,7 @@
 ;; HIGHLIGHT CURRENT WINDOW
 
 (use-package dimmer
+  :disabled
   :config
   (dimmer-mode))
 
