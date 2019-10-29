@@ -122,6 +122,10 @@
 (use-package ox-slack
   :after (org))
 
+(use-package ox-jekyll-lite
+  :quelpa (ox-jekyll-lite :fetcher github :repo "peterewills/ox-jekyll-lite")
+  :after (org))
+
 (defun prf/org-export-to-doc ()
   (interactive)
   (let* ((org-export-odt-preferred-output-format "doc")
