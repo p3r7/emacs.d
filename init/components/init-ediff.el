@@ -38,6 +38,17 @@
 
 (use-package ztree
   :config
+
+  ;; less aggressive faces
+  (face-spec-set
+   'ztreep-diff-model-add-face
+   '((t :inherit success))
+   'face-defface-spec)
+  (face-spec-set
+   'ztreep-diff-model-diff-face
+   '((t :inherit warning))
+   'face-defface-spec)
+
   (defun ztree-toggle ()
     (interactive)
     (if (= (length (window-list)) 2)
