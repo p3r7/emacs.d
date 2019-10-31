@@ -270,39 +270,34 @@
 
 (require 'init-hydra)
 
-(eval-after-load "hydra"
-  '(progn
+(with-eval-after-load "hydra"
+  ;; https://github.com/abo-abo/hydra/wiki/Conditional-Hydra
+  (defhydra hydra-visual (:color blue)
+    "visual"
+    ("r" prf/reset-frame-geometry "reset-default")
+    ("d" prf/double-default-frame-geometry "double")
+    ("t" prf/tiny-frame-geometry "tiny")
+    ("g" nil "cancel"))
 
-     ;; https://github.com/abo-abo/hydra/wiki/Conditional-Hydra
-     (defhydra hydra-visual (:color blue)
-       "visual"
-       ("r" prf/reset-frame-geometry "reset-default")
-       ("d" prf/double-default-frame-geometry "double")
-       ("t" prf/tiny-frame-geometry "tiny")
-       ("g" nil "cancel"))
+  (defhydra hydra-test (:color blue)
+    "test"
+    ("h" hydra-helm/body "helm")
+    ("g" nil "cancel"))
 
-     (defhydra hydra-test (:color blue)
-       "test"
-       ("h" hydra-helm/body "helm")
-       ("g" nil "cancel"))
+  ;; TODO: conditionnally append to hydra main
+  (defhydra hydra-main (:color blue)
+    "main"
+    ("m" magit-status "magit")
+    ("c" hydra-copyPath/body "copy path")
+    ("s" hydra-srvUtils/body "server utils")
+    ("v" hydra-visual/body "visual")
+    ("?" hydra-test/body "experimental")
+    ("g" nil "cancel"))
 
-     ;; TODO: conditionnally append to hydra main
-     (defhydra hydra-main (:color blue)
-       "main"
-       ("m" magit-status "magit")
-       ("c" hydra-copyPath/body "copy path")
-       ("s" hydra-srvUtils/body "server utils")
-       ("v" hydra-visual/body "visual")
-       ("?" hydra-test/body "experimental")
-       ("g" nil "cancel"))
+  ;; http://kitchingroup.cheme.cmu.edu/blog/2015/06/24/Conditional-hydra-menus/
 
-     ;; http://kitchingroup.cheme.cmu.edu/blog/2015/06/24/Conditional-hydra-menus/
-
-     (global-set-key (kbd "<apps>") 'hydra-main/body)
-     (global-set-key (kbd "<menu>") 'hydra-main/body)
-
-     )
-  )
+  (global-set-key (kbd "<apps>") 'hydra-main/body)
+  (global-set-key (kbd "<menu>") 'hydra-main/body))
 
 
 
@@ -316,11 +311,11 @@
 
 ;;|     .-.
 ;;|    /   \         .-.
-;;|   /     \       /   \       .-.     .-.     _   _
-;;+--/-------\-----/-----\-----/---\---/---\---/-\-/-\/\/---
-;;| /         \   /       \   /     '-'     '-'
+;;|   /     \       /   \       .-.     .-.     ..   _
+;;+--/-------\-----/-----\-----/---\---/---\---/--\-/-\-/\-'.--
+;;| /         \   /       \   /     '-'     '-'    '
 ;;|/           '-'         '-'
-
+;;|
 
 ;; (message "Benchmark: .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
 ;; (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
