@@ -158,7 +158,8 @@
 (use-package form-feed
   :delight
   :config
-  (add-hook 'prog-mode-hook 'form-feed-mode))
+  (add-hook 'prog-mode-hook 'form-feed-mode)
+  (add-hook 'compilation-mode-hook 'form-feed-mode))
 
 
 ;; -------------------------------------------------------------------------
