@@ -1,5 +1,5 @@
 
-;; -------------------------------------------------------------------------
+
 ;; HELP / DESCRIBE (EMACS)
 
 ;; automatic display of local help
@@ -31,21 +31,19 @@
   (which-key-mode))
 
 
-;; -------------------------------------------------------------------------
+
 ;; TEXINFO
 
 ;; TODO: http://ergoemacs.org/emacs/emacs_adding_browser_keys.html
 (add-to-list 'Info-default-directory-list "~/.emacs.d/info")
 
 
-;; -------------------------------------------------------------------------
-;; EPUB
+;; EPUB
 
 (require 'init-nov)
 
 
-;; -------------------------------------------------------------------------
-;; MAN
+;; MAN
 
 (defalias 'man 'woman)
 (setq woman-use-own-frame nil)
@@ -61,12 +59,11 @@
   (tldr-ext-activate))
 
 
-;; -------------------------------------------------------------------------
-;; WEBSITES / ARTICLES
+;; WEBSITES / ARTICLES
 
 (provide 'init-pocket)
 
 
-;; -------------------------------------------------------------------------
+
 
 (provide 'init-doc)
