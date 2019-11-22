@@ -1,4 +1,5 @@
 (require 'noflet)
+(require 's)
 
 (use-package multi-scratch
   :disabled
@@ -18,6 +19,22 @@
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
   ;; TODO: use
   (noflet ((process-list ())) ad-do-it))
+
+
+;; -------------------------------------------------------------------------
+;; helper to move at line / col
+
+(defun pos-at-line-col (l c)
+  (goto-char (point-min))
+  (forward-line (- l 1))
+  (move-to-column c)
+  (point))
+
+(defun pos-at-line-col-joined (l-c)
+  (let* ((l-c (s-split ":" l-c))
+         (l (string-to-number (car l-c)))
+         (c (string-to-number (car (cdr l-c)))))
+    (pos-at-line-col l c)))
 
 
 ;; -------------------------------------------------------------------------
