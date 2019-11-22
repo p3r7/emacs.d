@@ -54,6 +54,7 @@
    'white-sand
    'dracula-mod
    'comidia-mod
+   'challenger-deep
    ;; 'gotham
    ;; 'light-blue
    ))
@@ -63,6 +64,7 @@
    'comidia-mod
    'gotham
    'ample-flat
+   'challenger-deep
    ))
 
 (defvar prf/theme/list/retro-dark
