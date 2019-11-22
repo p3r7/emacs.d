@@ -33,6 +33,8 @@
   :defer t)
 (use-package dracula-theme
   :defer t)
+(use-package challenger-deep-theme
+  :defer t)
 
 ;; light
 (use-package white-sand-theme
