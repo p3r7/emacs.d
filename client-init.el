@@ -9,4 +9,4 @@
    (spacemacs/update-theme))
  (frame-list))
 
-(prf/tty-setup-frame-hook)
+;; (prf/tty-setup-frame-hook)
