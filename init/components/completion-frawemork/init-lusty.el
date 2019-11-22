@@ -8,7 +8,9 @@
   :init
   (setq lusty--completion-ignored-regexps '("^\\*tramp/.*\\*$"
 					    "^\\*Help\\*$"
-					    "^\\*Messages\\*$"
+					    "^\\*helpful .*$"
+					    ;; "^\\*scratch\\*$"
+					    ;; "^\\*Messages\\*$"
 					    "^\\*Completions\\*$"
 					    "^\\*Bookmark List\\*$"
 					    "^\\*Ibuffer\\*$"
@@ -16,8 +18,14 @@
 					    "^\\*Ediff Registry\\*$"
 					    "^\\*Occur\\*$"
 					    "^\\*vc\\*$"
-					    "^\\*helm M-x\\*$"
-					    "^\\*magit:.*$")
+					    "^\\*helm .*$"
+					    "^\\*quelpa.*$"
+                                            ;; older-style magit buffers
+					    "^\\*magit:.*$"
+                                            ;; newr style magit buffers
+					    "^magit:.*$"
+					    "^magit-diff:.*$"
+					    "^magit-process:.*$")
 	lusty--shell-open-here-fun #'prf/tramp/shell
 	lusty--M-x-fun #'helm-M-x)
   :config
