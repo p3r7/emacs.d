@@ -181,12 +181,15 @@
       (modify-frame-parameters nil (list (cons 'alpha newalpha))))))
 
 ;; increase opacity (== decrease transparency) => (djcb-opacity-modify)
-(global-set-key (kbd "M-°") '(lambda()(interactive)(djcb-opacity-modify)))
+(global-set-key (kbd "M-°")
+                (lambda () (interactive) (djcb-opacity-modify)))
 ;; decrease opacity (== increase transparency => (djcb-opacity-modify t)
-(global-set-key (kbd "C-M-+") '(lambda()(interactive)(djcb-opacity-modify t)))
+(global-set-key (kbd "C-M-+")
+                (lambda () (interactive) (djcb-opacity-modify t)))
 ;; return the state to normal
-(global-set-key (kbd "M-=") '(lambda()(interactive)
-                               (modify-frame-parameters nil `((alpha . 100)))))
+(global-set-key (kbd "M-=")
+                (lambda () (interactive)
+                  (modify-frame-parameters nil '((alpha . 100)))))
 
 
 
