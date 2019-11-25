@@ -51,28 +51,31 @@
 
   (defun ztree-toggle ()
     (interactive)
-    (if (= (length (window-list)) 2)
-        (let (dir-A dir-B)
 
-          (if (and (buffer-file-name)
-                   (file-exists-p (buffer-file-name)))
-              (setq dir-A buffer-file-name)
-            (setq dir-A default-directory))
+    (unless (= (length (window-list)) 2)
+      (error "invalid number of visible buffers (expected 2)"))
 
-          (other-window 1)
+    (let (dir-A dir-B)
+      (if (and (buffer-file-name)
+               (file-exists-p (buffer-file-name)))
+          (setq dir-A buffer-file-name)
+        (setq dir-A default-directory))
 
-          (if (and (buffer-file-name)
-                   (file-exists-p (buffer-file-name)))
-              (setq dir-B buffer-file-name)
-            (setq dir-B default-directory))
+      (other-window 1)
 
-          (other-window 1)
+      (if (and (buffer-file-name)
+               (file-exists-p (buffer-file-name)))
+          (setq dir-B buffer-file-name)
+        (setq dir-B default-directory))
 
-          (if (and (file-directory-p dir-A)
+      (other-window 1)
+
+      (unless (and (file-directory-p dir-A)
                    (file-directory-p dir-B))
-              (ztree-diff dir-A dir-B)
-            (message "not all buffers directories")))
-      (message "invalid number of visible buffers (expected 2)"))))
+        (error "not all buffers directories"))
+
+      (delete-other-windows)
+      (ztree-diff dir-A dir-B))))
 
 ;; NB: Old way to do this was w/ `ediff-trees', but `ztree' seems more
 ;; maintained.
