@@ -52,6 +52,11 @@
   (org-display-inline-images t t)
 
   ;; BABEL
+  (add-to-list 'org-babel-load-languages '(sh . t))
+  (add-to-list 'org-babel-load-languages '(calc . t))
+  (add-to-list 'org-babel-load-languages '(gnuplot . t))
+  (add-to-list 'org-babel-load-languages '(sql . t))
+  (add-to-list 'org-babel-load-languages '(sqlite . t))
   (when (executable-find "python")
     (add-to-list 'org-babel-load-languages '(python . t)))
   (org-babel-do-load-languages 'org-babel-load-languages
