@@ -1,22 +1,19 @@
-;;TODO: [[http://orgmode.org/worg/org-faq.html#load-org-after-setting-variables]]
 
 (use-package org
   :init
 
   ;; GENERAL
-  (setq
-   org-directory default-directory)
+  (setq org-directory default-directory)
 
   ;; DISPLAY
-  (setq
-   ;; org-hide-leading-stars t
-   org-ellipsis "⤵"
-   org-highlight-latex-and-related '(latex))
+  (setq org-highlight-latex-and-related '(latex)
+        org-ellipsis "⤵"
+        ;; org-hide-leading-stars t
+        )
 
   ;; EDITING BEAHVIOURS
-  (setq
-   org-yank-adjusted-subtrees t ;; adjust level while pasting, if not wanted do C-u C-y
-   )
+  ;; adjust level while pasting, if not wanted do C-u C-y
+  (setq org-yank-adjusted-subtrees t)
 
   ;; LINKS
   ;; http://orgmode.org/manual/Code-evaluation-security.html
@@ -31,8 +28,10 @@
   ;;         ))
 
   :config
+
+  ;; NB: org-mode loading specifity
+  ;; http://orgmode.org/worg/org-faq.html#load-org-after-setting-variables
   (require 'org-install)
-  (require 'org-habit)
 
   ;; TIME TRACKING
   ;; [[http://orgmode.org/manual/Clocking-work-time.html]]
@@ -74,7 +73,7 @@
   )
 
 
-;; ------------------------------------------------------------------------
+
 ;; CAPTURE
 
 (use-package org-capture
@@ -97,7 +96,7 @@
 	org-mobile-directory "~/Dropbox/textfiles/MobileOrg"))
 
 
-;; ------------------------------------------------------------------------
+
 ;; EXPORT
 
 (use-package ox
@@ -137,7 +136,7 @@
 ;; TODO: https://github.com/fniessen/org-html-themes
 
 
-;; ------------------------------------------------------------------------
+
 ;; BABEL
 
 (use-package org-babel
@@ -165,7 +164,7 @@
                                org-babel-load-languages))
 
 
-;; ------------------------------------------------------------------------
+
 ;; AGENDA
 
 (use-package org-babel
@@ -177,6 +176,16 @@
   :bind (("C-c a" . org-agenda)))
 
 
-;; ------------------------------------------------------------------------
+
+;; HABIT
+
+(use-package org-habit
+  :ensure nil
+  :no-require
+  :demand
+  :after org)
+
+
+
 
 (provide 'init-org)
