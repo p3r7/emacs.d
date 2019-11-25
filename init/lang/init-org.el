@@ -52,12 +52,10 @@
   (org-display-inline-images t t)
 
   ;; BABEL
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((C . t)))
   (when (executable-find "python")
-    (org-babel-do-load-languages
-     'org-babel-load-languages '((python . t))))
+    (add-to-list 'org-babel-load-languages '(python . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               org-babel-load-languages)
   (setq org-src-fontify-natively t
 	org-src-tab-acts-natively t
 	org-confirm-babel-evaluate nil
