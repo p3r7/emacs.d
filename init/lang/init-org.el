@@ -18,20 +18,6 @@
    org-yank-adjusted-subtrees t ;; adjust level while pasting, if not wanted do C-u C-y
    )
 
-  ;; CAPTURE
-  ;; (setq org-default-notes-file (concat org-directory "/captures.org")
-  ;; 	org-agenda-files (list (concat org-directory "/tasks.org")
-  ;; 			       (concat org-directory "/captures.org")))
-
-  ;; CAPTURE: MobileOrg
-  (setq org-mobile-inbox-for-pull "~/Dropbox/textfiles/mobileorg.org"
-	org-mobile-directory "~/Dropbox/textfiles/MobileOrg")
-
-  ;; EXPORT
-  (setq
-   org-export-with-section-numbers nil
-   org-html-validation-link nil)
-
   ;; LINKS
   ;; http://orgmode.org/manual/Code-evaluation-security.html
   ;; Safe as long as I only use my own org files
@@ -47,25 +33,6 @@
   :config
   (require 'org-install)
   (require 'org-habit)
-
-  ;; DISPLAY
-  (org-display-inline-images t t)
-
-  ;; BABEL
-  (when (featurep 'ob-sh)
-    (add-to-list 'org-babel-load-languages '(sh . t)))
-  (add-to-list 'org-babel-load-languages '(calc . t))
-  (add-to-list 'org-babel-load-languages '(gnuplot . t))
-  (add-to-list 'org-babel-load-languages '(sql . t))
-  (add-to-list 'org-babel-load-languages '(sqlite . t))
-  (when (executable-find "python")
-    (add-to-list 'org-babel-load-languages '(python . t)))
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               org-babel-load-languages)
-  (setq org-src-fontify-natively t
-	org-src-tab-acts-natively t
-	org-confirm-babel-evaluate nil
-	org-edit-src-content-indentation 0)
 
   ;; TIME TRACKING
   ;; [[http://orgmode.org/manual/Clocking-work-time.html]]
@@ -104,31 +71,56 @@
   ;; 	    org-fontify-quote-and-verse-blocks
   ;; 	    )
   ;;     (setq prf/org/wysiwyg-active t)))
-
   )
 
 
 ;; ------------------------------------------------------------------------
-;; FORMAT
+;; CAPTURE
 
-;; http://stackoverflow.com/questions/17621495/emacs-org-display-inline-images
-(org-display-inline-images t t)
+(use-package org-capture
+  :ensure nil
+  :no-require
+  :demand
+  :after org
+
+  :bind (("C-c c" . org-capture)
+         ("C-c l" . org-store-link)
+         ("C-c i" . org-insert-link))
+
+  :init
+
+  ;; (setq org-default-notes-file (concat org-directory "/captures.org")
+  ;; 	org-agenda-files (list (concat org-directory "/tasks.org")
+  ;; 			       (concat org-directory "/captures.org")))
+
+  (setq org-mobile-inbox-for-pull "~/Dropbox/textfiles/mobileorg.org"
+	org-mobile-directory "~/Dropbox/textfiles/MobileOrg"))
 
 
 ;; ------------------------------------------------------------------------
 ;; EXPORT
 
-;; TODO: https://github.com/fniessen/org-html-themes
+(use-package ox
+  :ensure nil
+  :no-require
+  :demand
+  :after org
+
+  :init
+
+  (setq
+   org-export-with-section-numbers nil
+   org-html-validation-link nil))
 
 (use-package htmlize
-  :after (org))
+  :after ox)
 
 (use-package ox-slack
-  :after (org))
+  :after ox)
 
 (use-package ox-jekyll-lite
   :quelpa (ox-jekyll-lite :fetcher github :repo "peterewills/ox-jekyll-lite")
-  :after (org))
+  :after ox)
 
 (defun prf/org-export-to-doc ()
   (interactive)
@@ -142,14 +134,47 @@
 	(org-odt-export-to-odt)
       (message "Missing either soffice and/or zip program(s)."))))
 
+;; TODO: https://github.com/fniessen/org-html-themes
+
 
 ;; ------------------------------------------------------------------------
-;; CAPTURE
+;; BABEL
 
-(define-key global-map "\C-cc" 'org-capture)
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ci" 'org-insert-link)
-(global-set-key "\C-ca" 'org-agenda)
+(use-package org-babel
+  :ensure nil
+  :no-require
+  :demand
+  :after org
+
+  :config
+
+  (setq org-src-fontify-natively t
+	org-src-tab-acts-natively t
+	org-confirm-babel-evaluate nil
+	org-edit-src-content-indentation 0)
+
+  (when (featurep 'ob-sh)
+    (add-to-list 'org-babel-load-languages '(sh . t)))
+  (add-to-list 'org-babel-load-languages '(calc . t))
+  (add-to-list 'org-babel-load-languages '(gnuplot . t))
+  (add-to-list 'org-babel-load-languages '(sql . t))
+  (add-to-list 'org-babel-load-languages '(sqlite . t))
+  (when (executable-find "python")
+    (add-to-list 'org-babel-load-languages '(python . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               org-babel-load-languages))
+
+
+;; ------------------------------------------------------------------------
+;; AGENDA
+
+(use-package org-babel
+  :ensure nil
+  :no-require
+  :demand
+  :after org
+
+  :bind (("C-c a" . org-agenda)))
 
 
 ;; ------------------------------------------------------------------------
