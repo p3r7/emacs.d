@@ -52,7 +52,8 @@
   (org-display-inline-images t t)
 
   ;; BABEL
-  (add-to-list 'org-babel-load-languages '(sh . t))
+  (when (featurep 'ob-sh)
+    (add-to-list 'org-babel-load-languages '(sh . t)))
   (add-to-list 'org-babel-load-languages '(calc . t))
   (add-to-list 'org-babel-load-languages '(gnuplot . t))
   (add-to-list 'org-babel-load-languages '(sql . t))
