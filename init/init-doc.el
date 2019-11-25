@@ -61,7 +61,7 @@
 
 ;; WEBSITES / ARTICLES
 
-(provide 'init-pocket)
+(require 'init-pocket)
 
 
 
