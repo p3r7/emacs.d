@@ -24,7 +24,8 @@
   (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))
 
 
-;; THEMES
+
+;; THEMES
 
 ;; dark
 (use-package chocolate-theme
