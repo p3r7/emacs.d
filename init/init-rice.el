@@ -198,19 +198,17 @@
       ;; (define-key global-map (kbd "C--") 'text-scale-decrease)
       (define-key global-map (kbd "C-°") 'text-scale-decrease)
       (define-key global-map (kbd "C-=")
-	'(lambda()(interactive)(text-scale-set 0)))
-      )
-  (progn
-    (defun zoom-emacs-pre24 (n)
-      "with positive N, increase the font size, otherwise decrease it"
-      (set-face-attribute 'default (selected-frame) :height
-			  (+ (face-attribute 'default :height) (* (if (> n 0) 1 -1) 10))))
-    (global-set-key (kbd "C-+")      '(lambda nil (interactive) (zoom-emacs-pre24 1)))
-    (global-set-key [C-kp-add]       '(lambda nil (interactive) (zoom-emacs-pre24 1)))
-    (global-set-key (kbd "C--")      '(lambda nil (interactive) (zoom-emacs-pre24 -1)))
-    (global-set-key [C-kp-subtract]  '(lambda nil (interactive) (zoom-emacs-pre24 -1)))
-    )
-  )
+	(lambda () (interactive) (text-scale-set 0))))
+
+  (defun zoom-emacs-pre24 (n)
+    "with positive N, increase the font size, otherwise decrease it"
+    (set-face-attribute 'default (selected-frame) :height
+                        (+ (face-attribute 'default :height) (* (if (> n 0) 1 -1) 10))))
+
+  (global-set-key (kbd "C-+")      (lambda () (interactive) (zoom-emacs-pre24 1)))
+  (global-set-key [C-kp-add]       (lambda () (interactive) (zoom-emacs-pre24 1)))
+  (global-set-key (kbd "C--")      (lambda () (interactive) (zoom-emacs-pre24 -1)))
+  (global-set-key [C-kp-subtract]  (lambda () (interactive) (zoom-emacs-pre24 -1))))
 
 
 ;; VISUAL ENHANCEMENTS
