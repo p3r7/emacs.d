@@ -193,28 +193,43 @@
 
 
 
-;; ZOOM
+
+;; ZOOM
 
-(if (>= emacs-major-version 24)
-    (progn
-      (define-key global-map (kbd "C-+") 'text-scale-increase)
-      ;; (define-key global-map (kbd "C--") 'text-scale-decrease)
-      (define-key global-map (kbd "C-°") 'text-scale-decrease)
-      (define-key global-map (kbd "C-=")
-	(lambda () (interactive) (text-scale-set 0))))
+(if (fboundp #'text-scale-set)
+
+    (defun prf/text-scale-reset ()
+      (interactive)
+      (text-scale-set 0))
+
+  (defvar prf/default-text-height (face-attribute 'default :height))
 
   (defun zoom-emacs-pre24 (n)
     "with positive N, increase the font size, otherwise decrease it"
     (set-face-attribute 'default (selected-frame) :height
                         (+ (face-attribute 'default :height) (* (if (> n 0) 1 -1) 10))))
 
-  (global-set-key (kbd "C-+")      (lambda () (interactive) (zoom-emacs-pre24 1)))
-  (global-set-key [C-kp-add]       (lambda () (interactive) (zoom-emacs-pre24 1)))
-  (global-set-key (kbd "C--")      (lambda () (interactive) (zoom-emacs-pre24 -1)))
-  (global-set-key [C-kp-subtract]  (lambda () (interactive) (zoom-emacs-pre24 -1))))
+  (defun prf/text-scale-reset ()
+    (interactive)
+    (set-face-attribute 'default (selected-frame)
+                        :height prf/default-text-height))
+
+  (defun prf/text-scale-increase () (interactive) (zoom-emacs-pre24 1))
+  (defun prf/text-scale-decrease () (interactive) (zoom-emacs-pre24 -1))
+
+  (defalias 'text-scale-increase #'prf/text-scale-increase)
+  (defalias 'text-scale-decrease #'prf/text-scale-decrease))
+
+(define-key global-map (kbd "C-+") #'text-scale-increase)
+;; (define-key global-map [C-kp-add] #'text-scale-increase)
+;; (define-key global-map (kbd "C--") 'text-scale-decrease)
+(define-key global-map (kbd "C-°") #'text-scale-decrease)
+;; (define-key global-map [C-kp-subtract] #'text-scale-decrease)
+(define-key global-map (kbd "C-=") #'prf/text-scale-reset)
 
 
-;; VISUAL ENHANCEMENTS
+
+;; VISUAL ENHANCEMENTS
 
 (use-package rainbow-mode
   :hook
