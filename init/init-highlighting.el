@@ -1,10 +1,13 @@
 
-;; Multiple highlights
-;; [[http://www.emacswiki.org/emacs/HighlightTemporarily]]
-;; - [X] Hi Lock
-;;   TODO: [[https://github.com/sensorflo/sensorflo-emacs/blob/master/misc/hi-lock-ext.el]]
+(defvar prf/highlight-implem 'hi-lock)
+
+(cond
+ ((eq prf/highlight-implem 'highlight-thing)
+  (require 'init-highlight-thing))
+ (t
+  (require 'init-hi-lock)))
 
 
-(require 'init-hi-lock)
+
 
 (provide 'init-highlighting)
