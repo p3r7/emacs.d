@@ -233,15 +233,11 @@
 ;; VISUAL ENHANCEMENTS
 
 (use-package rainbow-mode
+  ;; NB: disabled as highlights even partial symbols...
+  :disable
   :hook
   ((prog-mode conf-mode) . rainbow-mode)
-  :delight
-  ;; :config
-  ;; (defun prf/rainbow-mode-prog-mode-hook ()
-  ;;   (rainbow-mode 1))
-  ;; (add-hook 'prog-mode-hook 'prf/rainbow-mode-prog-mode-hook)
-  ;; (add-hook 'conf-mode-hook 'prf/rainbow-mode-prog-mode-hook)
-  )
+  :delight)
 
 ;; Preview faces at their definition
 ;; - [X] https://github.com/Fanael/highlight-defined
