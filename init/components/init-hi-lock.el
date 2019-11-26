@@ -13,27 +13,18 @@
   (setq hi-lock-face-defaults
         '("hi-yellow" "hi-pink" "hi-green" "hi-blue"))
 
-  (defvar hi-face-current nil)
-
-
   :config
-
-  (setq hi-face-current hi-lock-face-defaults)
-
-  (defun prf/hi-face-loop ()
-    (setq hi-face-current (cdr hi-lock-face-defaults))
-    (when (null hi-face-current)
-      (setq hi-face-current hi-faces)))
 
   (defun highlight-symbol-at-point-or-region ()
     "Highlight symbol at point of slected region"
     (interactive)
     (if (use-region-p)
-        (progn
-          (highlight-phrase (buffer-substring (region-beginning) (region-end)) (intern (car hi-face-current)))
+        (let* ((hi-lock-auto-select-face t)
+               (face (hi-lock-read-face-name)))
+          (or (facep face) (setq face 'hi-yellow))
+          (highlight-phrase (buffer-substring (region-beginning) (region-end)) face)
           (cua-set-mark))
-      (highlight-symbol-at-point))
-    (prf/hi-face-loop))
+      (highlight-symbol-at-point)))
 
   (defun unhighlight-all ()
     "Unhighlight all highlightened sexp in current buffer"
