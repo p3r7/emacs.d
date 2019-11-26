@@ -111,8 +111,7 @@
 
 ;; SHELL
 
-(when (>= emacs-major-version 25)
-  (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window)))
+(require 'init-shell)
 
 (defun local-root-shell ()
   (interactive)
