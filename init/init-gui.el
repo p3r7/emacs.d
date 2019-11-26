@@ -174,11 +174,6 @@
 ;; -------------------------------------------------------------------------
 ;; CUSTOM FACES
 
-;; "Set up highlighting of special words for selected modes."
-;; [[http://www.metasyntax.net/unix/dot-emacs.html]]
-;; for colors, see [[http://raebear.net/comp/emacscolors.html]]
-;; TODO: look for this [[http://www.emacswiki.org/emacs/download/fic-mode.el]]
-
 (use-package prf-highlight-keyword
   :load-path "~/.emacs.d/plugins/prf-highlight-keyword")
 
