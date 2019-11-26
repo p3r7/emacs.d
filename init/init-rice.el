@@ -234,7 +234,7 @@
 
 (use-package rainbow-mode
   ;; NB: disabled as highlights even partial symbols...
-  :disable
+  :disabled
   :hook
   ((prog-mode conf-mode) . rainbow-mode)
   :delight)
