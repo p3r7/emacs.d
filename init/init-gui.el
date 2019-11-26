@@ -178,29 +178,9 @@
 ;; [[http://www.metasyntax.net/unix/dot-emacs.html]]
 ;; for colors, see [[http://raebear.net/comp/emacscolors.html]]
 ;; TODO: look for this [[http://www.emacswiki.org/emacs/download/fic-mode.el]]
-(make-face 'font-lock-warning-face-alt)
-(set-face-attribute 'font-lock-warning-face-alt nil :foreground "White" :background "Firebrick")
-(let ((pattern "\\<\\(FIXME\\|TODO\\|TEST\\|NOTE\\|NOTES\\|NB\\|WARN\\|WARNING\\|BUG\\|HACK\\|ASK\\|EYESORE\\|BAD\\|FIXME\\|REVIEW\\):"))
-  (mapc
-   (lambda (mode)
-     ;;     (font-lock-add-keywords mode `((,pattern 1 'font-lock-warning-face-alt prepend))))
-     (font-lock-add-keywords mode `((,pattern 1 'font-lock-warning-face prepend))))
-   '(ada-mode c-mode emacs-lisp-mode java-mode haskell-mode web-mode
-              literate-haskell-mode html-mode lisp-mode php-mode python-mode ruby-mode tcl-mode
-              scheme-mode sgml-mode sh-mode sml-mode markdown-mode org-mode)))
 
-(make-face 'font-lock-ok-face)
-(set-face-attribute 'font-lock-ok-face nil :bold t :weight 'bold :inherit font-lock-type-face)
-(make-face 'font-lock-ok-face-alt)
-(set-face-attribute 'font-lock-ok-face-alt nil :foreground "White" :background "LightGreen")
-(let ((pattern "\\<\\(DONE\\|OK\\|GOOD\\|SOLVED\\|FIXED\\|IDEA\\):"))
-  (mapc
-   (lambda (mode)
-     (font-lock-add-keywords mode `((,pattern 1 'font-lock-ok-face prepend))))
-   '(ada-mode c-mode emacs-lisp-mode java-mode haskell-mode web-mode
-              literate-haskell-mode html-mode lisp-mode php-mode python-mode ruby-mode tcl-mode
-              scheme-mode sgml-mode sh-mode sml-mode markdown-mode org-mode)))
-
+(use-package prf-highlight-keyword
+  :load-path "~/.emacs.d/plugins/prf-highlight-keyword")
 
 
 ;; -------------------------------------------------------------------------
