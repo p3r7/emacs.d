@@ -242,10 +242,8 @@
 ;; Preview faces at their definition
 ;; - [X] https://github.com/Fanael/highlight-defined
 ;;   Additionally provides faces for defined symbols.
+;;   moved to init/lang/init-elisp.el
 ;; - [ ] https://github.com/Fuco1/fontify-face
-(use-package highlight-defined
-  :init
-  (setq highlight-defined-face-use-itself 't))
 
 (when (fboundp 'prettify-symbols-mode)
   (setq prettify-symbols-unprettify-at-point 'right-edge))

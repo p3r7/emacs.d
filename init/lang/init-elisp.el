@@ -77,6 +77,16 @@
 
 ;; FONT LOCK
 
+;; NB: might conflict w/ lisp-extra-font-lock ?
+;; primarilly wanted to highlight faces at definition
+;; don't seem to work, though
+(use-package highlight-defined
+  :after (elisp-mode)
+  :hook (emacs-lisp-mode . highlight-defined-mode)
+  :init
+  (setq highlight-defined-face-use-itself 't))
+
+
 (use-package lisp-extra-font-lock
   :after (elisp-mode)
   :hook (emacs-lisp-mode . lisp-extra-font-lock-mode))
