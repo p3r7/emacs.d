@@ -44,25 +44,63 @@
 
 
 
-;; NAVIGATION / REFACTORING HELPERS
+;; HELP
 
-(use-package macrostep
-  :after (elisp-mode)
-  :bind (:map emacs-lisp-mode-map
-	      ("C-c e m" . macrostep-expand)))
+(use-package helpful
+  :bind (("C-h f" . helpful-callable)
+	 ("C-h v" . helpful-variable)
+	 ("C-h k" . helpful-key)
+	 ("C-h o" . helpful-at-point)
+	 ("C-h F" . helpful-function)))
+
+(use-package which-key
+  :delight
+  :config
+  (which-key-mode))
+
+
+
+;; CODE NAVIGATION
+
+;; NB: generic stuff in ~/.emacs.d/init/init-file-navigation.el
+
+;; stolen from John Wiegley
+(define-prefix-command 'prf/lisp-find-map)
+(bind-key "C-h e" #'prf/lisp-find-map)
+(bind-key "C-h e e" #'view-echo-area-messages)
+(bind-key "C-h e f" #'find-function)
+(bind-key "C-h e k" #'find-function-on-key)
+(bind-key "C-h e l" #'find-library)
+(bind-key "C-h e v" #'find-variable)
+(bind-key "C-h e V" #'apropos-value)
+
+(use-package find-func
+  :ensure nil
+  :demand
+  :bind ("C-h C-F" . find-function))
 
 (use-package elisp-slime-nav
-  :after (elisp-mode)
+  :after elisp-mode
   :diminish
   :commands (elisp-slime-nav-mode
-             elisp-slime-nav-find-elisp-thing-at-point))
+             elisp-slime-nav-find-elisp-thing-at-point)
+  :bind ("C-h C-f" . elisp-slime-nav-find-elisp-thing-at-point))
+
+
+
+;; NAVIGATION / REFACTORING
+
+(use-package macrostep
+  :after elisp-mode
+  :bind (:map emacs-lisp-mode-map
+	      ("C-c e m" . macrostep-expand)))
 
 
 
 ;; EVALUATION
 
 (use-package eval-expr
-  :after (elisp-mode)
+  :after elisp-mode
   :bind ("M-:" . eval-expr)
   :config
   (defvar prf/eval-expr-minibuffer-setup-hook nil)
@@ -81,19 +119,19 @@
 ;; primarilly wanted to highlight faces at definition
 ;; don't seem to work, though
 (use-package highlight-defined
-  :after (elisp-mode)
+  :after elisp-mode
   :hook (emacs-lisp-mode . highlight-defined-mode)
   :init
   (setq highlight-defined-face-use-itself 't))
 
 
 (use-package lisp-extra-font-lock
-  :after (elisp-mode)
+  :after elisp-mode
   :hook (emacs-lisp-mode . lisp-extra-font-lock-mode))
 
 
 (use-package cl-lib-highlight
-  :after (elisp-mode)
+  :after elisp-mode
   :config
 
   (defvar prf/cl-lib-highlight-valid 'prf/cl-lib-highlight-valid
@@ -140,11 +178,6 @@
 
   (prf/cl-lib-highlight-initialize)
   (cl-lib-highlight-warn-cl-initialize))
-
-
-
-
-(require 'init-eldoc)
 
 
 
