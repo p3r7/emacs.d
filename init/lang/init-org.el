@@ -163,6 +163,9 @@
   (org-babel-do-load-languages 'org-babel-load-languages
                                org-babel-load-languages))
 
+(use-package poly-org
+  :after polymode)
+
 
 
 ;; AGENDA
