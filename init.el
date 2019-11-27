@@ -160,7 +160,7 @@
 (require 'init-scrolling)
 (require 'init-hydra)
 (require 'init-completion-at-point)
-(require 'init-completion-system)
+(require 'init-completion-backend)
 
 
 ;; LANGUAGES & FORMATS
