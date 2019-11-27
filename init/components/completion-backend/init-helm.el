@@ -77,18 +77,23 @@ On error (read-only), quit without selecting."
   (when (eq prf/fav-completion-system 'helm)
     (helm-mode 1)))
 
+
+
+;; INCREMENTAL SEARCH
+
 (use-package helm-grep
   :ensure nil
-  :after (helm)
+  :after helm
   :bind (:map helm-grep-mode-map
-	 ("<return>" . helm-grep-mode-jump-other-window)
-	 ("p" . helm-grep-mode-jump-other-window-backward)
-	 ("n" . helm-grep-mode-jump-other-window-forward)))
+	      ("<return>" . helm-grep-mode-jump-other-window)
+	      ("p" . helm-grep-mode-jump-other-window-backward)
+	      ("n" . helm-grep-mode-jump-other-window-forward)))
 
+(use-package helm-swoop
+  :after helm)
 
-;; (use-package helm-swoop
-;;   :after (helm))
+;; NB: (helm-)org-rifle in ~/.emacs.d/init/lang/init-org.el
 
-
+
 
 (provide 'init-helm)
