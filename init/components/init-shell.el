@@ -36,6 +36,7 @@ LINE-STYLE (for example 'w lp'); insert the plot in the buffer."
 
 
 (use-package readline-complete
+  :disabled
   :ensure nil
   :demand
   :after (auto-complete company)
