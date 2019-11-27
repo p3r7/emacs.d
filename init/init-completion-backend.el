@@ -6,14 +6,14 @@
 
 ;; WRAPPER
 
-(use-package prf-completion-system
-  :load-path "~/.emacs.d/plugins/prf-completion-system"
+(use-package prf-completion-backend
+  :load-path "~/.emacs.d/plugins/prf-completion-backend"
   :after (helm ivy lusty-explorer)
 
   :init
-  (setq prf/M-x-completion-system 'helm
-        prf/find-file-completion-system 'lusty
-        prf/switch-to-buffer-completion-system 'lusty)
+  (setq prf/M-x-completion-backend 'helm
+        prf/find-file-completion-backend 'lusty
+        prf/switch-to-buffer-completion-backend 'lusty)
   :bind (("C-x C-f" . prf/find-file-fun)
 	 ("C-x f" . prf/find-file-fun)
 	 ("C-x b" . prf/switch-to-buffer-fun)
