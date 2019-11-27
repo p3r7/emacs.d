@@ -190,5 +190,14 @@
 
 
 
+;; INDEX & SEARCH
+
+(use-package helm-org-rifle
+  :after (org helm))
+
+(require 'init-deft)
+
+
+
 
 (provide 'init-org)

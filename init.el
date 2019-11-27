@@ -261,7 +261,6 @@
 
 (require 'init-bookmark+)
 (require 'init-register)
-(require 'init-deft)
 
 
 ;; SHORTCUTS
