@@ -84,10 +84,11 @@ On error (read-only), quit without selecting."
 (use-package helm-grep
   :ensure nil
   :after helm
-  :bind (:map helm-grep-mode-map
-	      ("<return>" . helm-grep-mode-jump-other-window)
-	      ("p" . helm-grep-mode-jump-other-window-backward)
-	      ("n" . helm-grep-mode-jump-other-window-forward)))
+  :bind (
+         :map helm-grep-mode-map
+	 ("<return>" . helm-grep-mode-jump-other-window)
+	 ("p" . helm-grep-mode-jump-other-window-backward)
+	 ("n" . helm-grep-mode-jump-other-window-forward)))
 
 (use-package helm-swoop
   :after helm)
