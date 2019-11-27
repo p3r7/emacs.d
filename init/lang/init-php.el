@@ -1,27 +1,45 @@
-;; We use an old ass version of php-mode bundled inside nxhtml-mode.
-;; The reason is that modern php-mode versions have crappy as hell indentation.
-;; Even when forcing it back w/ prf/indentation-php-mode-hook, it craps with
-;; functions outside of classes.
-
-(defun prf/indentation-php-mode-hook ()
-  ;; php-mode identation is rather esotheric
-  ;; it misinterprets c-common rules
-  ;; it interprets indent-tabs-mode as indenting w/ spaces...
-  (setq tab-width 4
-	indent-tabs-mode t)
-  (c-set-style "symfony2"))
-
 
 (use-package php-mode
   ;; :load-path "~/.emacs.d/plugins-spe/nxhtml/related"
   :mode "\\.php?\\'"
   :hook (php-mode #'php-enable-default-coding-style))
 
-;; alternative: https://github.com/echosa/phpplus-mode
+
+
+;; COMPLETION AT POINT
+
+;; NB: disabled as causes:
+;; File mode specification error: (error Lisp nesting exceeds ‘max-lisp-eval-depth’)
+
+(use-package ac-php
+  :disabled
+  ;; :hook (php-mode . prf/php-mode-completion-generic-hook)
+  :after (auto-complete company)
+
+  :init
+  (defun prf/php-mode-completion-generic-hook ()
+    (ac-php-core-eldoc-setup)
+    (define-key php-mode-map (kbd "M-]")
+      #'ac-php-find-symbol-at-point)
+    (define-key php-mode-map (kbd "M-[")
+      #'ac-php-location-stack-back))
+
+  (defun prf/php-mode-ac-hook ()
+    (setq ac-sources '(ac-source-php)))
+
+  (defun prf/php-mode-company-hook ()
+    (set (make-local-variable 'company-backends)
+         '((company-ac-php-backend company-dabbrev-code)
+           company-capf company-files)))
+
+  :config
+  (add-hook 'php-mode-hook #'prf/php-mode-completion-generic-hook)
+  (when (member prf/fav-completion-at-point '(ac auto-complete))
+    (add-hook 'php-mode-hook #'prf/php-mode-ac-hook))
+  (when (eq prf/fav-completion-at-point 'company)
+    (add-hook 'php-mode-hook #'prf/php-mode-company-hook)))
 
 
-;;(eval-after-load 'php-mode
-;;    (require 'php-extras))
-
+
 
 (provide 'init-php)
