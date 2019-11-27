@@ -146,11 +146,6 @@
 ;; http://stackoverflow.com/questions/12166295/disable-all-paging-in-git
 ;; (setenv "PAGER" "cat")
 
-;; [[#readline-complete]] -> auto-complete in shell
-;; (setq explicit-shell-file-name "bash"
-;;       explicit-bash-args '("-c" "export EMACS=; stty echo; bash")
-;;       comint-process-echoes t)
-
 
 
 ;; TEMP SHELL BUFFERS
