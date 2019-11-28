@@ -1,6 +1,5 @@
 
-;; ------------------------------------------------------------------------
-;; GENERAL
+;; GENERAL
 
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)
@@ -32,26 +31,22 @@
 ;; REVIEW: what about c-electric-delete-forward on recent emacs versions
 
 
-;; ------------------------------------------------------------------------
-;; MULTIPLE CURSORS
+;; MULTIPLE CURSORS
 
 (require 'init-mc)
 
 
-;; ------------------------------------------------------------------------
-;; SMART PARENTHESIS
+;; SMART PARENTHESIS
 
 ;; https://www.emacswiki.org/emacs/AutoPairs
 
 (require 'init-smartparens)
 ;; (require 'init-autopair)
 ;; (require 'init-wrap-region)
-;; NB: conflict betweenwrap-region and autopair-autowrap
+;; NB: conflict between wrap-region and autopair-autowrap
 
 
-
-;; ------------------------------------------------------------------------
-;; AUTOMATIC HIGHLIGHTING
+;; AUTOMATIC HIGHLIGHTING
 
 ;; Last paste highlighted
 ;; - [ ] [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Highlight-Interactively.html]]
@@ -66,14 +61,12 @@
 ;; - [ ] [[http://www.emacswiki.org/emacs/MarkerPens]]
 
 
-;; ------------------------------------------------------------------------
-;; MANUAL HIGHLIGHTING
+;; MANUAL HIGHLIGHTING
 
 (require 'init-highlighting)
 
 
-;; ------------------------------------------------------------------------
-;; TIMESTAMPS
+;; TIMESTAMPS
 
 ;; Smart timestamps
 (setq
@@ -98,5 +91,7 @@ See help of `format-time-string' for possible replacements")
   (interactive)
   (insert (format-time-string datetime-format-compact (current-time))))
 
+
+
 
 (provide 'init-edition)
