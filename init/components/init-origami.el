@@ -8,6 +8,9 @@
     (local-set-key (kbd "C-c <up>")    'origami-close-all-nodes)
     (local-set-key (kbd "C-c <down>")  'origami-open-all-nodes))
 
-  (add-hook 'prog-mode-hook 'prf/origami-prog-mode-hook))
+  (add-hook 'prog-mode-hook #'prf/origami-prog-mode-hook))
+
+
+
 
 (provide 'init-origami)

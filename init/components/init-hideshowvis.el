@@ -1,9 +1,4 @@
 
-;; [[http://www.emacswiki.org/emacs/HideShow]]
-;; https://github.com/shanecelis/hideshow-org  http://gnufool.blogspot.fr/2009/03/make-hideshow-behave-more-like-org-mode.html
-;; https://gist.github.com/doitian/1571162
-;; (require 'hideshow-fringe)
-
 (use-package hideshowvis
   :init
   (setq hideshowvis-ignore-same-line t) ;; breaks stuff
@@ -19,6 +14,8 @@
     (local-set-key (kbd "C-c <down>")  'hs-show-all))
 
   (add-hook 'c-mode-common-hook #'prf/hideshowvis-c-mode-common-hook))
+
+
 
 
 (provide 'init-hideshowvis)
