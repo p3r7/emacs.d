@@ -46,22 +46,18 @@
 ;; NB: conflict between wrap-region and autopair-autowrap
 
 
-;; AUTOMATIC HIGHLIGHTING
+;; HIGHLIGHT CHANGES
 
-;; Last paste highlighted
-;; - [ ] [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Highlight-Interactively.html]]
-;; - [X] volatile-highlights
-;; NOTE: disabled as misbehaving randomly
-;; (require 'volatile-highlights)
-;; (eval-after-load "volatile-highlights"
-;; '(volatile-highlights-mode 1))
+;; NB: for displaying all edits in red, use the standard `highlight-change-mode'
 
-;; - [ ] http://nschum.de/src/emacs/highlight-symbol/ https://github.com/nschum/highlight-symbol.el
-;; -> nice but only for symbols (less nice) -> use it by extending previous comand when nothing selected ?
-;; - [ ] [[http://www.emacswiki.org/emacs/MarkerPens]]
+;; NOTE: used to be disabled as misbehaved randomly
+(use-package volatile-highlights
+  :delight
+  :config
+  (volatile-highlights-mode 1))
 
 
-;; MANUAL HIGHLIGHTING
+ ;; MANUAL HIGHLIGHTING
 
 (require 'init-highlighting)
 
