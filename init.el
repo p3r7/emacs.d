@@ -157,6 +157,7 @@
 ;; GENERAL BEHAVIOUR
 
 (require 'init-main)
+(require 'init-ux)
 (require 'init-scrolling)
 (require 'init-hydra)
 (require 'init-completion-at-point)
