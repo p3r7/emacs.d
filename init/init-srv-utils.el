@@ -116,10 +116,9 @@
 (defun local-root-shell ()
   (interactive)
   (with-temp-buffer
-    (cd "/sudo::")
+    (cd (concat "/sudo::" default-directory))
     (let ((current-prefix-arg '(4)))
-      (shell (generate-new-buffer-name "*root@localhost*")))
-    (cd dd-old)))
+      (shell (generate-new-buffer-name "*root@localhost*")))))
 
 ;;TODO: lotta stuff don't work as expected
 (add-hook 'shell-mode-hook
