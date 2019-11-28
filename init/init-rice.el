@@ -155,6 +155,9 @@
   ;;                                         (spacemacs/update-theme)))
   )
 
+;; allows converting emacs older (color-)themes to ~/.Xresources
+(use-package color-theme-x)
+
 
 
 ;; HIGHLIGHT CURRENT WINDOW
