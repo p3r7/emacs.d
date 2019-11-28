@@ -4,7 +4,7 @@
 (require 'prf-string)
 (require 'dired)
 
-;; ------------------------------------------------------------------------
+
 ;; DIRED
 
 ;; NB: `G' not taken into account for remote dirs but interpreted locally (on Windows at least)
@@ -14,13 +14,14 @@
 (setq prf/dired-listing-switches "-alhG")
 
 
-;; ------------------------------------------------------------------------
+
 ;; TRAMP
 
 (when (executable-find "pscp")
   (setq tramp-default-method "pscp"))
 
-;; ------------------------------------------------------------------------
+
+
 ;; FORMAT
 
 ;; DONE: defautl coding system tramp -> unix
@@ -43,7 +44,8 @@
 (when (file-exists-p prf/quelpa-tar-executable)
   (setq quelpa-build-tar-executable prf/quelpa-tar-executable))
 
-;; ------------------------------------------------------------------------
+
+
 ;; TOOLS
 
 (use-package w32-browser
@@ -60,8 +62,8 @@
   (define-key dired-mode-map (kbd "E") 'prf/show-in-file-explorer))
 
 
-(setq prf/setup/app/bash
-      (executable-find "bash"))
+(defvar prf/setup/app/bash
+  (executable-find "bash"))
 ;; (if (> (length prf/setup/app/bash) 0)
 ;; (progn
 ;; (setq shell-file-name "bash")
@@ -70,24 +72,25 @@
 ;; )
 ;; )
 
+(use-package w32shell
+  :quelpa (w32shell :url "https://gist.githubusercontent.com/johnfredcee/1097145/raw/0b9995e00f7d239dd27bfd60b841760389ffd1b9/w32shell.el" :fetcher url))
 
-;; ------------------------------------------------------------------------
-;; CYGWIN
 
-
+;; CYGWIN
 
 (when (executable-find "cygpath")
   (setq cygwin-root (replace-regexp-in-string "/bin/cygpath.exe" "" (executable-find "cygpath")))
   (require 'init-cygwin-integration))
 
+;;(prf/require-plugin 'setup-cygwin)
 
-;; ------------------------------------------------------------------------
-;; KEYS
+
+ ;; KEYS
 
 (setq w32-pass-lwindow-to-system nil
       ;; w32-pass-rwindow-to-system nil
       w32-pass-apps-to-system nil
-      w32-lwindow-modifier 'super ; Left Windows key
+      w32-lwindow-modifier 'super       ; Left Windows key
       ;; w32-rwindow-modifier 'super ; Right Windows key
       ;; w32-apps-modifier 'hyper
       )
@@ -99,33 +102,29 @@
 (w32-unregister-hot-key (kbd "<s-r>"))
 (w32-unregister-hot-key (kbd "<s-n>"))
 (w32-unregister-hot-key (kbd "<s-t>"))
+;; (w32-unregister-hot-key (kbd "<s-drag-mouse-1>"))
 
 
-;; ------------------------------------------------------------------------
-;; SHELLS
+;; SHELLS
 
 (with-eval-after-load 'prf-tramp
-  (setq prf/tramp/local-shell-bin/cmd shell-file-name)
+  (defvar prf/tramp/local-shell-bin/cmd shell-file-name)
   (defun prf/tramp/shell/cmd (&optional path)
     (interactive)
     (prf/tramp/shell path prf/tramp/local-shell-bin/cmd)))
 
 
-;; ------------------------------------------------------------------------
-;; CONFIG FILES
+;; CONFIG FILES
 
 ;; AutoHotKey
 (defun edit-dot-ahk () (interactive)
        (find-file (concat "c:/Users/" (getenv "USERNAME") "/Documents/AutoHotkey.ahk")))
-;; (global-set-key (kbd "C-<f3>") 'edit-dot-ahk)
-
-
 
 (defun edit-dot-dosrc () (interactive)
        (find-file (concat "c:/Users/" (getenv "USERNAME") "/Documents/dosrc.bat")))
 
 
-;; ------------------------------------------------------------------------
+
 ;; FULLSCREEN
 
 ;; Fullscreen in windows
@@ -137,8 +136,8 @@
 ;; (global-set-key (kbd "M-<f11>") 'toggle-full-screen-topmost)
 ;; - method  3, use toggle-frame-fullscreen from frame.el
 
-;; ------------------------------------------------------------------------
-;; EMACS DAEMON
+
+;; EMACS DAEMON
 
 ;; Pseudo emacs-daemon behaviour
 ;;(require 'server-mode) ;; unecessary ?
@@ -165,19 +164,14 @@
 (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
 
 
-;; ------------------------------------------------------------------------
-;; FONT
+
+;; DEFAULT FONT
 
 (setq
  prf/font "-outline-Consolas-normal-r-normal-normal-12-97-96-96-c-*-iso8859-1"
  inhibit-compacting-font-caches t)
 
-;; ------------------------------------------------------------------------
 
-;; CYGWIN
-
-;;(prf/require-plugin 'setup-cygwin)
-
-;; ------------------------------------------------------------------------
+
 
 (provide 'init-w32)
