@@ -18,7 +18,7 @@
     (local-set-key (kbd "C-c <up>")    'hs-hide-all)
     (local-set-key (kbd "C-c <down>")  'hs-show-all))
 
-  (add-hook 'c-mode-common-hook 'prf/origami-prog-mode-hook))
+  (add-hook 'c-mode-common-hook #'prf/hideshowvis-c-mode-common-hook))
 
 
 (provide 'init-hideshowvis)
