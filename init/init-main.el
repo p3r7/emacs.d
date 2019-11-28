@@ -16,6 +16,9 @@
   (let ((use-dialog-box nil))
     ad-do-it))
 
+(when (boundp 'confirm-kill-processes)
+  (setq confirm-kill-processes nil))
+
 (global-set-key (kbd "C-z")
 		(lambda () (interactive)
                   (unless window-system (suspend-frame))))
