@@ -1,10 +1,11 @@
 
 (require 'dash)
 
-;; -------------------------------------------------------------------------
-;; INTERRACTIONS
-
 (setq ring-bell-function 'ignore)
+
+
+
+;; USER INTERRACTIONS: PROMPT
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (defadvice yes-or-no-p (around prevent-dialog activate)
@@ -16,8 +17,24 @@
   (let ((use-dialog-box nil))
     ad-do-it))
 
+
+;; USER INTERRACTIONS: KILLING
+
 (when (boundp 'confirm-kill-processes)
   (setq confirm-kill-processes nil))
+
+(defun prf/kill-this-buffer ()
+  "Kill the current buffer.
+More stable than default `kill-this-buffer'"
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+(global-set-key (kbd "C-x k") #'prf/kill-this-buffer)
+(global-set-key "\C-x\C-k" #'prf/kill-this-buffer)
+
+
+
+;; USER INTERRACTIONS: SUSPENDING
 
 (global-set-key (kbd "C-z")
 		(lambda () (interactive)
@@ -27,21 +44,8 @@
 		(lambda () (interactive)
 		  (unless window-system (suspend-frame))))
 
-
-
-
-;; http://stackoverflow.com/questions/7031051/emacs-notify-when-a-file-has-been-modified-externally
-;; NOTE: not working ?
-(defun auto-revert-remote-file ()
-  (interactive)
-  (if (&& (file-remote-p (buffer-file-name (current-buffer)) (buffer-modified-p (buffer-file-name (current-buffer)))))
-      (revert-buffer t t)))
-
-(defun prf/revert-buffer-no-confirm ()
-  "Revert buffer without confirmation."
-  (interactive) (revert-buffer t t))
-
-(defalias '_rb 'prf/revert-buffer-no-confirm)
+
+;; SECRETS / AUTH
 
 ;; Do not use gpg agent when runing in terminal -> doesn't work on winnt
 (defadvice epg--start (around advice-epg-disable-agent activate)
@@ -62,8 +66,7 @@
   (setq auth-sources prf/auth-sources))
 
 
-;; -------------------------------------------------------------------------
-;; BACKUPS
+;; BACKUPS
 
 ;; Backups
 (setq
@@ -79,23 +82,22 @@
  version-control t)
 
 
-;; -------------------------------------------------------------------------
-;; EDITION
+;; EDITION
 
 (visual-line-mode 1)
 
 
-;; -------------------------------------------------------------------------
-;; SELECTION
+;; SELECTION
 
 (cua-selection-mode t)
 ;(global-set-key (kbd "C-<f4>") 'cua-mode)
 ;; could have used pc-selection-mode as well
 
 ;; FIXME: doesn't work
-(add-hook 'org-mode-hook
-	  '(lambda ()
-	     (define-key org-mode-map (kbd "C-RET") 'org-insert-heading-respect-content)))
+(add-hook
+ 'org-mode-hook
+ (lambda ()
+   (define-key org-mode-map (kbd "C-RET") 'org-insert-heading-respect-content)))
 
 (global-subword-mode t)
 (use-package emacs
@@ -104,15 +106,13 @@
   (subword-mode))
 
 
-;; -------------------------------------------------------------------------
-;; DISABLED COMMANDS
+;; DISABLED COMMANDS
 
 (put 'narrow-to-region 'disabled nil)
 (put 'erase-buffer 'disabled nil)
 
 
-;; -------------------------------------------------------------------------
-;; INDEPENDANT BEHAVIOURS
+;; INDEPENDANT BEHAVIOURS
 
 (use-package files
   :ensure nil
@@ -121,18 +121,11 @@
   (enable-local-variables :all)
   (enable-local-eval t))
 
-(use-package autorevert
-  :ensure nil
-  :hook
-  (after-init-hook . global-auto-revert-mode))
-
-;; not perfect, see [[http://stackoverflow.com/questions/6512086/emacs-reverts-buffer-to-weird-previous-state-with-git-rebase]]
-;; doesn't work on remote servers: [[http://newsgroups.derkeiler.com/Archive/Comp/comp.emacs/2005-08/msg00104.html]]
-
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (mouse-avoidance-mode 'animate)
 
 
+
 
 (provide 'init-main)

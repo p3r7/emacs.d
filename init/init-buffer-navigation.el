@@ -1,6 +1,5 @@
 
-;; ------------------------------------------------------------------------
-;; moving around
+;; CURSOR NAVIGATION
 
 (use-package goto-line-preview
   :bind ([remap goto-line] . goto-line-preview))
@@ -8,9 +7,26 @@
 ;; (require 'init-ace-jump)
 (require 'init-avy)
 
+;; better moving around code blocks
+(defun prf/smart-forward-list ()
+  (interactive)
+  (let ((matching (ignore-errors (scan-lists (point) 1 0))))
+    (if matching
+        (call-interactively #'forward-list)
+      (call-interactively #'up-list))))
 
-;; ------------------------------------------------------------------------
-;; undo history
+(defun prf/smart-backward-list ()
+  (interactive)
+  (let ((matching (ignore-errors (scan-lists (point) -1 0))))
+    (if matching
+        (call-interactively #'backward-list)
+      (call-interactively #'backward-up-list))))
+
+(global-set-key [remap forward-list] #'prf/smart-forward-list)
+(global-set-key [remap backward-list] #'prf/smart-backward-list)
+
+
+;; UNDO
 
 (use-package goto-last-change
   :bind ([(meta p)(u)] . goto-last-change))
@@ -26,18 +42,27 @@
 
 ;; REVIEW: timer trick https://emacs.stackexchange.com/a/47349
 
+(use-package autorevert
+  :ensure nil
+  :hook
+  (after-init-hook . global-auto-revert-mode))
+;; not perfect, see [[http://stackoverflow.com/questions/6512086/emacs-reverts-buffer-to-weird-previous-state-with-git-rebase]]
+;; doesn't work on remote servers: [[http://newsgroups.derkeiler.com/Archive/Comp/comp.emacs/2005-08/msg00104.html]]
 
-;; ------------------------------------------------------------------------
-;; killing
-
-(defun prf/kill-this-buffer ()
-  "Kill the current buffer.
-More stable than default `kill-this-buffer'"
+;; http://stackoverflow.com/questions/7031051/emacs-notify-when-a-file-has-been-modified-externally
+;; NOTE: not working ?
+(defun auto-revert-remote-file ()
   (interactive)
-  (kill-buffer (current-buffer)))
+  (if (&& (file-remote-p (buffer-file-name (current-buffer)) (buffer-modified-p (buffer-file-name (current-buffer)))))
+      (revert-buffer t t)))
 
-(global-set-key (kbd "C-x k") #'prf/kill-this-buffer)
-(global-set-key "\C-x\C-k" #'prf/kill-this-buffer)
+(defun prf/revert-buffer-no-confirm ()
+  "Revert buffer without confirmation."
+  (interactive) (revert-buffer t t))
 
+(defalias '_rb 'prf/revert-buffer-no-confirm)
+
+
+
 
 (provide 'init-buffer-navigation)

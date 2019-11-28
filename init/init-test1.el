@@ -38,27 +38,6 @@
 
 
 ;; -------------------------------------------------------------------------
-;; better moving around code blocks
-
-(defun prf/smart-forward-list ()
-  (interactive)
-  (let ((matching (ignore-errors (scan-lists (point) 1 0))))
-    (if matching
-        (call-interactively #'forward-list)
-      (call-interactively #'up-list))))
-
-(defun prf/smart-backward-list ()
-  (interactive)
-  (let ((matching (ignore-errors (scan-lists (point) -1 0))))
-    (if matching
-        (call-interactively #'backward-list)
-      (call-interactively #'backward-up-list))))
-
-(global-set-key [remap forward-list] #'prf/smart-forward-list)
-(global-set-key [remap backward-list] #'prf/smart-backward-list)
-
-
-;; -------------------------------------------------------------------------
 
 (defun perf/buffer-local-set-key (key command)
   (interactive "KSet key buffer-locally: \nCSet key %s buffer-locally to command: ")
