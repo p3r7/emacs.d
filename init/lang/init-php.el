@@ -1,6 +1,5 @@
 
 (use-package php-mode
-  ;; :load-path "~/.emacs.d/plugins-spe/nxhtml/related"
   :mode "\\.php?\\'"
   :hook (php-mode #'php-enable-default-coding-style))
 
