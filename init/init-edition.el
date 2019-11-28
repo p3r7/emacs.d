@@ -1,5 +1,6 @@
 
-;; GENERAL
+
+;; GENERAL
 
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)
@@ -31,12 +32,14 @@
 ;; REVIEW: what about c-electric-delete-forward on recent emacs versions
 
 
-;; MULTIPLE CURSORS
+
+;; MULTIPLE CURSORS
 
 (require 'init-mc)
 
 
-;; SMART PARENTHESIS
+
+;; SMART PARENTHESIS
 
 ;; https://www.emacswiki.org/emacs/AutoPairs
 
@@ -46,7 +49,8 @@
 ;; NB: conflict between wrap-region and autopair-autowrap
 
 
-;; HIGHLIGHT CHANGES
+
+;; HIGHLIGHT CHANGES
 
 ;; NB: for displaying all edits in red, use the standard `highlight-change-mode'
 
@@ -57,12 +61,14 @@
   (volatile-highlights-mode 1))
 
 
- ;; MANUAL HIGHLIGHTING
+
+;; MANUAL HIGHLIGHTING
 
 (require 'init-highlighting)
 
 
-;; TIMESTAMPS
+
+;; TIMESTAMPS
 
 ;; Smart timestamps
 (setq
