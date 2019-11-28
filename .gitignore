@@ -10,6 +10,9 @@ network-security.data
 elpa/
 quelpa/
 
+# dired thumbnail cache
+image-dired/
+
 # private source files
 custom.el
 init/host/*
@@ -29,6 +32,7 @@ smex-items
 smex.save
 tramp
 .saves
+session.*
 
 # requests
 request/
