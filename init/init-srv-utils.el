@@ -190,7 +190,7 @@
       (file-name-directory filename))))
 
 (defun prf/get-buffer-filename ()
-  (let ((filename (prf/get-buffer-filepath-clean)))
+  (let ((filename (prf/get-buffer-filepath-complete)))
     (when filename
       (file-name-nondirectory filename))))
 
