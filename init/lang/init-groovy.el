@@ -1,12 +1,13 @@
 
 (use-package groovy-mode
+  ;; NB: edge-case of newer version in melpa than in marmalade
+  :pin melpa
   :mode (
 	 "\.groovy$"
 	 ;; "groovy"
-	 "\.template$"
-	 )
-  :config
-  (autoload 'groovy-mode "groovy-mode" "Groovy editing mode." t))
+	 "\.template$"))
 
+
+
 
 (provide 'init-groovy)
