@@ -1,4 +1,6 @@
-;; [[http://web-mode.org/]]
+
+
+;; MAJOR MODE
 
 (use-package web-mode
   :mode ("\\.phtml\\'"
@@ -26,5 +28,15 @@
 	      (if (fboundp 'display-line-numbers-mode)
 		  (display-line-numbers-mode 1)
 		(linum-mode 1)))))
+
+
+
+;; HTML TEMPLATING
+
+(use-package emmet-mode
+  :hook (sgml-mode web-mode))
+
+
+
 
 (provide 'init-html)
