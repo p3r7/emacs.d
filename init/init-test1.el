@@ -33,6 +33,27 @@
 
 
 
+;; faster shell-command
+
+(defun fast-shell-command (command &optional output-buffer)
+  "A fast, no brainer, fork of shell-command, whithout shell-mode."
+  (interactive
+   (read-shell-command "Shell command: " nil nil
+                       (let ((filename
+                              (cond
+                               (buffer-file-name)
+                               ((eq major-mode 'dired-mode)
+                                (dired-get-filename nil t)))))
+                         (and filename (file-relative-name filename)))))
+
+  (unless output-buffer
+    (setq output-buffer "*Fast Shell Command Output*"))
+  (switch-to-buffer-other-window output-buffer)
+  (start-process command output-buffer
+                 "/bin/sh" "-c" command))
+
+
+
 ;; helper to move cursor at position (line:col)
 
 (defun pos-at-line-col (l c)
