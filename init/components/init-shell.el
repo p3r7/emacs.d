@@ -16,22 +16,23 @@
 
   :config
 
-  (defun prf/shx-insert-plot (filename plot-command line-style)
-    "Prepare a plot of the data in FILENAME.
+  (when (string-equal system-type "windows-nt")
+    (defun prf/shx-insert-plot (filename plot-command line-style)
+      "Prepare a plot of the data in FILENAME.
 Use a gnuplot specific PLOT-COMMAND (for example 'plot') and
 LINE-STYLE (for example 'w lp'); insert the plot in the buffer."
-    (let* ((img-name (make-temp-file "tmp" nil ".png"))
-           (status (call-process
-                    shx-path-to-gnuplot nil t nil "-e"
-                    (concat
-                     "set term png transparent truecolor;"
-                     "set border lw 3 lc rgb \""
-                     (color-lighten-name (face-attribute 'default :foreground) 5)
-                     "\"; set out \"" img-name "\";"
-                     ;; PATCHED HERE
-                     plot-command " " (shell-quote-argument filename) " "
-                     line-style))))
-      (when (zerop status) (shx-insert-image img-name))))
+      (let* ((img-name (make-temp-file "tmp" nil ".png"))
+             (status (call-process
+                      shx-path-to-gnuplot nil t nil "-e"
+                      (concat
+                       "set term png transparent truecolor;"
+                       "set border lw 3 lc rgb \""
+                       (color-lighten-name (face-attribute 'default :foreground) 5)
+                       "\"; set out \"" img-name "\";"
+                       ;; PATCHED HERE
+                       plot-command " " (shell-quote-argument filename) " "
+                       line-style))))
+        (when (zerop status) (shx-insert-image img-name)))))
   (defalias 'shx-insert-plot #'prf/shx-insert-plot))
 
 
