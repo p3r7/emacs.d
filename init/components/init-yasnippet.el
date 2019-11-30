@@ -9,11 +9,44 @@
 
   :init
   (setq yas-alias-to-yas/prefix-p nil)
+  (setq yas-buffer-local-condition
+        yas-not-string-or-comment-condition)
 
   :config
   ;; originally bounded to yas-maybe-expand, conflict w/ ac
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
   (define-key yas-minor-mode-map (kbd "TAB") nil)
+
+  ;; TODO: add blacklist / whitelist in yas--templates-for-key-at-point
+  ;; just has to advice yas--templates-for-key-at-point for filter the car of return value (templates-and-pos)
+  ;; even better: store last applied in a var and expose a command to blacklist last played
+
+  (defvar prf/yas-template-blacklist nil "Blacklist of templates to not play")
+  (defvar prf/last-templates-and-pos nil "For debugging purposes")
+
+  ;; BUG: doesn't get triggered, env though not autoloaded...
+  (defadvice prf/yas-filter-templates (around yas--templates-for-key-at-point activate)
+
+    (message "Triggered")
+
+    (let ((templates-and-pos ad-do-it))
+      (when templates-and-pos
+
+        (setq prf/last-templates-and-pos templates-and-pos)
+
+        ;; REVIEW: there should be a better way to destructure
+        (let ((templates (car templates-and-pos))
+              (pos (cadr templates-and-pos))
+              (original (cl-caddr templates-and-pos))))
+        (setq templates
+              (--filter (not (member (car it) prf/yas-template-blacklist)) templates))
+        (when templates
+          (list templates pos original)))))
+
+  ;; TODO: for elisp, prevent expension:
+  ;; - in quotted list (toggeable for edge-cases like eval-after-load)
+  ;; - when at first element of a let expression
+  ;; for this -> extend yas-buffer-local-condition
 
   ;; NB: this prevents nested expansions
 
