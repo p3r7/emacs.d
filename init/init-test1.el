@@ -1,12 +1,20 @@
 (require 'noflet)
 (require 's)
 
+
+
+;; multi-scratch
+
 (use-package multi-scratch
   :disabled
   :init
   (setq multi-scratch-buffer-name "scratch")
   :config
   (defalias '_msn 'multi-scratch-new))
+
+
+
+;; auto-determine thing at point
 
 (defun prf/thing-at-point (THING)
   "wrapper around thing-at-point to support other types"
@@ -16,13 +24,16 @@
    (t (thing-at-point THING))
    ) )
 
+
+
+;; don't complain about runing processes when quiting
+
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
-  ;; TODO: use
   (noflet ((process-list ())) ad-do-it))
 
 
-;; -------------------------------------------------------------------------
-;; helper to move at line / col
+
+;; helper to move cursor at position (line:col)
 
 (defun pos-at-line-col (l c)
   (goto-char (point-min))
@@ -30,14 +41,17 @@
   (move-to-column c)
   (point))
 
-(defun pos-at-line-col-joined (l-c)
-  (let* ((l-c (s-split ":" l-c))
+(defun pos-at-line-col-joined (l-c &optional separator)
+  (unless separator
+    (setq separator ":"))
+  (let* ((l-c (s-split separator l-c))
          (l (string-to-number (car l-c)))
          (c (string-to-number (car (cdr l-c)))))
     (pos-at-line-col l c)))
 
 
-;; -------------------------------------------------------------------------
+
+;; set a local-buffer key
 
 (defun perf/buffer-local-set-key (key command)
   (interactive "KSet key buffer-locally: \nCSet key %s buffer-locally to command: ")
@@ -49,7 +63,7 @@
     (use-local-map newmap)))
 
 
-;; -------------------------------------------------------------------------
+
 ;; VAGRANT local / ssh toggle
 
 ;; either do a `vagrant global-status' or look at file ~/.vagrant.d/data/machine-index/index
@@ -61,5 +75,7 @@
     (setq vec (prf/tramp/vec/with-new-localname vec "/vagrant"))
     (file-directory-p (prf/tramp/vec/undissect vec))))
 
+
+
 
 (provide 'init-test1)
