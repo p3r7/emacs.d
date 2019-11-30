@@ -79,12 +79,23 @@
   :demand
   :bind ("C-h C-F" . find-function))
 
+;; NB: elisp-def seem to handle better vars VS functions
+;; elisp-def ony handled features in `require' blocks
+;; whereas elisp-slime-nav handles `featurep' and `use-package'
+;; also, standard way is `xref-find-definitions'
+
 (use-package elisp-slime-nav
   :after elisp-mode
   :diminish
   :commands (elisp-slime-nav-mode
              elisp-slime-nav-find-elisp-thing-at-point)
   :bind ("C-h C-f" . elisp-slime-nav-find-elisp-thing-at-point))
+
+(use-package elisp-def
+  :disabled
+  :after elisp-mode
+  :diminish
+  :hook ((emacs-lisp-mode ielm-mode) . elisp-def-mode))
 
 
 

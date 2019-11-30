@@ -1,15 +1,51 @@
 
-;; manually downloaded and configured upstream versions of tramp
-;; http://www.gnu.org/software/tramp/#Installation
-(if (and (= emacs-major-version 24)
-	 (= emacs-minor-version 3))
-    (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.11/lisp"))
-(if (and (= emacs-major-version 24)
-	 (= emacs-minor-version 5))
-    (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.12/lisp"))
-;; NB: solves copy & mv, but potentially crashes find-file
+(require 'url)
 
 
+
+;; UPTSTREAM VERSIONS
+
+;; On some versions of emacs, default TRAMP is buggy
+
+(defvar prf/tramp/version-overide
+  (cond
+   ((and (= emacs-major-version 24)
+         (= emacs-minor-version 3))
+    "2.2.11")
+   ((and (= emacs-major-version 24)
+         (= emacs-minor-version 5))
+    "2.2.12")))
+
+
+(when (and prf/tramp/version-overide
+           (executable-find "tar"))
+
+  (let* ((tgz (concat "tramp-" prf/tramp/version-overide ".tar.gz"))
+         (url (concat "https://ftp.gnu.org/gnu/tramp/" tgz))
+         (localname (concat "~/.emacs.d/package-src/" tgz))
+         unarchive-res)
+
+    (mkdir "~/.emacs.d/package-src")
+    (url-copy-file url localname)
+
+    (setq unarchive-res
+          (with-temp-buffer
+            (save-excursion
+              (cd "~/.emacs.d/package-src")
+              ;; (process-file "tar" nil (current-buffer) nil "-xzf" localname)
+              (shell-command (concat "tar -xzf " localname) (current-buffer)))))
+
+    (unless (eq unarchive-res 0)
+      (message "Attempted to install more recent version of TRAMP but failed to extract %s" localname))))
+
+
+(let ((tramp-src (concat "~/.emacs.d/plugins-src/tramp-" prf/tramp/version-overide "/lisp")))
+  (when (file-directory-p tramp-src)
+    (add-to-list 'load-path (concat "~/.emacs.d/plugins-src/tramp-" prf/tramp/version-overide "/lisp"))))
+
+
+
+;; MAIN
 
 (use-package tramp
   :demand
@@ -23,7 +59,7 @@
                 tramp-file-name-regexp)))
 
 
-;; -------------------------------------------------------------------------
+
 ;; SHELL & TERM
 
 (use-package tramp-term
@@ -46,8 +82,8 @@
   (switch-to-buffer term-ansi-buffer-name))
 
 
-;; -------------------------------------------------------------------------
-;; Supplementary Cnnx Methods
+
+;; MORE METHODS
 
 ;; Docker
 (use-package docker-tramp
@@ -93,9 +129,10 @@
     (setq putty-open-putty-exec "kitty")))
 
 
-;; -------------------------------------------------------------------------
+
 ;; HELPER UTILS
 
+;; helpers, notably better remote shell commands
 (use-package prf-tramp
   :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
   :after (tramp)
@@ -104,6 +141,7 @@
       (defalias '_sh 'prf/tramp/shell))
   (defalias '_rsh 'prf/tramp/remote-shell))
 
+;; ansible inventory
 (use-package ansible-tramp
   :load-path "~/.emacs.d/plugins/ansible-tramp"
   :after (request-deferred prf-tramp)
@@ -112,5 +150,6 @@
     (ansible-tramp-set-inventory-cache-http)))
 
 
+
 
 (provide 'init-tramp)

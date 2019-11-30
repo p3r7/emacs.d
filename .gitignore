@@ -58,6 +58,5 @@ snippets/
 url/
 var/
 emojis/
-plugins-src/tramp-2.2.12/config.status
-plugins-src/tramp-2.2.12/config.log
+package-src/
 *.lnk
