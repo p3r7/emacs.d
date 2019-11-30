@@ -93,7 +93,7 @@
 	      ("C-c C-h" . prf/ansible/open-ansible-module-doc-at-point))
   :init
   (defun prf/yml-hook/enable-ansible-minor-mode ()
-    (when prf/ansible-file-p (ansible 1)))
+    (when (prf/ansible-file-p) (ansible 1)))
   :config
   (add-hook 'yaml-mode-hook #'prf/yml-hook/enable-ansible-minor-mode))
 
