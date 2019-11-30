@@ -5,6 +5,7 @@
 
   :bind (
          :map yas-minor-mode-map
+         ("C-j" . yas-expand)
          ("C-c y" . yas-expand))
 
   :init
