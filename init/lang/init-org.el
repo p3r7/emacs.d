@@ -192,6 +192,10 @@
 
 ;; INDEX & SEARCH
 
+(use-package org-ql
+  ;; REVIEW: in MELPA, but failed to install at time of writting
+  :quelpa (org-ql :fetcher github :repo "alphapapa/org-ql"))
+
 (use-package helm-org-rifle
   :after (org helm))
 
