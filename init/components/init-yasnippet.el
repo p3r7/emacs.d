@@ -10,10 +10,11 @@
 
   :init
   (setq yas-alias-to-yas/prefix-p nil)
+
+  :config
   (setq yas-buffer-local-condition
         yas-not-string-or-comment-condition)
 
-  :config
   ;; originally bounded to yas-maybe-expand, conflict w/ ac
   (define-key yas-minor-mode-map (kbd "<tab>") nil)
   (define-key yas-minor-mode-map (kbd "TAB") nil)
