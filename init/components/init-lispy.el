@@ -14,6 +14,11 @@
         ;; (when (fboundp 'autopair-mode)
         ;;   (autopair-mode -1))
 
+        ;; lispy-newline-and-indent / electric-newline-and-maybe-indent
+        ;; useless as using agressive-indent
+        ;; I wan't to use it for yas
+        (unbind-key "C-j" lispy-mode-map-base)
+
         ;; unbind conflicting keybindings
         ;; handled by smart-parens
         (unbind-key "(" lispy-mode-map-lispy)
