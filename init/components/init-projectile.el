@@ -1,11 +1,13 @@
 
 ;; (use-package 'grizzl)
 
-;; ------------------------------------------------------------------------
+
 ;; PROJECTILE
 
 (defun prf/enable-projectile-p ()
-  nil)
+  ;; seem to slow things down under the windows build
+  (not
+   (string-equal system-type "windows-nt")))
 
 (use-package projectile
   :after (s)
@@ -66,7 +68,7 @@
 	  projectile-git-command (concat "fd . -H -t f -0 " (prf/projectile/build-fdignore)))))
 
 
-;; ------------------------------------------------------------------------
+
 ;; HELM PROJECTILE
 
 (use-package helm-projectile
@@ -82,5 +84,6 @@
     (global-set-key (kbd "C-S-f") 'helm-projectile))))
 
 
+
 
 (provide 'init-projectile)
