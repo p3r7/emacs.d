@@ -98,7 +98,9 @@
   (add-hook 'yaml-mode-hook #'prf/yml-hook/enable-ansible-minor-mode))
 
 ;; Jinja2 inline support via polymode
+;; FIXME: disabled as indents aggressively tasks in roles
 (use-package poly-ansible
+  :disabled
   :after ansible)
 
 ;; NB: Jinja2 inside templates in ../lang/init-python.el, via mmm
