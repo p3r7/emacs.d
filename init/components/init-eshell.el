@@ -1,6 +1,4 @@
 
-(require 'em-term)
-
 (use-package eshell
   :ensure nil
   :commands eshell-mode
@@ -8,7 +6,18 @@
 	  . (lambda () (setq global-hl-line-mode nil)))
   :init
   (setq eshell-history-size 1000000
-	eshell-destroy-buffer-when-process-dies t)
+	eshell-destroy-buffer-when-process-dies t))
+
+;; TODO: em-smart ? plan9 concepts ported to emacs shells
+;; http://www.opensource.apple.com/source/emacs/emacs-51/emacs/lisp/eshell/em-smart.el
+
+
+
+;; TERM INTEGRATION
+
+(use-package em-term
+  :ensure nil
+  :after eshell
 
   :config
   (add-to-list 'eshell-visual-commands "htop")
@@ -68,11 +77,10 @@
 	(if eshell-escape-control-x
 	    (term-set-escape-char ?\C-x))))
     nil)
+
   (defalias 'eshell-exec-visual #'prf/eshell-exec-visual/tramp-aware))
 
 
-
-;; TODO: em-smart ? plan9 concepts ported to emacs shells
-;; http://www.opensource.apple.com/source/emacs/emacs-51/emacs/lisp/eshell/em-smart.el
+
 
 (provide 'init-eshell)
