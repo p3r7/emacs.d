@@ -139,19 +139,33 @@ behavior for short-lived processes, see bug#18108."
       #'shx-filter-input
     #'comint-simple-send))
 
+(defun shell-term--parse-input (input)
+  ;; NB: using eshell parsing capabilities
+  (let* ((parsed (cadr (eshell-parse-command input)))
+         (is-pipeline (eq (car parsed) 'eshell-execute-pipeline))
+         command-list)
+    (if is-pipeline
+        (--map (cons (cadr it) (list (cl-cdaddr it))) (cl-cadadr parsed))
+      (list (list (cadr parsed) (cl-cdaddr parsed))))))
+
 ;; NB: setting var `comint-input-sender' to this function is equivalent to
 ;; the function `eshell-term-initialize' in em-term.
 (defun shell-term-filter-input (process input)
   "Before sending to PROCESS, filter the INPUT.
 That means, if INPUT is a shx-command, do that command instead.
 This function overrides `comint-input-sender'."
-  ;; NB: using eshell parsing capabilities
-  (let* ((parsed-command (cl-cdadr (eshell-parse-command input)))
-         (command (car parsed-command))
-         (args (cl-cdadr parsed-command))
+  (let* ((parsed-command-list (shell-term--parse-input input))
+         (is-pipeline (< 1 (length parsed-command-list)))
+         (last-pipeline-command (car (last parsed-command-list)))
+         (command (car last-pipeline-command))
+         (args (cadr last-pipeline-command))
          (simple-input-sender (shell-term--get-simple-input-sender)))
     (if (or (not command)
-            (not (shell-visual-command-p command args)))
+            (not (shell-visual-command-p command args))
+            ;; NB: not supporting remote terms as of now
+            (tramp-tramp-file-p default-directory)
+            ;; NB: not supporting piped commands as of now
+            is-pipeline)
         (funcall simple-input-sender process input)
       (condition-case-unless-debug error-descriptor
           (progn
