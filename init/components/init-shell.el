@@ -36,14 +36,21 @@ LINE-STYLE (for example 'w lp'); insert the plot in the buffer."
   (defalias 'shx-insert-plot #'prf/shx-insert-plot))
 
 
+(use-package sh-term
+  :load-path "~/.emacs.d/plugins/sh-term"
+  :hook (shell-mode . shell-term-mode)
+  :after shell
+
+  :config
+  (add-to-list 'eshell-visual-commands "htop"))
+
+
 (use-package readline-complete
   :disabled
   :ensure nil
   :demand
   :after (auto-complete company)
   :config
-
-  (add-hook 'shell-mode-hook (lambda () (message "JB: %s" explicit-shell-file-name)))
 
   (cond
    ((member prf/fav-completion-at-point '(ac auto-complete))

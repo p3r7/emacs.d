@@ -8,6 +8,13 @@
 
 
 (require 'cl-lib)
+(require 'esh-util)
+(require 'esh-cmd)
+(require 'esh-ext)
+
+(when (featurep 'shx)
+  (require 'shx))
+
 
 
 ;; VARS
@@ -19,7 +26,12 @@ of the ANSI control codes, allowing curses-based applications to run
 within an Emacs window.  The variable `shell-visual-commands' defines
 which commands are considered visual in nature."
   :tag "Running visual commands"
+  :prefix "shell-term-"
   :group 'shell)
+
+(defvar shell-term-simple-input-sender (function comint-simple-send)
+  "Function to actually send to PROCESS the STRING submitted by user.
+When `shx' is active, we'll change it to `shx-filter-input'.")
 
 (defcustom shell-term-load-hook nil
   "A list of functions to call when loading `shell-term'."
@@ -122,24 +134,13 @@ behavior for short-lived processes, see bug#18108."
 
 ;; FUNCTIONS: COMINT FILTER
 
-;; equivalent of eshell-term-initialize for eshell
+(defun shell-term--get-simple-input-sender ()
+  (if shx-mode
+      #'shx-filter-input
+    #'comint-simple-send))
 
-;; NB: inspired by `shx-send-input', unused as of now
-(defun shell-term-send-input ()
-  "Send or parse the input currently written at the prompt.
-In normal circumstances this input is additionally filtered by
-`shell-term-filter-input' via `comint-mode'."
-  (interactive)
-  (cond ((not (comint-check-proc shell-term-parent-buffer))
-         ;; no process?  restart shell in a safe directory:
-         (when (file-remote-p default-directory)
-           (setq default-directory (getenv "HOME")))
-         (shx--restart-shell))
-        ((>= (length (shx--current-input)) shx-max-input)
-         (message "Input line exceeds `shx-max-input'."))
-        (t (shx--propertize-prompt)
-           (comint-send-input nil t))))
-
+;; NB: setting var `comint-input-sender' to this function is equivalent to
+;; the function `eshell-term-initialize' in em-term.
 (defun shell-term-filter-input (process input)
   "Before sending to PROCESS, filter the INPUT.
 That means, if INPUT is a shx-command, do that command instead.
@@ -147,15 +148,13 @@ This function overrides `comint-input-sender'."
   ;; NB: using eshell parsing capabilities
   (let* ((parsed-command (cl-cdadr (eshell-parse-command input)))
          (command (car parsed-command))
-         (args (cl-cdadr parsed-command)))
+         (args (cl-cdadr parsed-command))
+         (simple-input-sender (shell-term--get-simple-input-sender)))
     (if (or (not command)
             (not (shell-visual-command-p command args)))
-        (progn
-          (message "JB: not visual command !")
-          (comint-simple-send process input))
+        (funcall simple-input-sender process input)
       (condition-case-unless-debug error-descriptor
           (progn
-            (message "JB: visual command !")
             (apply #'shell-exec-visual command args))
         ;; TODO: remove dependency to `shx-insert'
         (error (shx-insert 'error (error-message-string error-descriptor) "\n")))
@@ -257,7 +256,7 @@ the buffer."
 \nThis minor mode allows intercepting visual commands in
 shell-mode to have them play in a term buffer."
   :lighter shell-term-mode-lighter
-  ;; :keymap shx-mode-map
+  ;; :keymap shell-term-mode-map
   (if shell-term-mode (shell-term--activate) (shell-term--deactivate)))
 
 
@@ -272,7 +271,9 @@ shell-mode to have them play in a term buffer."
   )
 
 (defun shell-term--deactivate ()
-  (setq comint-input-sender 'comint-simple-send))
+  (if shx-mode
+      (setq comint-input-sender 'shx-filter-input)
+    (setq comint-input-sender 'comint-simple-send)))
 
 
 
@@ -280,7 +281,7 @@ shell-mode to have them play in a term buffer."
 
 (defun shell-term--asynch-funcall (function &optional args delay)
   "Run FUNCTION with ARGS in the buffer after a short DELAY."
-  (run-at-time (or delay 0.2) nil
+  (run-at-time (or delay 0.3) nil
                `(lambda ()
                   (with-current-buffer ,shell-term-parent-buffer ,(cons function args)))))
 
