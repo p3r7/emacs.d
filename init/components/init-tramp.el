@@ -52,6 +52,14 @@
   :config
   ;; (setq tramp-verbose 6)
 
+  ;; upstream value, takes into account recent ssh messages
+  (setq tramp-yesno-prompt-regexp (concat
+                                   (regexp-opt
+                                    '("Are you sure you want to continue connecting (yes/no)?"
+                                      "Are you sure you want to continue connecting (yes/no/[fingerprint])?")
+                                    t)
+                                   "\\s-*"))
+
   ;; disable vc for remote files (speed increase)
   (setq vc-ignore-dir-regexp
         (format "\\(%s\\)\\|\\(%s\\)"
