@@ -52,6 +52,14 @@
   :config
   ;; (setq tramp-verbose 6)
 
+  ;; upstream value, takes into account recent ssh messages
+  (setq tramp-yesno-prompt-regexp (concat
+                                   (regexp-opt
+                                    '("Are you sure you want to continue connecting (yes/no)?"
+                                      "Are you sure you want to continue connecting (yes/no/[fingerprint])?")
+                                    t)
+                                   "\\s-*"))
+
   ;; disable vc for remote files (speed increase)
   (setq vc-ignore-dir-regexp
         (format "\\(%s\\)\\|\\(%s\\)"
@@ -62,24 +70,26 @@
 
 ;; SHELL & TERM
 
+;; helpers, notably better remote shell commands
+(use-package prf-tramp
+  :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
+  :after (tramp)
+  :config
+  (if (not (fboundp '_sh))
+      (defalias '_sh 'prf/tramp/shell))
+  (defalias '_rsh 'prf/tramp/remote-shell))
+
+;; ansible inventory
+(use-package ansible-tramp
+  :load-path "~/.emacs.d/plugins/ansible-tramp"
+  :after (request-deferred prf-tramp)
+  :config
+  (when ansible-tramp-inventory-http-url
+    (ansible-tramp-set-inventory-cache-http)))
+
 (use-package tramp-term
   :after (tramp)
   :defer t)
-
-;; http://www.emacswiki.org/emacs/AnsiTermHints#toc4
-;; http://stackoverflow.com/questions/12802236/emacs-keyboard-shortcut-to-run-ansi-term-with-a-specific-shell
-;; REVIEW: redundant w/ tramp-term ?
-(defun remote-term (new-buffer-name cmd &rest switches)
-  ""
-  (interactive)
-  (setq term-ansi-buffer-name (concat "*" new-buffer-name "*"))
-  (setq term-ansi-buffer-name (generate-new-buffer-name term-ansi-buffer-name))
-  (setq term-ansi-buffer-name (apply 'make-term term-ansi-buffer-name cmd nil switches))
-  (set-buffer term-ansi-buffer-name)
-  (term-mode)
-  (term-char-mode)
-  (term-set-escape-char ?\C-x)
-  (switch-to-buffer term-ansi-buffer-name))
 
 
 
@@ -127,27 +137,6 @@
   :init
   (when (executable-find "kitty")
     (setq putty-open-putty-exec "kitty")))
-
-
-
-;; HELPER UTILS
-
-;; helpers, notably better remote shell commands
-(use-package prf-tramp
-  :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
-  :after (tramp)
-  :config
-  (if (not (fboundp '_sh))
-      (defalias '_sh 'prf/tramp/shell))
-  (defalias '_rsh 'prf/tramp/remote-shell))
-
-;; ansible inventory
-(use-package ansible-tramp
-  :load-path "~/.emacs.d/plugins/ansible-tramp"
-  :after (request-deferred prf-tramp)
-  :config
-  (when ansible-tramp-inventory-http-url
-    (ansible-tramp-set-inventory-cache-http)))
 
 
 

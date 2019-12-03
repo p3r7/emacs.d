@@ -168,6 +168,7 @@
 
 ;; multilingual files
 (require 'init-mmm)
+(require 'init-polymode)
 
 ;; - descriptive
 (require 'init-html)
