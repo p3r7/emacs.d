@@ -47,23 +47,11 @@
   "Format a path using current server address prefix and remote server file location"
   ;; prefix current srv
 
-  (let (my-prefix my-suffix
-		  vec-current method-current user-current host-current localname-current
-		  vec-remote method-remote user-remote host-remote localname-remote)
-    (setq vec-current (tramp-dissect-file-name currentFilePath))
+  (let (vec-remote localname-remote)
     (setq vec-remote (tramp-dissect-file-name remoteFilePath))
-
-    (when (and vec-current vec-remote)
-      (setq method-current (tramp-file-name-method vec-current))
-      (setq user-current (tramp-file-name-user vec-current))
-      (setq host-current (tramp-file-name-host vec-current))
-
+    (when vec-remote
       (setq localname-remote (tramp-file-name-localname vec-remote))
-
-      (setq my-prefix (concat "/" method-current ":" (string-join (remove nil `(,user-current ,host-current)) "@") ":"))
-      (setq my-suffix localname-remote)
-
-      (concat my-prefix my-suffix))))
+      (prf/tramp/path/with-new-localname currentFilePath localname-remote))))
 
 
 ;; TODO: make it work w/ shell buffers
