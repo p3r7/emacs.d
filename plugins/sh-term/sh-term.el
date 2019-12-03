@@ -172,7 +172,7 @@ This function overrides `comint-input-sender'."
   (let* ((parsed-command-list (shell-term--parse-input input))
          (is-multiline (< 1 (length parsed-command-list)))
          (last-line (car (last parsed-command-list)))
-         (is-multiline (< 1 (length last-line)))
+         (is-pipeline (< 1 (length last-line)))
          (last-pipeline-command (car (last last-line)))
          (command (car last-pipeline-command))
          (args (cadr last-pipeline-command))
