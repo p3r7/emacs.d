@@ -284,8 +284,9 @@ Uses the faces `lusty-directory-face', `lusty-slash-face', and
 
         (if (eq action :file-open)
             (switch-to-buffer (find-file-noselect file))
-          (cd file)
-          (call-interactively (gethash action lusty--custom-explorer-actions)))
+          (save-excursion
+            (cd file)
+            (call-interactively (gethash action lusty--custom-explorer-actions))))
 
         ;; (cond
         ;;  ((eq action :file-open)
