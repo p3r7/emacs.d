@@ -27,6 +27,14 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(if (featurep 'so-long)
+    (use-package so-long
+      :ensure nil
+      :config (global-so-long-mode 1))
+  (use-package so-long
+    :quelpa (so-long :url "https://raw.githubusercontent.com/emacs-mirror/emacs/master/lisp/so-long.el" :fetcher url)
+    :config (global-so-long-mode 1)))
+
 
 
 ;; BACKUPS
