@@ -100,12 +100,12 @@
   :after (tramp))
 
 ;; Vagrant
-(use-package vagrant-tramp
-  :if (and (executable-find "vagrant")
-           (not (windows-nt-p)))
-  :config
-  (eval-after-load 'tramp
-    '(vagrant-tramp-enable)))
+;;(when (and (executable-find "vagrant")
+;;           (not (windows-nt-p)))
+;;  (use-package vagrant-tramp
+;;    :config
+;;    (eval-after-load 'tramp
+;;      '(vagrant-tramp-enable))))
 
 ;; KiTTY
 (when (and (executable-find "kscp")
