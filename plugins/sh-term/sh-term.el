@@ -335,6 +335,38 @@ shell-mode to have them play in a term buffer."
                `(lambda ()
                   (with-current-buffer ,shell-term-parent-buffer ,(cons function args)))))
 
+(defun shell-term--get-tramp-method-login-program (method)
+  (cadr
+   (--first
+    (eq (car it) 'tramp-login-program)
+    (cdr
+     (--first (string= (car it) method)
+              tramp-methods)))))
+
+(defun shell-term--get-tramp-method-login-args (method)
+  (cadr
+   (--first
+    (eq (car it) 'tramp-login-args)
+    (cdr
+     (--first (string= (car it) method)
+              tramp-methods)))))
+
+;; (defun shell-term--flatten-tramp-method-login-args (login-args host user port)
+;;   (s-replace-all
+;;    `(("%h" . ,host)
+;;      ("%u" . ,user)
+;;      ("%p" . ,port))
+;;    (s-join " " (--map (s-join " " it) login-args))))
+
+(defun shell-term--flatten-tramp-method-login-args (login-args host user port)
+  (--map
+   (s-replace-all
+    `(("%h" . ,host)
+      ("%u" . ,user)
+      ("%p" . ,port))
+    it)
+   (-flatten login-args)))
+
 
 
 
