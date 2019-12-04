@@ -224,12 +224,29 @@ visual command, returns non-nil."
                           (cdr (assoc command shell-visual-options))
                           :test 'string=)))))
 
+(defun shell-term--find-interp-remote (command &optional _args)
+  (let (errno
+        ;; (get-path-cmd (concat "which "command))
+        (get-path-cmd (concat "command -v "command)))
+    (with-temp-buffer
+      (setq errno (shell-command get-path-cmd (current-buffer)))
+      (when (eq errno 0)
+        ;; NB: removing trailing \n
+        (substring (buffer-string) 0 -1)))))
+
+(defun shell-term--find-interp (command &optional args)
+  ;; NB: `eshell-find-interpreter' works with TRAMP, but is hella slow
+  ;; REVIEW: wouldn't we use `executable-find' for local shells ?
+  (if (file-remote-p default-directory)
+      (shell-term--find-interp-remote command)
+    (eshell-find-interpreter command args)))
+
 (defun shell-exec-visual (&rest args)
   "Run the specified PROGRAM in a terminal emulation buffer.
 ARGS are passed to the program.  At the moment, no piping of input is
 allowed."
   (let* (shell-interpreter-alist
-	 (interp (eshell-find-interpreter (car args) (cdr args)))
+	 (interp (shell-term--find-interp (car args) (cdr args)))
 	 (program (car interp))
 	 (args (eshell-flatten-list
 		(eshell-stringify-list (append (cdr interp)
