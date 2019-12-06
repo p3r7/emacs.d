@@ -38,7 +38,7 @@ LINE-STYLE (for example 'w lp'); insert the plot in the buffer."
 
 (use-package sh-term
   :load-path "~/.emacs.d/plugins/sh-term"
-  :hook (shell-mode . shell-term-mode)
+  ;; :hook (shell-mode . shell-term-mode)
   :after shell
 
   :config
