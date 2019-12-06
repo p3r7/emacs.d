@@ -13,13 +13,16 @@
 (when (fboundp #'json/format-region)
   (defun json/format ()
     (interactive)
-    (save-excursion
-      (when (not (region-active-p))
-        (let* ((matching-prev (scan-lists (point) -1 0))
+    (if (not (region-active-p))
+        (let* (
+               (matching-prev (scan-lists (point) -1 0))
                (matching-next (scan-lists (point) 1 0))
                (matching (or matching-prev matching-next)))
-          (goto-char matching)
-          (activate-mark)))
+          (when matching
+            (goto-char matching)
+            (activate-mark)
+            (call-interactively #'json/format-region))
+          )
       (call-interactively #'json/format-region))))
 
 
