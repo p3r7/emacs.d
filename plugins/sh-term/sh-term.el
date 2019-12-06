@@ -367,6 +367,19 @@ shell-mode to have them play in a term buffer."
     it)
    (-flatten login-args)))
 
+(defun shell-term--shell-unquote-argument (argument)
+  ;; REVIEW: join or get car ?
+  ;; raise error if more than one element ?
+  (s-join " "
+          ;; if fails to parse as a quoted arg, return og value
+          (condition-case _err
+              (split-string-and-unquote argument)
+            (end-of-file
+             (list argument)))))
+
+(defun shell-term--shell-unquote-args (args)
+  (-map #'shell-term--shell-unquote-argument args))
+
 
 
 
