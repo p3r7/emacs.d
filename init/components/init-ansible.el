@@ -98,13 +98,24 @@
   (add-hook 'yaml-mode-hook #'prf/yml-hook/enable-ansible-minor-mode))
 
 ;; Jinja2 inline support via polymode
-;; FIXME: disabled as indents aggressively tasks in roles
-(use-package poly-ansible
-  :disabled
-  :after ansible)
+;; NB: disabled as indents aggressively tasks in roles
+;; alos, seems to load strangely, the :disabled keyword doesn't appear to work
+(when nil
+  (use-package poly-ansible
+    :disabled
+    :after ansible))
 
 ;; NB: Jinja2 inside templates in ../lang/init-python.el, via mmm
 
+
+;; OUTPUT
+
+(defun json/ansible/format ()
+  (interactive)
+  (call-interactively #'json/format)
+  (replace-regexp (regexp-quote "\\n") "\n"
+                  nil (region-beginning) (region-end))
+  )
 
 
 
