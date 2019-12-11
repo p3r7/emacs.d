@@ -7,6 +7,7 @@
 ;; TODO: port eshell-flatten-list / eshell-stringify-list (maybe from dash.el)
 
 
+(require 'term)
 (require 'cl-lib)
 (require 'esh-util)
 (require 'esh-cmd)
@@ -103,7 +104,7 @@ See also `shell-visual-commands' and `shell-visual-subcommands'."
   "Name to use for the TERM variable when running visual commands.
 See `term-term-name' in term.el for more information on how this is
 used."
-  :version "24.3"	       ; eterm -> term-term-name = eterm-color
+  :version "24.3"                   ; eterm -> term-term-name = eterm-color
   :type 'string
   :group 'shell-term)
 
