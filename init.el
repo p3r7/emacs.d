@@ -107,7 +107,9 @@
 
 
 
-(use-package quelpa)
+(use-package quelpa
+  :init
+  (setq quelpa-self-upgrade-p nil))
 (use-package quelpa-use-package
   :after (quelpa)
   :config

@@ -38,11 +38,11 @@ LINE-STYLE (for example 'w lp'); insert the plot in the buffer."
 
 (use-package sh-term
   :load-path "~/.emacs.d/plugins/sh-term"
-  :hook (shell-mode . shell-term-mode)
+  ;; :hook (shell-mode . shell-term-mode)
   :after shell
 
   :config
-  (add-to-list 'eshell-visual-commands "htop"))
+  (add-to-list 'shell-visual-commands "htop"))
 
 
 (use-package readline-complete

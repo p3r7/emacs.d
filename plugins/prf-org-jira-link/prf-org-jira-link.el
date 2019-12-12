@@ -7,8 +7,7 @@
 (org-add-link-type "jira" 'org-jira-open)
 
 (defun org-jira-open (element)
-  "Visit the element on JIRA.
-     PATH should be a topic that can be thrown at the man command."
+  "Visit the element on JIRA."
   (browse-url (concat prf-org-jira-link-baseUrl "/browse/" element)))
 
 (provide 'prf-org-jira-link)

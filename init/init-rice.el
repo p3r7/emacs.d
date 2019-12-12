@@ -51,7 +51,7 @@
 (defvar prf/theme/list/practical
   (list
    'chocolate
-   'plan9
+   ;; 'plan9
    'white-sand
    'dracula-mod
    'comidia-mod
@@ -117,7 +117,13 @@
 	   (bmkp-local-directory :foreground "#00ffff")
 	   (bmkp-remote-file :foreground "#ffc0cb"))
           (plan9
-           (form-feed-line :strike-through "#40883f"))
+           (form-feed-line :strike-through "#40883f")
+           (org-level-1 :weight bold :height 1.0 :box nil :background nil :foreground "#4fa8a8")
+           (org-level-2 :weight bold :height 1.0 :box nil :background nil :foreground "#b85c57")
+           (org-level-3 :weight bold :foreground "#989848")
+           (org-level-4 :weight bold :foreground "#40883f")
+           (org-level-5 :weight bold :foreground "#0287c8")
+           (org-level-6 :weight bold :foreground "#8888c8"))
           (white-sand
            (cursor :background "#585858")
            (form-feed-line :strike-through "#a9a9a9"))

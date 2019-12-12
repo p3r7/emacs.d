@@ -74,6 +74,14 @@
 
 
 
+;; LINKS
+
+(use-package prf-org-github-link
+  :load-path "~/.emacs.d/plugins/prf-org-github-link/"
+  :after org
+  :demand)
+
+
 ;; CAPTURE
 
 (use-package org-capture

@@ -7,6 +7,7 @@
 ;; TODO: port eshell-flatten-list / eshell-stringify-list (maybe from dash.el)
 
 
+(require 'term)
 (require 'cl-lib)
 (require 'esh-util)
 (require 'esh-cmd)
@@ -103,7 +104,7 @@ See also `shell-visual-commands' and `shell-visual-subcommands'."
   "Name to use for the TERM variable when running visual commands.
 See `term-term-name' in term.el for more information on how this is
 used."
-  :version "24.3"	       ; eterm -> term-term-name = eterm-color
+  :version "24.3"                   ; eterm -> term-term-name = eterm-color
   :type 'string
   :group 'shell-term)
 
@@ -366,6 +367,19 @@ shell-mode to have them play in a term buffer."
       ("%p" . ,port))
     it)
    (-flatten login-args)))
+
+(defun shell-term--shell-unquote-argument (argument)
+  ;; REVIEW: join or get car ?
+  ;; raise error if more than one element ?
+  (s-join " "
+          ;; if fails to parse as a quoted arg, return og value
+          (condition-case _err
+              (split-string-and-unquote argument)
+            (end-of-file
+             (list argument)))))
+
+(defun shell-term--shell-unquote-args (args)
+  (-map #'shell-term--shell-unquote-argument args))
 
 
 
