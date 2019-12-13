@@ -162,14 +162,23 @@
           (prf/tramp/extract-remote-file-name filename)
         filename))))
 
+(defvar prf/exec-cmd nil "file-local variable to override exec command")
+
+(defun prf/exec-cmd-eval (exec-cmd filename)
+  (let ((dirname (file-name-directory filename)))
+    (s-replace-all `(("$FILEPATH" . ,filename)
+                     ("$DIRNAME" . ,dirname))
+                   exec-cmd)))
+
 (defun prf/get-buffer-filepath-with-exec ()
   (let ((clean-filename (prf/get-buffer-filepath-complete)))
     (when clean-filename
       (when (file-remote-p clean-filename)
 	(setq clean-filename (prf/tramp/extract-remote-file-name clean-filename)))
-      (cond ((bound-and-true-p ansible) (concat "ansible-playbook " clean-filename)) ;; NB: ansible-mode is named `ansible` ...
-	    ((s-suffix? ".php" clean-filename) (concat "php " clean-filename))
-	    ((s-suffix? ".py" clean-filename) (concat "python " clean-filename))) ;; REVIEW: should ideally test if in virtual env
+      (cond (prf/exec-cmd (prf/exec-cmd-eval prf/exec-cmd clean-filename))
+            ((bound-and-true-p ansible) (concat "ansible-playbook " clean-filename)) ;; NB: ansible-mode is named `ansible` ...
+            ((s-suffix? ".php" clean-filename) (concat "php " clean-filename))
+            ((s-suffix? ".py" clean-filename) (concat "python " clean-filename))) ;; REVIEW: should ideally test if in virtual env
       )))
 
 (defun prf/get-buffer-dirname ()
