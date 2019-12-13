@@ -126,4 +126,15 @@ current filename, but with the extension removed and replaced with .html."
    'markdown-mode
    '(("\\(<mark>\\)\\([^<]+?\\)\\(</mark>\\)" (2 highlight)))))
 
+
+
+;; CODE BLOCKS
+
+(use-package poly-markdown
+  :after polymode)
+
+
+
+
+
 (provide 'init-markdown)
