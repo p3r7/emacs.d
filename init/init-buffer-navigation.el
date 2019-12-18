@@ -6,6 +6,7 @@
 ;; REVIEW: read about `pc-selection-mode'
 (cua-selection-mode t)
 
+
 
 ;; CURSOR NAVIGATION (in buffers)
 
@@ -20,11 +21,14 @@
 (use-package goto-line-preview
   :bind ([remap goto-line] . goto-line-preview))
 
+
 (use-package goto-last-change
   :bind ([(meta p)(u)] . goto-last-change))
 
+
 ;; (require 'init-ace-jump)
 (require 'init-avy)
+
 
 ;; better moving around code blocks
 (defun prf/smart-forward-list ()
