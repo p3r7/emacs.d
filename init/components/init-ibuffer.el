@@ -117,10 +117,12 @@
 	     (or
 	      (name . "^\\*scratch\\*$")
 	      (name . "^\\*Messages\\*$")))
+	    ("temp: magit"
+	     (or
+	      (name . "^\\*magit:")))
 	    ("temp"
 	     (or
 	      (name . "^\\*tramp")
-	      (name . "^\\*magit:")
 	      (name . "^\\*Error")
 	      (name . "^\\*Packages\\*$")
 	      (name . "^\\*Compile-Log\\*$")
