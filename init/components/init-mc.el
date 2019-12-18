@@ -8,8 +8,9 @@
          ("C-c C-<" . mc/mark-all-like-this)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click))
   :config
-  (with-eval-after-load 'cua-base
-    (unbind-key "C-S-c" cua--region-keymap)))
+  (add-hook 'cua-mode-hook
+            (lambda () (when cua-mode
+                    (unbind-key "C-S-c" cua--region-keymap)))))
 
 
 
