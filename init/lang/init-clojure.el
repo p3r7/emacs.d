@@ -1,5 +1,6 @@
 
 (use-package clojure-mode)
+
 (use-package cider
   :demand
   :after (clojure-mode)
@@ -30,6 +31,20 @@
   (define-key clojure-mode-map (kbd "C-c C-x") 'prf/cider-repl-reset))
 
 (use-package cider-eval-sexp-fu
-  :after (cider))
+  :after cider)
+
+
+
+;; REFACTORING
+
+;; NB: will be merged into CIDER in the future
+(use-package clj-refactor
+  :after clojure-mode
+  :hook
+  ((clojure-mode . clj-refactor-mode)
+   (clj-refactor-mode . (lambda () (cljr-add-keybindings-with-prefix "C-c C-m")))))
+
+
+
 
 (provide 'init-clojure)
