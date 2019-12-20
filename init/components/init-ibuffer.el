@@ -119,7 +119,7 @@
 	      (name . "^\\*Messages\\*$")))
 	    ("temp: magit"
 	     (or
-	      (name . "^\\*magit:")))
+	      (name . "^magit")))
 	    ("temp"
 	     (or
 	      (name . "^\\*tramp")
