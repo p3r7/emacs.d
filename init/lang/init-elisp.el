@@ -108,7 +108,7 @@
 
 
 
-;; EVALUATION
+;; EVALUATION / TESTS
 
 (use-package eval-expr
   :after elisp-mode
@@ -121,6 +121,19 @@
     (local-set-key (kbd "<tab>") #'completion-at-point)
     (set-syntax-table emacs-lisp-mode-syntax-table)
     (run-hooks 'prf/eval-expr-minibuffer-setup-hook)))
+
+(use-package ert
+  :ensure nil
+  :demand
+  :bind (
+         :map emacs-lisp-mode-map
+         ("C-x r" . ert-silently)
+         :map lisp-interaction-mode-map
+         ("C-x r" . ert-silently))
+  :config
+  (defun ert-silently ()
+    (interactive)
+    (ert t)))
 
 
 
