@@ -105,6 +105,11 @@
 
 (with-eval-after-load "helm"
 
+  (defun ansible-tramp--hostname-at-point ()
+    (with-syntax-table (make-syntax-table (syntax-table))
+      (modify-syntax-entry ?. "_")
+      (thing-at-point 'symbol)))
+
   (setq ansible-tramp-helm-source
         (helm-build-sync-source "Connect to Ansible host"
           :candidates #'ansible-tramp-get-inventory-hostnames
@@ -134,7 +139,7 @@
     (interactive)
     (let ((helm-candidate-number-limit 10000))
       (helm :sources '(ansible-tramp-helm-source)
-            :input (let ((tap (thing-at-point 'symbol)))
+            :input (let ((tap (ansible-tramp--hostname-at-point)))
                      (when (member tap (ansible-tramp-get-inventory-hostnames)) tap))
             :buffer "*helm Tramp Shell Ansible*"))))
 
