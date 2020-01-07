@@ -71,7 +71,7 @@
 ;; SHELL & TERM
 
 ;; helpers, notably better remote shell commands
-(use-package prf-tramp
+(use-package prf-tramp-shell
   :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
   :after (tramp)
   :config
