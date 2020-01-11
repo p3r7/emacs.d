@@ -2,7 +2,7 @@
 (setq prf/lispy-modes '(emacs-lisp-mode clojure-mode))
 
 (use-package lispy
-  :after (lisp-mode)
+  :after lisp-mode
   :demand
   :hook
 ;;;  REVIEW: why is this not working ?!
