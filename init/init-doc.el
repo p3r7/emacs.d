@@ -18,8 +18,8 @@
 
 (require 'init-eldoc)
 
-
 ;; NB: elisp / emacs -specific stuff in ~/.emacs.d/init/lang/init-elisp.el
+
 
 
 ;; TEXINFO

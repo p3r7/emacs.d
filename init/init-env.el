@@ -1,5 +1,5 @@
 
-;; ------------------------------------------------------------------------
+
 ;; OS DETECTION
 
 (defun windows-nt-p ()
@@ -10,7 +10,7 @@
   (string-equal system-type "gnu/linux"))
 
 
-;; ------------------------------------------------------------------------
+
 ;; OS-related customs
 
 (cond
@@ -20,7 +20,7 @@
   (require 'init-w32)))
 
 
-;; ------------------------------------------------------------------------
+
 ;; HW DETECTION
 
 (defun prf/current-frame-terminal-type ()
@@ -40,7 +40,7 @@ See the documentation of `framep' for possible return values."
 		   "vt400" "vt420"))))
 
 
-;; ------------------------------------------------------------------------
+
 ;; HW-related customs
 
 (defun prf/customize-helm-tty-faces (&optional current-frame)
@@ -111,7 +111,7 @@ See the documentation of `framep' for possible return values."
 ;; (add-hook 'after-make-frame-functions #'prf/tty-setup-frame-hook)
 
 
-;; ------------------------------------------------------------------------
+
 ;; LOCAL SETUP
 
 (setq homedir-truename (directory-file-name (file-truename "~")))
@@ -138,6 +138,6 @@ See the documentation of `framep' for possible return values."
   (setq prf-auto-save-dir "~/.emacs.d/.saves"))
 
 
-;; ------------------------------------------------------------------------
+
 
 (provide 'init-env)

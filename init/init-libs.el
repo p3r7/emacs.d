@@ -1,39 +1,62 @@
 
+
 ;; COMMON LISP
+
 (require 'cl)
 (use-package noflet)
 
+
+
 ;; ORG
+
 (require 'org)
 
-;; ASYNC
-;; (require 'async)
-;; (require 'async-file)
 
-;; OBJECT MANIPULATION
-(use-package f)
-(use-package s)
-(use-package dash
-  :config
-  (dash-enable-font-lock))
-;; (use-package ht)
-(use-package prf-string
-  :quelpa (prf-string :fetcher github :repo "p3r7/prf-string"))
-(use-package pickling
-  :load-path "~/.emacs.d/plugins/pickling")
-(use-package buffer-grid
-  :load-path "~/.emacs.d/plugins/buffer-grid")
+
+;; ASYNC / PARALLEL PROCESSING
 
 ;; NB: deferred is now buggy and no more maintained
-;; async is better but bases itself on a new emcs process wo/ all the plugins / vars loaded
-;; aio (async-io) seems to be better
 (use-package deferred)
+
+;; async is better but bases itself on a new emcs process wo/ all the plugins / vars loaded
 (use-package async
   ;; :hook
   ;; (dired-mode-hook . dired-async-mode)
   :config
   (async-bytecomp-package-mode 1))
+;; (require 'async-file)
+
+;; aio (async-io) works w/ a promise system
 (use-package aio)
+
+
+
+;; OBJECT MANIPULATION
+
+(use-package f)                         ; files
+
+(use-package s)                         ; strings
+
+(use-package prf-string
+  :quelpa (prf-string :fetcher github :repo "p3r7/prf-string"))
+
+(use-package dash
+  :config
+  (dash-enable-font-lock))
+
+;; (use-package ht)
+;; https://github.com/plexus/a.el
+
+;; https://github.com/kiwanami/emacs-ctable
+
+(use-package ppp)
+
+(use-package pickling
+  :load-path "~/.emacs.d/plugins/pickling")
+
+
+
+;; HTTP CLIENT
 
 (use-package request
   :config
@@ -43,8 +66,21 @@
 (use-package request-deferred
   :after (request))
 
-;; https://github.com/kiwanami/emacs-ctable
 
-;; https://github.com/plexus/a.el
+
+;; BUFFERS
+
+(use-package thingatpt+
+  :quelpa (thingatpt+ :fetcher github :repo "emacsmirror/thingatpt-plus"))
+
+
+
+;; WINDOWS
+
+(use-package buffer-grid
+  :load-path "~/.emacs.d/plugins/buffer-grid")
+
+
+
 
 (provide 'init-libs)

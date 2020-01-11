@@ -164,22 +164,60 @@
 
 (defvar prf/exec-cmd nil "file-local variable to override exec command")
 
-(defun prf/exec-cmd-eval (exec-cmd filename)
+(defun prf/exec-cmd-eval (exec-cmd filename &optional shebang)
   (let ((dirname (file-name-directory filename)))
+    ;; TODO: add parsing of #! and be able to refference it
     (s-replace-all `(("$FILEPATH" . ,filename)
-                     ("$DIRNAME" . ,dirname))
+                     ("$DIRNAME" . ,dirname)
+                     ("$EXEC" . ,shebang))
                    exec-cmd)))
+
+
+(defun prf/exec-from-shebang ()
+  "Parses the shebang (#!) for current buffer.
+Inspired by src of `shell-script-mode'"
+  (when (save-excursion
+          (goto-char (point-min))
+          (looking-at "#![ \t]?\\([^ \t\n]*/bin/env[ \t]\\)?\\([^ \t\n]+\\)"))
+    (match-string 2)))
+
+(defun prf/exec-based-on-filename (filename)
+  "Determine the exec based on filename.
+Inspired by src of `shell-script-mode'.
+Modified to return nil instead of `sh-shell-file' as defautl value."
+  (cond
+   ((string-match "\\.m?spec\\'" filename) "rpm")
+   ((string-match "[.]sh\\>"     filename) "sh")
+   ((string-match "[.]bash\\>"   filename) "bash")
+   ((string-match "[.]ksh\\>"    filename) "ksh")
+   ((string-match "[.]mkshrc\\>" filename) "mksh")
+   ((string-match "[.]t?csh\\(rc\\)?\\>" filename) "csh")
+   ((string-match "[.]zsh\\(rc\\|env\\)?\\>" filename) "zsh")
+   ((equal (file-name-nondirectory filename) ".profile") "sh")
+
+   ;; not originally in `shell-script-mode'
+   ((s-suffix? ".py" filename) "python") ;; REVIEW: should ideally test if in virtual env
+   ((s-suffix? ".php" filename) "php")))
+
+(defun prf/exec-based-on-mode ()
+  (cond
+   ((bound-and-true-p ansible) "ansible-playbook"))) ; NB: ansible-mode is named `ansible` ...
 
 (defun prf/get-buffer-filepath-with-exec ()
   (let ((clean-filename (prf/get-buffer-filepath-complete)))
     (when clean-filename
       (when (file-remote-p clean-filename)
-	(setq clean-filename (prf/tramp/extract-remote-file-name clean-filename)))
-      (cond (prf/exec-cmd (prf/exec-cmd-eval prf/exec-cmd clean-filename))
-            ((bound-and-true-p ansible) (concat "ansible-playbook " clean-filename)) ;; NB: ansible-mode is named `ansible` ...
-            ((s-suffix? ".php" clean-filename) (concat "php " clean-filename))
-            ((s-suffix? ".py" clean-filename) (concat "python " clean-filename))) ;; REVIEW: should ideally test if in virtual env
-      )))
+        (setq clean-filename (prf/tramp/extract-remote-file-name clean-filename)))
+
+      (let* ((exec-shebang (prf/exec-from-shebang))
+             (exec-based-on-filename (prf/exec-based-on-filename clean-filename))
+             (exec-based-on-mode (prf/exec-based-on-mode))
+             (exec (or exec-shebang exec-based-on-filename exec-based-on-mode)))
+
+        (cond
+         ;; NB: set as file-local var
+         (prf/exec-cmd (prf/exec-cmd-eval prf/exec-cmd clean-filename shebang))
+         (exec (concat exec " " clean-filename)))))))
 
 (defun prf/get-buffer-dirname ()
   (let ((filename (prf/get-buffer-filepath-clean)))

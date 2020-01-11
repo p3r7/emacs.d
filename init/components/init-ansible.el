@@ -25,8 +25,8 @@
 (defun prf/ansible/go-to-role (role)
   (interactive
    (list
-    (read-string (format "role (%s): " (thing-at-point 'symbol))
-                 nil nil (thing-at-point 'symbol))))
+    (read-string (format "role (%s): " (dotted-symbol-at-point))
+                 nil nil (dotted-symbol-at-point))))
   (let* ((roles-path-list (prf/ansible/extract-roles-path-list-from-conf))
          (matched-path-list (prf/ansible/role/get-path role roles-path-list))
          (matched-path (car matched-path-list)))

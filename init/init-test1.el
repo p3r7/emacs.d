@@ -25,6 +25,15 @@
    ) )
 
 
+;; https://www.emacswiki.org/emacs/SyntaxAtPoint
+
+;; this is hackish but way easier than defining a new THING the standard way.
+(defun dotted-symbol-at-point ()
+  (with-syntax-table (make-syntax-table (syntax-table))
+    (modify-syntax-entry ?. "_")
+    (thing-at-point 'symbol)))
+
+
 
 ;; don't complain about runing processes when quiting
 

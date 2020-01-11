@@ -1,5 +1,5 @@
 
-;; -------------------------------------------------------------------------
+
 ;; GENERAL
 
 ;; (setq x-stretch-cursor t)
@@ -16,7 +16,7 @@
 (setq-default initial-scratch-message ";;                               Hello Master\n\n")
 
 
-;; -------------------------------------------------------------------------
+
 ;; FRAME
 
 (customize-set-variable 'menu-bar-mode nil)
@@ -55,7 +55,7 @@
 	(horizontal-scroll-bar . nil)))
 
 
-;; -------------------------------------------------------------------------
+
 ;; MODELINE
 
 (column-number-mode t)
@@ -66,13 +66,13 @@
 ;; (display-battery-mode 1)
 
 
-;; -------------------------------------------------------------------------
+
 ;; MINIBUFFER
 
 (setq
  ;;enable-recursive-minibuffers nil
  ;; don't allow mb cmds in the mb
- resize-mini-windows  t             ;; mb resize itself atomatically
+ resize-mini-windows  t     ;; mb resize itself atomatically
  max-mini-window-height .25 ;; max 2 lines
  )
 
@@ -80,7 +80,7 @@
 (setq redisplay-dont-pause t)
 
 
-;; -------------------------------------------------------------------------
+
 ;; LINUM
 
 (if (fboundp 'display-line-numbers-mode)
@@ -98,7 +98,7 @@
   (global-set-key (kbd "C-<f5>") 'linum-mode))
 
 
-;; -------------------------------------------------------------------------
+
 ;; HL-LINE
 
 ;; (defface hl-line-dark '((t (:background "#333300"))) ;; current line highlight
@@ -132,7 +132,8 @@
 (eval-after-load "hl-line"
   '(advice-add 'describe-face :before #'prf/describe-face))
 
-;; -------------------------------------------------------------------------
+
+
 ;; PARENS
 
 (setq show-paren-delay 0)
@@ -150,7 +151,7 @@
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 
-;; -------------------------------------------------------------------------
+
 ;; FORM FEED
 
 ;; - [X] https://github.com/wasamasa/form-feed
@@ -163,7 +164,7 @@
   (add-hook 'help-mode-hook 'form-feed-mode))
 
 
-;; -------------------------------------------------------------------------
+
 ;; INVISIBLE CHARACTERS
 
 (require 'whitespace)
@@ -171,25 +172,27 @@
 ;; NOTE: do not use w/ web-mode, might break stuff
 
 
-;; -------------------------------------------------------------------------
+
 ;; CUSTOM FACES
 
 (use-package prf-highlight-keyword
   :load-path "~/.emacs.d/plugins/prf-highlight-keyword")
 
 
-;; -------------------------------------------------------------------------
+
 ;; SPLASH IMAGE
 
 ;; (setq fancy-splash-image (expand-file-name "~/.emacs.d/resources/s3.xpm"))
 
 
-;; -------------------------------------------------------------------------
+
 ;; EMOJIS
 
 (use-package emojify
   :init
   (setq emojify-emoji-styles '(unicode github)))
 
+
+
 
 (provide 'init-gui)
