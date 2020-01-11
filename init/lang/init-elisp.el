@@ -143,6 +143,7 @@
 ;; primarilly wanted to highlight faces at definition
 ;; don't seem to work, though
 (use-package highlight-defined
+  :disabled
   :after elisp-mode
   :hook (emacs-lisp-mode . highlight-defined-mode)
   :init
