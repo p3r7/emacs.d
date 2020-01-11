@@ -37,7 +37,8 @@ The response body is automatically parsed with `json-read'."
                      (string endpoint)))
          ;; (request-backend 'url-retrieve)
          (url (concat "https://api.pushbullet.com/v2/" endpoint))
-         (params (kvplist->alist (pocket-lib--plist-non-nil params))))
+         (params (kvplist->alist (pocket-lib--plist-non-nil params)))
+         (json-array-type 'list))
     (request url
       :type "GET"
       :headers `(("Access-Token" . ,pushbullet-reader-access-token))
@@ -65,7 +66,7 @@ not be sent in the request.  See
 <https://docs.pushbullet.com/#list-pushes>."
   (declare (indent defun))
   (let ((limit (number-to-string limit))
-        (params (list :limit limit :cursor start-cursor
+        (params (list :limit limit :cursor cursor
                       :active active
                       :modified_after modified_after)))
     (request-response-data
@@ -73,28 +74,29 @@ not be sent in the request.  See
        :params params
        :sync t))))
 
-
-;; REVIEW: cleaner reduce-like syntax ?
-;; overwise could fill up the stack
-;; maybe cl-loop ?
 (cl-defun pushbullet-reader-get-all-pushes (&key
                                             (active "true")
                                             modified_after
-                                            start-cursor)
-  (let* ((res (pushbullet-reader-get-pushes
-                :active active
-                :modified_after modified_after
-                :cursor start-cursor))
-         (next-cursor (assoc 'cursor res)))
-    (if next-cursor
-        (let ((res2 (pushbullet-reader-get-all-pushes
-                     :active active
-                     :modified_after modified_after
-                     :cursor next-cursor)))
-          ;; TODO: merge keys from res & res2
-          )
-      res)))
+                                            cursor)
+  ;; TODO: make it async using `deferred' or `aio'
+  (cl-loop
+   until (string= cursor "END")
+   ;; repeat 500
+   append
+   (let* ((res (pushbullet-reader-get-pushes :cursor cursor))
+          (next-cursor (cdr (assoc 'cursor res))))
+     (setq cursor next-cursor)
+     (unless cursor
+       (setq cursor "END"))
+     (cdr (assoc 'pushes res)))))
 
+
+(defun pushbullet-reader-get-push-text (push)
+  (cond
+   ((string= (cdr (assoc 'type push)) "note")
+    (cdr (assoc 'body push)))
+   ((string= (cdr (assoc 'type push)) "link")
+    (cdr (assoc 'url push)))))
 
 
 ;; HELPERS
