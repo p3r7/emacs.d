@@ -195,7 +195,7 @@
 (require 'init-sql)
 (require 'init-haskell)
 (require 'init-applescript)
-;;(require 'init-tickscript)
+(require 'init-tickscript)
 (require 'init-ahk)
 (require 'init-r)
 (require 'init-python)

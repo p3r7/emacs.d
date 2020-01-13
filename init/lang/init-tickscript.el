@@ -1,5 +1,7 @@
 
-(prf/require-plugin 'tickscript-mode)
+(use-package tickscript-mode)
 
+
+
 
 (provide 'init-tickscript)
