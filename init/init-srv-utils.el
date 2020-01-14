@@ -216,7 +216,7 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
 
         (cond
          ;; NB: set as file-local var
-         (prf/exec-cmd (prf/exec-cmd-eval prf/exec-cmd clean-filename shebang))
+         (prf/exec-cmd (prf/exec-cmd-eval prf/exec-cmd clean-filename exec-shebang))
          (exec (concat exec " " clean-filename)))))))
 
 (defun prf/get-buffer-dirname ()
