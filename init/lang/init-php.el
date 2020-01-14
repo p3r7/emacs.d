@@ -1,7 +1,16 @@
 
 (use-package php-mode
   :mode "\\.php?\\'"
-  :hook (php-mode #'php-enable-default-coding-style))
+  :hook
+  ((php-mode . #'php-enable-default-coding-style)
+   (php-mode .
+    (lambda ()
+      (unbind-key "C-c C-f" php-mode-map) ; php-search-documentation
+      )))
+  :bind (
+         :map php-mode-map
+         ("C-h f" . php-search-documentation)
+         ("C-h F" . php-search-documentation)))
 
 
 
