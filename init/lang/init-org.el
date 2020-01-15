@@ -204,6 +204,10 @@
   ;; REVIEW: in MELPA, but failed to install at time of writting
   :quelpa (org-ql :fetcher github :repo "alphapapa/org-ql"))
 
+(use-package om
+  :disabled
+  :quelpa (om :fetcher github :repo "ndwarshuis/om.el"))
+
 (use-package helm-org-rifle
   :after (org helm))
 

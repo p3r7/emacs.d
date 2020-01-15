@@ -9,6 +9,7 @@
         lispy-kill
         lispy-parens
         lispy-quotes
+        lispy-space
         org-self-insert-command
         special-digit-argument
         special-lh-knight/body
@@ -80,6 +81,7 @@
         special-lispy-widen
         special-lispy-x
         special-pop-tag-mark
+        yaml-electric-backspace
         ))
 
 (setq mc/cmds-to-run-once
@@ -88,4 +90,5 @@
         helpful-key
         lispy-cursor-down
         lispy-newline-and-indent
+        yaml-electric-dash-and-dot
         ))
