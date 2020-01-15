@@ -226,6 +226,7 @@
 ;; SHELLS
 
 (require 'init-srv-utils)
+(require 'init-influxdb-client)
 
 
 
