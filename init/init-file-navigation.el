@@ -19,5 +19,11 @@
 
 
 
+;; SEARCH & REPLACE
+
+(use-package wgrep)
+
+
+
 
 (provide 'init-file-navigation)
