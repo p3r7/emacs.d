@@ -89,8 +89,8 @@
 (use-package ansible
   :demand
   :bind (:map ansible-key-map
-	      ("C-c h" . prf/ansible/open-ansible-module-doc-at-point)
-	      ("C-c C-h" . prf/ansible/open-ansible-module-doc-at-point))
+	      ("C-h f" . prf/ansible/open-ansible-module-doc-at-point)
+	      ("C-h C-f" . prf/ansible/open-ansible-module-doc-at-point))
   :init
   (defun prf/yml-hook/enable-ansible-minor-mode ()
     (when (prf/ansible-file-p) (ansible 1)))
