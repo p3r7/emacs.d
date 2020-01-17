@@ -21,45 +21,71 @@
 
 (defvar ansible-tramp-ansible-bin "ansible" "Ansible exec name / location")
 (defvar ansible-tramp-ansible-user nil "Ansible user to use for module execution.")
-(defvar ansible-tramp-remote-ansible-cnnx nil)
-(defvar ansible-tramp-prefer-remote nil "If 't and `ansible-tramp-remote-ansible-cnnx' is set, would use this connection even if has local ansible install")
+(defvar ansible-tramp-cnnx nil "Path to launch ansible inventory from.
+Only really usefull to set it for remote executions w/ TRAMP.
+Support remote paths in form /<method>:<user>@<host>:/.")
 
-(defvar ansible-tramp-inventory-http-url nil "HTTP URL to retrieve Ansible Inventory from")
+(defvar ansible-tramp-inventory-lookup-method 'cli "Preffered method to retrieve inventory.
+Either 'cli or 'url.")
+(defvar ansible-tramp-inventory-http-url nil "HTTP URL to retrieve Ansible Inventory from.")
+(defvar ansible-tramp-inventory-cli-exec "ansible-inventory" "Name of ansible-inventory executable.
+If not in PATH env var, you should specify an absolute path to the exec.
+Expected to be called with option \"--list\".")
+
 (defvar ansible-tramp-inventory-cache nil "Cache for Ansible Inventory")
 (defvar ansible-tramp-inventory-cache-set-time nil "Timestamp at which `ansible-tramp-inventory-cache' last got set.")
 
 
 
-;; PUBLIC FUNCS
+;; HOST FACTS
 
 ;; REVIEW: should be able to force local cnxx even if default is prefer-remote
 
-(defun ansible-tramp-get-facts-for-host (host &optional ansible-bin ansible-user remote-ansible-cnnx)
+(defun ansible-tramp-get-facts-for-host (host &optional ansible-bin ansible-user ansible-cnnx)
   "Returns facts for HOST, gotten by running Ansible module \"setup\"."
-  (let* ((prefer-remote (if remote-ansible-cnnx 't ansible-tramp-prefer-remote))
-	 (remote-ansible-cnnx (or remote-ansible-cnnx ansible-tramp-remote-ansible-cnnx))
-	 (raw-facts))
-    (setq raw-facts
-	  (if prefer-remote
-	      (ansible-tramp--remote-exec-module-setup host remote-ansible-cnnx ansible-bin ansible-user)
-	    (ansible-tramp--exec-module-setup host ansible-bin ansible-user)))
+  (let* ((ansible-cnnx (or ansible-cnnx ansible-tramp-cnnx default-directory))
+	 (raw-facts (ansible-tramp--exec-module-setup host ansible-cnnx ansible-bin ansible-user)))
     (ansible-tramp--parse-task-setup-output raw-facts host)))
 
-
-(defun ansible-tramp-get-fact-for-host (host fact-path &optional ansible-bin ansible-user remote-ansible-cnnx)
+(defun ansible-tramp-get-fact-for-host (host fact-path &optional ansible-bin ansible-user ansible-cnnx)
   "Returns value of fact at FACT-PATH for HOST, gotten by running Ansible module \"setup\".
 FACT-PATH should be a string in dot-bucket format."
-  (let ((facts))
-    (setq facts (ansible-tramp-get-facts-for-host host ansible-bin ansible-user remote-ansible-cnnx))
+  (let ((facts (ansible-tramp-get-facts-for-host host ansible-bin ansible-user ansible-cnnx)))
     (prf/gethash-recursive-dot-bucket facts fact-path)))
 
-
-(defun ansible-tramp-get-default-ipv4-for-host (host &optional ansible-bin ansible-user remote-ansible-cnnx)
+(defun ansible-tramp-get-default-ipv4-for-host (host &optional ansible-bin ansible-user ansible-cnnx)
   "Returns value of fact \"ansible_default_ipv4.address\" for HOST, gotten by running Ansible module \"setup\"."
-  (ansible-tramp-get-fact-for-host host "ansible_default_ipv4.address" &optional ansible-bin ansible-user remote-ansible-defun))
+  (ansible-tramp-get-fact-for-host host "ansible_default_ipv4.address" &optional ansible-bin ansible-user ansible-cnnx))
 
 
-(defun ansible-tramp-get-inventory-hosts (&optional inventory-http-url)
+
+;; INVENTORY
+
+;; BUG: does systematic reload of cache even though recent
+(cl-defun ansible-tramp-get-inventory-hosts (&key inventory-bin ansible-cnnx
+                                                  inventory-http-url)
+  "Attempts retrieving list of hosts in Ansible inventory.
+First looks up local cache `ansible-tramp-inventory-cache' if not empty or not too old.
+If not available, returns nil but tries reloading cache via an async API call."
+  (cond
+   (inventory-http-url
+    (ansible-tramp-set-inventory-cache-http inventory-http-url))
+   ((or inventory-bin ansible-cnnx)
+    (ansible-tramp-set-inventory-cache-cli inventory-bin ansible-cnnx))
+   (t
+    (if (eq ansible-tramp-inventory-lookup-method 'url)
+        (ansible-tramp-get-inventory-hosts-http ansible-tramp-inventory-http-url)
+      (ansible-tramp-get-inventory-hosts-cli ansible-tramp-inventory-cli-exec ansible-tramp-cnnx)))))
+
+(defun ansible-tramp-get-inventory-hosts-cli (&optional inventory-bin ansible-cnnx)
+  "Attempts retrieving list of hosts in Ansible inventory.
+First looks up local cache `ansible-tramp-inventory-cache' if not empty or not too old."
+  (if ansible-tramp-inventory-cache
+      (prf/gethash-recursive ansible-tramp-inventory-cache "_meta" "hostvars")
+    (message "Reloading inventory cache, retry later")
+    (ansible-tramp-set-inventory-cache-cli inventory-bin ansible-cnnx)))
+
+(defun ansible-tramp-get-inventory-hosts-http (&optional inventory-http-url)
   "Attempts retrieving list of hosts in Ansible inventory.
 First looks up local cache `ansible-tramp-inventory-cache' if not empty or not too old.
 If not available, returns nil but tries reloading cache via an async API call (see `ansible-tramp-set-inventory-cache-http')."
@@ -68,36 +94,15 @@ If not available, returns nil but tries reloading cache via an async API call (s
     (message "Reloading inventory cache, retry later")
     (ansible-tramp-set-inventory-cache-http inventory-http-url)))
 
-
-(defun ansible-tramp-get-inventory-hostnames (&optional inventory-http-url)
-  "Attempts retrieving list of hostnames in Ansible inventory.
-First looks up local cache `ansible-tramp-inventory-cache' if not empty or not too old.
-If not available, returns nil but tries reloading cache via an async API call (see `ansible-tramp-set-inventory-cache-http')."
-  (let ((inventory-hosts-hash-table (ansible-tramp-get-inventory-hosts inventory-http-url)))
-    (when inventory-hosts-hash-table
-      (hash-table-keys inventory-hosts-hash-table))))
-
-
-(defun ansible-tramp-get-inventory-vars-for-host (host &optional inventory-http-url)
-  "Returns inventory vars for HOST."
-  (if ansible-tramp-inventory-cache
-      (prf/gethash-recursive ansible-tramp-inventory-cache "_meta" "hostvars" host)
-    (message "Reloading inventory cache, retry later")
-    (ansible-tramp-set-inventory-cache-http inventory-http-url)))
-
-
-(defun ansible-tramp-get-inventory-var-for-host (host varname &optional inventory-http-url)
-  "Returns value of inventory var VARNAME for HOST."
-  (let ((host-vars))
-    (setq host-vars (ansible-tramp-get-inventory-vars-for-host host inventory-http-url))
-    (when host-vars
-      (gethash varname host-vars))))
-
-
-(defun ansible-tramp-get-inventory-address-for-host (host &optional inventory-http-url)
-  "Returns value of inventory var \"ansible_host\" for HOST."
-  (ansible-tramp-get-inventory-var-for-host host "ansible_host" inventory-http-url))
-
+(defun ansible-tramp-set-inventory-cache-cli (&optional inventory-bin ansible-cnnx)
+  "Sets cache `ansible-tramp-inventory-cache' by doing an async API call."
+  (interactive)
+  (ansible-tramp--cli-inventory-callback
+   '(lambda (response)
+      (setq ansible-tramp-inventory-cache (request-response-data response)
+	    ansible-tramp-inventory-cache-set-time (current-time))
+      (message "Ansible Inventory cache set"))
+   inventory-bin ansible-cnnx))
 
 (defun ansible-tramp-set-inventory-cache-http (&optional inventory-http-url)
   "Sets cache `ansible-tramp-inventory-cache' by doing an async API call.
@@ -110,12 +115,39 @@ The latter targets either INVENTORY-HTTP-URL or `ansible-tramp-inventory-http-ur
       (message "Ansible Inventory cache set"))
    inventory-http-url))
 
-
 (defun ansible-tramp-clear-inventory-cache ()
   "Clears cache `ansible-tramp-inventory-cache'."
   (interactive)
   (setq ansible-tramp-inventory-cache nil
 	ansible-tramp-inventory-cache-set-time nil))
+
+(defun ansible-tramp-get-inventory-hostnames (&optional inventory-http-url)
+  "Attempts retrieving list of hostnames in Ansible inventory.
+First looks up local cache `ansible-tramp-inventory-cache' if not empty or not too old.
+If not available, returns nil but tries reloading cache via an async API call (see `ansible-tramp-set-inventory-cache-http')."
+  ;; TODO: make it generic (work w/ cli)
+  ;; (let ((inventory-hosts-hash-table (ansible-tramp-get-inventory-hosts :inventory-http-url inventory-http-url)))
+  (let ((inventory-hosts-hash-table (ansible-tramp-get-inventory-hosts-http inventory-http-url)))
+    (when inventory-hosts-hash-table
+      (hash-table-keys inventory-hosts-hash-table))))
+
+(defun ansible-tramp-get-inventory-vars-for-host (host &optional inventory-http-url)
+  "Returns inventory vars for HOST."
+  (if ansible-tramp-inventory-cache
+      (prf/gethash-recursive ansible-tramp-inventory-cache "_meta" "hostvars" host)
+    (message "Reloading inventory cache, retry later")
+    (ansible-tramp-set-inventory-cache-http inventory-http-url)))
+
+(defun ansible-tramp-get-inventory-var-for-host (host varname &optional inventory-http-url)
+  "Returns value of inventory var VARNAME for HOST."
+  (let ((host-vars))
+    (setq host-vars (ansible-tramp-get-inventory-vars-for-host host inventory-http-url))
+    (when host-vars
+      (gethash varname host-vars))))
+
+(defun ansible-tramp-get-inventory-address-for-host (host &optional inventory-http-url)
+  "Returns value of inventory var \"ansible_host\" for HOST."
+  (ansible-tramp-get-inventory-var-for-host host "ansible_host" inventory-http-url))
 
 
 
@@ -184,10 +216,32 @@ The latter targets either INVENTORY-HTTP-URL or `ansible-tramp-inventory-http-ur
 
 ;; NB: those are async using defer
 
-(defun ansible-tramp--message-inventory (&optional inventory-http-url)
+(defun ansible-tramp--message-inventory-cli (&optional inventory-bin ansible-cnnx)
+  (ansible-tramp--cli-inventory-callback
+   '(lambda (response)
+      (message "Got: %S" (request-response-data response)))))
+
+(defun ansible-tramp--message-inventory-http (&optional inventory-http-url)
   (ansible-tramp--http-inventory-callback
    '(lambda (response)
       (message "Got: %S" (request-response-data response)))))
+
+(defun ansible-tramp--cli-inventory-callback (callback &optional inventory-bin ansible-cnnx)
+  (let* ((ansible-cnnx (or ansible-cnnx ansible-tramp-cnnx default-directory))
+         (inventory-bin (or inventory-bin ansible-tramp-inventory-cli-exec))
+         (ansible-inventory-cmd (concat inventory-bin " --list")))
+    (deferred:$
+      (deferred:next
+        `(lambda ()
+           (prf/tramp/remote-shell-command-to-string ,ansible-cnnx ,ansible-inventory-cmd)))
+      (deferred:nextc it
+        (lambda (x)
+          (let ((json-object-type 'hash-table)
+                (json-array-type 'list)
+                (json-key-type 'string))
+            (json-read-from-string x))))
+      (deferred:nextc it
+        callback))))
 
 (defun ansible-tramp--http-inventory-callback (callback &optional inventory-http-url)
   "Launch async call of API to retrieve Ansible inventory and registers CALLBACK to be triggered on end of execution."
@@ -225,15 +279,11 @@ The latter targets either INVENTORY-HTTP-URL or `ansible-tramp-inventory-http-ur
   (ansible-tramp--build-ansible-cmd host "setup" ansible-bin ansible-user))
 
 
-(defun ansible-tramp--remote-exec-module-setup (host remote-ansible-cnnx &optional ansible-bin ansible-user)
+(defun ansible-tramp--exec-module-setup (host &optional ansible-cnnx ansible-bin ansible-user)
   "Launch Ansible shell command targeting HOST with module \"setup\", at remote path REMOTE-ANSIBLE-CNNX."
-  (let ((ansible-cmd (ansible-tramp--build-ansible-cmd-setup host ansible-bin ansible-user)))
-    (prf/tramp/remote-shell-command-to-string remote-ansible-cnnx ansible-cmd)))
-
-;; REVIEW: should be able to use `ansible-tramp--remote-exec-module-setup' w/ local paths as well
-(defun ansible-tramp--exec-module-setup (host &optional ansible-bin ansible-user)
-  (let ((ansible-cmd (ansible-tramp--build-ansible-cmd-setup host ansible-bin ansible-user)))
-    (shell-command-to-string ansible-cmd)))
+  (let ((ansible-cnnx (or ansible-cnnx ansible-tramp-cnnx default-directory))
+        (ansible-cmd (ansible-tramp--build-ansible-cmd-setup host ansible-bin ansible-user)))
+    (prf/tramp/remote-shell-command-to-string ansible-cnnx ansible-cmd)))
 
 
 (defun ansible-tramp--parse-task-setup-output (raw-res host)
