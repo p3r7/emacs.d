@@ -76,19 +76,20 @@
 ;;;;; (setq shell-command-switch "-ic") ; SHOULD THIS BE "-c" or "-ic"?
 
 
-(with-eval-after-load 'prf-tramp
-  (setq prf/tramp/local-shell-bin/git-bash (concat git-bash-bin-root "/bash.exe")
-	prf/tramp/local-shell-bin/cygwin-bash (concat cygwin-bin "/bash.exe"))
+(with-eval-after-load 'prf-shell
+  (setq prf/local-shell-bin/git-bash (concat git-bash-bin-root "/bash.exe")
+	prf/local-shell-bin/cygwin-bash (concat cygwin-bin "/bash.exe"))
 
-  (defun prf/tramp/shell/git-bash (&optional path)
+  (defun prf/shell/git-bash (&optional path)
     (interactive)
-    (prf/tramp/shell path prf/tramp/local-shell-bin/git-bash))
+    (prf/shell :path path :interpreter prf/local-shell-bin/git-bash))
 
-  (defun prf/tramp/shell/cygwin-bash (&optional path)
+  (defun prf/shell/cygwin-bash (&optional path)
     (interactive)
     ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
-    (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash (list "--init-file" (concat "/home/" (getenv "USERNAME") "/.bashrc"))))
-  (defalias 'prf/tramp/shell/bash 'prf/tramp/shell/cygwin-bash))
+    (prf/shell :path path :interpreter prf/local-shell-bin/cygwin-bash
+               :interpreter-args `("--init-file" ,(concat "/home/" (getenv "USERNAME") "/.bashrc"))))
+  (defalias 'prf/shell/bash 'prf/shell/cygwin-bash))
 
 
 
@@ -135,32 +136,17 @@ loaded as such.)"
 (use-package fakecygpty
   :quelpa (fakecygpty :fetcher github :repo "d5884/fakecygpty")
   :if (executable-find "fakecygpty")
-  :after (tramp)
+  :after (tramp prf-tramp-method)
   :config
   (fakecygpty-activate)
-
-  (defun tramp-cywgin-ssh--replace-login-program-of-method (tramp-method-def)
-    (let ((method-name (car tramp-method-def))
-          (method-def-args (cdr tramp-method-def)))
-      (cons method-name
-            (-map-when
-             (lambda (e) (equal (car e) 'tramp-login-program))
-             (lambda (_e) '(tramp-login-program "fakecygpty ssh"))
-             method-def-args))))
 
   (defun tramp-cywgin-ssh--get-enriched-tramp-methods ()
     (-map-when
      (lambda (e) (member (car e) '("ssh" "sshx")))
-     #'tramp-cywgin-ssh--replace-login-program-of-method
+     (lambda (e) (prf/tramp/method-def/with-login-exec e "fakecygpty ssh"))
      tramp-methods))
 
-  (defun tramp-cywgin-ssh-enrich-existing ()
-    (if (executable-find "fakecygpty")
-        (progn
-          (setq tramp-methods (tramp-cywgin-ssh--get-enriched-tramp-methods)))
-      (message "Missing program `fakecygpty'")))
-
-  (tramp-cywgin-ssh-enrich-existing))
+  (setq tramp-methods (tramp-cywgin-ssh--get-enriched-tramp-methods)))
 
 
 

@@ -107,11 +107,11 @@
 
 ;; SHELLS
 
-(with-eval-after-load 'prf-tramp
-  (defvar prf/tramp/local-shell-bin/cmd shell-file-name)
-  (defun prf/tramp/shell/cmd (&optional path)
+(with-eval-after-load 'prf-shell
+  (defun prf/shell/cmd (&optional path)
     (interactive)
-    (prf/tramp/shell path prf/tramp/local-shell-bin/cmd)))
+    (prf/shell :path path
+               :interpreter prf-default-local-shell-interpreter)))
 
 
 ;; CONFIG FILES

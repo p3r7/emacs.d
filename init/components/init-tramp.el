@@ -66,23 +66,35 @@
                 vc-ignore-dir-regexp
                 tramp-file-name-regexp)))
 
+(use-package prf-tramp-method
+  :quelpa (prf-tramp-method :fetcher github :repo "p3r7/prf-tramp")
+  :after tramp)
+
 
 
 ;; SHELL & TERM
 
 ;; helpers, notably better remote shell commands
-(use-package prf-tramp-shell
+
+(use-package prf-tramp
   :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
-  :after (tramp)
+  :after tramp)
+
+(use-package prf-tramp-friendly-parsing
+  :quelpa (prf-tramp-friendly-parsing :fetcher github :repo "p3r7/prf-tramp")
+  :after tramp)
+
+(use-package prf-remote-shell
+  :quelpa (prf-remote-shell :fetcher github :repo "p3r7/prf-tramp")
+  :after (prf-tramp prf-tramp-friendly-parsing)
   :config
   (if (not (fboundp '_sh))
-      (defalias '_sh 'prf/tramp/shell))
-  (defalias '_rsh 'prf/tramp/remote-shell))
+      (defalias '_rsh 'prf/remote-shell)))
 
 ;; ansible inventory
 (use-package ansible-tramp
   :load-path "~/.emacs.d/plugins/ansible-tramp"
-  :after (request-deferred prf-tramp)
+  :after (request-deferred prf-remote-shell)
   :config
   (when ansible-tramp-inventory-http-url
     (ansible-tramp-set-inventory-cache-http)))
@@ -97,7 +109,7 @@
 
 ;; Docker
 (use-package docker-tramp
-  :after (tramp))
+  :after tramp)
 
 ;; Vagrant
 ;;(when (and (executable-find "vagrant")

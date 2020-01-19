@@ -5,9 +5,27 @@
   :after comint
 
   :config
-
   (when (>= emacs-major-version 25)
     (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window))))
+
+
+(use-package prf-with-interpreter
+  :quelpa (prf-with-interpreter :fetcher github :repo "p3r7/prf-tramp")
+  :config
+  (setq tramp-default-user "root"))
+
+
+(use-package prf-shell-command
+  :quelpa (prf-shell :fetcher github :repo "p3r7/prf-tramp")
+  :after prf-with-interpreter)
+
+
+(use-package prf-shell
+  :quelpa (prf-shell :fetcher github :repo "p3r7/prf-tramp")
+  :after prf-with-interpreter
+  :config
+  (if (not (fboundp '_sh))
+      (defalias '_sh 'prf/shell)))
 
 
 (use-package shx
