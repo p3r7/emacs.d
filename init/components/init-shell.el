@@ -24,8 +24,8 @@
   :quelpa (prf-shell :fetcher github :repo "p3r7/prf-tramp")
   :after prf-with-interpreter
   :config
-  (if (not (fboundp '_sh))
-      (defalias '_sh 'prf/shell)))
+  (when (not (fboundp '_sh))
+    (defalias '_sh 'prf/shell)))
 
 
 (use-package shx

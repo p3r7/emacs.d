@@ -88,8 +88,8 @@
   :quelpa (prf-remote-shell :fetcher github :repo "p3r7/prf-tramp")
   :after (prf-tramp prf-tramp-friendly-parsing)
   :config
-  (if (not (fboundp '_sh))
-      (defalias '_rsh 'prf/remote-shell)))
+  (when (not (fboundp '_rsh))
+    (defalias '_rsh 'prf/remote-shell)))
 
 ;; ansible inventory
 (use-package ansible-tramp
