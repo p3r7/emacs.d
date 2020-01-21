@@ -99,7 +99,7 @@
 
 ;; Jinja2 inline support via polymode
 ;; NB: disabled as indents aggressively tasks in roles
-;; alos, seems to load strangely, the :disabled keyword doesn't appear to work
+;; also, seems to load strangely, the :disabled keyword doesn't appear to work
 (when nil
   (use-package poly-ansible
     :disabled
