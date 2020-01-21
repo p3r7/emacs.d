@@ -18,7 +18,7 @@
 
 (require 'init-eldoc)
 
-;; NB: elisp / emacs -specific stuff in ~/.emacs.d/init/lang/init-elisp.el
+;; NB: elisp / emacs -specific stuff in HELP section in ~/.emacs.d/init/lang/init-elisp.el
 
 
 
@@ -28,12 +28,14 @@
 (add-to-list 'Info-default-directory-list "~/.emacs.d/info")
 
 
-;; EPUB
+
+;; EPUB
 
 (require 'init-nov)
 
 
-;; MAN
+
+;; MAN
 
 (defalias 'man 'woman)
 (setq woman-use-own-frame nil)
@@ -44,12 +46,14 @@
 
 (use-package tldr-ext
   :load-path "~/.emacs.d/plugins/tldr-ext"
-  :after (tldr)
+  :after tldr
   :config
-  (tldr-ext-activate))
+  (when (file-exists-p tldr-ext-directory-path)
+    (tldr-ext-activate)))
 
 
-;; WEBSITES / ARTICLES
+
+;; WEBSITES / ARTICLES
 
 (require 'init-pocket)
 
