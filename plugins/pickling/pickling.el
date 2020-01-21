@@ -1,15 +1,57 @@
+;;; pickling.el --- Save and restore state.
+
+;; Copyright (C) 2019-2020 Jordan Besly
+;;
+;; Version: 0.1.0
+;; URL: https://github.com/p3r7/prf-tramp
+;; Package-Requires: ((dash "2.16.0"))
+;;
+;; Permission is hereby granted to use and distribute this code, with or
+;; without modifications, provided that this copyright notice is copied with
+;; it. Like anything else that's free, lusty-explorer.el is provided *as is*
+;; and comes with no warranty of any kind, either expressed or implied. In no
+;; event will the copyright holder be liable for any damages resulting from
+;; the use of this software.
+
+;;; Commentary:
+;;  -----------
+;;
+;; For detailed instructions, please look at the README.md
+
+;;; Code:
+
+
+
+;; REQUIRES
 
 (require 'dash)
 
-;; TODO: have pickles hold their types, so they we culd just call a simple `unpickle' method
-;; TODO: have the possibility to have the pickles be globally set w/ a suffix of prefix, so that we would not have to bother storing them in a variable client-side
 
-;; ------------------------------------------------------------------------
-;; VARS
+
+;; GENERIC
+
+(defun unpickle (pickled-stuff)
+  (let ((type (car pickled-stuff))
+        (stuff (cdr pickled-stuff)))
+    (cond
+     ((eq type 'var)
+      (unpickle-var stuff))
+     ((eq type 'face)
+      (unpickle-face stuff))
+     ((eq type 'minor-mode)
+      (unpickle-minor-mode stuff))
+     (t
+      (error "Unsupported type %S" type)))))
+
+
+
+;; VAR
 
 (defun pickle-var (var-name)
   (when (listp var-name)
     (setq var-name (car var-name)))
+  (when (stringp var-name)
+    (setq var-name (intern var-name)))
   (when (boundp var-name)
     (cons var-name (eval var-name))))
 
@@ -23,35 +65,22 @@
   (mapc #'unpickle-var pickled-var-list))
 
 
-;; ------------------------------------------------------------------------
+
 ;; FACES
 
 (defun pickle-face (face-name)
   (when (listp face-name)
     (setq face-name (car face-name)))
-  (when (facep check-face)
-    (cons face-name (face-all-attributes face-name))))
+  (when (stringp face-name)
+    (setq face-name (intern face-name)))
+  (when (facep face-name)
+    (cons face-name (face-all-attributes face-name (selected-frame)))))
 
-;; FIXME: not working, dunno why
 (defun unpickle-face (pickled-face)
   (let ((face-name (car pickled-face))
 	(face-attrs (cdr pickled-face)))
-
     (apply 'set-face-attribute face-name nil
-	   (--mapcat (list (car it) (cdr it)) face-attrs))
-
-    ;; (mapc
-    ;;  (lambda (x)
-    ;;    (message "(set-face-attribute %S nil %S %S)" face-name (car x) (cdr x))
-    ;;    (funcall 'set-face-attribute face-name nil (car x) (cdr x)))
-    ;;  face-attrs)
-    ;; (-each face-attrs
-    ;;   (lambda (x)
-    ;; 	(message "(set-face-attribute %S nil %S %S)" face-name (car x) (cdr x))
-    ;; 	(funcall 'set-face-attribute face-name nil (car x) (cdr x))))
-
-    )
-  )
+	   (--mapcat (list (car it) (cdr it)) face-attrs))))
 
 (defun pickle-face-list (face-name-list)
   (mapcar #'pickle-face face-name-list))
@@ -60,20 +89,22 @@
   (mapc #'unpickle-face pickled-face-list))
 
 
-;; ------------------------------------------------------------------------
+
 ;; MINOR MODES
 
 (defun pickle-minor-mode (minor-mode-name)
   (when (listp minor-mode-name)
     (setq minor-mode-name (car minor-mode-name)))
-  (pickle-var (minor-mode-name)))
+  (when (stringp minor-mode-name)
+    (setq minor-mode-name (intern minor-mode-name)))
+  (pickle-var minor-mode-name))
 
 (defun unpickle-minor-mode (pickled-minor-mode)
   (let ((minor-mode-name (car pickled-minor-mode))
 	(minor-mode-state (cdr pickled-minor-mode)))
     (if minor-mode-state
-	(funcall (intern "minor-mode-name") 1)
-      (funcall (intern "minor-mode-name") -1))))
+	(funcall minor-mode-name 1)
+      (funcall minor-mode-name -1))))
 
 (defun pickle-minor-mode-list (minor-mode-name-list)
   (mapcar #'pickle-minor-mode minor-mode-name-list))
@@ -82,4 +113,8 @@
   (mapc #'unpickle-minor-mode pickled-minor-mode-list))
 
 
+
+
 (provide 'pickling)
+
+;;; pickling.el ends here.
