@@ -30,7 +30,7 @@
 
 (use-package shx
   :hook (shell-mode . shx-mode)
-  :after shell
+  :after (shell prf-with-interpreter)
 
   :config
 
@@ -50,8 +50,29 @@ LINE-STYLE (for example 'w lp'); insert the plot in the buffer."
                        ;; PATCHED HERE
                        plot-command " " (shell-quote-argument filename) " "
                        line-style))))
-        (when (zerop status) (shx-insert-image img-name)))))
-  (defalias 'shx-insert-plot #'prf/shx-insert-plot))
+        (when (zerop status) (shx-insert-image img-name))))
+    (defalias 'shx-insert-plot #'prf/shx-insert-plot))
+
+  ;; NB: patched version to prevent respawning in local dd
+  (defun prf/shx-send-input ()
+    "Send or parse the input currently written at the prompt.
+In normal circumstances this input is additionally filtered by
+`shx-filter-input' via `comint-mode'."
+    (interactive)
+    (cond ((not (comint-check-proc shx-buffer))
+           ;; no process?  restart shell
+           (when (file-remote-p default-directory)
+             (if (file-exists-p default-directory)
+                 (setq explicit-shell-file-name prf-default-remote-shell-interpreter)
+               ;; in a safe directory:
+               (setq default-directory (getenv "HOME"))))
+           ;; (message "respawning shell @ %s w/ shell %s" default-directory explicit-shell-file-name)
+           (shx--restart-shell))
+          ((>= (length (shx--current-input)) shx-max-input)
+           (message "Input line exceeds `shx-max-input'."))
+          (t (shx--propertize-prompt)
+             (comint-send-input))))
+  (defalias 'shx-send-input #'prf/shx-send-input))
 
 
 (use-package sh-term
