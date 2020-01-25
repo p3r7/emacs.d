@@ -300,8 +300,7 @@ Uses the faces `lusty-directory-face', `lusty-slash-face', and
             (switch-to-buffer
              (find-file-noselect
               (expand-file-name file)))
-          (save-excursion
-            (cd file)
+          (let ((default-directory file))
             (call-interactively (gethash action lusty--custom-explorer-actions))))
 
         ;; (cond
