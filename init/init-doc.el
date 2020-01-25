@@ -48,7 +48,8 @@
   :load-path "~/.emacs.d/plugins/tldr-ext"
   :after tldr
   :config
-  (when (file-exists-p tldr-ext-directory-path)
+  (when (and tldr-ext-directory-path
+             (file-exists-p tldr-ext-directory-path))
     (tldr-ext-activate)))
 
 
