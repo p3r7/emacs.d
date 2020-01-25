@@ -1,11 +1,11 @@
 
-;; ------------------------------------------------------------------------
+
 ;; TRAMP
 
 (setq tramp-default-method "ssh")
 
 
-;; ------------------------------------------------------------------------
+
 ;; CLIPBOARD
 
 ;; NB: might not be necessary if using autocutsel
@@ -15,7 +15,7 @@
  save-interprogram-paste-before-kill t)
 
 
-;; ------------------------------------------------------------------------
+
 ;; FULLSCREEN (OLDER EMACS)
 
 ;; NOTE: does not work for some WM (e.g. xmonad)
@@ -31,6 +31,6 @@
   (defalias 'toggle-frame-fullscreen #'prf/toggle-fullscreen-wmctrl))
 
 
-;; ------------------------------------------------------------------------
+
 
 (provide 'init-linux)
