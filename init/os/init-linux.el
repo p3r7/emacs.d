@@ -16,6 +16,16 @@
 
 
 
+;; SERVER
+
+(defun prf/emacs-daemon-reload ()
+  (interactive)
+  (let ((default-directory "~"))
+    (async-shell-command "emacsclient -e \"(save-buffers-kill-emacs)\" && emacs --daemon && notify-send \"Emacs Daemon\" \"Emacs is ready\"")))
+(global-set-key (kbd "C-x M-c") 'prf/emacs-daemon-reload)
+
+
+
 ;; FULLSCREEN (OLDER EMACS)
 
 ;; NOTE: does not work for some WM (e.g. xmonad)
