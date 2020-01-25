@@ -9,20 +9,20 @@
     (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window))))
 
 
-(use-package prf-with-interpreter
-  :quelpa (prf-with-interpreter :fetcher github :repo "p3r7/prf-tramp")
+(use-package with-shell-interpreter
+  :quelpa (with-shell-interpreter :fetcher github :repo "p3r7/with-shell-interpreter")
   :config
   (setq tramp-default-user "root"))
 
 
 (use-package prf-shell-command
-  :quelpa (prf-shell :fetcher github :repo "p3r7/prf-tramp")
-  :after prf-with-interpreter)
+  :quelpa (prf-shell-command :fetcher github :repo "p3r7/prf-shell")
+  :after with-shell-interpreter)
 
 
 (use-package prf-shell
-  :quelpa (prf-shell :fetcher github :repo "p3r7/prf-tramp")
-  :after prf-with-interpreter
+  :quelpa (prf-shell :fetcher github :repo "p3r7/prf-shell")
+  :after with-shell-interpreter
   :config
   (when (not (fboundp '_sh))
     (defalias '_sh 'prf/shell)))

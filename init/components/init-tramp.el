@@ -85,7 +85,7 @@
   :after tramp)
 
 (use-package prf-remote-shell
-  :quelpa (prf-remote-shell :fetcher github :repo "p3r7/prf-tramp")
+  :quelpa (prf-remote-shell :fetcher github :repo "p3r7/prf-shell")
   :after (prf-tramp prf-tramp-friendly-parsing)
   :config
   (when (not (fboundp '_rsh))
