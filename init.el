@@ -244,6 +244,7 @@
 (require 'init-origami)
 (require 'init-yasnippet)
 
+(require 'init-flycheck)
 (require 'init-eglot)
 
 
