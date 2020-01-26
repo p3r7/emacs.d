@@ -25,7 +25,7 @@
   :after with-shell-interpreter
   :config
   (when (not (fboundp '_sh))
-    (defalias '_sh 'prf/shell)))
+    (defalias '_sh 'prf-shell)))
 
 
 (use-package shx

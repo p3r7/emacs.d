@@ -110,8 +110,10 @@
 (with-eval-after-load 'prf-shell
   (defun prf/shell/cmd (&optional path)
     (interactive)
-    (prf/shell :path path
-               :interpreter prf-default-local-shell-interpreter)))
+    (when (and path
+               (file-remote-p path))
+      (setq path "~"))
+    (prf-shell :path path)))
 
 
 ;; CONFIG FILES

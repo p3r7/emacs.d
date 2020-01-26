@@ -58,7 +58,7 @@ Function inspired by `bmkp-jump-1' from bookmark+."
 
 (defun prf/bmkp-bmenu-open-shell (&optional flip-use-region-p)
   (interactive "P")
-  (prf/bmkp-bmenu-action #'prf/shell flip-use-region-p))
+  (prf/bmkp-bmenu-action #'prf-shell flip-use-region-p))
 
 (defun prf/bmkp-bmenu-shell-command (&optional flip-use-region-p)
   (interactive "P")

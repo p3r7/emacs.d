@@ -89,7 +89,7 @@
   :after (prf-tramp prf-tramp-friendly-parsing)
   :config
   (when (not (fboundp '_rsh))
-    (defalias '_rsh 'prf/remote-shell)))
+    (defalias '_rsh 'prf-remote-shell)))
 
 ;; ansible inventory
 (use-package ansible-tramp

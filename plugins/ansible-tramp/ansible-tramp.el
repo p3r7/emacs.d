@@ -171,14 +171,14 @@ If not available, returns nil but tries reloading cache via an async API call (s
                               buf-list)
                          (mapc
                           (lambda (e)
-                            (add-to-list 'buf-list (prf/remote-shell :path (ansible-tramp-get-inventory-address-for-host e)) 't))
+                            (add-to-list 'buf-list (prf-remote-shell :path (ansible-tramp-get-inventory-address-for-host e)) 't))
                           marked-candidates)
                          (when (< 1 nb-marked-candidates)
                            (buffer-grid-diplay buf-list 't)))))
                     ("dired" .
                      (lambda (candidate)
                        (let ((host-address (ansible-tramp-get-inventory-address-for-host candidate)))
-                         (prf/remote-shell :path host-address ))))
+                         (prf-remote-shell :path host-address ))))
                     ("debug" .
                      (lambda (candidate)
                        (let ((hostname candidate)
@@ -233,7 +233,7 @@ If not available, returns nil but tries reloading cache via an async API call (s
     (deferred:$
       (deferred:next
         `(lambda ()
-           (prf/shell-command-to-string ,ansible-inventory-cmd :path ,ansible-cnnx)))
+           (prf-shell-command-to-string ,ansible-inventory-cmd :path ,ansible-cnnx)))
       (deferred:nextc it
         (lambda (x)
           (let ((json-object-type 'hash-table)
@@ -283,7 +283,7 @@ If not available, returns nil but tries reloading cache via an async API call (s
   "Launch Ansible shell command targeting HOST with module \"setup\", at remote path REMOTE-ANSIBLE-CNNX."
   (let ((ansible-cnnx (or ansible-cnnx ansible-tramp-cnnx default-directory))
         (ansible-cmd (ansible-tramp--build-ansible-cmd-setup host ansible-bin ansible-user)))
-    (prf/shell-command-to-string ansible-cmd :path ansible-cnnx)))
+    (prf-shell-command-to-string ansible-cmd :path ansible-cnnx)))
 
 
 (defun ansible-tramp--parse-task-setup-output (raw-res host)

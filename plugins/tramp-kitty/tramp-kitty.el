@@ -152,7 +152,7 @@
 		   ;; NB: not working
 		   ("shell" .
 		    (lambda (candidate)
-		      (prf/shell :path (concat "/klinkx:" candidate ":/"))))
+		      (prf-shell :path (concat "/klinkx:" candidate ":/"))))
                    ("kitty" .
 		    (lambda (candidate)
 		      (start-process (concat "kitty<" candidate ">") nil "kitty" "-load" candidate)))

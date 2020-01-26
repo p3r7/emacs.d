@@ -82,12 +82,12 @@
 
   (defun prf/shell/git-bash (&optional path)
     (interactive)
-    (prf/shell :path path :interpreter prf/local-shell-bin/git-bash))
+    (prf-shell :path path :interpreter prf/local-shell-bin/git-bash))
 
   (defun prf/shell/cygwin-bash (&optional path)
     (interactive)
     ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
-    (prf/shell :path path :interpreter prf/local-shell-bin/cygwin-bash
+    (prf-shell :path path :interpreter prf/local-shell-bin/cygwin-bash
                :interpreter-args `("--init-file" ,(concat "/home/" (getenv "USERNAME") "/.bashrc"))))
   (defalias 'prf/shell/bash 'prf/shell/cygwin-bash))
 
