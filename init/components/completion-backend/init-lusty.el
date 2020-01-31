@@ -29,11 +29,26 @@
 	lusty--shell-open-here-fun #'prf-shell
 	lusty--M-x-fun #'helm-M-x)
   :config
+
+  (with-eval-after-load 'ibuffer
+    (defun ibuffer-lusty-find-file (file &optional _wildcards)
+      "Reimplementation of `ibuffer-find-file' calling `lusty-file-explorer'."
+      (interactive
+       (let ((default-directory (let ((buf (ibuffer-current-buffer)))
+                                  (if (buffer-live-p buf)
+                                      (with-current-buffer buf
+                                        default-directory)
+                                    default-directory))))
+         (lusty-file-explorer))))
+    (define-key ibuffer-mode-map [remap ibuffer-find-file] #'ibuffer-lusty-find-file))
+
   (lusty-register-custom-explorer-action "launch-shell" #'prf-shell "C-x s")
   (lusty-register-custom-explorer-action "shell-command" #'shell-command "M-!")
   (lusty-register-custom-explorer-action "async-shell-command" #'async-shell-command "M-&")
   (lusty-register-custom-explorer-action "eval-expression" #'eval-expression "M-:")
   (lusty-register-custom-explorer-action "M-x" #'helm-M-x "M-x")
   (lusty-register-custom-explorer-action "magit-status" #'prf/magit-status-maybe "C-x g"))
+
+
 
 (provide 'init-lusty)
