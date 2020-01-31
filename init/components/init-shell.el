@@ -30,7 +30,7 @@
 
 (use-package shx
   :hook (shell-mode . shx-mode)
-  :after (shell prf-with-interpreter)
+  :after (shell with-shell-interpreter)
 
   :config
 
