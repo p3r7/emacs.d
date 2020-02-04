@@ -56,7 +56,8 @@
   "Revert buffer without confirmation."
   (interactive) (revert-buffer t t))
 
-(defalias '_rb 'prf/revert-buffer-no-confirm)
+(defalias '_rb #'prf/revert-buffer-no-confirm)
+(global-set-key (kbd "<f5>") #'prf/revert-buffer-no-confirm)
 
 
 
