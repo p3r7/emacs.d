@@ -82,5 +82,12 @@
 
 
 
+;; OS
+
+(use-package prf-exec-path
+  :load-path "~/.emacs.d/plugins/prf-exec-path/prf-exec-path.el")
+
+
+
 
 (provide 'init-libs)
