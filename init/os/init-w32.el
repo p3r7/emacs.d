@@ -76,13 +76,36 @@
   :quelpa (w32shell :url "https://gist.githubusercontent.com/johnfredcee/1097145/raw/0b9995e00f7d239dd27bfd60b841760389ffd1b9/w32shell.el" :fetcher url))
 
 
-;; CYGWIN
+;; ENV: CYGWIN
 
-(when (executable-find "cygpath")
-  (setq cygwin-root (replace-regexp-in-string "/bin/cygpath.exe" "" (executable-find "cygpath")))
+(setq cygwin-root nil)
+
+(cond
+ ((executable-find "cygpath")
+  (setq cygwin-root (replace-regexp-in-string "/bin/cygpath.exe" "" (executable-find "cygpath"))))
+ ((file-directory-p "C:/cygwin64")
+  (setq cygwin-root "C:/cygwin64"))
+ ((file-directory-p "C:/cygwin")
+  (setq cygwin-root "C:/cygwin")))
+
+(when cygwin-root
+  (with-eval-after-load 'init-cygwin-integration
+    (prf/add-cygwin-to-path)
+    (prf/add-cygwin-info-dir)
+    (defalias 'prf/shell/bash 'prf/shell/cygwin-bash))
   (require 'init-cygwin-integration))
 
-;;(prf/require-plugin 'setup-cygwin)
+
+
+;; ENV: MSYS
+
+(require 'init-msys-integration)
+
+
+
+;; ENV: GIT BASH
+
+(require 'init-git-bash-integration)
 
 
  ;; KEYS
