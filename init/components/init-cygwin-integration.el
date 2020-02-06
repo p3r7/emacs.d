@@ -7,43 +7,17 @@
 
 ;; VARS
 
-(defvar cygwin-root "c:/cygwin64")
-
-(defvar mingw-bin-root "C:/MinGW/bin")
-(defvar mingw-msys-bin-root "C:/MinGW/msys/1.0/bin")
-(defvar git-bash-cmd-root "C:/Program Files/Git/cmd") ; contains only git
-(defvar git-bash-bin-root "C:/Program Files/Git/bin") ; contains only git + bash
-
-(setq
- ;; cygwin-bin (concat cygwin-root "/usr/bin")
- cygwin-bin (concat cygwin-root "/bin")
- cygwin-local-bin (concat cygwin-root "/usr/local/bin")
- Info-default-directory-list (append Info-default-directory-list (list cygwin-root))
- )
-
 ;; trick is that :
 ;; - cygwin's /usr/bin is linked to /bin, that is <cygwin-root>\bin\
 ;; - cygwin's /usr/local/bin is <cygwin-root>\usr\local\bin\
 
+(setq cygwin-bin (concat cygwin-root "/bin")
+      cygwin-local-bin (concat cygwin-root "/usr/local/bin"))
 
-;; EXEC-PATH ENRICHMENT
+(setq prf/local-shell-bin/cygwin-bash (concat cygwin-bin "/bash.exe"))
 
-(defun prf/escape-winnt-path (path)
-  (replace-regexp-in-string "\\\\" "\\\\\\\\" (downcase (prf/system/get-path-system-format path))))
 
-(defun prf/enrich-exec-path (dir)
-  (when (not (string-match-p
-	      (prf/escape-winnt-path dir)
-	      (downcase (getenv "PATH"))))
-    (setenv "PATH" (concat
-		    (prf/system/get-path-system-format dir) ";"
-		    (getenv "PATH")))
-    (setq exec-path (cons dir exec-path))))
-
-(prf/enrich-exec-path cygwin-bin)
-(prf/enrich-exec-path cygwin-local-bin)
-
-;; do undo in a let, typically before launching a shell: (replace-regexp-in-string (concat (prf/escape-winnt-path cygwin-bin) ";") "" (getenv "PATH"))
+ ;; EXEC-PATH ENRICHMENT
 
 ;; NB: cygwin's git misbehave w/ quelpa under Windows
 ;; thus we use git bash version by default instead, by putting it at the front of `exec-path'
@@ -57,6 +31,23 @@
 ;;   (when (member mingw-msys-bin-root exec-path)
 ;;     (setq exec-path (delete mingw-msys-bin-root exec-path)))
 ;;   (setq exec-path (cons mingw-msys-bin-root exec-path)))
+
+(defun prf/add-cygwin-to-path ()
+  "Enrich Emacs path w/ cygwin bin folders"
+  (prf/enrich-exec-path cygwin-bin)
+  (prf/enrich-exec-path cygwin-local-bin))
+
+(prf/add-cygwin-to-path)
+
+
+
+;; DOC
+
+(defun prf/add-cygwin-info-dir ()
+  "Add Cygwin docinfo dir to `Info-default-directory-list'"
+  (setq Info-default-directory-list (append Info-default-directory-list (list cygwin-root))))
+
+(prf/add-cygwin-info-dir)
 
 
 
@@ -75,21 +66,13 @@
 ;; (setq explicit-shell-args '("--login" "-i"))
 ;;;;; (setq shell-command-switch "-ic") ; SHOULD THIS BE "-c" or "-ic"?
 
-
-(with-eval-after-load 'prf-shell
-  (setq prf/local-shell-bin/git-bash (concat git-bash-bin-root "/bash.exe")
-	prf/local-shell-bin/cygwin-bash (concat cygwin-bin "/bash.exe"))
-
-  (defun prf/shell/git-bash (&optional path)
-    (interactive)
-    (prf-shell :path path :interpreter prf/local-shell-bin/git-bash))
-
-  (defun prf/shell/cygwin-bash (&optional path)
-    (interactive)
-    ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
-    (prf-shell :path path :interpreter prf/local-shell-bin/cygwin-bash
-               :interpreter-args `("--init-file" ,(concat "/home/" (getenv "USERNAME") "/.bashrc"))))
-  (defalias 'prf/shell/bash 'prf/shell/cygwin-bash))
+(when (executable-find prf/local-shell-bin/cygwin-bash)
+  (with-eval-after-load 'prf-shell
+    (defun prf/shell/cygwin-bash (&optional path)
+      (interactive)
+      ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
+      (prf-shell :path path :interpreter prf/local-shell-bin/cygwin-bash
+                 :interpreter-args `("--init-file" ,(concat "/home/" (getenv "USERNAME") "/.bashrc"))))))
 
 
 
@@ -97,6 +80,25 @@
 
 ;;; Use Unix-style line endings.
 ;; (setq-default buffer-file-coding-system 'undecided-unix)
+
+
+
+;; CYGWIN PTY COMPATIBILITY LAYER
+
+(use-package fakecygpty
+  :quelpa (fakecygpty :fetcher github :repo "d5884/fakecygpty")
+  :if (executable-find "fakecygpty")
+  :after (tramp prf-tramp-method)
+  :config
+  (fakecygpty-activate)
+
+  (defun tramp-cywgin-ssh--get-enriched-tramp-methods ()
+    (-map-when
+     (lambda (e) (member (car e) '("ssh" "sshx")))
+     (lambda (e) (prf/tramp/method-def/with-login-exec e "fakecygpty ssh"))
+     tramp-methods))
+
+  (setq tramp-methods (tramp-cywgin-ssh--get-enriched-tramp-methods)))
 
 
 
@@ -128,25 +130,6 @@ loaded as such.)"
   :config
   (cygwin-mount-activate)
   (add-hook 'find-file-hooks 'follow-cygwin-symlink))
-
-
-
-;; CYGWIN PTY COMPATIBILITY LAYER
-
-(use-package fakecygpty
-  :quelpa (fakecygpty :fetcher github :repo "d5884/fakecygpty")
-  :if (executable-find "fakecygpty")
-  :after (tramp prf-tramp-method)
-  :config
-  (fakecygpty-activate)
-
-  (defun tramp-cywgin-ssh--get-enriched-tramp-methods ()
-    (-map-when
-     (lambda (e) (member (car e) '("ssh" "sshx")))
-     (lambda (e) (prf/tramp/method-def/with-login-exec e "fakecygpty ssh"))
-     tramp-methods))
-
-  (setq tramp-methods (tramp-cywgin-ssh--get-enriched-tramp-methods)))
 
 
 
