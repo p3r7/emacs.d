@@ -24,13 +24,14 @@
 
   :config
   (defun prf/magit-status-maybe (&optional directory)
+    "Find out if we're in a git repo and if true call `magit-status'"
     (interactive)
     (unless directory
       (setq directory default-directory))
     (let ((toplevel (magit-toplevel directory)))
       (if (not toplevel)
           (message "Not a git repo")
-        (magit-status)))))
+        (magit-status toplevel)))))
 
 
 
