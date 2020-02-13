@@ -126,6 +126,7 @@
            (org-level-6 :weight bold :foreground "#8888c8"))
           (white-sand
            (cursor :background "#585858")
+           (region :background "#a4a4a4" :foreground "white")
            (form-feed-line :strike-through "#a9a9a9"))
 	  (flatui
 	   (org-block :inherit default))
