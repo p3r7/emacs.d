@@ -90,7 +90,8 @@
 (use-package prf-theme
   :quelpa (prf-theme :fetcher github :repo "p3r7/prf-theme")
   :demand
-  :bind ([f12] . prf/theme/cycle-theme)
+  :bind (([f12] . prf/theme/cycle-theme)
+         ("C-<f12>" . helm-prf-theme-choose))
   :init
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
   (setq prf/theme/theme-list prf/theme/list/practical)
