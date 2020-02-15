@@ -30,15 +30,27 @@
 
 ;; GENERIC
 
+(defun pickle (type name)
+  (cond
+   ((pickling--permissive-eq type 'var)
+    (list :var (pickle-var name)))
+   ((pickling--permissive-eq type 'face)
+    (list :face (pickle-face name)))
+   ((pickling--permissive-eq type 'minor-mode)
+    (list :minor-mode (pickle-minor-mode name)))
+   (t
+    (error "Unsupported type %s" type))))
+
+
 (defun unpickle (pickled-stuff)
   (let ((type (car pickled-stuff))
         (stuff (cdr pickled-stuff)))
     (cond
-     ((eq type 'var)
+     ((pickling--permissive-eq type 'var)
       (unpickle-var stuff))
-     ((eq type 'face)
+     ((pickling--permissive-eq type 'face)
       (unpickle-face stuff))
-     ((eq type 'minor-mode)
+     ((pickling--permissive-eq type 'minor-mode)
       (unpickle-minor-mode stuff))
      (t
       (error "Unsupported type %S" type)))))
@@ -111,6 +123,17 @@
 
 (defun unpickle-minor-mode-list (pickled-minor-mode-list)
   (mapc #'unpickle-minor-mode pickled-minor-mode-list))
+
+
+
+;; PRIVATE HELPERS
+
+(defun pickling--permissive-eq (val ref-symbol)
+  "Like `eq' but expect REF-SYMBOL to be a symbol.
+Compare VAL against its symbol, string and keyword derivatives"
+  (let* ((str (symbol-name ref-symbol))
+         (keyword (intern (concat ":" str))))
+    (member val (list ref-symbol str keyword))))
 
 
 
