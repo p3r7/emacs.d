@@ -19,12 +19,13 @@
 
 ;; API
 
-(cl-defun pushbullet-reader--get (endpoint &key params sync)
+(cl-defun pushbullet-reader--get (endpoint &key params callback)
   "Return response struct for an API request to <https://api.pushbullet.com/v2/ENPOINT>.
 
 ENDPOINT may be a string or symbol, e.g. `users/me'.  DATA should be a
-plist of API parameters; keys with nil values are removed.  SYNC
-is passed to `request''s `:sync' keyword.
+plist of API parameters; keys with nil values are removed.
+
+Call is synchronous unless CALLBACK is passed as an argument.
 
 The response body is automatically parsed with `json-read'."
   (declare (indent defun))
@@ -39,49 +40,116 @@ The response body is automatically parsed with `json-read'."
          (url (concat "https://api.pushbullet.com/v2/" endpoint))
          (params (kvplist->alist (pocket-lib--plist-non-nil params)))
          (json-array-type 'list))
-    (request url
-      :type "GET"
-      :headers `(("Access-Token" . ,pushbullet-reader-access-token))
-      :params params
-      :sync sync
-      :parser #'json-read
-      :success (cl-function
-                (lambda (&key data &allow-other-keys)
-                  data))
-      :error (cl-function
-              (lambda (&key data error-thrown symbol-status response &allow-other-keys)
-                (error "Request error: URL:%s  DATA:%s  ERROR-THROWN:%s  SYMBOL-STATUS:%s  RESPONSE:%s"
-                       url data error-thrown symbol-status response))))))
+
+    (if callback
+        (deferred:$
+          (request-deferred url
+                            :type "GET"
+                            :headers `(("Access-Token" . ,pushbullet-reader-access-token))
+                            :params params
+                            :parser
+                            (lambda ()
+                              (let ((json-array-type 'list))
+                                (json-read))))
+          (deferred:nextc it
+            callback))
+      ;; (request url
+      ;;   :type "GET"
+      ;;   :headers `(("Access-Token" . ,pushbullet-reader-access-token))
+      ;;   :params params
+      ;;   :sync nil
+      ;;   :parser #'json-read
+      ;;   :success (cl-function
+      ;;             (lambda (&key data &allow-other-keys)
+      ;;               (setq prf/toto3 (request-response-data data))))
+      ;;   :error (cl-function
+      ;;           (lambda (&key data error-thrown symbol-status response &allow-other-keys)
+      ;;             (error "Request error: URL:%s  DATA:%s  ERROR-THROWN:%s  SYMBOL-STATUS:%s  RESPONSE:%s"
+      ;;                    url data error-thrown symbol-status response))))
+      (request url
+        :type "GET"
+        :headers `(("Access-Token" . ,pushbullet-reader-access-token))
+        :params params
+        :sync 't
+        :parser #'json-read
+        :success (cl-function
+                  (lambda (&key data &allow-other-keys)
+                    data))
+        :error (cl-function
+                (lambda (&key data error-thrown symbol-status response &allow-other-keys)
+                  (error "Request error: URL:%s  DATA:%s  ERROR-THROWN:%s  SYMBOL-STATUS:%s  RESPONSE:%s"
+                         url data error-thrown symbol-status response)))))))
 
 
 (cl-defun pushbullet-reader-get-pushes (&key
                                         (limit 10)
                                         (active "true")
                                         modified_after
-                                        cursor)
+                                        cursor
+                                        callback)
   "Return JSON response for a \"pushes\" API request.
 Without any arguments, this simply returns the first 10
 undeleted items in the user's list.  Keys set to nil will
 not be sent in the request.  See
 <https://docs.pushbullet.com/#list-pushes>."
   (declare (indent defun))
-  (let ((limit (number-to-string limit))
+  (let ((limit (when limit (number-to-string limit)))
         (params (list :limit limit :cursor cursor
                       :active active
                       :modified_after modified_after)))
-    (request-response-data
-     (pushbullet-reader--get 'pushes
-       :params params
-       :sync t))))
+    (if callback
+        (pushbullet-reader--get 'pushes
+          :params params
+          :callback callback)
+      (request-response-data
+       (pushbullet-reader--get 'pushes
+         :params params
+         :callback callback)))))
 
-(cl-defun pushbullet-reader-get-all-pushes (&key
-                                            (active "true")
-                                            modified_after
-                                            cursor)
+(cl-defun pushbullet-reader-get-all-pushes-async (&key
+                                                  limit
+                                                  (active "true")
+                                                  modified_after
+                                                  cursor
+                                                  callback
+                                                  final-callback
+                                                  (all-pushes '()))
+  (pushbullet-reader-get-pushes
+    :limit limit
+    :active active
+    :modified_after modified_after
+    :cursor cursor
+    :callback
+    `(lambda (response)
+       (when (request-response-error-thrown response)
+         (error "Got request-deferred error, aborting"))
+       (when ,callback
+         (funcall ,callback response))
+       (let* ((res (request-response-data response))
+              (next-cursor (cdr (assoc 'cursor res)))
+              (pushes (cdr (assoc 'pushes res))))
+         (setq pushes (append pushes ',all-pushes))
+         (if (and next-cursor
+                  (< prf/counter 20))
+             (progn
+               (setq prf/counter (+ prf/counter 1))
+               (message "JB1: nb merged pushes=%S" (length pushes))
+               (pushbullet-reader-get-all-pushes-async :cursor next-cursor
+                                                       :all-pushes pushes
+                                                       :callback ,callback
+                                                       :final-callback ,final-callback
+                                                       :limit ,limit
+                                                       ))
+           (when ,final-callback
+             (funcall ,final-callback pushes)))))))
+
+(cl-defun pushbullet-reader-get-all-pushes-sync (&key
+                                                 (active "true")
+                                                 modified_after
+                                                 cursor)
   ;; TODO: make it async using `deferred' or `aio'
   (cl-loop
    until (string= cursor "END")
-   ;; repeat 500
    append
    (let* ((res (pushbullet-reader-get-pushes :cursor cursor))
           (next-cursor (cdr (assoc 'cursor res))))
@@ -97,6 +165,7 @@ not be sent in the request.  See
     (cdr (assoc 'body push)))
    ((string= (cdr (assoc 'type push)) "link")
     (cdr (assoc 'url push)))))
+
 
 
 ;; HELPERS
