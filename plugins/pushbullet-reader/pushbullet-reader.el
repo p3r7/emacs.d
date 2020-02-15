@@ -82,7 +82,7 @@ The response body is automatically parsed with `json-read'."
 
 
 (cl-defun pushbullet-reader-get-pushes (&key
-                                        (limit 10)
+                                        (limit 20)
                                         (active "true")
                                         modified_after
                                         cursor
@@ -115,7 +115,7 @@ not be sent in the request.  See
                                                   final-callback
                                                   (all-pushes '()))
   (pushbullet-reader-get-pushes
-    :limit limit
+    :limit limit                        ; NB: limiting unitary calls but no effect unless <= 20
     :active active
     :modified_after modified_after
     :cursor cursor
@@ -127,19 +127,21 @@ not be sent in the request.  See
          (funcall ,callback response))
        (let* ((res (request-response-data response))
               (next-cursor (cdr (assoc 'cursor res)))
-              (pushes (cdr (assoc 'pushes res))))
+              (pushes (cdr (assoc 'pushes res)))
+              (limit ,limit))
+         (unless (null limit)
+           (setq limit (- limit (length pushes))))
          (setq pushes (append pushes ',all-pushes))
          (if (and next-cursor
-                  (< prf/counter 20))
+                  (> limit 0))
              (progn
-               (setq prf/counter (+ prf/counter 1))
-               (message "JB1: nb merged pushes=%S" (length pushes))
-               (pushbullet-reader-get-all-pushes-async :cursor next-cursor
-                                                       :all-pushes pushes
+               (pushbullet-reader-get-all-pushes-async :limit limit
+                                                       :active ,active
+                                                       :modified_after ,modified_after
+                                                       :cursor next-cursor
                                                        :callback ,callback
                                                        :final-callback ,final-callback
-                                                       :limit ,limit
-                                                       ))
+                                                       :all-pushes pushes))
            (when ,final-callback
              (funcall ,final-callback pushes)))))))
 
@@ -147,7 +149,6 @@ not be sent in the request.  See
                                                  (active "true")
                                                  modified_after
                                                  cursor)
-  ;; TODO: make it async using `deferred' or `aio'
   (cl-loop
    until (string= cursor "END")
    append
