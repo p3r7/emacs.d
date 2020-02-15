@@ -165,8 +165,7 @@ not be sent in the request.  See
      (unless cursor
        (setq cursor "END"))
      (unless (null limit)
-       (setq limit (- limit (length pushes)))
-       (message "limit=%S" limit))
+       (setq limit (- limit (length pushes))))
      (setq count (+ count (length pushes)))
      pushes)))
 
