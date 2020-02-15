@@ -227,6 +227,7 @@
 
 (require 'init-srv-utils)
 (require 'init-influxdb-client)
+(require 'init-docker)
 
 
 
