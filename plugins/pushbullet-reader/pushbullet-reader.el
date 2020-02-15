@@ -133,7 +133,8 @@ not be sent in the request.  See
            (setq limit (- limit (length pushes))))
          (setq pushes (append pushes ',all-pushes))
          (if (and next-cursor
-                  (> limit 0))
+                  (or (null limit)
+                      (> limit 0)))
              (progn
                (pushbullet-reader-get-all-pushes-async :limit limit
                                                        :active ,active
@@ -146,18 +147,28 @@ not be sent in the request.  See
              (funcall ,final-callback pushes)))))))
 
 (cl-defun pushbullet-reader-get-all-pushes-sync (&key
+                                                 limit
                                                  (active "true")
                                                  modified_after
                                                  cursor)
   (cl-loop
-   until (string= cursor "END")
+   with count = 0
+   until (or (string= cursor "END")
+             (and (not (null limit))
+                  (<= limit 0)))
    append
-   (let* ((res (pushbullet-reader-get-pushes :cursor cursor))
+   (let* ((res (pushbullet-reader-get-pushes :cursor cursor
+                 :limit limit))
+          (pushes (cdr (assoc 'pushes res)))
           (next-cursor (cdr (assoc 'cursor res))))
      (setq cursor next-cursor)
      (unless cursor
        (setq cursor "END"))
-     (cdr (assoc 'pushes res)))))
+     (unless (null limit)
+       (setq limit (- limit (length pushes)))
+       (message "limit=%S" limit))
+     (setq count (+ count (length pushes)))
+     pushes)))
 
 
 (defun pushbullet-reader-get-push-text (push)
