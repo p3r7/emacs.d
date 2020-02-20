@@ -47,7 +47,8 @@
           (setq ad-return-value (delq nil (delete-dups (append command-list ext-command-list)))))))
 
     (defadvice tldr-render-markdown (around tldr-render-markdown-with-ext activate)
-      (let ((md ad-do-it))
+      (let ((md (when (tldr-get-file-path-from-command-name (ad-get-arg 0))
+                  ad-do-it)))
         (let* ((tldr-directory-path tldr-ext-directory-path)
                (tldr-directory-file-path (tldr-get-file-path-from-command-name (ad-get-arg 0)))
                md-ext)
