@@ -60,12 +60,8 @@
        do
        (setq current-item line)
 
-       if (s-starts-with? "`" (s-trim line))
-       do (setq inside-multiline 't)
-
-       if (and inside-multiline
-               (s-ends-with? "`" (s-trim line)))
-       do (setq inside-multiline nil)
+       if (string= "```" (s-trim line))
+       do (setq inside-multiline (null inside-multiline))
 
        if (null inside-multiline)
        collect current-item)))
@@ -86,6 +82,20 @@
                          ((string-prefix-p "- " line)
                           (concat "- "
                                   (propertize (substring line 2) 'face 'tldr-description)))
+                         ((string-prefix-p "```" line)
+                          ;; Strip leading/trailing back-ticks and add code block face
+                          (setq line (propertize (substring line 4 -4) 'face 'tldr-code-block))
+                          ;; Add command face
+                          (setq line (replace-regexp-in-string
+                                      (concat "^" command)
+                                      (propertize command 'face 'tldr-command-itself)
+                                      line 'fixedcase))
+                          ;; Strip {{}} and add command argument face
+                          (while (string-match "{{\\(.+?\\)}}" line)
+                            (let ((argument (propertize (match-string 1 line)
+                                                        'face 'tldr-command-argument)))
+                              (setq line (replace-match argument 'fixedcase 'literal line 0))))
+                          (concat "  " line))
                          ((string-prefix-p "`" line)
                           ;; Strip leading/trailing back-ticks and add code block face
                           (setq line (propertize (substring line 1 -1) 'face 'tldr-code-block))
@@ -144,6 +154,10 @@
                                (back-to-indentation)
                                (setq code-end-pos
                                      (save-excursion
+                                       (or (re-search-forward "^- " nil 'no-error)
+                                           (end-of-buffer))
+                                       (back-to-indentation)
+                                       (backward-sentence)
                                        (forward-sentence)
                                        (point)))
                                (setq code (buffer-substring (point) code-end-pos))
