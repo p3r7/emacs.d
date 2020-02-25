@@ -288,8 +288,8 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
 (with-eval-after-load "hydra"
   (defhydra hydra-srvUtils (:color blue)
     "server utils"
-    ("s" prf/tramp/shell "shell")
-    ("r" prf/tramp/remote-shell "remote shell")
+    ("s" prf-shell "shell")
+    ("r" prf-remote-shell "remote shell")
     ("a" helm-ansible-inventory-host-connect "remote shell (Ansible)")
     ("o" prf/tramp/visit-remoteFile-currentSrv "visit other version file")
     ("e" ediff-toggle "toggle ediff")
