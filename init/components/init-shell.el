@@ -10,7 +10,6 @@
 
 
 (use-package with-shell-interpreter
-  :quelpa (with-shell-interpreter :fetcher github :repo "p3r7/with-shell-interpreter")
   :config
   (setq tramp-default-user "root"))
 
