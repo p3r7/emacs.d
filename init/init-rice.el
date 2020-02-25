@@ -53,9 +53,10 @@
    'chocolate
    ;; 'plan9
    'white-sand
+   'tango
    'dracula-mod
    'comidia-mod
-   'challenger-deep
+   ;; 'challenger-deep
    ;; 'gotham
    ;; 'light-blue
    ))
