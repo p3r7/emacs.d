@@ -130,6 +130,8 @@
            (cursor :background "#585858")
            (region :background "#a4a4a4" :foreground "white")
            (form-feed-line :strike-through "#a9a9a9"))
+          (tango
+           (hl-line :inherit nil :background "#eeced3"))
 	  (flatui
 	   (org-block :inherit default))
 	  (dracula-mod
