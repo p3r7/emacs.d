@@ -131,7 +131,9 @@
            (region :background "#a4a4a4" :foreground "white")
            (form-feed-line :strike-through "#a9a9a9"))
           (tango
-           (hl-line :inherit nil :background "#eeced3"))
+           (hl-line :inherit nil :background "#dbdbd7")
+           (form-feed-line :strike-through "#b7b8b5")
+           (font-lock-comment-face :foreground "#b7b8b5"))
 	  (flatui
 	   (org-block :inherit default))
 	  (dracula-mod
