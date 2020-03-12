@@ -112,6 +112,9 @@
   :load-path "~/.emacs.d/plugins/space-theming"
   :after (prf-theme)
   :init
+  ;; fix `custom-theme-set-faces' under emacs 27
+  (setq custom--inhibit-theme-enable nil)
+
   (setq theming-modifications
 	'((comidia-mod
            (form-feed-line :strike-through "chocolate1")
