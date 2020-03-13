@@ -16,7 +16,10 @@
 
 (define-key comint-mode-map (kbd "C-c E") #'prf/comint-clear-buffer)
 
-;;
+
+
+;; APT PROGRESS BAR
+
 ;; https://oremacs.com/2019/03/24/shell-apt/
 
 (advice-add
@@ -45,5 +48,6 @@ Display progress in the mode line instead."
     (ansi-color-apply progress))))
 
 
+
 
 (provide 'init-comint)
