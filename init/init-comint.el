@@ -7,6 +7,8 @@
       comint-buffer-maximum-size 20000
       comint-scroll-to-bottom-on-input t)
 
+
+;; REVIEW: why not use `comint-clear-buffer'?
 (defun prf/comint-clear-buffer ()
   (interactive)
   (let ((comint-buffer-maximum-size 0))
