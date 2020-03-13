@@ -6,7 +6,7 @@
 (mapc
  (lambda (frame)
    (select-frame frame 't)
-   (spacemacs/update-theme))
+   (space-theming-update-current-theme))
  (frame-list))
 
 ;; (prf/tty-setup-frame-hook)
