@@ -2544,3 +2544,8 @@ name, or enter pathname to xfretboard program."
 (interactive)
 (tab-e-fret (+ tab-position 6))
 )
+
+
+
+
+(provide 'tablature-mode)
