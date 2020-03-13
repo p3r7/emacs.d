@@ -116,8 +116,11 @@
   :load-path "~/.emacs.d/plugins/space-theming"
   :demand
   :init
+  ;; fix `custom-theme-set-faces' under emacs 27
+  (setq custom--inhibit-theme-enable nil)
+
   (setq space-theming-modifications
-        '((comidia-mod
+	'((comidia-mod
            (form-feed-line :strike-through "chocolate1")
            (org-block :inherit default)
            (bmkp-local-directory :foreground "#00ffff")

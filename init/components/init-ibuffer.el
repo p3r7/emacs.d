@@ -34,19 +34,23 @@
    ibuffer-show-empty-filter-groups nil
    ibuffer-saved-filter-groups
    (quote (("default"
-	    ("shells"
+	    ("Shells"
 	     (or (mode . shell-mode)
                  (mode . term-mode)
 		 (name . "^\\*\\(.*\\)@[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[0-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\\*\\(.*\\)$") )
 	     )
 
-	    ("dired"
+	    ("Dired"
 	     (mode . dired-mode))
 
-	    ("org" ;; all org-related buffers
+	    ("Org" ;; all org-related buffers
 	     (or
 	      (name . "^\\*Deft\\*$")
 	      (mode . org-mode)))
+
+            ("Markdown"
+	     (or
+              (mode . markdown-mode)))
 
 	    ;; ("Mail"
 	    ;;   (or
@@ -54,7 +58,7 @@
 	    ;;    (mode . mail-mode)
 	    ;;    ))
 
-	    ("ansible"
+	    ("Ansible"
 	     (predicate . (prf/ibuffer/ansible-buffer-p)))
 
 	    ("Clojure"
@@ -67,23 +71,22 @@
 	     (or (filename . "/etc/crontab")
 		 (filename . "/etc/cron.d/")))
 
-	    ("logs"
+	    ("Logs"
 	     (mode . syslog-mode))
 
-	    ("config: emacs"
+	    ("Config: Emacs"
 	     (filename . ".emacs.d"))
 
-	    ("config"
+	    ("Config"
 	     (or (filename . "AutoHotkey.ahk")
-		 (mode . yaml-mode)))
+		 (mode . yaml-mode)
+                 (mode . json-mode)
+                 (mode . fvwm-mode)))
 
-	    ("XSLT"
-	     (filename . "\\.xsl$"))
-
-	    ("provi"
+	    ("Provi"
 	     (filename . "^provi"))
 
-	    ("dev"
+	    ("Dev"
 	     (or
 	      (mode . c-mode)
 	      (mode . java-mode)
@@ -94,12 +97,12 @@
 	      (mode . js3-mode)
 	      (mode . css-mode)
 	      (mode . php-mode)
-	      (mode . shell-script-mode)
+	      (mode . sh-mode)          ; aka Shell-script mode
 	      (mode . perl-mode)
 	      (mode . python-mode)
 	      (mode . emacs-lisp-mode)))
 
-	    ("mail"
+	    ("Mail"
 	     (or
 	      (mode . message-mode)
               ;; notmuch
@@ -108,28 +111,29 @@
 	      (mode . notmuch-show-mode)
               (mode . notmuch-message-mode)))
 
-	    ("irc"
+	    ("IRC"
 	     (or
 	      (mode . circe-server-mode)
 	      (mode . circe-channel-mode)))
 
-	    ("temp: standard"
+	    ("tmp: standard"
 	     (or
 	      (name . "^\\*scratch\\*$")
 	      (name . "^\\*Messages\\*$")))
-	    ("temp: magit"
+	    ("tmp: Magit"
 	     (or
 	      (name . "^magit")))
-	    ("temp"
+	    ("tmp"
 	     (or
 	      (name . "^\\*tramp")
 	      (name . "^\\*Error")
 	      (name . "^\\*Packages\\*$")
 	      (name . "^\\*Compile-Log\\*$")
+              (name . "^\\*quelpa-build")
 	      (name . "^\\*Completions\\*$")
 	      (name . "^\\*Help\\*$")
 	      (name . "^\\*helpful")
-	      (name . "^\\*Apropos\\*$")))
+              (name . "^\\*Apropos\\*$")))
 	    ;; ("ERC"   (mode . erc-mode))
 	    ))))
 
