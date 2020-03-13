@@ -90,6 +90,7 @@
 ;; NB: could alternatively have used DoReMi
 (use-package prf-theme
   :quelpa (prf-theme :fetcher github :repo "p3r7/prf-theme")
+  :after space-theming
   :demand
   :bind (([f12] . prf/theme/cycle-theme)
          ("C-<f12>" . helm-prf-theme-choose))
@@ -99,7 +100,10 @@
   ;; (setq prf/theme/theme-list prf/theme/list/retro-light)
   ;; (setq prf/theme/theme-list prf/theme/list/retro-dark)
   :config
-  (prf/theme/initialize))
+  (prf/theme/initialize)
+  ;; for space-theming
+  (setq space-theming--current-theme prf/theme/current-theme)
+  (space-theming-update-current-theme))
 
 (require 'init-doremi)
 
@@ -110,14 +114,14 @@
 
 (use-package space-theming
   :load-path "~/.emacs.d/plugins/space-theming"
-  :after (prf-theme)
+  :demand
   :init
-  (setq theming-modifications
-	'((comidia-mod
+  (setq space-theming-modifications
+        '((comidia-mod
            (form-feed-line :strike-through "chocolate1")
-	   (org-block :inherit default)
-	   (bmkp-local-directory :foreground "#00ffff")
-	   (bmkp-remote-file :foreground "#ffc0cb"))
+           (org-block :inherit default)
+           (bmkp-local-directory :foreground "#00ffff")
+           (bmkp-remote-file :foreground "#ffc0cb"))
           (plan9
            (form-feed-line :strike-through "#40883f")
            (org-level-1 :weight bold :height 1.0 :box nil :background nil :foreground "#4fa8a8")
@@ -134,38 +138,38 @@
            (hl-line :inherit nil :background "#dbdbd7")
            (form-feed-line :strike-through "#b7b8b5")
            (font-lock-comment-face :foreground "#b7b8b5"))
-	  (flatui
-	   (org-block :inherit default))
-	  (dracula-mod
+          (flatui
+           (org-block :inherit default))
+          (dracula-mod
            (form-feed-line :strike-through "#6272a4")
-	   (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
-	   (bmkp-remote-file :foreground "#ff79c6")) ; rainbow-4
-	  (chocolate
-	   ;; NB: file face fore dired is `default'
-	   (dired-directory :foreground "#EAEAFE") ; chocolate-hue-2
-	   (org-block :inherit default)
-	   (org-block-begin-line :foreground "#594A3B")
-	   (org-block-end-line :foreground "#594A3B")
-	   (region :background "#C77497" :foreground "black") ; VS primary-selection ?
-	   (mode-line :background "#594A3B") ; chocolate-dark-yellow
-	   (mode-line-inactive :background "#2b241d") ; darker derivative of chocolate-dark-yellow
-	   (fringe :background "#2b241d") ; same as mode-line-inactive
-	   (show-paren-match :background "white" :foreground "black")
-	   (show-paren-mismatch :background "red" :foreground "white")
-	   (form-feed-line :strike-through "#705B5F") ;; :foreground of `font-lock-comment-delimiter-face'
-	   (bmkp-local-directory :foreground "#45AFBD")
-	   (bmkp-remote-file :foreground "#C55D67"))))
-  ;; to reload: (spacemacs/update-theme)
+           (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
+           (bmkp-remote-file :foreground "#ff79c6")) ; rainbow-4
+          (chocolate
+           ;; NB: file face for dired is `default'
+           (dired-directory :foreground "#EAEAFE") ; chocolate-hue-2
+           (org-block :inherit default)
+           (org-block-begin-line :foreground "#594A3B")
+           (org-block-end-line :foreground "#594A3B")
+           (region :background "#C77497" :foreground "black") ; VS primary-selection ?
+           (mode-line :background "#594A3B") ; chocolate-dark-yellow
+           (mode-line-inactive :background "#2b241d") ; darker derivative of chocolate-dark-yellow
+           (fringe :background "#2b241d") ; same as mode-line-inactive
+           (show-paren-match :background "white" :foreground "black")
+           (show-paren-mismatch :background "red" :foreground "white")
+           (form-feed-line :strike-through "#705B5F") ;; :foreground of `font-lock-comment-delimiter-face'
+           (bmkp-local-directory :foreground "#45AFBD")
+           (bmkp-remote-file :foreground "#C55D67"))))
+  ;; to reload: (space-theming-update-current-theme)
   :config
   ;; current frame
-  (theming/init-theming)
+  (space-theming-init-theming)
 
   ;; future frames
   ;; NB: not working, might not be the appropriate hook
   ;; running it in client-init.el instead
-  ;; (add-hook 'after-make-frame-functions (lambda (_current-frame)
-  ;;
-  ;;                                         (spacemacs/update-theme)))
+  ;; (add-hook 'after-make-frame-functions
+  ;;           (lambda (_current-frame)
+  ;;             (space-theming-update-current-theme)))
   )
 
 ;; allows converting emacs older (color-)themes to ~/.Xresources
