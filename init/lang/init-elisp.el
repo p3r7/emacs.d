@@ -32,10 +32,13 @@
         (2 font-lock-function-name-face
            nil t)))))
 
+  (defvar prf/scratch-default-directory nil)
+
   (defun prf/scratch nil
     "create a scratch buffer"
     (interactive)
-    (let ((scratch-buffer (get-buffer "*scratch*")))
+    (let ((default-directory prf/scratch-default-directory)
+          (scratch-buffer (get-buffer "*scratch*")))
       (if scratch-buffer
 	  (switch-to-buffer scratch-buffer)
 	(switch-to-buffer (get-buffer-create "*scratch*"))
