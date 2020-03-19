@@ -15,6 +15,8 @@
     (comint-truncate-buffer)))
 
 (define-key comint-mode-map (kbd "C-c E") #'prf/comint-clear-buffer)
+;; instead of `comint-delete-output`
+(define-key comint-mode-map (kbd "C-c C-o") #'org-open-at-point)
 
 
 
