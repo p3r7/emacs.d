@@ -155,6 +155,9 @@ If not available, returns nil but tries reloading cache via an async API call (s
 
 (with-eval-after-load "helm"
 
+  (eval-when-compile
+    (require 'helm-source nil t))
+
   (defun ansible-tramp--hostname-at-point ()
     (with-syntax-table (make-syntax-table (syntax-table))
       (modify-syntax-entry ?. "_")
