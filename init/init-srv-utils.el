@@ -102,11 +102,13 @@
 (require 'init-shell)
 
 (defun local-root-shell ()
+  "Open a shell at current location as root"
   (interactive)
   (with-temp-buffer
-    (cd (concat "/sudo::" default-directory))
+    (cd (concat "/sudo::" (expand-file-name default-directory)))
     (let ((current-prefix-arg '(4)))
       (shell (generate-new-buffer-name "*root@localhost*")))))
+
 
 ;;TODO: lotta stuff don't work as expected
 (add-hook 'shell-mode-hook
