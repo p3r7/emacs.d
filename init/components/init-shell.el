@@ -49,7 +49,7 @@
   :after (shell prf-tramp)
 
   :config
-  (add-to-list 'shell-visual-commands "htop"))
+  (add-to-list 'sh-term-visual-commands "htop"))
 
 
 (use-package readline-complete
