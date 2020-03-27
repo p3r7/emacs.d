@@ -15,6 +15,12 @@ Wrap the function `shell-command-to-string', ensuring variable `shell-file-name'
       (shell-command-to-string command))))
 
 
+(use-package dockerfile-mode
+  :config
+  (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+  (put 'dockerfile-image-name 'safe-local-variable #'stringp))
+
+
 
 
 (provide 'init-docker)
