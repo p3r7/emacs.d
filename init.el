@@ -221,6 +221,9 @@
 ;; (require 'csv-mode)
 (require 'init-guitar-tab)
 
+;; - frameworks
+(require 'init-arduino)
+
 (require 'init-compilation)
 
 
