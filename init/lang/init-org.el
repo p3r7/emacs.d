@@ -81,6 +81,15 @@
   :after org
   :demand)
 
+
+
+;; IMAGES
+
+(use-package org-download
+  :init
+  (setq org-download-method 'directory))
+
+
 
 ;; CAPTURE
 
