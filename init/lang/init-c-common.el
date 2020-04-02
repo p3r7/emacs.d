@@ -3,7 +3,7 @@
 ;; (require 'dtrt-indent)
 ;; (dtrt-indent-mode t)
 
-(setq c-basic-offset 4)
+(setq-default c-basic-offset 4)
 
 (defun prf/main-c-mode-common-hook ()
   (c-set-style "linux")
@@ -15,5 +15,8 @@
 	comment-end   ""))
 
 (add-hook 'c-mode-common-hook 'prf/main-c-mode-common-hook)
+
+
+
 
 (provide 'init-c-common)
