@@ -1,3 +1,7 @@
+
+
+;; REPL
+
 (use-package quack
   :defer t
   :init
@@ -22,26 +26,28 @@
     (interactive
      (if mark-active (list (region-beginning) (region-end))
        (list (line-beginning-position)
-	     (line-beginning-position 2)))))
+	     (line-beginning-position 2))))))
 
-  ;; SICP study layout
 
-  ;; (defvar sicp-view nil "")
-  (defun sicp () (interactive)
-    ;; (if sicp-view
-    ;;     ()
-    ;;   ((setq sicp-view t)
-    (delete-other-windows)
-    (shell-command "wmctrl -r :ACTIVE: -badd,fullscreen")
-    (split-window-horizontally)
-    (windmove-right)
-    (info "sicp")
-    (windmove-left)
-    (find-file "~/Dropbox/textfiles/scratch.scm")
-    (split-window-vertically)
-    (run-scheme "scm")
-    (windmove-right))
-  ;; ))
-  )
+
+
+;; SICP study layout
+(defun sicp () (interactive)
+       ;; (if sicp-view
+       ;;     ()
+       ;;   ((setq sicp-view t)
+       (delete-other-windows)
+       (shell-command "wmctrl -r :ACTIVE: -badd,fullscreen")
+       (split-window-horizontally)
+       (windmove-right)
+       (info "sicp")
+       (windmove-left)
+       (find-file "~/Dropbox/textfiles/scratch.scm")
+       (split-window-vertically)
+       (run-scheme "scm")
+       (windmove-right))
+
+
+
 
 (provide 'init-scheme)
