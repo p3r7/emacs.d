@@ -76,17 +76,17 @@
 
 ;; helpers, notably better remote shell commands
 
+(use-package friendly-tramp-path
+  :quelpa (friendly-tramp-path :fetcher github :repo "p3r7/friendly-tramp-path")
+  :after tramp)
+
 (use-package prf-tramp
   :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
   :after tramp)
 
-(use-package prf-tramp-friendly-parsing
-  :quelpa (prf-tramp-friendly-parsing :fetcher github :repo "p3r7/prf-tramp")
-  :after tramp)
-
 (use-package prf-remote-shell
   :quelpa (prf-remote-shell :fetcher github :repo "p3r7/prf-shell")
-  :after (prf-tramp prf-tramp-friendly-parsing)
+  :after (prf-tramp friendly-tramp-path)
   :config
   (when (not (fboundp '_rsh))
     (defalias '_rsh 'prf-remote-shell)))
