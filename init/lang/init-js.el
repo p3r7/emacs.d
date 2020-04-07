@@ -1,6 +1,14 @@
-;; - js
-;; (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-;; (add-hook 'js3-mode-hook (lambda () (tern-mode t)))
+
+
+;; JS
+
+(use-package js2-mode
+  :delight (js2-mode "JS2")
+  :mode "\\.js\\'"
+  :config
+  ;; (customize-set-variable 'js2-include-node-externs t)
+  )
+
 (add-hook 'js3-mode-hook
 	  (lambda ()
 	    (setq js3-auto-indent-p t
@@ -17,15 +25,15 @@
 		  )
 	    (linum-mode 1)))
 ;; (add-to-list 'ac-modes 'js3-mode)
-;; (setq tern-command (cons (executable-find "tern") '()))
-;; (eval-after-load 'tern
-;; '(progn
-;; (require 'tern-auto-complete)
-;; (tern-ac-setup)))
 
-;; - jsx
+
+
+;; JSX (REACT)
+
 (use-package rjsx-mode
   :defer t)
 
+
+
 
 (provide 'init-js)
