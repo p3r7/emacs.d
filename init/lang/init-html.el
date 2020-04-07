@@ -31,10 +31,21 @@
 
 
 
-;; HTML TEMPLATING
+;; TEMPLATING
 
 (use-package emmet-mode
   :hook (sgml-mode web-mode))
+
+
+
+;; LIVE RELOAD
+
+(use-package skewer-mode
+  :hook (web-mode . skewer-html-mode)
+  :init
+  (setq httpd-port 8123)
+  :config
+  (skewer-setup))
 
 
 
