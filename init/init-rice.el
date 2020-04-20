@@ -47,6 +47,9 @@
 (use-package flatui-theme
   :defer t)
 
+;; both
+(use-package solarized-theme
+  :defer t)
 
 (defvar prf/theme/list/practical
   (list
@@ -56,6 +59,7 @@
    'tango
    'dracula-mod
    'comidia-mod
+   'solarized-dark
    ;; 'challenger-deep
    ;; 'gotham
    ;; 'light-blue
