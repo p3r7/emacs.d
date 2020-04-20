@@ -1,5 +1,9 @@
 
 (use-package org
+  :bind (
+         :map org-mode-map
+         ;; NB: og bound to `org-fill-paragraph'
+         ("M-q" . toggle-truncate-lines))
   :init
 
   ;; GENERAL
