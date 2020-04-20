@@ -77,24 +77,16 @@
 ;; helpers, notably better remote shell commands
 
 (use-package friendly-tramp-path
-  :quelpa (friendly-tramp-path :fetcher github :repo "p3r7/friendly-tramp-path")
   :after tramp)
 
 (use-package prf-tramp
   :quelpa (prf-tramp :fetcher github :repo "p3r7/prf-tramp")
   :after tramp)
 
-(use-package prf-remote-shell
-  :quelpa (prf-remote-shell :fetcher github :repo "p3r7/prf-shell")
-  :after (prf-tramp friendly-tramp-path)
-  :config
-  (when (not (fboundp '_rsh))
-    (defalias '_rsh 'prf-remote-shell)))
-
 ;; ansible inventory
 (use-package ansible-tramp
   :load-path "~/.emacs.d/plugins/ansible-tramp"
-  :after (request-deferred prf-remote-shell)
+  :after (request-deferred friendly-remote-shell)
   :config
   (when ansible-tramp-inventory-http-url
     (ansible-tramp-set-inventory-cache-http)))
