@@ -253,6 +253,7 @@
 
 (require 'init-flycheck)
 (require 'init-eglot)
+(require 'init-crypt)
 
 
 ;; FILE / BUFFER / POJECT NAVIGATION
