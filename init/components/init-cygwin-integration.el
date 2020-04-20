@@ -67,12 +67,13 @@
 ;;;;; (setq shell-command-switch "-ic") ; SHOULD THIS BE "-c" or "-ic"?
 
 (when (executable-find prf/local-shell-bin/cygwin-bash)
-  (with-eval-after-load 'prf-shell
+  (with-eval-after-load 'friendly-shell
     (defun prf/shell/cygwin-bash (&optional path)
       (interactive)
       ;; (prf/tramp/shell path prf/tramp/local-shell-bin/cygwin-bash)
-      (prf-shell :path path :interpreter prf/local-shell-bin/cygwin-bash
-                 :interpreter-args `("--init-file" ,(concat "/home/" (getenv "USERNAME") "/.bashrc"))))))
+      (friendly-shell :path path
+                      :interpreter prf/local-shell-bin/cygwin-bash
+                      :interpreter-args `("--init-file" ,(concat "/home/" (getenv "USERNAME") "/.bashrc"))))))
 
 
 

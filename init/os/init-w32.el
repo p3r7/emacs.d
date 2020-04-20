@@ -130,13 +130,13 @@
 
 ;; SHELLS
 
-(with-eval-after-load 'prf-shell
+(with-eval-after-load 'friendly-shell
   (defun prf/shell/cmd (&optional path)
     (interactive)
     (when (and path
                (file-remote-p path))
       (setq path "~"))
-    (prf-shell :path path)))
+    (friendly-shell :path path)))
 
 
 ;; CONFIG FILES

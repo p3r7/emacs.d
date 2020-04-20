@@ -13,24 +13,24 @@
 ;; SHELLS
 
 (when (executable-find prf/local-shell-bin/msys-bash)
-  (with-eval-after-load 'prf-shell
+  (with-eval-after-load 'friendly-shell
     (defun prf/shell/msys-bash (&optional path)
       (interactive)
-      (prf-shell :path path :interpreter prf/local-shell-bin/msys-bash
-                 :interpreter-args '("-c" "export MSYSTEM=MSYS;stty echo; bash")
-                 :buffer-name "bash(msys)"))
+      (friendly-shell :path path :interpreter prf/local-shell-bin/msys-bash
+                      :interpreter-args '("-c" "export MSYSTEM=MSYS;stty echo; bash")
+                      :buffer-name "bash(msys)"))
 
     (defun prf/shell/mingw32-bash (&optional path)
       (interactive)
-      (prf-shell :path path :interpreter prf/local-shell-bin/msys-bash
-                 :interpreter-args '("-c" "export MSYSTEM=MINGW32;stty echo; bash")
-                 :buffer-name "bash(mingw32)"))
+      (friendly-shell :path path :interpreter prf/local-shell-bin/msys-bash
+                      :interpreter-args '("-c" "export MSYSTEM=MINGW32;stty echo; bash")
+                      :buffer-name "bash(mingw32)"))
 
     (defun prf/shell/mingw64-bash (&optional path)
       (interactive)
-      (prf-shell :path path :interpreter prf/local-shell-bin/msys-bash
-                 :interpreter-args '("-c" "export MSYSTEM=MINGW64;stty echo; bash")
-                 :buffer-name "bash(mingw64)"))))
+      (friendly-shell :path path :interpreter prf/local-shell-bin/msys-bash
+                      :interpreter-args '("-c" "export MSYSTEM=MINGW64;stty echo; bash")
+                      :buffer-name "bash(mingw64)"))))
 
 
 

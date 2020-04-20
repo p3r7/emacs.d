@@ -9,23 +9,34 @@
     (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window))))
 
 
-(use-package with-shell-interpreter
-  :config
-  (setq tramp-default-user "root"))
+;; (use-package with-shell-interpreter
+;; :config
+;; (setq tramp-default-user "root"))
 
 
-(use-package prf-shell-command
-  :quelpa (prf-shell-command :fetcher github :repo "p3r7/prf-shell")
-  :after with-shell-interpreter)
-
-
-(use-package prf-shell
-  :quelpa (prf-shell :fetcher github :repo "p3r7/prf-shell")
-  :after with-shell-interpreter
+(use-package friendly-shell
+  :quelpa (friendly-shell :fetcher github :repo "p3r7/friendly-shell")
+  ;; :after with-shell-interpreter
   :config
   (when (not (fboundp '_sh))
-    (defalias '_sh 'prf-shell)))
+    (defalias '_sh 'friendly-shell)))
 
+
+(use-package friendly-shell-command
+  :ensure nil
+  :after friendly-shell
+  ;; :quelpa (friendly-shell-command :fetcher github :repo "p3r7/friendly-shell")
+  ;; :after with-shell-interpreter
+  )
+
+(use-package friendly-remote-shell
+  :ensure nil
+  :after (friendly-shell friendly-tramp-path)
+  ;; :quelpa (friendly-remote-shell :fetcher github :repo "p3r7/friendly-shell")
+  ;; :after friendly-shell friendly-tramp-path
+  :config
+  (when (not (fboundp '_rsh))
+    (defalias '_rsh 'friendly-remote-shell)))
 
 (use-package shx
   :hook (shell-mode . shx-mode)
@@ -70,6 +81,13 @@
    ((eq prf/fav-completion-at-point 'company)
     (push 'company-readline company-backends)
     (add-hook 'rlc-no-readline-hook (lambda () (company-mode -1))))))
+
+
+
+;; VTERM
+
+(when module-file-suffix
+  (use-package vterm))
 
 
 

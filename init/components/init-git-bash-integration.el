@@ -14,10 +14,10 @@
 ;; SHELLS
 
 (when (executable-find prf/local-shell-bin/git-bash)
-  (with-eval-after-load 'prf-shell
+  (with-eval-after-load 'friendly-shell
     (defun prf/shell/git-bash (&optional path)
       (interactive)
-      (prf-shell :path path :interpreter prf/local-shell-bin/git-bash))))
+      (friendly-shell :path path :interpreter prf/local-shell-bin/git-bash))))
 
 
 

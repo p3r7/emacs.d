@@ -26,7 +26,7 @@
 					    "^magit:.*$"
 					    "^magit-diff:.*$"
 					    "^magit-process:.*$")
-	lusty--shell-open-here-fun #'prf-shell
+	lusty--shell-open-here-fun #'friendly-shell
 	lusty--M-x-fun #'helm-M-x)
   :config
 
@@ -42,7 +42,7 @@
          (lusty-file-explorer))))
     (define-key ibuffer-mode-map [remap ibuffer-find-file] #'ibuffer-lusty-find-file))
 
-  (lusty-register-custom-explorer-action "launch-shell" #'prf-shell "C-x s")
+  (lusty-register-custom-explorer-action "launch-shell" #'friendly-shell "C-x s")
   (lusty-register-custom-explorer-action "shell-command" #'shell-command "M-!")
   (lusty-register-custom-explorer-action "async-shell-command" #'async-shell-command "M-&")
   (lusty-register-custom-explorer-action "eval-expression" #'eval-expression "M-:")
