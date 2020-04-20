@@ -4,6 +4,9 @@
          :map org-mode-map
          ;; NB: og bound to `org-fill-paragraph'
          ("M-q" . toggle-truncate-lines))
+
+  :hook ((org-mode . (lambda () (setq word-wrap t))))
+
   :init
 
   ;; GENERAL
