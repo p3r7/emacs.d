@@ -328,6 +328,16 @@
 
 
 
+;; END
+
+(when (and (daemonp)
+           (string-equal (terminal-name (frame-terminal)) "initial_terminal"))
+  (notifications-notify
+   :title "Emacs Daemon"
+   :body "Emacs is ready"))
+
+
+
 
 ;;|     .-.
 ;;|    /   \         .-.

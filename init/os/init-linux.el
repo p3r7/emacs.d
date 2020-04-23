@@ -16,13 +16,19 @@
 
 
 
-;; SERVER
+;; DAEMON / SERVER
 
-(defun prf/emacs-daemon-reload ()
-  (interactive)
-  (let ((default-directory "~"))
-    (async-shell-command "emacsclient -e \"(save-buffers-kill-emacs)\" && emacs --daemon && notify-send \"Emacs Daemon\" \"Emacs is ready\"")))
-(global-set-key (kbd "C-x M-c") 'prf/emacs-daemon-reload)
+(when (daemonp)
+  (defun prf/emacs-daemon-reload ()
+    (interactive)
+    (let ((default-directory "~"))
+      (save-some-buffers)
+      (apply
+       #'start-file-process
+       "kill-emacs"
+       "kill-emacs"
+       (s-split " " "systemctl --user restart emacs"))))
+  (global-set-key (kbd "C-x M-c") #'prf/emacs-daemon-reload))
 
 
 
