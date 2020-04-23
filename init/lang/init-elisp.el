@@ -130,9 +130,9 @@
   :demand
   :bind (
          :map emacs-lisp-mode-map
-         ("C-x r" . ert-silently)
+         ("C-x R" . ert-silently)
          :map lisp-interaction-mode-map
-         ("C-x r" . ert-silently))
+         ("C-x R" . ert-silently))
   :config
   (defun ert-silently ()
     (interactive)
