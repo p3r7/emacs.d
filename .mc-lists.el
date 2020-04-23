@@ -6,11 +6,14 @@
         lispy-braces
         lispy-brackets
         lispy-delete
+        lispy-hash
         lispy-kill
         lispy-parens
         lispy-quotes
         lispy-space
+        lispy-tick
         org-self-insert-command
+        prf/lispy-space-no-selection
         special-digit-argument
         special-lh-knight/body
         special-lispy-ace-char
