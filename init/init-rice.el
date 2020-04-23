@@ -48,6 +48,8 @@
   :defer t)
 
 ;; both
+(use-package flucui-themes
+  :defer t)
 (use-package solarized-theme
   :defer t)
 
@@ -56,10 +58,11 @@
    'chocolate
    ;; 'plan9
    'white-sand
-   'tango
+   ;; 'tango
+   'flucui-light
    'dracula-mod
    'comidia-mod
-   'solarized-dark
+   ;; 'solarized-dark
    ;; 'challenger-deep
    ;; 'gotham
    ;; 'light-blue
