@@ -46,5 +46,36 @@
 
 
 
+;; DEPS INJECTION
+
+;; REVIEW: only clojars or also maven?
+;; otherwise would be better to use: lein search <term>
+(use-package clojars)
+
+(defun prf/clj/copy-pomegranate-dep (&optional dep)
+  (interactive)
+  (setq dep (or dep (read-string "Dep: ")))
+  (kill-new
+   (prf/clj/pomegranate-dep dep)))
+
+(defun prf/clj/pomegranate-dep (dep)
+  ;; REVIEW: better implementation w/ clomacs?
+  (concat
+   (format
+    "%s"
+    ;; NB: this is clojure!
+    `(use '[cemerick.pomegranate :only (add-dependencies)]))
+   (s-replace-all
+    `(("\\." . ".")
+      ("mydep" . ,dep))
+    (format
+     "%S"
+     ;; NB: this is clojure!
+     `(add-dependencies :coordinates '[mydep]
+                        :repositories (merge cemerick.pomegranate.aether/maven-central
+                                             {"clojars" "https://clojars.org/repo"}))))))
+
+
+
 
 (provide 'init-clojure)
