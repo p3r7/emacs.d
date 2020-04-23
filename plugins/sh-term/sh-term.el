@@ -351,13 +351,17 @@ shell-mode to have them play in a term buffer."
 
 
 
-;; UTILS
+;; PRIVATE HELPERS: GENERIC
 
 (defun sh-term--asynch-funcall (function &optional args delay)
   "Run FUNCTION with ARGS in the buffer after a short DELAY."
   (run-at-time (or delay 0.3) nil
                `(lambda ()
                   (with-current-buffer ,sh-term-parent-buffer ,(cons function args)))))
+
+
+
+;; PRIVATE HELPERS: TRAMP METHODS
 
 (defun sh-term--get-tramp-method-login-program (method)
   (cadr
@@ -390,6 +394,10 @@ shell-mode to have them play in a term buffer."
       ("%p" . ,port))
     it)
    (-flatten login-args)))
+
+
+
+;; PRIVATE HELPERS: SHELL
 
 (defun sh-term--shell-unquote-argument (argument)
   ;; REVIEW: join or get car ?
