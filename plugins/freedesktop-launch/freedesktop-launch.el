@@ -127,7 +127,7 @@ servers.  The unused ARGS param makes it also a replacement for
        :name "tmp"
        ;; NB: :stderr is mandatory
        :stderr (current-buffer)
-       :command '("dex" "/usr/local/share/applications/arduino-arduinoide.desktop"))
+       :command command)
       ;; REVIEW: this is very hackish, there must be a better way, e.g.
       ;; killing the buffer via a process sentinel instead.
 
