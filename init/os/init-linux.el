@@ -1,5 +1,13 @@
 
 
+;; EMACS C SRC
+
+(let ((src-dir (concat "/usr/src/emacs-" emacs-version)))
+  (when (file-directory-p src-dir)
+    (setq source-directory src-dir)))
+
+
+
 ;; TRAMP
 
 (setq tramp-default-method "ssh")
