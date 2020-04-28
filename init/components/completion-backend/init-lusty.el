@@ -20,9 +20,13 @@
 					    "^\\*vc\\*$"
 					    "^\\*helm .*$"
 					    "^\\*quelpa.*$"
+
+                                            ;; clojure
+					    "^\\*nrepl-server .*$"
+
                                             ;; older-style magit buffers
 					    "^\\*magit:.*$"
-                                            ;; newr style magit buffers
+                                            ;; newer style magit buffers
 					    "^magit:.*$"
 					    "^magit-diff:.*$"
 					    "^magit-process:.*$")
