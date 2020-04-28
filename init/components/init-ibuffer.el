@@ -63,6 +63,7 @@
 
 	    ("Clojure"
 	     (or
+	      (name . "^\\*nrepl-server")
 	      (name . "^\\*cider-repl")
 	      (name . "^\\*cider-error\\*$")
 	      (mode . clojure-mode)))
@@ -123,17 +124,19 @@
 	    ("tmp: Magit"
 	     (or
 	      (name . "^magit")))
+	    ("tmp: Help"
+	     (or
+              (name . "^\\*Help\\*$")
+              (name . "^\\*Apropos\\*$")
+              (name . "^\\*Completions\\*$")
+	      (name . "^\\*helpful ")))
 	    ("tmp"
 	     (or
 	      (name . "^\\*tramp")
 	      (name . "^\\*Error")
 	      (name . "^\\*Packages\\*$")
 	      (name . "^\\*Compile-Log\\*$")
-              (name . "^\\*quelpa-build")
-	      (name . "^\\*Completions\\*$")
-	      (name . "^\\*Help\\*$")
-	      (name . "^\\*helpful")
-              (name . "^\\*Apropos\\*$")))
+              (name . "^\\*quelpa-build")))
 	    ;; ("ERC"   (mode . erc-mode))
 	    ))))
 
