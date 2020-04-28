@@ -30,12 +30,7 @@
   (defun prf/emacs-daemon-reload ()
     (interactive)
     (let ((default-directory "~"))
-      (save-some-buffers)
-      (apply
-       #'start-file-process
-       "kill-emacs"
-       "kill-emacs"
-       (s-split " " "systemctl --user restart emacs"))))
+      (save-buffers-kill-emacs)))
   (global-set-key (kbd "C-x M-c") #'prf/emacs-daemon-reload))
 
 
