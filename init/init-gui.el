@@ -13,7 +13,7 @@
  inhibit-startup-message   t
  inhibit-startup-echo-area-message t
  )
-(setq-default initial-scratch-message ";;                               Hello Master\n\n")
+(setq-default initial-scratch-message ";;                            Hello  Master\n\n")
 
 
 
