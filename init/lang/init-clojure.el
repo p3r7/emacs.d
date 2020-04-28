@@ -31,8 +31,24 @@
   (define-key cider-mode-map (kbd "C-c C-x") 'prf/cider-repl-reset)
   (define-key clojure-mode-map (kbd "C-c C-x") 'prf/cider-repl-reset))
 
+
 (use-package cider-eval-sexp-fu
   :after cider)
+
+
+(defun prf/cider/send-to-repl (sexp &optional eval ns)
+  "Send SEXP to Cider Repl. If EVAL is t, evaluate it.
+Optionally, we can change namespace by specifying NS."
+  (cider-switch-to-repl-buffer ns)
+  ;; inspired by `cider-repl--grab-old-input'
+  (goto-char cider-repl-input-start-mark)
+  (delete-region (point) (point-max))
+  (save-excursion
+    (insert sexp)
+    (when (equal (char-before) ?\n)
+      (delete-char -1)))
+  (when eval
+    (cider-repl--send-input t)))
 
 
 
@@ -52,6 +68,7 @@
 ;; REVIEW: only clojars or also maven?
 ;; otherwise would be better to use: lein search <term>
 (use-package clojars)
+
 
 (defun prf/clj/copy-pomegranate-dep (&optional dep)
   (interactive)
@@ -76,6 +93,10 @@
                         :repositories (merge cemerick.pomegranate.aether/maven-central
                                              {"clojars" "https://clojars.org/repo"}))))))
 
+(defun prf/cider/inject-pomegranate-dep (&optional dep ns)
+  (interactive)
+  (setq dep (or dep (read-string "Dep: ")))
+  (prf/cider/send-to-repl (prf/clj/pomegranate-dep dep) t ns))
 
 
 
