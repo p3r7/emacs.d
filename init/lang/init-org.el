@@ -83,10 +83,11 @@
 
 ;; LINKS
 
-(use-package prf-org-github-link
-  :load-path "~/.emacs.d/plugins/prf-org-github-link/"
-  :after org
-  :demand)
+(--each '((archwiki . "https://wiki.archlinux.org/index.php/")
+          (gh . "https://github.com/"))
+  (let ((link-prefix (car it))
+        (url (cdr it)))
+    (org-add-link-type link-prefix (lambda (e) (browse-url (concat "https://github.com/" e))))))
 
 
 
