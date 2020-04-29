@@ -1,4 +1,17 @@
 
+
+
+;; ENSURE EXEC PATH
+
+;; NB: When using emacs systemd user service, .profile doesn't get loaded
+;; unless we use this.
+
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+
 
 ;; OS DETECTION
 
