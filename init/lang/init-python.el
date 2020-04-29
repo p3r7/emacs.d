@@ -7,7 +7,10 @@
 
 (use-package pyvenv
   :config
-  (setenv "WORKON_HOME" "C:/ProgramData/Anaconda2/envs"))
+  (let ((w32-conda-envs-dir "C:/ProgramData/Anaconda2/envs"))
+    (when (and (string-equal system-type "windows-nt")
+               (file-directory-p w32-conda-envs-dir))
+      (setenv "WORKON_HOME" w32-conda-envs-dir))))
 
 ;; (use-package ac-anaconda
 ;;   :hook (python-mode-hook . ac-anaconda-setup))
