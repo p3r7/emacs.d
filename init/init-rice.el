@@ -189,6 +189,17 @@
 
 
 
+;; BACKGROUND PICTURES
+
+(use-package bgex
+  :if (boundp 'bgex-exist-p)
+  :quelpa (bgex :fetcher github :repo "wachikun/emacs_bgex")
+  :config
+  ;; (bgex-set-image-default "~/.emacs.d/xpm/ghosts.xpm" t)
+  )
+
+
+
 ;; HIGHLIGHT CURRENT WINDOW
 
 (use-package dimmer
