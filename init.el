@@ -107,7 +107,6 @@
 ;; (setq use-package-verbose t)
 
 
-
 (use-package quelpa
   :init
   (setq quelpa-self-upgrade-p nil))
