@@ -93,5 +93,6 @@
         helpful-key
         lispy-cursor-down
         lispy-newline-and-indent
+        markdown-outdent-or-delete
         yaml-electric-dash-and-dot
         ))
