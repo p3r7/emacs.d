@@ -129,6 +129,12 @@
 
 
 
+;; FILES TO OPEN AT STARTUP
+
+(defvar prf/startup-open-files '() "List of files to open when Emacs starts.")
+
+
+
 ;; OS / HW
 
 (require 'init-env)
@@ -284,7 +290,14 @@
 (require 'init-register)
 
 
-;; SHORTCUTS
+
+;; OPEN FILES
+
+(--each prf/startup-open-files
+  (find-file-noselect it))
+
+
+ ;; SHORTCUTS
 
 (require 'init-keyboard-macro)
 
