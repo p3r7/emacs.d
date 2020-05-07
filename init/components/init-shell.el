@@ -9,38 +9,21 @@
     (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window))))
 
 
-;; (use-package with-shell-interpreter
-;; :config
-;; (setq tramp-default-user "root"))
-
-
 (use-package friendly-shell
-  :quelpa (friendly-shell :fetcher github :repo "p3r7/friendly-shell")
-  ;; :after with-shell-interpreter
   :config
   (when (not (fboundp '_sh))
     (defalias '_sh 'friendly-shell)))
 
-
-(use-package friendly-shell-command
-  :ensure nil
-  :after friendly-shell
-  ;; :quelpa (friendly-shell-command :fetcher github :repo "p3r7/friendly-shell")
-  ;; :after with-shell-interpreter
-  )
+(use-package friendly-shell-command)
 
 (use-package friendly-remote-shell
-  :ensure nil
-  :after (friendly-shell friendly-tramp-path)
-  ;; :quelpa (friendly-remote-shell :fetcher github :repo "p3r7/friendly-shell")
-  ;; :after friendly-shell friendly-tramp-path
   :config
   (when (not (fboundp '_rsh))
     (defalias '_rsh 'friendly-remote-shell)))
 
 (use-package shx
   :hook (shell-mode . shx-mode)
-  :after (shell with-shell-interpreter)
+  :after shell
 
   :config
   ;; NB: as `with-shell-interpreter' does not local-set `explicit-shell-file-name', we force it
