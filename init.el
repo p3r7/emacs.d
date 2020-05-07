@@ -199,6 +199,7 @@
 (require 'init-applescript)
 (require 'init-tickscript)
 (require 'init-ahk)
+(require 'init-devilspie)
 (require 'init-r)
 (require 'init-python)
 
