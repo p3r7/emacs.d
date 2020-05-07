@@ -77,7 +77,6 @@ Optionally, we can change namespace by specifying NS."
    (prf/clj/pomegranate-dep dep)))
 
 (defun prf/clj/pomegranate-dep (dep)
-  ;; REVIEW: better implementation w/ clomacs?
   (concat
    (format
     "%s"
