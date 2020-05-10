@@ -1,11 +1,11 @@
-;;; helm-freedesktop-launch.el --- Helm-based app launcher for XDG desktop entries -*- lexical-binding: t; -*-
+;;; helm-drun.el --- Helm-based app launcher for XDG desktop entries -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020 Jordan Besly
 ;;
 ;; Version: 0.1.0
 ;; Keywords: processes, terminals
-;; URL: https://github.com/p3r7/freedesktop-launch
-;; Package-Requires: ((emacs "24.1")(cl-lib "0.6.1")(freedesktop-launch "0.1.0"))
+;; URL: https://github.com/p3r7/drun
+;; Package-Requires: ((emacs "24.1")(cl-lib "0.6.1")(drun "0.1.0"))
 ;;
 ;; SPDX-License-Identifier: MIT
 
@@ -22,22 +22,22 @@
 
 (require 'helm-source)
 
-(require 'freedesktop-launch)
+(require 'drun)
 
 
 
 ;; HELM SOURCES
 
-(defvar helm-freedesktop-launch--by-filepath-source
+(defvar helm-drun--by-filepath-source
   (helm-build-sync-source "Launch XDG desktop entry by filepath"
-    :candidates #'freedesktop-launch-list-filepaths
+    :candidates #'drun-list-filepaths
     :fuzzy-match t
     :action '(("launch" .
                (lambda (_candidate)
                  (let ((marked-candidates (helm-marked-candidates)))
                    (mapc
                     (lambda (e)
-                      (freedesktop-launch-by-filepath e))
+                      (drun-by-filepath e))
                     marked-candidates))))
               ("visit" .
                (lambda (_candidate)
@@ -51,14 +51,14 @@
 
 ;; COMMANDS
 
-(defun helm-freedesktop-launch-by-filepath ()
+(defun helm-drun-by-filepath ()
   (interactive)
-  (helm :sources '(helm-freedesktop-launch--by-filepath-source)
+  (helm :sources '(helm-drun--by-filepath-source)
         :buffer "*helm XDG desktop entry (by filepath)*"))
 
 
 
 
-(provide 'helm-freedesktop-launch)
+(provide 'helm-drun)
 
-;;; helm-freedesktop-launch.el ends here
+;;; helm-drun.el ends here

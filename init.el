@@ -245,8 +245,8 @@
   :bind ("C-c v" . magrant)
   :load-path "~/.emacs.d/plugins/magrant/")
 
-(use-package freedesktop-launch
-  :load-path "~/.emacs.d/plugins/freedesktop-launch/")
+(use-package drun
+  :load-path "~/.emacs.d/plugins/drun/")
 
 
 

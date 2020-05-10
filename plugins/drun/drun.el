@@ -1,10 +1,10 @@
-;;; freedesktop-launch.el --- Parse and launch XDG desktop entries -*- lexical-binding: t; -*-
+;;; drun.el --- Parse and launch XDG desktop entries -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2020 Jordan Besly
 ;;
 ;; Version: 0.1.0
 ;; Keywords: processes, terminals
-;; URL: https://github.com/p3r7/freedesktop-launch
+;; URL: https://github.com/p3r7/drun
 ;; Package-Requires: ((emacs "24.1")(cl-lib "0.6.1")(friendly-shell-command "0.2.0"))
 ;;
 ;; SPDX-License-Identifier: MIT
@@ -30,10 +30,13 @@
 
 ;; VARS
 
-(defvar freedesktop-launch-default-data-dirs
+(defvar drun-executable "dex" "Executable to run a desktop entry.")
+(defvar drun-executable-opts '() "Command line options for `drun-executable'.")
+
+(defvar drun-default-data-dirs
   "/usr/local/share/:/usr/share/:/var/lib/snapd/desktop" "Fallback value for env var XDG_DATA_DIRS.")
 
-(defvar freedesktop-launch-cnnx nil "Path to act from.
+(defvar drun-cnnx nil "Path to act from.
 Only really usefull to set it for remote executions w/ TRAMP.
 Support remote paths in form /<method>:<user>@<host>:/.")
 
@@ -41,32 +44,32 @@ Support remote paths in form /<method>:<user>@<host>:/.")
 
 ;; COMMANDS
 
-(defun freedesktop-launch-by-filename (data-dir entry &optional cnnx)
+(defun drun-by-filename (data-dir entry &optional cnnx)
   "Launch .desktop ENTRY in DATA-DIR at location CNNX"
   (interactive)
-  (setq data-dir (freedesktop-launch--sanitize-dir data-dir))
-  (freedesktop-launch-by-filepath (data-dir "applications/" entry ".desktop") cnnx))
+  (setq data-dir (drun--sanitize-dir data-dir))
+  (drun-by-filepath (data-dir "applications/" entry ".desktop") cnnx))
 
 
-(defun freedesktop-launch-by-filepath (entry-file-path &optional cnnx)
+(defun drun-by-filepath (entry-file-path &optional cnnx)
   "Launch .desktop ENTRY in DATA-DIR at location CNNX"
   (interactive)
-  (unless (freedesktop-launch--executable-find "dex" cnnx)
-    (error "Command not found: dex"))
-  (freedesktop-launch--launch-backround (list "dex" entry-file-path)))
+  (unless (drun--executable-find drun-executable cnnx)
+    (error (concat "Command not found: " drun-executable)))
+  (drun--launch-backround (-flatten (list drun-executable drun-executable-opts entry-file-path))))
 
 
 
 ;; ENTRIES
 
-(defun freedesktop-launch-list-files (&optional cnnx)
+(defun drun-list-files (&optional cnnx)
   "Get alist of data dirs / .desktop entries at location CNNX"
   ;; get list of .desktop entries locations
-  (let ((entries-locations (freedesktop-launch--data-dirs cnnx))
-        (entries-locations (freedesktop-launch--data-dirs cnnx)))
-    (--map (freedesktop-launch--list-apps-for-data-dir it cnnx) entries-locations)))
+  (let ((entries-locations (drun--data-dirs cnnx))
+        (entries-locations (drun--data-dirs cnnx)))
+    (--map (drun--list-apps-for-data-dir it cnnx) entries-locations)))
 
-(defun freedesktop-launch-list-filepaths (&optional cnnx)
+(defun drun-list-filepaths (&optional cnnx)
   "Get alist of data dirs / .desktop entries at location CNNX"
   ;; get list of .desktop entries locations
   (-flatten
@@ -74,34 +77,34 @@ Support remote paths in form /<method>:<user>@<host>:/.")
     (let ((data-dir (car it))
           (entries (cdr it)))
       (--map
-       (freedesktop-launch--build-desktop-entry-path data-dir it)
+       (drun--build-desktop-entry-path data-dir it)
        entries))
-    (freedesktop-launch-list-files cnnx))))
+    (drun-list-files cnnx))))
 
 
 
 ;; PRIVATE HELPERS: EXECUTABLES
 
-(defun freedesktop-launch--executable-find (command &optional cnnx)
+(defun drun--executable-find (command &optional cnnx)
   "Test COMMAND exists at location CNNX.
 TRAMP-aware replacement for `executable-find'"
   (setq cnnx (or cnnx default-directory))
   (let ((default-directory cnnx))
-    (freedesktop-launch--executable-find-dd command)))
+    (drun--executable-find-dd command)))
 
 
-(defun freedesktop-launch--executable-find-dd (command &optional _args)
+(defun drun--executable-find-dd (command &optional _args)
   "Test COMMAND exists.
 Drop in replacement for `executable-find' w/ support for remote
 *nix servers.  The unused ARGS param makes it also a replacement
 for `eshell-find-interpreter' which is slow with tramp
 connections."
   (if (file-remote-p default-directory)
-      (freedesktop-launch--executable-find-dd-cli command)
+      (drun--executable-find-dd-cli command)
     (executable-find command)))
 
 
-(defun freedesktop-launch--executable-find-dd-cli (command &optional _args)
+(defun drun--executable-find-dd-cli (command &optional _args)
   "Test COMMAND exists via cli.
 Drop in replacement for `executable-find' for remote *nix
 servers.  The unused ARGS param makes it also a replacement for
@@ -119,7 +122,7 @@ servers.  The unused ARGS param makes it also a replacement for
 
 ;; PRIVATE HELPERS: PROCESS
 
-(defun freedesktop-launch--launch-backround (command)
+(defun drun--launch-backround (command)
   "Silently launch COMMAND in the background"
   (let ((kill-buffer-query-functions nil))
     (with-temp-buffer
@@ -139,16 +142,16 @@ servers.  The unused ARGS param makes it also a replacement for
 
 ;; PRIVATE HELPERS: ENV VARS
 
-(defun freedesktop-launch--getenv (variable &optional cnnx)
+(defun drun--getenv (variable &optional cnnx)
   "Get the value of environment variable VARIABLE, when at location CNNX.
 Work even if CNNX is a remote path, given it's a *nix."
   (if (and cnnx
            (file-remote-p cnnx))
-      (freedesktop-launch--getenv-cli variable cnnx)
+      (drun--getenv-cli variable cnnx)
     (getenv variable)))
 
 
-(defun freedesktop-launch--getenv-cli (variable &optional cnnx)
+(defun drun--getenv-cli (variable &optional cnnx)
   "Get the value of environment variable VARIABLE, when at location CNNX.
 Work even if CNNX is a remote path, given it's a *nix."
   (let ((res
@@ -162,12 +165,12 @@ Work even if CNNX is a remote path, given it's a *nix."
 
 ;; PRIVATE HELPERS: DIRS
 
-(defun freedesktop-launch--sanitize-dir (dir)
+(defun drun--sanitize-dir (dir)
   "Ensure DIR ends with a \"/\""
   (concat (s-chop-suffix "/" dir) "/"))
 
 
-(defun freedesktop-launch--build-dir-path-maybe-remote (dir &optional cnnx)
+(defun drun--build-dir-path-maybe-remote (dir &optional cnnx)
   "Build DIR path, prefixing it with Tramp prefix if CNNX is remote"
   (setq cnnx (or cnnx ""))
   ;; NB: when remote, `file-remote-p' returns prefix
@@ -178,20 +181,20 @@ Work even if CNNX is a remote path, given it's a *nix."
 ;; PRIVATE HELPERS: FREEDESKTOP DATA DIRS
 
 
-(defun freedesktop-launch--data-dirs (&optional cnnx)
+(defun drun--data-dirs (&optional cnnx)
   "Get list of Xdg data dirsat location CNNX"
-  (let* ((env-data-dirs (freedesktop-launch--getenv "XDG_DATA_DIRS" cnnx))
-         (env-data-dirs (or env-data-dirs freedesktop-launch-default-data-dirs))
+  (let* ((env-data-dirs (drun--getenv "XDG_DATA_DIRS" cnnx))
+         (env-data-dirs (or env-data-dirs drun-default-data-dirs))
          (entries-locations (split-string env-data-dirs ":"))
          (entries-locations (append entries-locations '("~/.local/share/")))
-         (entries-locations (mapcar #'freedesktop-launch--sanitize-dir entries-locations)))
+         (entries-locations (mapcar #'drun--sanitize-dir entries-locations)))
     entries-locations))
 
 
-(defun freedesktop-launch--list-apps-for-data-dir (data-dir &optional cnnx)
+(defun drun--list-apps-for-data-dir (data-dir &optional cnnx)
   "Get list of .desktop entries in DATA-DIR at location CNNX"
   (let* ((app-dir (concat data-dir "applications"))
-         (app-dir (freedesktop-launch--build-dir-path-maybe-remote app-dir cnnx)))
+         (app-dir (drun--build-dir-path-maybe-remote app-dir cnnx)))
     (cons data-dir
           (when (file-directory-p app-dir)
             (--filter
@@ -202,14 +205,14 @@ Work even if CNNX is a remote path, given it's a *nix."
 
 ;; PRIVATE HELPERS: FREEDESKTOP ENTRIES PARSING
 
-(defun freedesktop-launch--build-desktop-entry-path (data-dir entry)
+(defun drun--build-desktop-entry-path (data-dir entry)
   (concat data-dir "applications/" entry))
 
 
-(defun freedesktop-launch--parse-desktop-entry (data-dir entry &optional cnnx)
+(defun drun--parse-desktop-entry (data-dir entry &optional cnnx)
   "parse .desktop file ENTRY in DATA-DIR at location CNNX"
   (with-temp-buffer
-    (insert-file-contents (freedesktop-launch--build-desktop-entry-path data-dir entry))
+    (insert-file-contents (drun--build-desktop-entry-path data-dir entry))
     (let ((lines (split-string (buffer-string) "\n" t))
           parsed)
 
@@ -241,6 +244,6 @@ Work even if CNNX is a remote path, given it's a *nix."
 
 
 
-(provide 'freedesktop-launch)
+(provide 'drun)
 
-;;; freedesktop-launch.el ends here
+;;; drun.el ends here
