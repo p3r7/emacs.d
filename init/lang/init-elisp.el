@@ -93,7 +93,16 @@
   :diminish
   :commands (elisp-slime-nav-mode
              elisp-slime-nav-find-elisp-thing-at-point)
-  :bind ("C-h C-f" . elisp-slime-nav-find-elisp-thing-at-point))
+  :bind ("C-h C-f" . prf/find-elisp-thing-at-point)
+  :config
+  (defun prf/find-elisp-thing-at-point (symbol)
+    "Go to SYMBOL definition. When called interactively, propose symbol at point.
+Wrapper around `elisp-slime-nav-find-elisp-thing-at-point'."
+    (interactive
+     (list
+      (read-string (format "symbol (%s): " (elisp-slime-nav--read-symbol-at-point))
+                   nil nil (elisp-slime-nav--read-symbol-at-point))))
+    (elisp-slime-nav-find-elisp-thing-at-point symbol)))
 
 (use-package elisp-def
   :disabled
