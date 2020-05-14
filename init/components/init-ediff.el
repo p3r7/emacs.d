@@ -49,6 +49,11 @@
    '((t :inherit warning))
    'face-defface-spec)
 
+  ;; allow diffing between remote hosts
+  (defun prf/ztree-same-host-p (&optional _file1 _file2) t)
+  (defalias 'ztree-same-host-p #'prf/ztree-same-host-p)
+
+
   (defun ztree-toggle ()
     (interactive)
 
