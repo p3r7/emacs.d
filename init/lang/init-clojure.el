@@ -1,6 +1,6 @@
 
 (use-package clojure-mode
-  :hook (clojure-mode . eldoc-mode))
+  :hook (clojure-mode . (lambda () (eldoc-mode 1))))
 
 (use-package cider
   :demand
