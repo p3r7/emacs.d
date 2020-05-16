@@ -53,8 +53,11 @@ Function inspired by `bmkp-jump-1' from bookmark+."
   (let ((bmkp-use-region  (if flip-use-region-p (not bmkp-use-region) bmkp-use-region)))
     (setq bookmark (bookmark-get-filename bookmark))
     (when bookmark
-      (cd (expand-file-name bookmark))
-      (call-interactively action-function))))
+      (let ((dir-location (expand-file-name bookmark)))
+        (unless (file-directory-p dir-location)
+          (setq dir-location (file-name-directory dir-location)))
+        (cd dir-location)
+        (call-interactively action-function)))))
 
 (defun prf/bmkp-bmenu-open-shell (&optional flip-use-region-p)
   (interactive "P")
