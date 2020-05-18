@@ -156,6 +156,7 @@
            (org-block :inherit default)
            (markdown-code-face :inherit nil))
           (flucui-light
+           (form-feed-line :strike-through "#95a5a6")
            (org-block :inherit default)
            (markdown-code-face :inherit nil))
           (dracula-mod
