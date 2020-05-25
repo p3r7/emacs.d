@@ -71,6 +71,10 @@ Support remote paths in form /<method>:<user>@<host>:/.")
 
 (defun drun-list-filepaths (&optional cnnx)
   "Get alist of data dirs / .desktop entries at location CNNX"
+  (drun-filter-duplicate-entries (drun-list-all-filepaths cnnx)))
+
+(defun drun-list-all-filepaths (&optional cnnx)
+  "Get alist of data dirs / .desktop entries at location CNNX, even duplicate ones."
   ;; get list of .desktop entries locations
   (-flatten
    (--map
@@ -80,6 +84,28 @@ Support remote paths in form /<method>:<user>@<host>:/.")
        (drun--build-desktop-entry-path data-dir it)
        entries))
     (drun-list-files cnnx))))
+
+(defun drun-filter-duplicate-entries (entries)
+  "Remove ENTRIES with same file name."
+  (let ((loop-entries entries)
+        entry duplicates)
+    (while loop-entries
+      (setq entry (car loop-entries))
+      (setq duplicates (drun--get-duplicates-for-entry entry entries))
+
+      (--each duplicates
+        (setq entries (delete it entries))
+        (setq loop-entries (delete it loop-entries)))
+
+      (setq loop-entries (cdr loop-entries)))
+    entries))
+
+(defun drun--get-duplicates-for-entry (entry entries)
+  "Get duplicates of ENTRY in ENTRIES."
+  (let ((filename-entry (file-name-nondirectory entry)))
+    (cdr (--filter
+          (string= filename-entry (file-name-nondirectory it))
+          entries))))
 
 
 
@@ -186,7 +212,7 @@ Work even if CNNX is a remote path, given it's a *nix."
   (let* ((env-data-dirs (drun--getenv "XDG_DATA_DIRS" cnnx))
          (env-data-dirs (or env-data-dirs drun-default-data-dirs))
          (entries-locations (split-string env-data-dirs ":"))
-         (entries-locations (append entries-locations '("~/.local/share/")))
+         (entries-locations (cons "~/.local/share/" entries-locations ))
          (entries-locations (mapcar #'drun--sanitize-dir entries-locations)))
     entries-locations))
 
