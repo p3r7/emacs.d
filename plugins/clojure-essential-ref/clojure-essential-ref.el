@@ -642,7 +642,7 @@ opposite of what that option dictates."
            "Doc for"
            #'clojure-essential-ref-browse))
 
-(defun cider-var-info--resolve-symbol (symbol)
+(defun clojure-essential-ref--resolve-symbol (symbol)
   "Gets the fully-qualified name for SYMBOL"
   (let* ((info (cider-var-info symbol))
          (ns (nrepl-dict-get info "ns"))
