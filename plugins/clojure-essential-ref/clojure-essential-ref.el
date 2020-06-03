@@ -549,7 +549,7 @@
 
 ;; COMMAND
 
-(defun w (&optional arg)
+(defun clojure-essential-ref (&optional arg)
   "Open Clojure documentation for symbol from book Clojure Essential Ref in the web browser.
 
 Prompts for the symbol to use, or uses the symbol at point, depending on
@@ -576,7 +576,7 @@ opposite of what that option dictates."
 
 (defun clojure-essential-ref-browse (symbol)
   "Open doc in Clojure Essential Ref for SYMBOL"
-  (setq symbol (cider-var-info--resolve-symbol symbol))
+  (setq symbol (clojure-essential-ref--resolve-symbol symbol))
   (let ((props (cdr (assoc symbol clojure-essential-ref--index))))
     (unless props
       (error "Couldn't find reference to %s in book index" symbol))

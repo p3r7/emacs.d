@@ -5,17 +5,18 @@
 (use-package cider
   :demand
   :after (clojure-mode)
-  :bind (:map cider-mode-map
-	      ("C-h f" . cider-doc)
-	      ("C-h F" . cider-clojuredocs-web)
-	      ("C-h C-f" . cider-find-var)
-	      :map cider-repl-mode-map
-	      ("C-h f" . cider-doc)
-	      ("C-h F" . cider-clojuredocs-web)
-	      ("C-h C-f" . cider-find-var)
-	      ("C-c E" . cider-repl-clear-buffer)
-	      ("C-x k" . cider-quit)
-	      ("C-x C-k" . cider-quit))
+  :bind (
+         :map cider-mode-map
+	 ("C-h f" . cider-doc)
+	 ;; ("C-h F" . cider-clojuredocs-web)
+	 ("C-h V" . cider-find-var)
+	 :map cider-repl-mode-map
+	 ("C-h f" . cider-doc)
+	 ;; ("C-h F" . cider-clojuredocs-web)
+	 ("C-h V" . cider-find-var)
+	 ("C-c E" . cider-repl-clear-buffer)
+	 ("C-x k" . cider-quit)
+	 ("C-x C-k" . cider-quit))
   :init
   (setq org-babel-clojure-backend 'cider)
   :config
@@ -96,6 +97,20 @@ Optionally, we can change namespace by specifying NS."
   (interactive)
   (setq dep (or dep (read-string "Dep: ")))
   (prf/cider/send-to-repl (prf/clj/pomegranate-dep dep) t ns))
+
+
+
+;; DOC
+
+(use-package clojure-essential-ref
+  :load-path "~/.emacs.d/plugins/clojure-essential-ref"
+  :bind (
+         :map cider-mode-map
+         ("C-h F" . clojure-essential-ref)
+         :map cider-repl-mode-map
+         ("C-h F" . clojure-essential-ref)
+         ))
+
 
 
 
