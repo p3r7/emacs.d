@@ -1,5 +1,10 @@
 
 
+(require 'nrepl-dict)
+(require 'cider-common)
+(require 'cider-connection)
+(require 'cider-client)
+
 
 ;; BOOK INDEX
 
@@ -150,7 +155,27 @@
     ("postwalk" . (:url "/chapter-8/v-29/763" :short-name "8.4.2"))
     ("prewalk-replace" . (:url "/chapter-8/v-29/795" :short-name "8.4.3"))
     ("postwalk-replace" . (:url "/chapter-8/v-29/795" :short-name "8.4.3"))
-    ("clojure.zip" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/zipper" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/seq-zip" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/xml-zip" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/vector-zip" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/make-node" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/node" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/up" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/down" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/right" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/left" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/children" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/lefts" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/rights" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/branch?" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/path" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/replace" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/edit" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/insert-left" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/insert-right" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/append-child" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
+    ("clojure.zip/next" . (:url "/chapter-8/v-29/805" :short-name "8.4.4"))
     ("seq" . (:url "/chapter-9/v-29/23" :short-name "9.1.1"))
     ("sequence" . (:url "/chapter-9/v-29/23" :short-name "9.1.1"))
     ("rseq" . (:url "/chapter-9/v-29/77" :short-name "9.1.2"))
@@ -524,7 +549,7 @@
 
 ;; COMMAND
 
-(defun clojure-essential-ref (&optional arg)
+(defun w (&optional arg)
   "Open Clojure documentation for symbol from book Clojure Essential Ref in the web browser.
 
 Prompts for the symbol to use, or uses the symbol at point, depending on
@@ -536,10 +561,22 @@ opposite of what that option dictates."
            "Doc for"
            #'clojure-essential-ref-browse))
 
+(defun cider-var-info--resolve-symbol (symbol)
+  "Gets the fully-qualified name for SYMBOL"
+  (let* ((info (cider-var-info symbol))
+         (ns (nrepl-dict-get info "ns"))
+         (name (nrepl-dict-get info "name")))
+    (if (and ns
+             (not (string= ns "clojure.core")))
+        (concat ns "/" name)
+      name)))
+
 
 ;; BROWSE
 
 (defun clojure-essential-ref-browse (symbol)
+  "Open doc in Clojure Essential Ref for SYMBOL"
+  (setq symbol (cider-var-info--resolve-symbol symbol))
   (let ((props (cdr (assoc symbol clojure-essential-ref--index))))
     (unless props
       (error "Couldn't find reference to %s in book index" symbol))
@@ -547,6 +584,7 @@ opposite of what that option dictates."
 
 
 (defun clojure-essential-ref--build-url (props)
+  "Build url according to the symbol PROPS from clojure-essential-ref--index"
   (concat clojure-essential-ref--base-url (plist-get props :url)))
 
 
