@@ -10,10 +10,13 @@
 	 ("C-h f" . cider-doc)
 	 ;; ("C-h F" . cider-clojuredocs-web)
 	 ("C-h V" . cider-find-var)
+         ("C-c e b" . cider-eval-buffer)
+         ("C-c e s" . cider-scratch)
 	 :map cider-repl-mode-map
 	 ("C-h f" . cider-doc)
 	 ;; ("C-h F" . cider-clojuredocs-web)
 	 ("C-h V" . cider-find-var)
+         ("C-c e s" . cider-scratch)
 	 ("C-c E" . cider-repl-clear-buffer)
 	 ("C-x k" . cider-quit)
 	 ("C-x C-k" . cider-quit))
