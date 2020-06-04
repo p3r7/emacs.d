@@ -1,5 +1,6 @@
 
-(setq prf/lispy-modes '(emacs-lisp-mode clojure-mode))
+(setq prf/lispy-modes '(emacs-lisp-mode
+                        clojure-mode clojurescript-mode cider-repl-mode))
 
 (use-package lispy
   :after lisp-mode
@@ -7,7 +8,8 @@
   :hook
 ;;;  REVIEW: why is this not working ?!
   ;; `(prf/lispy-mode . lispy-mode)
-  (((emacs-lisp-mode clojure-mode) . lispy-mode)
+  (((emacs-lisp-mode
+     clojure-mode clojurescript-mode cider-repl-mode) . lispy-mode)
    (lispy-mode
     . (lambda ()
         ;; disable conflicting module: autopair
