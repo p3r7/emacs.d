@@ -38,7 +38,7 @@
         (call-interactively #'forward-list)
       (condition-case ex
           (call-interactively #'up-list)
-        ('scan-error (end-of-buffer))))))
+        ('scan-error (goto-char (point-max)))))))
 
 (defun prf/smart-backward-list ()
   (interactive)
@@ -47,7 +47,7 @@
         (call-interactively #'backward-list)
       (condition-case ex
           (call-interactively #'backward-up-list)
-        ('scan-error (beginning-of-buffer))))))
+        ('scan-error (goto-char (point-min)))))))
 
 (global-set-key [remap forward-list] #'prf/smart-forward-list)
 (global-set-key [remap backward-list] #'prf/smart-backward-list)
