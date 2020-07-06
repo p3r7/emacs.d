@@ -36,14 +36,18 @@
   (let ((matching (ignore-errors (scan-lists (point) 1 0))))
     (if matching
         (call-interactively #'forward-list)
-      (call-interactively #'up-list))))
+      (condition-case ex
+          (call-interactively #'up-list)
+        ('scan-error (end-of-buffer))))))
 
 (defun prf/smart-backward-list ()
   (interactive)
   (let ((matching (ignore-errors (scan-lists (point) -1 0))))
     (if matching
         (call-interactively #'backward-list)
-      (call-interactively #'backward-up-list))))
+      (condition-case ex
+          (call-interactively #'backward-up-list)
+        ('scan-error (beginning-of-buffer))))))
 
 (global-set-key [remap forward-list] #'prf/smart-forward-list)
 (global-set-key [remap backward-list] #'prf/smart-backward-list)
