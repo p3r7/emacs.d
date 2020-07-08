@@ -113,6 +113,12 @@ Optionally, we can change namespace by specifying NS."
          :map cider-repl-mode-map
          ("C-h F" . clojure-essential-ref)))
 
+(use-package clojure-essential-ref-nov
+  :ensure nil
+  :after (nov clojure-essential-ref)
+  :init
+  (setq clojure-essential-ref-nov-epub-path "~/Downloads/Clojure_The_Essential_Reference_v29_MEAP.epub"))
+
 
 
 
