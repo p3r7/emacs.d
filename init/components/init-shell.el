@@ -1,4 +1,7 @@
 
+
+;; SHELL
+
 (use-package shell
   :ensure nil
   :demand
@@ -66,8 +69,20 @@
     (add-hook 'rlc-no-readline-hook (lambda () (company-mode -1))))))
 
 
+(use-package native-complete
+  :config
+  (with-eval-after-load 'shell
+    (native-complete-setup-bash)))
+
+(use-package company-native-complete
+  :after (auto-complete company)
+  :config
+  (push 'company-native-complete company-backends)
+  (add-hook 'shell-mode-hook (company-mode 1)))
+
+
 
-;; VTERM
+;; TERM
 
 (when module-file-suffix
   (use-package vterm))
