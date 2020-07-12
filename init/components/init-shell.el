@@ -25,6 +25,7 @@
     (defalias '_rsh 'friendly-remote-shell)))
 
 (use-package shx
+  ;; :disabled
   :hook (shell-mode . shx-mode)
   :after shell
 
@@ -78,7 +79,7 @@
   :after (auto-complete company)
   :config
   (push 'company-native-complete company-backends)
-  (add-hook 'shell-mode-hook (company-mode 1)))
+  (add-hook 'shell-mode-hook (lambda () (company-mode 1))))
 
 
 
