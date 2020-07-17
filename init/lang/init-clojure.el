@@ -59,11 +59,17 @@ Optionally, we can change namespace by specifying NS."
 ;; REFACTORING
 
 ;; NB: will be merged into CIDER in the future
+
 (use-package clj-refactor
   :after clojure-mode
   :hook
   ((clojure-mode . clj-refactor-mode)
-   (clj-refactor-mode . (lambda () (cljr-add-keybindings-with-prefix "C-c C-m")))))
+   (clj-refactor-mode . (lambda () (cljr-add-keybindings-with-prefix "C-c C-m"))))
+  :bind (
+         :map cider-mode-map
+	 ("<SunProps>" . hydra-cljr-help-menu/body)
+         :map cider-repl-mode-map
+         ("<SunProps>" . hydra-cljr-help-menu/body)))
 
 
 
