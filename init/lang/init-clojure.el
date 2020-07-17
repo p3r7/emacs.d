@@ -69,7 +69,9 @@ Optionally, we can change namespace by specifying NS."
          :map cider-mode-map
 	 ("<SunProps>" . hydra-cljr-help-menu/body)
          :map cider-repl-mode-map
-         ("<SunProps>" . hydra-cljr-help-menu/body)))
+         ("<SunProps>" . hydra-cljr-help-menu/body))
+  :init
+  (setq cljr-warn-on-eval nil))
 
 
 
