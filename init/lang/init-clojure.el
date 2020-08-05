@@ -22,6 +22,7 @@
 	 ("C-x C-k" . cider-quit))
   :init
   (setq org-babel-clojure-backend 'cider)
+  (setq cider-repl-display-in-current-window t) ; don't pop a window randomly
   :config
   (require 'ob-clojure)
 
