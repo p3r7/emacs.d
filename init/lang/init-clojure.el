@@ -114,17 +114,22 @@ Optionally, we can change namespace by specifying NS."
 
 ;; DOC
 
-(use-package clojure-essential-ref
+;; (use-package clojure-essential-ref-nov
+;;   :bind (
+;;          :map cider-mode-map
+;;          ("C-h F" . clojure-essential-ref)
+;;          :map cider-repl-mode-map
+;;          ("C-h F" . clojure-essential-ref)))
+
+(use-package clojure-essential-ref-nov
   :bind (
          :map cider-mode-map
          ("C-h F" . clojure-essential-ref)
          :map cider-repl-mode-map
-         ("C-h F" . clojure-essential-ref)))
-
-(use-package clojure-essential-ref-nov
-  :after (nov clojure-essential-ref)
+         ("C-h F" . clojure-essential-ref))
   :init
-  (setq clojure-essential-ref-nov-epub-path "~/Downloads/Clojure_The_Essential_Reference_v29_MEAP.epub"))
+  (setq clojure-essential-ref-nov-epub-path "/home/eigen/Calibre Library/Renzo Borgatti/Clojure_ The Essential Reference MEAP V29 (40)/Clojure_ The Essential Reference MEAP V29 - Renzo Borgatti.epub")
+  (setq clojure-essential-ref-default-browse-fn #'clojure-essential-ref-nov-browse))
 
 
 
