@@ -1,19 +1,6 @@
 
 
 
-;; ENSURE EXEC PATH
-
-;; NB: When using emacs systemd user service, .profile doesn't get loaded
-;; unless we use this.
-
-(use-package exec-path-from-shell
-  :init
-  (setq exec-path-from-shell-check-startup-files nil)
-  :config
-  (exec-path-from-shell-initialize))
-
-
-
 ;; OS DETECTION
 
 (defun windows-nt-p ()
@@ -25,13 +12,28 @@
 
 
 
+;; ENSURE EXEC PATH
+
+;; NB: When using emacs systemd user service, .profile doesn't get loaded
+;; unless we use this.
+
+(use-package exec-path-from-shell
+  :init
+  (setq exec-path-from-shell-check-startup-files nil)
+  :config
+  (unless (windows-nt-p)
+    (exec-path-from-shell-initialize)))
+
+
+
 ;; OS-related customs
 
 (cond
  ((gnu/linux-p)
   (require 'init-linux))
  ((windows-nt-p)
-  (require 'init-w32)))
+  (require 'init-w32)
+  ))
 
 
 
