@@ -71,6 +71,7 @@
 
 
 (use-package native-complete
+  :disabled
   :config
   (with-eval-after-load 'shell
     (native-complete-setup-bash)))
