@@ -87,7 +87,9 @@
 ;; TERM
 
 (when module-file-suffix
-  (use-package vterm))
+  (use-package vterm
+    :init
+    (setq vterm-always-compile-module t)))
 
 
 
