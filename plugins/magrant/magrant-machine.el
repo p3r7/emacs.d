@@ -169,9 +169,11 @@ and FLIP is a boolean to specify the sort order."
 
 ;; TRANSIENT: PROVISION
 
-(defun magrant-machine-provision ()
-  (interactive)
-  (message "Not yet implemented"))
+(magrant-utils-define-transient-command magrant-machine-provision ()
+  "Transient for provisioning machines."
+  :man-page "magrant-machine-provision"
+  [:description magrant-utils-generic-actions-heading
+                ("p" "ALL" magrant-machine-generic-action-async)])
 
 
 
