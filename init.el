@@ -242,8 +242,8 @@
 (require 'init-docker)
 
 (use-package magrant
-  :bind ("C-c v" . magrant)
-  :load-path "~/.emacs.d/plugins/magrant/")
+  :quelpa (magrant :fetcher github :repo "p3r7/magrant")
+  :bind ("C-c v" . magrant))
 
 (use-package drun
   :load-path "~/.emacs.d/plugins/drun/")
