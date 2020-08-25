@@ -28,7 +28,7 @@
 
 (use-package bookmark+
   :quelpa (bookmark+ :fetcher github :repo "emacsmirror/bookmark-plus")
-  :after (bookmark))
+  :after bookmark)
 
 
 ;; ------------------------------------------------------------------------
