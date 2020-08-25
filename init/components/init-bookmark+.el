@@ -1,5 +1,5 @@
 
-;; ------------------------------------------------------------------------
+
 ;; BOOKMARK
 
 (use-package bookmark
@@ -23,7 +23,7 @@
   (add-to-list 'display-buffer-alist `(,(concat "^\\*Bookmark List\\*$") display-buffer-same-window)))
 
 
-;; ------------------------------------------------------------------------
+
 ;; BOOKMARK+
 
 (use-package bookmark+
@@ -31,7 +31,7 @@
   :after bookmark)
 
 
-;; ------------------------------------------------------------------------
+
 ;; CUSTOM ACTIONS
 
 (defun prf/bmkp-bmenu-action (action-function &optional flip-use-region-p) ; Bound to `RET' in bookmark list
@@ -84,5 +84,6 @@ Function inspired by `bmkp-jump-1' from bookmark+."
   (prf/bmkp-bmenu-action #'lusty-file-explorer flip-use-region-p))
 
 
+
 
 (provide 'init-bookmark+)
