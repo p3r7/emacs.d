@@ -97,7 +97,7 @@
 ;; NB: could alternatively have used DoReMi
 (use-package prf-theme
   :quelpa (prf-theme :fetcher github :repo "p3r7/prf-theme")
-  :after space-theming
+  :after (space-theming helm)
   :demand
   :bind (([f12] . prf/theme/cycle-theme)
          ("C-<f12>" . helm-prf-theme-choose))
