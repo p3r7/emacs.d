@@ -1,6 +1,6 @@
 
 
-;; SHELL
+;; SHELL - MAIN
 
 (use-package shell
   :ensure nil
@@ -48,6 +48,11 @@
   :config
   (add-to-list 'sh-term-visual-commands "htop"))
 
+
+
+;; SHELL - COMPLETION AT POINT
+
+;; NB: all those kinda crap on me
 
 (use-package readline-complete
   :disabled
