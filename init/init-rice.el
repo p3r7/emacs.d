@@ -99,8 +99,7 @@
   :quelpa (prf-theme :fetcher github :repo "p3r7/prf-theme")
   :after (space-theming helm)
   :demand
-  :bind (([f12] . prf/theme/cycle-theme)
-         ("C-<f12>" . helm-prf-theme-choose))
+  :bind (([f12] . prf/theme/cycle-theme))
   :init
   (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
   (setq prf/theme/theme-list prf/theme/list/practical)
@@ -111,6 +110,11 @@
   ;; for space-theming
   (setq space-theming--current-theme prf/theme/current-theme)
   (space-theming-update-current-theme))
+
+(use-package helm-prf-theme
+  :after (prf-theme helm)
+  :ensure nil
+  :bind (("C-<f12>" . helm-prf-theme-choose)))
 
 (require 'init-doremi)
 
