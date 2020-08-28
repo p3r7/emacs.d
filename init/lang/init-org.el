@@ -40,6 +40,10 @@
   ;; http://orgmode.org/worg/org-faq.html#load-org-after-setting-variables
   (require 'org-install)
 
+  ;; enable back easy-template
+  (when (>= emacs-major-version 27)
+    (require 'org-tempo))
+
   ;; TIME TRACKING
   ;; [[http://orgmode.org/manual/Clocking-work-time.html]]
   (setq org-clock-persist 'history)
