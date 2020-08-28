@@ -33,16 +33,17 @@
 
 ;; OBJECT MANIPULATION
 
-(use-package f)                         ; files
-
-(use-package s)                         ; strings
-
-(use-package prf-string
-  :quelpa (prf-string :fetcher github :repo "p3r7/prf-string"))
-
 (use-package dash
   :config
   (dash-enable-font-lock))
+
+(use-package f)                         ; files
+
+(use-package s)                         ; strings
+(use-package prf-string
+  :quelpa (prf-string :fetcher github :repo "p3r7/prf-string"))
+
+(use-package ts)                        ; time
 
 ;; (use-package ht)
 ;; https://github.com/plexus/a.el
