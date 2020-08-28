@@ -1,5 +1,9 @@
 
 
+
+(require 'ts)
+
+
 ;; FONT
 
 (set-face-bold-p 'bold nil)
@@ -106,7 +110,14 @@
   ;; (setq prf/theme/theme-list prf/theme/list/retro-light)
   ;; (setq prf/theme/theme-list prf/theme/list/retro-dark)
   :config
-  (prf/theme/initialize)
+
+  ;; (prf/theme/initialize)
+  (let ((now-h (ts-hour (ts-now))))
+    (if (or (< now-h 9)
+            (> now-h 19))
+        (prf/theme/set-theme-from-list 'chocolate)
+      (prf/theme/set-theme-from-list 'white-sand)))
+
   ;; for space-theming
   (setq space-theming--current-theme prf/theme/current-theme)
   (space-theming-update-current-theme))
