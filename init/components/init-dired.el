@@ -58,8 +58,12 @@
   :quelpa (dired+ :fetcher github :repo "emacsmirror/dired-plus")
   :after (dired)
   :demand
+
   :config
+  ;; NB: dired+ does this weird thing in emacs -nw where all arrow keys are bound to "M-O" prefixes
+  ;; disabling this keybinding solves the issue
   (unbind-key "M-O" dired-mode-map)
+
   ;; (eval-after-load "dired-aux"
   ;;     '(require 'dired-async))
   )
