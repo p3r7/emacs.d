@@ -54,10 +54,12 @@
 ;; EXTRA FACES
 
 (use-package dired+
+  ;; :disabled
   :quelpa (dired+ :fetcher github :repo "emacsmirror/dired-plus")
   :after (dired)
   :demand
-  ;; :config
+  :config
+  (unbind-key "M-O" dired-mode-map)
   ;; (eval-after-load "dired-aux"
   ;;     '(require 'dired-async))
   )
