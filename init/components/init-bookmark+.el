@@ -28,7 +28,13 @@
 
 (use-package bookmark+
   :quelpa (bookmark+ :fetcher github :repo "emacsmirror/bookmark-plus")
-  :after bookmark)
+  :after bookmark
+  :hook ((bookmark-bmenu-mode
+          . (lambda ()
+              ;; NB: recent bookmark+ introduced a key prefix "s" to sort bookmarks
+              ;; we need a hook to override it
+              (bind-key "s" #'prf/bmkp-bmenu-open-shell bookmark-bmenu-mode-map)
+              ))))
 
 
 
