@@ -14,6 +14,17 @@
 
 
 
+;; WIP PUSHBULLET PACKAGE
+
+(use-package pushbullet-api
+  :load-path "/home/eigen/.emacs.d/plugins/pushbullet-reader")
+
+(use-package pushbullet
+  :load-path "/home/eigen/.emacs.d/plugins/pushbullet-reader"
+  :after pushbullet-api)
+
+
+
 ;; auto-determine thing at point
 
 (defun prf/thing-at-point (THING)
