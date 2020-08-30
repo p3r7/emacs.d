@@ -7,7 +7,6 @@
 
 (use-package hide-lines)
 
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins-spe/syslog-mode-prf"))
 (use-package syslog-mode
   :load-path "~/.emacs.d/plugins-spe/syslog-mode-prf"
   :mode (".*\.log'" ".*\.log\..*\.gz'" "/var/log.*\\'"
