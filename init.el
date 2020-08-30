@@ -243,7 +243,7 @@
 (require 'init-vagrant)
 
 (use-package drun
-  :load-path "~/.emacs.d/plugins/drun/")
+  :load-path "~/.emacs.d/plugins/drun")
 
 
 
