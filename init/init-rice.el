@@ -70,6 +70,7 @@
    ;; 'challenger-deep
    ;; 'gotham
    ;; 'light-blue
+   'default
    ))
 
 (defvar prf/theme/list/dark
