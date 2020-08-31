@@ -240,13 +240,10 @@
 (require 'init-srv-utils)
 (require 'init-influxdb-client)
 (require 'init-docker)
-
-(use-package magrant
-  :quelpa (magrant :fetcher github :repo "p3r7/magrant")
-  :bind ("C-c v" . magrant))
+(require 'init-vagrant)
 
 (use-package drun
-  :load-path "~/.emacs.d/plugins/drun/")
+  :load-path "~/.emacs.d/plugins/drun")
 
 
 

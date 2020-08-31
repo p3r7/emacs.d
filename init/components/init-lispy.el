@@ -1,6 +1,13 @@
 
+
+;; CONF
+
 (setq prf/lispy-modes '(emacs-lisp-mode
                         clojure-mode clojurescript-mode cider-repl-mode))
+
+
+
+;; MAIN
 
 (use-package lispy
   :after lisp-mode
@@ -66,5 +73,7 @@
   ;; disable when region active
   (advice-add 'delete-selection-pre-hook :around 'lispy--delsel-advice))
 
+
+
 
 (provide 'init-lispy)
