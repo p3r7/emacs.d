@@ -1,4 +1,8 @@
 
+
+
+(require 's)
+
 
 
 ;; OS DETECTION
@@ -12,17 +16,38 @@
 
 
 
-;; ENSURE EXEC PATH
+;; ENV VARS
 
-;; NB: When using emacs systemd user service, .profile doesn't get loaded
-;; unless we use this.
+;; NB: When using emacs systemd user service, .profile doesn't get loaded.
 
 (use-package exec-path-from-shell
   :init
   (setq exec-path-from-shell-check-startup-files nil)
+  (add-to-list 'exec-path-from-shell-variables "TERM")
+  (add-to-list 'exec-path-from-shell-variables "REAL_TERM")
   :config
   (unless (windows-nt-p)
     (exec-path-from-shell-initialize)))
+
+
+(defun override-env-vars (env-vars)
+  "Override env vars with new ENV-VARS.
+This is usefull for when Emacs in launched as a systemd service, in which case the user environment is not retrieved.
+To be called when launching emacsclient:
+
+    $ emacsclient -c -e \"(override-env-vars \\\"$(env | egrep '(TERM|REAL_TERM)' | paste -s -d: -)\\\")\"
+
+NB: some env vars have emacs var bindings (e.g. PATH -> `exec-path').
+These are not handles here.
+"
+  (let ((env-vars (s-split ":" env-vars)))
+    (mapc
+     (lambda (env-var)
+       (let* ((k_v (s-split-up-to "=" env-var 1))
+              (k (car k_v))
+              (v (cadr k_v)))
+         (setenv k v)))
+     env-vars)))
 
 
 
