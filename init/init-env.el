@@ -23,9 +23,9 @@
 (use-package exec-path-from-shell
   :init
   (setq exec-path-from-shell-check-startup-files nil)
+  :config
   (add-to-list 'exec-path-from-shell-variables "TERM")
   (add-to-list 'exec-path-from-shell-variables "REAL_TERM")
-  :config
   (unless (windows-nt-p)
     (exec-path-from-shell-initialize)))
 
