@@ -100,13 +100,27 @@
 
 (require 'init-shell)
 
-(defun local-root-shell ()
-  "Open a shell at current location as root"
+(defun sudoify-path (&optional path)
+  "Enrich PATH with a sudo multi-hop TRAMP part."
+  (let* ((path (or path (expand-file-name default-directory)))
+         (remote-prefix (file-remote-p path)))
+
+    (when (and remote-prefix
+               (s-contains? "|sudo:" path)
+               (s-starts-with? "sudo:"
+                               (cadr (s-split "|" "/ssh:pi@rpi3b|sudo:root@rpi3b:"))))
+      (error "Path already contains a sudo at the last multi-hop position"))
+
+    (if remote-prefix
+        (replace-regexp-in-string (concat "^" (regexp-quote remote-prefix))
+                                  (concat (s-chop-suffix ":" remote-prefix) "|sudo::")
+                                  path)
+      (concat "/sudo::" path))))
+
+(defun local-root-shell (&optional path)
+  "Open a shell at current location as root."
   (interactive)
-  (with-temp-buffer
-    (cd (concat "/sudo::" (expand-file-name default-directory)))
-    (let ((current-prefix-arg '(4)))
-      (shell (generate-new-buffer-name "*root@localhost*")))))
+  (friendly-shell :path (sudoify-path path)))
 
 
 ;;TODO: lotta stuff don't work as expected
