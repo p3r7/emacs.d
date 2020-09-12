@@ -1,5 +1,5 @@
 
-(when (version<=  emacs-version "26.3")
+(when (version<= "26.3" emacs-version)
 
   (use-package eglot
     :after (company)
