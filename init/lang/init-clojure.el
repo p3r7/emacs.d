@@ -23,6 +23,7 @@
   :init
   (setq org-babel-clojure-backend 'cider)
   (setq cider-repl-display-in-current-window t) ; don't pop a window randomly
+  (setq cider-repl-display-help-banner nil)
   :config
   (require 'ob-clojure)
 
