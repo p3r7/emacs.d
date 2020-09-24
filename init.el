@@ -197,6 +197,7 @@
 (require 'init-php)
 (require 'init-js)
 (require 'init-lua)
+(require 'init-python)
 (require 'init-groovy)
 (require 'init-scheme)
 (require 'init-sql)
@@ -206,7 +207,7 @@
 (require 'init-ahk)
 (require 'init-devilspie)
 (require 'init-r)
-(require 'init-python)
+(require 'init-supercollider)
 
 ;; - shell
 (require 'init-dos)
