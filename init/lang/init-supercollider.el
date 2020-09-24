@@ -9,7 +9,8 @@
 
 
 
-(when (locate-library "sclang")
+(when (and (locate-library "sclang")
+           (locate-library "sclang-vars"))
   (use-package sclang
     :ensure nil
     :demand))
