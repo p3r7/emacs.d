@@ -1,8 +1,4 @@
 
-(use-package smex
-  :config
-  (smex-initialize))
-
 (use-package ivy
   :init
   (setq ivy-use-virtual-buffers t)
@@ -12,11 +8,9 @@
     (ivy-mode 1)
     (global-set-key (kbd "C-c C-r") #'ivy-resume)))
 
-(use-package swiper
-  :after (ivy)
+(use-package smex
   :config
-  (when (eq prf/fav-completion-system 'ivy)
-    (global-set-key (kbd "C-s") #'swiper)))
+  (smex-initialize))
 
 (use-package counsel
   :after (ivy smex)
@@ -35,6 +29,16 @@
   ;;   (global-set-key (kbd "C-x l") 'counsel-locate)
   ;;   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
   )
+
+
+
+;; INCREMENTAL SEARCH
+
+(use-package swiper
+  :after ivy
+  :config
+  (when (eq prf/fav-completion-system 'ivy)
+    (global-set-key (kbd "C-s") #'swiper)))
 
 
 

@@ -90,10 +90,17 @@ On error (read-only), quit without selecting."
 	 ("p" . helm-grep-mode-jump-other-window-backward)
 	 ("n" . helm-grep-mode-jump-other-window-forward)))
 
+
+;; NB: swiper & helm-swoop are very close
+
 (use-package helm-swoop
   :after helm)
 
+(use-package swiper-helm
+  :after helm)
+
 ;; NB: (helm-)org-rifle in ~/.emacs.d/init/lang/init-org.el
+
 
 
 
