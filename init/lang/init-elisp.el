@@ -218,6 +218,10 @@ Wrapper around `elisp-slime-nav-find-elisp-thing-at-point'."
   (cl-lib-highlight-warn-cl-initialize))
 
 
+(use-package easy-escape
+  :hook ((emacs-lisp-mode ielm-mode) . easy-escape-minor-mode))
+
+
 
 
 (provide 'init-elisp)
