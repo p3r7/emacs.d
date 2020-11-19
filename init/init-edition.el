@@ -23,6 +23,12 @@
 
 ;; REVIEW: what about c-electric-delete-forward on recent emacs versions
 
+(defun prf/reindent-buffer ()
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
+(global-set-key (kbd "C-c TAB") 'prf/reindent-buffer)
+
 
 
 ;; UNDO
