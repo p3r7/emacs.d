@@ -299,6 +299,16 @@
 
 ;; VISUAL ENHANCEMENTS
 
+(use-package greenbar
+  ;; NB: using own fork w/ reload of colors on theme change
+  :load-path "~/.emacs.d/plugins/greenbar"
+  :config
+  (setq greenbar-background-colors 'greenbar)
+  :init
+  (add-hook 'comint-mode-hook #'greenbar-mode))
+;; see also:: https://www.emacswiki.org/emacs/StripesMode
+
+
 (use-package rainbow-mode
   ;; NB: disabled as highlights even partial symbols...
   :disabled
