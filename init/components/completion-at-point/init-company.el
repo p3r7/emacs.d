@@ -8,7 +8,7 @@
 
   :config
   (when (eq prf/fav-completion-at-point 'company)
-    (add-hook 'after-init-hook 'global-company-mode)))
+    (add-hook 'after-init-hook #'global-company-mode)))
 
 
 
