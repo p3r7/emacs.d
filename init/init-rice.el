@@ -5,7 +5,7 @@
 
 ;; FONT
 
-(set-face-bold-p 'bold nil)
+;; (set-face-bold-p 'bold nil)
 
 ;; alt way to test: (when (find-font (font-spec :name "DejaVu Sans Mono") ...)
 
