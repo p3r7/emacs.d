@@ -8,6 +8,9 @@
 	     (string-match-p (regexp-quote "ansible") fname)
 	     (s-suffix? ".j2" fname)))))
 
+(defun prf/ibuffer/help-mode-or-derived-p ()
+  (when (derived-mode-p 'help-mode)))
+
 
 ;; http://www.emacswiki.org/emacs/IbufferMode
 
@@ -126,11 +129,17 @@
 	     (or
 	      (name . "^magit")))
 	    ("tmp: Help"
-	     (or
+             (or
+              (predicate . (prf/ibuffer/help-mode-or-derived-p))
+              (mode . cider-docview-mode)
               (name . "^\\*Help\\*$")
               (name . "^\\*Apropos\\*$")
               (name . "^\\*Completions\\*$")
 	      (name . "^\\*helpful ")))
+            ("tmp: Search"
+	     (or
+	      (name . "^\\*Occur")
+              (name . "^\\*deadgrep ")))
 	    ("tmp"
 	     (or
 	      (name . "^\\*tramp")
