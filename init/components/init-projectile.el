@@ -32,10 +32,12 @@
     (add-to-list 'project-find-functions 'prf/projectile-project-find-function))
 
 
+  ;; Disable under TRAMP
   ;; https://github.com/bbatsov/projectile/pull/444
-  ;; (setq projectile-file-exists-remote-cache-expire nil)
-  ;; (defadvice projectile-project-root (around ignore-remote first activate)
-  ;;   (unless (file-remote-p default-directory) ad-do-it))
+  (setq projectile-file-exists-remote-cache-expire nil)
+  (defadvice projectile-project-root (around ignore-remote first activate)
+    (unless (file-remote-p default-directory) ad-do-it))
+
 
   (projectile-global-mode)
 
