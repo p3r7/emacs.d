@@ -10,7 +10,7 @@
    (string-equal system-type "windows-nt")))
 
 (use-package projectile
-  :after (s)
+  ;; :after s
   :if (prf/enable-projectile-p)
   ;; REVIEW: cleaner defintion w/ let*
   :delight '(:eval (if (string= "-" (projectile-project-name))
