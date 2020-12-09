@@ -45,6 +45,8 @@
   :defer t)
 (use-package challenger-deep-theme
   :defer t)
+(use-package zenburn-theme
+  :defer t)
 
 ;; light
 (use-package white-sand-theme
@@ -62,21 +64,23 @@
 (use-package solarized-theme
   :defer t)
 
-(defvar prf/theme/list/practical
-  (list
-   'chocolate
-   ;; 'plan9
-   'white-sand
-   ;; 'tango
-   'flucui-light
-   'dracula-mod
-   'comidia-mod
-   ;; 'solarized-dark
-   ;; 'challenger-deep
-   ;; 'gotham
-   ;; 'light-blue
-   'default
-   ))
+(defvar prf/theme/list/practical '())
+(setq prf/theme/list/practical
+      (list
+       'chocolate
+       ;; 'plan9
+       'zenburn
+       'white-sand
+       ;; 'tango
+       'flucui-light
+       'dracula-mod
+       'comidia-mod
+       'solarized-dark
+       ;; 'challenger-deep
+       ;; 'gotham
+       ;; 'light-blue
+       'default
+       ))
 
 (defvar prf/theme/list/dark
   (list
