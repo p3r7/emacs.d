@@ -69,7 +69,8 @@
 	      (name . "^\\*nrepl-server")
 	      (name . "^\\*cider-repl")
 	      (name . "^\\*cider-error\\*$")
-	      (mode . clojure-mode)
+	      (mode . clojurec-mode)
+              (mode . clojure-mode)
               (mode . clojurescript-mode)))
 
 	    ("CRON"
