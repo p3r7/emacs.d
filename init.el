@@ -278,7 +278,7 @@
 (require 'init-treemacs)
 ;; (require 'init-speedbar) ;; craps since emacs 24.4 due to void-function ad-advised-definition-p
 
-;; (require 'init-projectile)
+(require 'init-project)
 
 (require 'init-grep)
 (require 'init-vcs)
