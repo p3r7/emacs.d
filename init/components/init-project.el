@@ -94,4 +94,4 @@
 
 
 
-(provide 'init-projectile)
+(provide 'init-project)
