@@ -23,10 +23,11 @@
       (save-excursion
         (shell-command-on-region (mark) (point) "python -m json.tool" (buffer-name) t)))))
 
-(when (fboundp #'json/format-region)
-  (defun json/format ()
-    "Pretty-print json near point or region"
-    (interactive)
+(defun apply-cmd-on-delimited-region (apply-cmd)
+  "Apply command APPLY-CMD on region.
+Region is either the active region or found using delimiters around points."
+  (interactive)
+  (save-excursion
     (let* ((siblings (prf/parens/get-siblings))
            (dir (car siblings))
            (first-pos (nth 1 siblings))
@@ -46,7 +47,15 @@
           (set-mark matching)
           (goto-char current)
           (activate-mark))
-        (call-interactively #'json/format-region)))))
+        (call-interactively apply-cmd)
+        (when (region-active-p)
+          (deactivate-mark))))))
+
+(when (fboundp #'json/format-region)
+  (defun json/format ()
+    "Pretty-print json near point or region"
+    (interactive)
+    (apply-cmd-on-delimited-region #'json/format-region)))
 
 
 

@@ -110,12 +110,18 @@
 
 ;; OUTPUT
 
+(defun json/ansible/format-region-strings ()
+  (replace-regexp (regexp-quote "\\n") "\n"
+                  nil (region-beginning) (region-end)))
+
 (defun json/ansible/format ()
   (interactive)
   (call-interactively #'json/format)
-  (replace-regexp (regexp-quote "\\n") "\n"
-                  nil (region-beginning) (region-end))
-  )
+  (apply-cmd-on-delimited-region (lambda ()
+                                   (interactive)
+                                   (replace-regexp (regexp-quote "\\n") "\n"
+                                                   nil (region-beginning) (region-end)))))
+
 
 
 
