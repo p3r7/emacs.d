@@ -2,6 +2,12 @@
 ;; (use-package 'grizzl)
 
 
+;; PROJECT
+
+(use-package find-file-in-project)
+
+
+
 ;; PROJECTILE
 
 (defun prf/enable-projectile-p ()
@@ -88,4 +94,4 @@
 
 
 
-(provide 'init-projectile)
+(provide 'init-project)
