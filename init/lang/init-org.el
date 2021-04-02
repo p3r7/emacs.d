@@ -95,6 +95,17 @@
 
 
 
+;; TABLES
+
+(use-package valign
+  :quelpa (valign :fetcher github :repo "casouri/valign")
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook #'valign-mode)
+  (setq valign-fancy-bar t))
+
+
+
 ;; IMAGES
 
 (use-package org-download
