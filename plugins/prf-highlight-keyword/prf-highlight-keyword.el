@@ -7,7 +7,9 @@
 
 (defvar prd-highlight-keyword-modes
   '(ada-mode c-mode emacs-lisp-mode java-mode haskell-mode web-mode
-             literate-haskell-mode html-mode lisp-mode php-mode python-mode ruby-mode tcl-mode
+             literate-haskell-mode html-mode lisp-mode
+             ;; php-mode
+             python-mode ruby-mode tcl-mode
              scheme-mode sgml-mode sh-mode sml-mode markdown-mode org-mode
              yaml-mode clojure-mode clojurescript-mode clojurec-mode))
 
