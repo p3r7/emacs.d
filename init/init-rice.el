@@ -184,6 +184,18 @@
            (form-feed-line :strike-through "#95a5a6")
            (org-block :inherit default)
            (markdown-code-face :inherit nil))
+          (zenburn
+           (form-feed-line :strike-through "#7F9F7F")
+           (hl-line :background "#4a3434")
+           (highlight :background "#4a3434"))
+          (late-night
+           ;; (hl-line :inherit nil :background "#192a2a")
+           (hl-line :inherit nil :background "#2a1919")
+           (form-feed-line :strike-through "#555")
+           (link :foreground "#006262")
+           ;; (markdown-code-face :inherit nil)
+           (org-block-begin-line :foreground "#594A3B")
+           (org-block-end-line :foreground "#594A3B"))
           (dracula-mod
            (form-feed-line :strike-through "#6272a4")
            (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
