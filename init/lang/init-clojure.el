@@ -1,6 +1,10 @@
 
 (use-package clojure-mode
-  :hook (clojure-mode . (lambda () (eldoc-mode 1))))
+  :after flycheck-clj-kondo
+  :hook ((clojure-mode . (lambda () (eldoc-mode 1)))
+         (clojure-mode . (lambda () (flycheck-mode 1))))
+  :config
+  (require 'flycheck-clj-kondo))
 
 (use-package cider
   :demand
@@ -75,6 +79,12 @@ Optionally, we can change namespace by specifying NS."
   :init
   (setq cljr-warn-on-eval nil))
 
+
+
+;; LINT
+
+(use-package flycheck-clj-kondo
+  :after flycheck)
 
 
 ;; DEPS INJECTION
