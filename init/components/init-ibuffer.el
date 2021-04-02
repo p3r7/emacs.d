@@ -106,7 +106,8 @@
 	      (mode . sh-mode)          ; aka Shell-script mode
 	      (mode . perl-mode)
 	      (mode . python-mode)
-	      (mode . emacs-lisp-mode)))
+	      (mode . emacs-lisp-mode)
+              (mode . lua-mode)))
 
 	    ("Mail"
 	     (or
