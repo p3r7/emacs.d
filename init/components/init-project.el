@@ -62,6 +62,40 @@
   ;; (if (featurep 'grizzl)
   ;;     (setq projectile-completion-system 'grizzl))
 
+  ;; (when (fboundp #'fileloop-continue)
+
+  ;;   (defun prf/fileloop-initialize-replace-no-prompt ()
+  ;;     (fileloop-initialize
+  ;;      files
+  ;;      (lambda ()
+  ;;        (let ((case-fold-search (fileloop--case-fold from case-fold)))
+  ;;          (if (re-search-forward from nil t)
+  ;;              ;; When we find a match, move back
+  ;;              ;; to the beginning of it so perform-replace
+  ;;              ;; will see it.
+  ;;              (goto-char (match-beginning 0)))))
+  ;;      (lambda ()
+  ;;        (let ((case-fold-search (fileloop--case-fold from case-fold)))
+
+  ;;          (perform-replace from to t t delimited nil multi-query-replace-map)))))
+
+  ;;   (defun prf/projectile-replace-no-prompt ()
+  ;;     (interactive)
+  ;;     (interactive "P")
+  ;;     (let* ((directory (if arg
+  ;;                           (file-name-as-directory
+  ;;                            (read-directory-name "Replace in directory: "))
+  ;;                         (projectile-acquire-root)))
+  ;;            (old-text (read-string
+  ;;                       (projectile-prepend-project-name "Replace: ")
+  ;;                       (projectile-symbol-or-selection-at-point)))
+  ;;            (new-text (read-string
+  ;;                       (projectile-prepend-project-name
+  ;;                        (format "Replace %s with: " old-text))))
+  ;;            (files (projectile-files-with-string old-text directory)))
+  ;;       (progn (fileloop-initialize-replace old-text new-text files 'default)
+  ;;              (fileloop-continue)))))
+
   (when (executable-find "fd")
 
     (setq prf/projectile/fdignore '("\".git/\"" "\"**/.gitkeep\"" "\"**/.gitignore\""))
