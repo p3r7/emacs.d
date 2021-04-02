@@ -3,6 +3,7 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        cua-paste
         lispy-braces
         lispy-brackets
         lispy-delete
@@ -90,6 +91,7 @@
 (setq mc/cmds-to-run-once
       '(
         cut-line-or-region
+        handle-switch-frame
         helpful-key
         lispy-cursor-down
         lispy-newline-and-indent
