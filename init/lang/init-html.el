@@ -29,6 +29,7 @@
 		  (display-line-numbers-mode 1)
 		(linum-mode 1)))))
 
+(use-package sass-mode)
 
 
 ;; TEMPLATING
