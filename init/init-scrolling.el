@@ -24,5 +24,13 @@
 
 
 
+;; PIXEL SCROLLING
+
+(use-package good-scroll
+  :config
+  (good-scroll-mode 1))
+
+
+
 
 (provide 'init-scrolling)
