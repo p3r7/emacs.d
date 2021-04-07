@@ -4,7 +4,8 @@
 
 ;; PROJECT
 
-(use-package find-file-in-project)
+(use-package find-file-in-project
+  :bind ("C-M-s-f" . find-file-in-project))
 
 
 
@@ -27,6 +28,10 @@
 		      (when (not (string= "generic" (symbol-name (projectile-project-type))))
 			(concat ":" (symbol-name (projectile-project-type))))
 		      "]")))
+
+  :bind
+  ;; ("C-s-f" . helm-projectile-find-file)
+  ("C-s-f" . projectile-find-file)
 
   :config
 

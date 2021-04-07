@@ -12,12 +12,14 @@
   :bind (
          :map cider-mode-map
 	 ("C-h f" . cider-doc)
+	 ("C-s-n" . cider-find-ns)
 	 ;; ("C-h F" . cider-clojuredocs-web)
 	 ("C-h C-f" . cider-find-var)
          ("C-c e b" . cider-eval-buffer)
          ("C-c e s" . cider-scratch)
 	 :map cider-repl-mode-map
 	 ("C-h f" . cider-doc)
+         ("C-s-n" . cider-find-ns)
 	 ;; ("C-h F" . cider-clojuredocs-web)
 	 ("C-h C-f" . cider-find-var)
          ("C-c e s" . cider-scratch)
