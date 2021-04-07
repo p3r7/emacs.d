@@ -62,6 +62,17 @@ Optionally, we can change namespace by specifying NS."
 
 
 
+;; EXTRA FONT LOCK
+
+;; mainly highlight encore macro even when prefixed
+
+(use-package clj-extra-font-lock
+  :load-path "~/plugins/clj-extra-font-lock/"
+  :demand
+  :hook ((clojure-mode . clj-extra-font-lock-mode)))
+
+
+
 ;; REFACTORING
 
 ;; NB: will be merged into CIDER in the future
@@ -85,6 +96,7 @@ Optionally, we can change namespace by specifying NS."
 
 (use-package flycheck-clj-kondo
   :after flycheck)
+
 
 
 ;; DEPS INJECTION
