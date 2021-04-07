@@ -37,7 +37,7 @@
 (use-package swiper
   :after ivy
   :config
-  (when (eq prf/fav-completion-system 'ivy)
+  (when (member prf/fav-incremental-search-system '(ivy swiper))
     (global-set-key (kbd "C-s") #'swiper)))
 
 

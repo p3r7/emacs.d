@@ -1,7 +1,9 @@
 
 ;; ABOUT: Those provite minibuffer completion + advanced features.
 
-(defvar prf/fav-completion-system nil)
+;; (defvar prf/fav-completion-system nil)
+(defvar prf/fav-completion-system 'ivy)
+(defvar prf/fav-incremental-search-system 'ivy)
 
 
 ;; WRAPPER
@@ -13,7 +15,9 @@
   :init
   (setq prf/M-x-completion-backend 'helm
         prf/find-file-completion-backend 'lusty
-        prf/switch-to-buffer-completion-backend 'lusty)
+        prf/switch-to-buffer-completion-backend 'lusty
+        ;; prf/completing-read-completion-backend 'ivy
+        )
   :bind (("C-x C-f" . prf/find-file-fun)
 	 ("C-x f" . prf/find-file-fun)
 	 ("C-x b" . prf/switch-to-buffer-fun)
