@@ -46,6 +46,7 @@
 
 (use-package autorevert
   :ensure nil
+  :diminish
   :hook
   (after-init-hook . global-auto-revert-mode))
 ;; not perfect, see [[http://stackoverflow.com/questions/6512086/emacs-reverts-buffer-to-weird-previous-state-with-git-rebase]]

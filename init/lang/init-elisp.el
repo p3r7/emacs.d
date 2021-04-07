@@ -219,6 +219,7 @@ Wrapper around `elisp-slime-nav-find-elisp-thing-at-point'."
 
 
 (use-package easy-escape
+  :diminish
   :hook ((emacs-lisp-mode ielm-mode) . easy-escape-minor-mode))
 
 
