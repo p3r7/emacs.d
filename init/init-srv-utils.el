@@ -124,6 +124,13 @@
   "Open a shell at current location as root."
   (interactive)
   (let ((path (or path default-directory)))
+
+    (unless (and path
+                 (file-exists-p path))
+      (if (called-interactively-p)
+          (error "Cannot open a root shell - current buffer is not visiting a file/directory!")
+        (error "Cannot open a root shell - PATH not provided and current buffer is not visiting a file/directory!")))
+
     (friendly-shell :path (sudoify-path path))))
 
 (defun ff-as-root (&optional path)
@@ -137,8 +144,8 @@
     (unless (and path
                  (file-exists-p path))
       (if (called-interactively-p)
-          (error "Buffer '%s' is not visiting a file/directory!" (buffer-name))
-        (error "Buffer '%s' is not visiting a file/directory and PATH not provided!" (buffer-name))))
+          (error "Cannot open file as root - current buffer is not visiting a file/directory!")
+        (error "Cannot open file as root - PATH not provided and current buffer is not visiting a file/directory!")))
 
     (find-file (sudoify-path path))
     (when p
