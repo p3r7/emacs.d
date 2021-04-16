@@ -108,7 +108,7 @@
     (when (and remote-prefix
                (s-contains? "|sudo:" path)
                (s-starts-with? "sudo:"
-                               (cadr (s-split "|" "/ssh:pi@rpi3b|sudo:root@rpi3b:"))))
+                               (cadr (s-split "|" path))))
       (error "Path already contains a sudo at the last multi-hop position"))
 
     (if remote-prefix
