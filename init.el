@@ -316,11 +316,12 @@
     ("h" hydra-helm/body "helm")
     ("g" nil "cancel"))
 
-  (defhydra hydra-project (:color blue)
-    "project"
+  (defhydra hydra-projectSearch (:color blue)
+    "project search"
     ("F" find-file-in-project "find file (fast)")
     ("f" projectile-find-file "find file")
     ("n" cider-find-ns "find class / ns")
+    ("s" swiper "swiper")
     ("g" nil "cancel"))
 
   ;; TODO: conditionnally append to hydra main
@@ -329,7 +330,7 @@
     ("m" magit-status "magit")
     ("c" hydra-copyPath/body "copy path")
     ("s" hydra-srvUtils/body "server utils")
-    ("s" hydra-project/body "project utils")
+    ("p" hydra-projectSearch/body "project utils")
     ("v" hydra-visual/body "visual")
     ("?" hydra-test/body "experimental")
     ("g" nil "cancel"))
