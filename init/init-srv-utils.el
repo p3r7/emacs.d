@@ -100,10 +100,13 @@
 
 (require 'init-shell)
 
-(defun sudoify-path (&optional path)
+(defun sudoify-path (path)
   "Enrich PATH with a sudo multi-hop TRAMP part."
-  (let* ((path (or path (expand-file-name default-directory)))
+  (let* ((path (expand-file-name path))
          (remote-prefix (file-remote-p path)))
+
+    (unless (file-exists-p path)
+      (error "File '%s' doesn't appear to exist!" path))
 
     (when (and remote-prefix
                (s-contains? "|sudo:" path)
@@ -120,7 +123,8 @@
 (defun root-shell (&optional path)
   "Open a shell at current location as root."
   (interactive)
-  (friendly-shell :path (sudoify-path path)))
+  (let ((path (or path default-directory)))
+    (friendly-shell :path (sudoify-path path))))
 
 (defun ff-as-root (&optional path)
   "Open file at PATH as root."
@@ -128,9 +132,7 @@
   (let* ((filename (buffer-file-name))
          (p (when filename
               (point)))
-         (dd (when default-directory
-               (expand-file-name default-directory)))
-         (path (or path filename dd)))
+         (path (or path filename default-directory)))
 
     (unless (and path
                  (file-exists-p path))
