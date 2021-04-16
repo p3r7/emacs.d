@@ -3,7 +3,8 @@
 
 ;; (defvar prf/fav-completion-system nil)
 (defvar prf/fav-completion-system 'ivy)
-(defvar prf/fav-incremental-search-system 'ivy)
+;; (defvar prf/fav-incremental-search-system 'ivy)
+(defvar prf/fav-incremental-search-system nil)
 
 
 ;; WRAPPER
