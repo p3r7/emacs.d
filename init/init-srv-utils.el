@@ -126,6 +126,8 @@
   "Open file at PATH as root."
   (interactive)
   (let* ((filename (buffer-file-name))
+         (p (when filename
+              (point)))
          (dd (when default-directory
                (expand-file-name default-directory)))
          (path (or path filename dd)))
@@ -136,7 +138,9 @@
           (error "Buffer '%s' is not visiting a file/directory!" (buffer-name))
         (error "Buffer '%s' is not visiting a file/directory and PATH not provided!" (buffer-name))))
 
-    (find-file (sudoify-path path))))
+    (find-file (sudoify-path path))
+    (when p
+      (goto-char p))))
 
 
 ;;TODO: lotta stuff don't work as expected
