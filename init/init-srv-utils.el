@@ -117,10 +117,26 @@
                                   path)
       (concat "/sudo::" path))))
 
-(defun local-root-shell (&optional path)
+(defun root-shell (&optional path)
   "Open a shell at current location as root."
   (interactive)
   (friendly-shell :path (sudoify-path path)))
+
+(defun ff-as-root (&optional path)
+  "Open file at PATH as root."
+  (interactive)
+  (let* ((filename (buffer-file-name))
+         (dd (when default-directory
+               (expand-file-name default-directory)))
+         (path (or path filename dd)))
+
+    (unless (and path
+                 (file-exists-p path))
+      (if (called-interactively-p)
+          (error "Buffer '%s' is not visiting a file/directory!" (buffer-name))
+        (error "Buffer '%s' is not visiting a file/directory and PATH not provided!" (buffer-name))))
+
+    (find-file (sudoify-path path))))
 
 
 ;;TODO: lotta stuff don't work as expected
@@ -309,7 +325,8 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     ("o" prf/tramp/visit-remoteFile-currentSrv "visit other version file")
     ("e" ediff-toggle "toggle ediff")
     ("f" prf/find-file-at-point "find at point")
-    ("#" local-root-shell "local root shell")
+    ("#" ff-as-root "as root")
+    ("S" root-shell "root shell")
     ("g" nil "cancel"))
 
   (defhydra hydra-copyPath (:color blue)
