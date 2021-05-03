@@ -216,6 +216,7 @@
 (require 'init-apache)
 (require 'init-syslog-ng)
 (require 'init-fvwm-conf)
+(require 'init-systemd-unit)
 ;;(require 'cisco-router-mode)
 
 ;; - formats
