@@ -55,8 +55,9 @@ Support remote paths in form /<method>:<user>@<host>:/.")
   "Launch .desktop ENTRY in DATA-DIR at location CNNX"
   (unless (drun--executable-find drun-executable cnnx)
     (error (concat "Command not found: " drun-executable)))
-  (setq entry-file-path (expand-file-name entry-file-path))
   (setq cnnx (or cnnx default-directory))
+  (setq entry-file-path (drun--expand-file-name entry-file-path cnnx))
+  (message entry-file-path)
   (drun--launch-backround (-flatten (list drun-executable drun-executable-opts entry-file-path))))
 
 
@@ -168,6 +169,15 @@ See `drun--start-process' for more details."
     (if fh (apply fh 'start-file-process name buffer program program-args)
       (apply #'drun--start-process name buffer program program-args))))
 
+(defun drun--tramp-handle-start-file-process (name buffer program &rest args)
+  (tramp-file-name-handler
+   'make-process
+   :name name
+   :buffer buffer
+   :command (and program (cons program args))
+   :noquery nil
+   :file-handler t))
+
 (defun drun--launch-backround-old (command)
   "Silently launch COMMAND in the background"
   (let ((kill-buffer-query-functions nil))
@@ -185,6 +195,17 @@ See `drun--start-process' for more details."
       (sleep-for 0 50))))
 
 (defun drun--launch-backround (command &optional cnnx)
+  "Silently launch COMMAND in the background"
+  (setq cnnx (or cnnx default-directory))
+  (let* ((default-directory cnnx)
+         (buffer (generate-new-buffer "*drun*"))
+         (process (apply #'drun--start-file-process
+                         "drun"
+                         buffer
+                         command)))
+    ))
+
+(defun drun--launch-backround-bak (command &optional cnnx)
   "Silently launch COMMAND in the background"
   (setq cnnx (or cnnx default-directory))
   (let ((kill-buffer-query-functions nil))
@@ -240,9 +261,20 @@ Work even if CNNX is a remote path, given it's a *nix."
   (concat (file-remote-p cnnx) dir))
 
 
+(defun drun--expand-file-name (name &optional cnnx)
+  "Version of `expand-file-name' that also work on remote tramp CNNX."
+  (setq cnnx (or cnnx default-directory))
+  (if (and (file-remote-p cnnx)
+           (s-starts-with? "~/" name))
+      (let* ((vec (tramp-dissect-file-name cnnx))
+             (user (tramp-file-name-user vec)))
+        ;; FIXME: retrieve user home via env var or /etc/passwd
+        (s-replace "~/" (concat "/home/" user "/") name))
+    (expand-file-name name)))
+
+
 
 ;; PRIVATE HELPERS: FREEDESKTOP DATA DIRS
-
 
 (defun drun--data-dirs (&optional cnnx)
   "Get list of Xdg data dirsat location CNNX"
