@@ -246,6 +246,9 @@
 
 (use-package drun
   :load-path "~/.emacs.d/plugins/drun")
+(use-package helm-drun
+  :load-path "~/.emacs.d/plugins/drun"
+  :after (helm drun))
 
 
 
