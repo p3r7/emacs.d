@@ -46,16 +46,15 @@ Support remote paths in form /<method>:<user>@<host>:/.")
 
 (defun drun-by-filename (data-dir entry &optional cnnx)
   "Launch .desktop ENTRY in DATA-DIR at location CNNX"
-  (interactive)
   (setq data-dir (drun--sanitize-dir data-dir))
   (drun-by-filepath (data-dir "applications/" entry ".desktop") cnnx))
 
 
 (defun drun-by-filepath (entry-file-path &optional cnnx)
   "Launch .desktop ENTRY in DATA-DIR at location CNNX"
-  (interactive)
   (unless (drun--executable-find drun-executable cnnx)
     (error (concat "Command not found: " drun-executable)))
+  (setq entry-file-path (expand-file-name entry-file-path))
   (drun--launch-backround (-flatten (list drun-executable drun-executable-opts entry-file-path))))
 
 
@@ -148,7 +147,26 @@ servers.  The unused ARGS param makes it also a replacement for
 
 ;; PRIVATE HELPERS: PROCESS
 
-(defun drun--launch-backround (command)
+(defun drun--start-process (name buffer program &rest program-args)
+  "Fix of `start-process' that allows launching graphical applications.
+The trick is to add the :stderr keyword arg to `make-process'."
+  (unless (fboundp 'make-process)
+    (error "Emacs was compiled without subprocess support"))
+  (apply #'make-process
+	 (append (list :name name
+                       :stderr buffer   ; <- fix
+                       :buffer buffer)
+		 (if program
+		     (list :command (cons program program-args))))))
+
+(defun drun--start-file-process (name buffer program &rest program-args)
+  "Fix of `start-file-process' that allows launching graphical applications.
+See `drun--start-process' for more details."
+  (let ((fh (find-file-name-handler default-directory 'start-file-process)))
+    (if fh (apply fh 'start-file-process name buffer program program-args)
+      (apply #'drun--start-process name buffer program program-args))))
+
+(defun drun--launch-backround-old (command)
   "Silently launch COMMAND in the background"
   (let ((kill-buffer-query-functions nil))
     (with-temp-buffer
@@ -157,13 +175,30 @@ servers.  The unused ARGS param makes it also a replacement for
        ;; NB: :stderr is mandatory
        :stderr (current-buffer)
        :command command)
-      ;; REVIEW: this is very hackish, there must be a better way, e.g.
-      ;; killing the buffer via a process sentinel instead.
 
       ;; NB: `make-process' is async we need to force waiting for the
       ;; process to launch before current-buffer gets killed.
+      ;; NB: this is hackish, but we can't use a sentinel as the buffer
+      ;; keeps seeing a process as long as sub-process is running.
       (sleep-for 0 50))))
 
+(defun drun--launch-backround (command &optional cnnx)
+  "Silently launch COMMAND in the background"
+  (setq cnnx (or cnnx default-directory))
+  (let ((kill-buffer-query-functions nil))
+    (with-temp-buffer
+      (let* ((default-directory cnnx)
+             (buffer (current-buffer))
+             (process (apply #'drun--start-file-process
+                             "drun"
+                             buffer
+                             command)))
+
+        ;; NB: `make-process' is async we need to force waiting for the
+        ;; process to launch before current-buffer gets killed.
+        ;; NB: this is hackish, but we can't use a sentinel as the buffer
+        ;; keeps seeing a process as long as sub-process is running.
+        (sleep-for 0 50)))))
 
 
 ;; PRIVATE HELPERS: ENV VARS
