@@ -47,6 +47,7 @@ Support remote paths in form /<method>:<user>@<host>:/.")
 (defun drun-by-filename (data-dir entry &optional cnnx)
   "Launch .desktop ENTRY in DATA-DIR at location CNNX"
   (setq data-dir (drun--sanitize-dir data-dir))
+  (setq cnnx (or cnnx default-directory))
   (drun-by-filepath (data-dir "applications/" entry ".desktop") cnnx))
 
 
@@ -55,6 +56,7 @@ Support remote paths in form /<method>:<user>@<host>:/.")
   (unless (drun--executable-find drun-executable cnnx)
     (error (concat "Command not found: " drun-executable)))
   (setq entry-file-path (expand-file-name entry-file-path))
+  (setq cnnx (or cnnx default-directory))
   (drun--launch-backround (-flatten (list drun-executable drun-executable-opts entry-file-path))))
 
 
@@ -64,8 +66,8 @@ Support remote paths in form /<method>:<user>@<host>:/.")
 (defun drun-list-files (&optional cnnx)
   "Get alist of data dirs / .desktop entries at location CNNX"
   ;; get list of .desktop entries locations
-  (let ((entries-locations (drun--data-dirs cnnx))
-        (entries-locations (drun--data-dirs cnnx)))
+  (setq cnnx (or cnnx default-directory))
+  (let ((entries-locations (drun--data-dirs cnnx)))
     (--map (drun--list-apps-for-data-dir it cnnx) entries-locations)))
 
 (defun drun-list-filepaths (&optional cnnx)
@@ -268,7 +270,6 @@ Work even if CNNX is a remote path, given it's a *nix."
 
 (defun drun--build-desktop-entry-path (data-dir entry)
   (concat data-dir "applications/" entry))
-
 
 (defun drun--parse-desktop-entry (data-dir entry &optional cnnx)
   "parse .desktop file ENTRY in DATA-DIR at location CNNX"
