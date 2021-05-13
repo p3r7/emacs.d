@@ -12,6 +12,10 @@
                (file-directory-p w32-conda-envs-dir))
       (setenv "WORKON_HOME" w32-conda-envs-dir))))
 
+(use-package pip-requirements
+  :config
+  (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
+
 ;; (use-package ac-anaconda
 ;;   :hook (python-mode-hook . ac-anaconda-setup))
 
