@@ -316,13 +316,34 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
 
 (defalias '_cfp #'prf/copy-buffer-filepath-to-clipboard-clean)
 
-; REVIEW: could use directly find-file-at-point aka ffap
+
+(defun prf/ffap-cider ()
+  (interactive)
+  (-when-let* ((full-path-str (ffap-string-at-point))
+               (split (s-split ":" full-path-str))
+               (_ (= 3 (length split)))
+               ((path line col) split)
+               (line (string-to-number line))
+               (col (string-to-number col))
+               ((path-no-ext _ext) (s-split "\\\." path))
+               (ns (s-replace "_" "-" path-no-ext)))
+    ;; (cider-find-ns ns)
+    (cider--find-ns ns)
+    (goto-line line)
+    (move-to-column col t)))
+
+
+;; REVIEW: could use directly find-file-at-point aka ffap
 (defun prf/find-file-at-point ()
   "Find file at point if it exists."
   (interactive)
   (let ((file (ffap-guess-file-name-at-point)))
-    (when file
-      (find-file file))))
+    (cond (file
+           (find-file file))
+
+          ((and (bound-and-true-p shell-mode)
+                (clojure-project-root-path)) ; is in a Clojure project
+           (prf/ffap-cider)))))
 
 (defalias '_ffap #'prf/find-file-at-point)
 
