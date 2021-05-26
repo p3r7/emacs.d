@@ -2,7 +2,8 @@
 
 ;; CONF
 
-(setq prf/lispy-modes '(emacs-lisp-mode
+(setq prf/lispy-modes '(
+                        emacs-lisp-mode inferior-emacs-lisp-mode
                         clojure-mode clojurescript-mode cider-repl-mode))
 
 
@@ -15,7 +16,8 @@
   :hook
 ;;;  REVIEW: why is this not working ?!
   ;; `(prf/lispy-mode . lispy-mode)
-  (((emacs-lisp-mode
+  (((
+     emacs-lisp-mode inferior-emacs-lisp-mode
      clojure-mode clojurescript-mode cider-repl-mode) . lispy-mode)
    (lispy-mode
     . (lambda ()
