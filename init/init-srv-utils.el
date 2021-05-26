@@ -246,7 +246,15 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
 
 (defun prf/exec-based-on-mode ()
   (cond
-   ((bound-and-true-p ansible) "ansible-playbook"))) ; NB: ansible-mode is named `ansible` ...
+   ((bound-and-true-p ansible) "ansible-playbook")   ; NB: ansible-mode is named `ansible` ...
+   ))
+
+(defun prf/exec-complex-rule (filename)
+  (cond
+   ((and (eq major-mode 'clojure-mode)
+         (clojure-project-root-path)
+         (s-starts-with-p "test/" (s-replace (expand-file-name (clojure-project-root-path)) "" filename)))
+    (concat "lein test " (clojure-find-ns)))))
 
 (defun prf/get-buffer-filepath-with-exec ()
   (let ((clean-filename (prf/get-buffer-filepath-complete)))
@@ -257,12 +265,19 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
       (let* ((exec-shebang (prf/exec-from-shebang))
              (exec-based-on-filename (prf/exec-based-on-filename clean-filename))
              (exec-based-on-mode (prf/exec-based-on-mode))
-             (exec (or exec-shebang exec-based-on-filename exec-based-on-mode)))
+             (exec (or exec-shebang exec-based-on-filename exec-based-on-mode))
+             (exec-complex-rule (prf/exec-complex-rule clean-filename)))
 
         (cond
          ;; NB: set as file-local var
-         (prf/exec-cmd (prf/exec-cmd-eval prf/exec-cmd clean-filename exec-shebang))
-         (exec (concat exec " " clean-filename)))))))
+         (prf/exec-cmd
+          (prf/exec-cmd-eval prf/exec-cmd clean-filename exec-shebang))
+
+         (exec-complex-rule
+          exec-complex-rule)
+
+         (exec
+          (concat exec " " clean-filename)))))))
 
 (defun prf/get-buffer-dirname ()
   (let ((filename (prf/get-buffer-filepath-clean)))
