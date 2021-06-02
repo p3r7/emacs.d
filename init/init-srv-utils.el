@@ -251,7 +251,7 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
 
 (defun prf/exec-complex-rule (filename)
   (cond
-   ((and (eq major-mode 'clojure-mode)
+   ((and (member major-mode '(clojurec-mode clojure-mode clojurescript-mode))
          (clojure-project-root-path)
          (s-starts-with-p "test/" (s-replace (expand-file-name (clojure-project-root-path)) "" filename)))
     (concat "lein test " (clojure-find-ns)))))
