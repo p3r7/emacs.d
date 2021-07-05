@@ -87,11 +87,14 @@
 
 ;; LINKS
 
-(--each '(("archwiki" . "https://wiki.archlinux.org/index.php/")
-          ("gh" . "https://github.com/"))
+(setq prefixable-link-types '(("archwiki" . "https://wiki.archlinux.org/index.php/")
+                              ("gh" . "https://github.com/")))
+
+(--each prefixable-link-types
   (let ((link-prefix (car it))
         (url (cdr it)))
-    (org-add-link-type link-prefix (lambda (e) (browse-url (concat "https://github.com/" e))))))
+    (org-add-link-type link-prefix
+                       (lambda (e) (browse-url (concat url e))))))
 
 
 
