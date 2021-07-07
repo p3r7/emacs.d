@@ -75,6 +75,32 @@ Optionally, we can change namespace by specifying NS."
 
 
 
+;; DEBUGGING - PORTAL
+
+;; NB: from https://github.com/djblue/portal#emacs-integration
+
+(with-eval-after-load "cider"
+  (setq cider-clojure-cli-global-options "-A:portal")
+
+  (defun portal.api/open ()
+    (interactive)
+    (cider-nrepl-sync-request:eval
+     "(require '[portal.api :as p]) (p/tap) (p/open)"))
+
+  (defun portal.api/clear ()
+    (interactive)
+    (cider-nrepl-sync-request:eval "(portal.api/clear)"))
+
+  (defun portal.api/close ()
+    (interactive)
+    (cider-nrepl-sync-request:eval "(portal.api/close)"))
+
+  (define-key cider-mode-map (kbd "C-c p o") #'portal.api/open)
+  (define-key cider-mode-map (kbd "C-c p c") #'portal.api/clear)
+  (define-key cider-mode-map (kbd "C-c p k") #'portal.api/close))
+
+
+
 ;; REFACTORING
 
 ;; NB: will be merged into CIDER in the future
