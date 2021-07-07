@@ -40,8 +40,8 @@
     (cider-interactive-eval
      (concat "((or (resolve 'user/reset)"
              "     (resolve 'clojure.tools.namespace.repl/refresh)))")))
-  (define-key cider-mode-map (kbd "C-c C-x") 'prf/cider-repl-reset)
-  (define-key clojure-mode-map (kbd "C-c C-x") 'prf/cider-repl-reset))
+  (define-key cider-mode-map (kbd "C-c C-x") #'prf/cider-repl-reset)
+  (define-key clojure-mode-map (kbd "C-c C-x") #'prf/cider-repl-reset))
 
 
 (use-package cider-eval-sexp-fu
