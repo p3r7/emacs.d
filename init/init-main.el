@@ -2,7 +2,14 @@
 (require 'dash)
 
 
- ;; DISABLED COMMANDS
+
+;; HISTORY
+
+(setq history-delete-duplicates t)
+
+
+
+;; DISABLED COMMANDS
 
 (put 'erase-buffer 'disabled nil)
 (put 'upcase-region 'disabled nil)
