@@ -91,10 +91,10 @@
                               ("gh" . "https://github.com/")))
 
 (--each prefixable-link-types
-  (let ((link-prefix (car it))
-        (url (cdr it)))
-    (org-add-link-type link-prefix
-                       (lambda (e) (browse-url (concat url e))))))
+  (let* ((link-prefix (car it))
+         (url (cdr it))
+         (browse-fn `(lambda (e) (browse-url (concat ,url e)))))
+    (org-link-set-parameters link-prefix :follow browse-fn)))
 
 
 
