@@ -43,6 +43,9 @@ transient/
 # nov.el
 nov-places
 
+# org-roam
+org-roam.db
+
 # tldr
 tldr-master/
 
