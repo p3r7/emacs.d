@@ -3,6 +3,7 @@
   :init
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t)
+  (setq ivy-use-selectable-prompt t)
   :config
   (when (eq prf/fav-completion-system 'ivy)
     (ivy-mode 1)
