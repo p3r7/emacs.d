@@ -1,4 +1,7 @@
 
+
+;; MAIN
+
 (use-package org
   :bind (
          :map org-mode-map
@@ -95,6 +98,29 @@
          (url (cdr it))
          (browse-fn `(lambda (e) (browse-url (concat ,url e)))))
     (org-link-set-parameters link-prefix :follow browse-fn)))
+
+
+
+;; BACK-LINKS (ROAM)
+
+(use-package org-roam
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert))
+
+  :custom
+  (org-roam-directory prf/dir/notes)
+
+  :init
+  (setq org-roam-file-exclude-regexp "\\.gpg\\'")
+  (setq org-roam-capture-templates
+        '(("d" "default" plain "%?" :target
+           ;; (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+           (file+head "${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)))
+
+  :config
+  (org-roam-setup))
 
 
 
