@@ -1,4 +1,8 @@
 
+(require 's)
+(require 'f)
+
+
 
 ;; MAIN
 
@@ -99,6 +103,28 @@
          (browse-fn `(lambda (e) (browse-url (concat ,url e)))))
     (org-link-set-parameters link-prefix :follow browse-fn)))
 
+(defun prf/orf/file-path-org-p (f)
+  "Return t if file path F corresponds to an org file."
+  (let ((cleaned-f (s-chop-suffixes '("gpg" "bak") f)))
+    (equal (f-ext cleaned-f) "org")))
+
+(setq prf/org/index-file-explude-regexp "\\.gpg\\'")
+
+(defun prf/org/file-path-indexable-p (f)
+  "Return t if file path F corresponds to an indexable org file."
+  (and (prf/orf/file-path-org-p f)
+       (not (f-descendant-of? f prf-backup-dir))
+       (not (f-descendant-of? f prf-auto-save-dir))
+       (not (string-match-p prf/org/index-file-explude-regexp f))))
+
+(defun prf/org/index-rescan-all ()
+  "Populate `org-id-locations' by rescaning recursively all files in `prf/dir/notes'."
+  (interactive)
+  ;; NB: `org-id-update-id-locations' opens matching files
+  (save-excursion
+    (org-id-update-id-locations
+     (f-files prf/dir/notes #'prf/org/file-path-indexable-p t))))
+
 
 
 ;; BACK-LINKS (ROAM)
@@ -112,7 +138,8 @@
   (org-roam-directory prf/dir/notes)
 
   :init
-  (setq org-roam-file-exclude-regexp "\\.gpg\\'")
+  (setq org-roam-v2-ack t)
+  (setq org-roam-file-exclude-regexp prf/org/index-file-explude-regexp)
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?" :target
            ;; (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
@@ -121,6 +148,15 @@
 
   :config
   (org-roam-setup))
+
+(use-package org-roam-ui
+  :quelpa (org-roam-ui :fetcher github :repo "org-roam/org-roam-ui")
+  :after (simple-httpd websocket org-roam)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
 
 
