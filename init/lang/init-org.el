@@ -1,4 +1,5 @@
 
+(require 'dash)
 (require 's)
 (require 'f)
 
@@ -120,10 +121,12 @@
 (defun prf/org/index-rescan-all ()
   "Populate `org-id-locations' by rescaning recursively all files in `prf/dir/notes'."
   (interactive)
-  ;; NB: `org-id-update-id-locations' opens matching files
-  (save-excursion
+  (let ((buffs-snapshot (buffer-list)))
     (org-id-update-id-locations
-     (f-files prf/dir/notes #'prf/org/file-path-indexable-p t))))
+     (f-files prf/dir/notes #'prf/org/file-path-indexable-p t))
+    ;; NB: `org-id-update-id-locations' opens matching files
+    (mapc #'kill-buffer
+          (-difference (buffer-list) buffs-snapshot))))
 
 
 
