@@ -153,7 +153,7 @@
   (org-roam-setup))
 
 (use-package org-roam-ui
-  :quelpa (org-roam-ui :fetcher github :repo "org-roam/org-roam-ui")
+  :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
   :after (simple-httpd websocket org-roam)
   :config
   (setq org-roam-ui-sync-theme t
