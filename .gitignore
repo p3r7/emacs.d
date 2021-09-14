@@ -9,6 +9,7 @@ network-security.data
 # packages
 elpa/
 quelpa/
+straight/
 
 # dired thumbnail cache
 image-dired/
