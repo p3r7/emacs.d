@@ -48,15 +48,7 @@
 
 
 
-;; PACKAGES
-
-;; TODO: choose which of /plugins or /elpa has biggest priority -> add to load path in correct order
-
-(setq package-check-signature nil)
-
-(when (and (>= libgnutls-version 30603)
-	   (version<= emacs-version "26.2"))
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+;; FEATURES
 
 ;; locations for features:
 ;; - init/ : initialization features (manually defined)
@@ -66,15 +58,18 @@
 ;; - themes/ : manually installed deftheme themes
 ;; - elpa/ : features installed through packages.el
 
+
+;; FEATURES - LOCAL
+
 ;; unused
 ;; was wanting to have load-path dedicated to inits, but let-bounding is not suffiscient in that case
 ;; we migth need a more complete implementation w/ noflet
 (setq prf/load-path load-path)
 
 ;; (if (and (= emacs-major-version 24)
-	 ;; (= emacs-minor-version 5))
-    ;; (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.12/lisp")
-  ;; )
+;; (= emacs-minor-version 5))
+;; (add-to-list 'load-path "~/.emacs.d/plugins-src/tramp-2.2.12/lisp")
+;; )
 
 (defun prf/recursive-add-to-load-path (dir)
   "Add directory and all child directories to load path"
@@ -87,6 +82,17 @@
 ;; TODO: custom load-path for those, w/ custom require function to access them
 (prf/recursive-add-to-load-path "~/.emacs.d/init/")
 
+
+
+;; FEATURES - PACKAGE.EL / USE-PACKAGE
+
+;; TODO: choose which of /plugins or /elpa has biggest priority -> add to load path in correct order
+
+(setq package-check-signature nil)
+
+(when (and (>= libgnutls-version 30603)
+	   (version<= emacs-version "26.2"))
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 (when (require 'package nil 'noerror)
   ;; still some issues w/ marmalade's certif https://github.com/nicferrier/elmarmalade/issues/55
@@ -106,6 +112,15 @@
 (setq use-package-always-ensure t)
 ;; (setq use-package-verbose t)
 
+(use-package paradox)
+(use-package delight)
+
+(use-package esup)
+(require 'init-auto-compile)
+
+
+
+;; FEATURES - QUELPA
 
 (use-package quelpa
   :init
@@ -115,11 +130,22 @@
   :config
   (quelpa-use-package-activate-advice))
 
-(use-package paradox)
-(use-package delight)
 
-(use-package esup)
-(require 'init-auto-compile)
+
+;; FEATURES - STRAIGHT
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
 
 
