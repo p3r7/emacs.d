@@ -114,6 +114,7 @@
 (defun prf/org/file-path-indexable-p (f)
   "Return t if file path F corresponds to an indexable org file."
   (and (prf/orf/file-path-org-p f)
+       (f-descendant-of? f prf/dir/notes) ; REVIEW: not sure we should enforce this one here
        (not (f-descendant-of? f prf-backup-dir))
        (not (f-descendant-of? f prf-auto-save-dir))
        (not (string-match-p prf/org/index-file-explude-regexp f))))
@@ -135,7 +136,9 @@
 (use-package org-roam
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert))
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n a" . prf/org-roam/add-index-current)
+         ("C-c n r" . prf/org-roam/rescan))
 
   :custom
   (org-roam-directory prf/dir/notes)
@@ -150,7 +153,33 @@
            :unnarrowed t)))
 
   :config
-  (org-roam-setup))
+  (org-roam-setup)
+
+  (defun prf/org-roam/add-index-current ()
+    "Add index to file of currently visited buffer, if applicable."
+    (interactive)
+
+    (unless (and (buffer-file-name)
+		 (file-exists-p (buffer-file-name)))
+      (user-error "Current buffer is not visiting a file that exists on disk."))
+
+    (unless (prf/org/file-path-indexable-p (buffer-file-name))
+      (user-error "Current buffer is not visiting an indexable file."))
+
+    (unless (org-id-get)
+      (org-id-get-create)
+      (call-interactively #'save-buffer))
+
+    (org-id-update-id-locations (list (buffer-file-name)))
+
+    (org-roam-db-sync))
+
+  (defun prf/org-roam/rescan ()
+    "Force rescan of whole `prf/dir/notes'."
+    (interactive)
+    (prf/org/index-rescan-all)
+    (org-roam-db-sync)))
+
 
 (use-package org-roam-ui
   :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
