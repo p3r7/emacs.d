@@ -172,7 +172,7 @@
 
     (org-id-update-id-locations (list (buffer-file-name)))
 
-    (org-roam-db-sync))
+    (org-roam-db-update-file))
 
   (defun prf/org-roam/rescan ()
     "Force rescan of whole `prf/dir/notes'."
