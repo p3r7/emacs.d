@@ -26,6 +26,7 @@ abbrev_defs
 bookmarks
 ac-comphist.dat
 org-clock-save.el
+projects
 projectile-bookmarks.eld
 projectile.cache
 recentf
@@ -34,6 +35,7 @@ smex.save
 tramp
 .saves
 session.*
+.cache/
 
 # requests
 request/
