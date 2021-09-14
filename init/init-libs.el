@@ -57,6 +57,11 @@
 
 
 
+;; HTTP SERVER
+
+(use-package simple-httpd)
+
+
 ;; HTTP CLIENT
 
 (use-package request
@@ -66,6 +71,8 @@
     (setq request-backend 'url-retrieve)))
 (use-package request-deferred
   :after (request))
+
+(use-package websocket)
 
 
 
