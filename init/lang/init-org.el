@@ -11,7 +11,9 @@
   :bind (
          :map org-mode-map
          ;; NB: og bound to `org-fill-paragraph'
-         ("M-q" . toggle-truncate-lines))
+         ("M-q" . toggle-truncate-lines)
+         ;; NB: got overriden by `cua-selection-mode'
+         ("C-y" . org-yank))
 
   :hook ((org-mode . (lambda () (setq word-wrap t))))
 
