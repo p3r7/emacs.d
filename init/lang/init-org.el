@@ -124,15 +124,15 @@
   (let ((cleaned-f (s-chop-suffixes '("gpg" "bak") f)))
     (equal (f-ext cleaned-f) "org")))
 
-(setq prf/org/index-file-explude-regexp "\\.gpg\\'")
+(defvar prf/org/index-file-exclude-regexp "\\.gpg\\'")
 
 (defun prf/org/file-path-indexable-p (f)
   "Return t if file path F corresponds to an indexable org file."
-  (and (prf/orf/file-path-org-p f)
+  (and (prf/org/file-path-org-p f)
        (f-descendant-of? f prf/dir/notes) ; REVIEW: not sure we should enforce this one here
        (not (f-descendant-of? f prf-backup-dir))
        (not (f-descendant-of? f prf-auto-save-dir))
-       (not (string-match-p prf/org/index-file-explude-regexp f))))
+       (not (string-match-p prf/org/index-file-exclude-regexp f))))
 
 (defun prf/org/index-rescan-all ()
   "Populate `org-id-locations' by rescaning recursively all files in `prf/dir/notes'."
@@ -160,7 +160,7 @@
 
   :init
   (setq org-roam-v2-ack t)
-  (setq org-roam-file-exclude-regexp prf/org/index-file-explude-regexp)
+  (setq org-roam-file-exclude-regexp prf/org/index-file-exclude-regexp)
   (setq org-roam-capture-templates
         '(("d" "default" plain "%?" :target
            ;; (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
