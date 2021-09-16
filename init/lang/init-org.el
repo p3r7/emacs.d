@@ -95,8 +95,8 @@
 
 ;; LINKS
 
-(setq prefixable-link-types '(("archwiki" . "https://wiki.archlinux.org/index.php/")
-                              ("gh" . "https://github.com/")))
+(defvar prefixable-link-types '(("archwiki" . "https://wiki.archlinux.org/index.php/")
+                                ("gh" . "https://github.com/")))
 
 (--each prefixable-link-types
   (let* ((link-prefix (car it))
@@ -104,7 +104,22 @@
          (browse-fn `(lambda (e) (browse-url (concat ,url e)))))
     (org-link-set-parameters link-prefix :follow browse-fn)))
 
-(defun prf/orf/file-path-org-p (f)
+(defun prf/org/link-apply-prefix (txt)
+  "Rework link TXT, swapping prefix w/ shorted one if matches `prefixable-link-types'."
+  (let ((prfx (--some (and (s-starts-with? (cdr it) txt) it) prefixable-link-types)))
+    (if prfx
+        (s-replace (cdr prfx) (concat (car prfx) ":") txt)
+      txt)))
+
+(defadvice org-yank (around prf/org-yank-prefix-link activate)
+  "Advice around `org-yank' that will auto-compact current entry in `kill-ring' if it matches `prefixable-link-types'."
+  (let* ((kill (or (and kill-ring (current-kill 0)) ""))
+         (new-kill (prf/org/link-apply-prefix kill)))
+    (unless (s-blank? new-kill)
+      (kill-new new-kill t))
+    ad-do-it))
+
+(defun prf/org/file-path-org-p (f)
   "Return t if file path F corresponds to an org file."
   (let ((cleaned-f (s-chop-suffixes '("gpg" "bak") f)))
     (equal (f-ext cleaned-f) "org")))
