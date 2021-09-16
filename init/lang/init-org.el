@@ -96,7 +96,8 @@
 ;; LINKS
 
 (defvar prefixable-link-types '(("archwiki" . "https://wiki.archlinux.org/index.php/")
-                                ("gh" . "https://github.com/")))
+                                ("gh" . "https://github.com/")
+                                ("hn" . "https://news.ycombinator.com/item?id=")))
 
 (--each prefixable-link-types
   (let* ((link-prefix (car it))
