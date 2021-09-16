@@ -199,7 +199,9 @@
 (use-package org-roam-ui
   :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
   :after (simple-httpd websocket org-roam)
-  :delight (org-roam-ui-mode "RoamUI")
+  :delight
+  (org-roam-ui-mode " RoamUI")
+  (org-roam-ui-follow-mode)
   :config
   (setq org-roam-ui-sync-theme t
         org-roam-ui-follow t
