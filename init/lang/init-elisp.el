@@ -169,6 +169,7 @@ Wrapper around `elisp-slime-nav-find-elisp-thing-at-point'."
 
 
 (use-package cl-lib-highlight
+  :quelpa (cl-lib-highlight :fetcher github :repo "skeeto/cl-lib-highlight")
   :after elisp-mode
   :config
 
