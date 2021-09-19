@@ -26,9 +26,10 @@
 
 ;; PIXEL SCROLLING
 
-(use-package good-scroll
-  :config
-  (good-scroll-mode 1))
+(when (>= emacs-major-version 27)
+  (use-package good-scroll
+    :config
+    (good-scroll-mode 1)))
 
 
 
