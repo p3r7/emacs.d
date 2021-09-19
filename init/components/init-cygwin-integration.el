@@ -128,6 +128,7 @@ loaded as such.)"
 
 ;;; Make Cygwin paths accessible
 (use-package cygwin-mount
+  :load-path "~/.emacs.d/plugins/cygwin-mount"
   :config
   (cygwin-mount-activate)
   (add-hook 'find-file-hooks 'follow-cygwin-symlink))
