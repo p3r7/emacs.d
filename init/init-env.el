@@ -159,6 +159,8 @@ See the documentation of `framep' for possible return values."
 
 (setq prf/system-name system-name)
 
+(defvar prf/dir/notes default-directory)
+
 ;; case Android
 (when (and (string= system-name "localhost")
 	   (gnu/linux-p)
