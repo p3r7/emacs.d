@@ -155,9 +155,9 @@ See the documentation of `framep' for possible return values."
 
 ;; LOCAL SETUP
 
-(setq homedir-truename (directory-file-name (file-truename "~")))
+(defvar homedir-truename (directory-file-name (file-truename "~")))
 
-(setq prf/system-name system-name)
+(defvar prf/system-name system-name)
 
 (defvar prf/dir/notes default-directory)
 
