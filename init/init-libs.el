@@ -37,6 +37,8 @@
   :config
   (dash-enable-font-lock))
 
+(use-package kv)
+
 (use-package f)                         ; files
 
 (use-package s)                         ; strings
