@@ -159,8 +159,6 @@ See the documentation of `framep' for possible return values."
 
 (defvar prf/system-name system-name)
 
-(defvar prf/dir/notes default-directory)
-
 ;; case Android
 (when (and (string= system-name "localhost")
 	   (gnu/linux-p)
@@ -179,6 +177,8 @@ See the documentation of `framep' for possible return values."
   (setq prf-backup-dir "~/.emacs.d/.saves"))
 (unless (boundp 'prf-auto-save-dir)
   (setq prf-auto-save-dir "~/.emacs.d/.saves"))
+(unless (boundp 'prf/dir/notes)
+  (setq prf/dir/notes default-directory))
 
 
 
