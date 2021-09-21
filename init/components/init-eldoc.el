@@ -1,6 +1,9 @@
 
 (use-package eldoc
-  :after (elisp-mode)
+  :after elisp-mode
   :delight)
+
+
+
 
 (provide 'init-eldoc)
