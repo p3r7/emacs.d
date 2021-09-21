@@ -64,7 +64,17 @@
   (setq vc-ignore-dir-regexp
         (format "\\(%s\\)\\|\\(%s\\)"
                 vc-ignore-dir-regexp
-                tramp-file-name-regexp)))
+                tramp-file-name-regexp))
+
+  ;; enable X11 forwarding
+  ;; TODO: dynamically bind those w/ `with-shell-interpreter'
+  ;; - local
+  ;; (add-to-list 'tramp-remote-process-environment
+  ;;              (format "DISPLAY=%s" (getenv "DISPLAY")))
+  ;; - virtualbox
+  ;; (add-to-list 'tramp-remote-process-environment
+  ;;              (format "DISPLAY=localhost:10.0"))
+  )
 
 (use-package prf-tramp-method
   :quelpa (prf-tramp-method :fetcher github :repo "p3r7/prf-tramp")
