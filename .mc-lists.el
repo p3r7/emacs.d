@@ -9,10 +9,12 @@
         lispy-delete
         lispy-hash
         lispy-kill
+        lispy-move-beginning-of-line
         lispy-parens
         lispy-quotes
         lispy-space
         lispy-tick
+        lispy-yank
         org-self-insert-command
         prf/lispy-space-no-selection
         special-digit-argument
