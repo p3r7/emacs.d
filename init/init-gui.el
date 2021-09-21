@@ -136,6 +136,8 @@
 
 ;; PARENS
 
+;; TODO: https://with-emacs.com/posts/ui-hacks/show-matching-lines-when-parentheses-go-off-screen/
+
 (setq show-paren-delay 0)
 (show-paren-mode t)
 ;; (setq show-paren-style 'expression)
