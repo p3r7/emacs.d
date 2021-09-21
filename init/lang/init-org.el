@@ -99,7 +99,8 @@
 
 (defvar prefixable-link-types '(("archwiki" . "https://wiki.archlinux.org/index.php/")
                                 ("gh" . "https://github.com/")
-                                ("hn" . "https://news.ycombinator.com/item?id=")))
+                                ("hn" . "https://news.ycombinator.com/item?id=")
+                                ("lines" . "https://llllllll.co/t/")))
 
 (--each prefixable-link-types
   (let* ((link-prefix (car it))
