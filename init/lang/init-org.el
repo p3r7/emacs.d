@@ -26,7 +26,7 @@
   (setq org-highlight-latex-and-related '(latex)
         org-ellipsis "⤵"
         ;; org-hide-leading-stars t
-        )
+        org-startup-folded t)
 
   ;; EDITING BEAHVIOURS
   ;; adjust level while pasting, if not wanted do C-u C-y
