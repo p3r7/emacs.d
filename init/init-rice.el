@@ -241,7 +241,7 @@
   :if (boundp 'bgex-exist-p)
   :quelpa (bgex :fetcher github :repo "wachikun/emacs_bgex")
   :config
-  ;; (bgex-set-image-default "~/.emacs.d/xpm/ghosts.xpm" t)
+  ;; (bgex-set-image-default "~/.emacs.d/resources/background/ghosts.xpm" t)
   )
 
 
