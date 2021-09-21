@@ -9,4 +9,14 @@
    (space-theming-update-current-theme))
  (frame-list))
 
+
+;; (message "frame-list")
+;; (message "%S" (frame-list))
+
+;; (message "client-init-current-frame")
+;; (message "%S" (selected-frame))
+
+
+;; (prf/customize-helm-tty-faces-maybe)
+;; (call-interactively #'prf/scratch)
 ;; (prf/tty-setup-frame-hook)
