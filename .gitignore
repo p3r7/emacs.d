@@ -36,6 +36,7 @@ tramp
 .saves
 session.*
 .cache/
+tldr/
 
 # requests
 request/
