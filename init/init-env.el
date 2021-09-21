@@ -84,9 +84,15 @@ See the documentation of `framep' for possible return values."
 
 ;; HW-related customs
 
+
+;; (add-hook 'helm-mode-hook
+;;           (lambda ()
+;;             (when (dec-term-p)
+;;               (prf/customize-helm-tty-faces))))
+
 (defun prf/customize-helm-tty-faces (&optional current-frame)
   (let ((current-frame (if current-frame current-frame (selected-frame))))
-    (set-face-attribute 'helm-selection (selected-frame)
+    (set-face-attribute 'helm-selection current-frame
                         :inverse-video t
                         :background nil
                         :foreground nil
@@ -147,9 +153,20 @@ See the documentation of `framep' for possible return values."
 (defun prf/tty-setup-frame-hook (&optional current-frame)
   (prf/customize-tty-faces current-frame))
 
+(add-hook 'after-make-frame-functions
+          (lambda (new-frame)
+            (message "new-frame: %S" new-frame)
+            (prf/tty-setup-frame-hook new-frame)))
+
 (add-hook 'tty-setup-hook #'prf/tty-setup-hook)
+
 ;; BUG: not working, done in client-init.el instead
 ;; (add-hook 'after-make-frame-functions #'prf/tty-setup-frame-hook)
+
+(use-package term-keys
+  :quelpa (term-keys :fetcher github :repo "CyberShadow/term-keys")
+  :config
+  (term-keys-mode t))
 
 
 
