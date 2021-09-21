@@ -20,7 +20,7 @@
   :init
 
   ;; GENERAL
-  (setq org-directory default-directory)
+  (setq org-directory prf/dir/notes)
 
   ;; DISPLAY
   (setq org-highlight-latex-and-related '(latex)
