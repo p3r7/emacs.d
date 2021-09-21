@@ -94,7 +94,9 @@
 (when module-file-suffix
   (use-package vterm
     :init
-    (setq vterm-always-compile-module t)))
+    (setq vterm-always-compile-module t))
+
+  (use-package vterm-toggle))
 
 
 
