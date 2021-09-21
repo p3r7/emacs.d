@@ -23,6 +23,7 @@
 (require 'cl-lib)
 (require 'dash)
 (require 's)
+(require 'async)
 
 (require 'friendly-shell-command)
 
@@ -57,8 +58,7 @@ Support remote paths in form /<method>:<user>@<host>:/.")
     (error (concat "Command not found: " drun-executable)))
   (setq cnnx (or cnnx default-directory))
   (setq entry-file-path (drun--expand-file-name entry-file-path cnnx))
-  (message entry-file-path)
-  (drun--launch-backround (-flatten (list drun-executable drun-executable-opts entry-file-path))))
+  (drun--launch-backround (-flatten (list drun-executable drun-executable-opts entry-file-path)) cnnx))
 
 
 
@@ -194,6 +194,8 @@ See `drun--start-process' for more details."
       ;; keeps seeing a process as long as sub-process is running.
       (sleep-for 0 50))))
 
+
+
 (defun drun--launch-backround (command &optional cnnx)
   "Silently launch COMMAND in the background"
   (setq cnnx (or cnnx default-directory))
@@ -204,6 +206,26 @@ See `drun--start-process' for more details."
                          buffer
                          command)))
     ))
+
+(defun drun--launch-backround (command &optional cnnx)
+  "Silently launch COMMAND in the background"
+  ;; (setq cnnx (or cnnx default-directory))
+  (setq cnnx "/ssh:vagrant@192.168.254.66:/vagrant/")
+  (let ((command (s-join " " command)))
+    (async-start
+     (lambda ()
+       (package-initialize)
+       (require 'friendly-shell-command)
+       (friendly-shell-command command
+                               :path cnnx
+                               :kill-buffer t)
+       (sleep-for 10 50)
+       command
+       )
+     (lambda (result)
+       (message (concat "DONE: " result))
+       )))
+  )
 
 (defun drun--launch-backround-bak (command &optional cnnx)
   "Silently launch COMMAND in the background"
