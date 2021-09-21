@@ -3,6 +3,9 @@
 (use-package markdown-mode
   :mode ("\\.md\\'" "\\.markdown\\'" "README\\.md\\'")
 
+  ;; :hook
+  ;; ((markdown-mode . emojify-mode))
+
   :init
   (when (executable-find "pandoc")
     (setq markdown-command "pandoc -t html5 --mathjax --highlight-style pygments --standalone"))
