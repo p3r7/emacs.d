@@ -266,9 +266,12 @@
 ;; SHELLS
 
 (require 'init-srv-utils)
+
 (require 'init-influxdb-client)
-(require 'init-docker)
+
 (require 'init-vagrant)
+(require 'init-kubernetes)
+(require 'init-docker)
 
 (use-package drun
   :load-path "~/.emacs.d/plugins/drun")
