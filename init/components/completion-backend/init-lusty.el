@@ -20,6 +20,8 @@
 					    "^\\*vc\\*$"
 					    "^\\*helm .*$"
 					    "^\\*quelpa.*$"
+                                            "^\\*straight-process\\*$"
+                                            "^\\*kubel-process\\*$"
 
                                             ;; clojure
 					    "^\\*nrepl-server .*$"

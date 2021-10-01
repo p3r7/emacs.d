@@ -148,7 +148,9 @@
 	      (name . "^\\*Error")
 	      (name . "^\\*Packages\\*$")
 	      (name . "^\\*Compile-Log\\*$")
-              (name . "^\\*quelpa-build")))
+              (name . "^\\*quelpa-build")
+              (name . "^\\*straight-process\\*$")
+              (name . "^\\*kubel-process\\*$")))
 	    ;; ("ERC"   (mode . erc-mode))
 	    ))))
 
