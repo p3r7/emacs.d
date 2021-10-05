@@ -153,65 +153,67 @@
 
 ;; BACK-LINKS (ROAM)
 
-(use-package org-roam
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n a" . prf/org-roam/add-index-current)
-         ("C-c n r" . prf/org-roam/rescan))
+(unless (windows-nt-p)
 
-  :custom
-  (org-roam-directory prf/dir/notes)
+  (use-package org-roam
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n a" . prf/org-roam/add-index-current)
+           ("C-c n r" . prf/org-roam/rescan))
 
-  :init
-  (setq org-roam-v2-ack t)
-  (setq org-roam-file-exclude-regexp prf/org/index-file-exclude-regexp)
-  (setq org-roam-capture-templates
-        '(("d" "default" plain "%?" :target
-           ;; (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-           (file+head "${slug}.org" "#+title: ${title}\n")
-           :unnarrowed t)))
+    :custom
+    (org-roam-directory prf/dir/notes)
 
-  :config
-  (org-roam-setup)
+    :init
+    (setq org-roam-v2-ack t)
+    (setq org-roam-file-exclude-regexp prf/org/index-file-exclude-regexp)
+    (setq org-roam-capture-templates
+          '(("d" "default" plain "%?" :target
+             ;; (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+             (file+head "${slug}.org" "#+title: ${title}\n")
+             :unnarrowed t)))
 
-  (defun prf/org-roam/add-index-current ()
-    "Add index to file of currently visited buffer, if applicable."
-    (interactive)
+    :config
+    (org-roam-setup)
 
-    (unless (and (buffer-file-name)
-		 (file-exists-p (buffer-file-name)))
-      (user-error "Current buffer is not visiting a file that exists on disk."))
+    (defun prf/org-roam/add-index-current ()
+      "Add index to file of currently visited buffer, if applicable."
+      (interactive)
 
-    (unless (prf/org/file-path-indexable-p (buffer-file-name))
-      (user-error "Current buffer is not visiting an indexable file."))
+      (unless (and (buffer-file-name)
+		   (file-exists-p (buffer-file-name)))
+        (user-error "Current buffer is not visiting a file that exists on disk."))
 
-    (unless (org-id-get)
-      (org-id-get-create)
-      (call-interactively #'save-buffer))
+      (unless (prf/org/file-path-indexable-p (buffer-file-name))
+        (user-error "Current buffer is not visiting an indexable file."))
 
-    (org-id-update-id-locations (list (buffer-file-name)))
+      (unless (org-id-get)
+        (org-id-get-create)
+        (call-interactively #'save-buffer))
 
-    (org-roam-db-update-file))
+      (org-id-update-id-locations (list (buffer-file-name)))
 
-  (defun prf/org-roam/rescan ()
-    "Force rescan of whole `prf/dir/notes'."
-    (interactive)
-    (prf/org/index-rescan-all)
-    (org-roam-db-sync)))
+      (org-roam-db-update-file))
+
+    (defun prf/org-roam/rescan ()
+      "Force rescan of whole `prf/dir/notes'."
+      (interactive)
+      (prf/org/index-rescan-all)
+      (org-roam-db-sync)))
 
 
-(use-package org-roam-ui
-  :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
-  :after (simple-httpd websocket org-roam)
-  :delight
-  (org-roam-ui-mode " RoamUI")
-  (org-roam-ui-follow-mode)
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
+  (use-package org-roam-ui
+    :straight (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    :after (simple-httpd websocket org-roam)
+    :delight
+    (org-roam-ui-mode " RoamUI")
+    (org-roam-ui-follow-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t)))
 
 
 
