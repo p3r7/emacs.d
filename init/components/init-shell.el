@@ -91,7 +91,8 @@
 
 ;; TERM
 
-(when module-file-suffix
+(when (and module-file-suffix
+           (executable-find "cmake"))
   (use-package vterm
     :init
     (setq vterm-always-compile-module t))
