@@ -23,10 +23,10 @@
                             tab-width 2
                             standard-indent 2)
 
-                      (when (and (executable-find "goimports")
-                                 (executable-find "diff"))
-                        (setq gofmt-command "goimports"))
-                      (add-hook 'before-save-hook #'gofmt-before-save)
+                      (when (executable-find "diff")
+                        (when (executable-find "goimports")
+                          (setq gofmt-command "goimports"))
+                        (add-hook 'before-save-hook #'gofmt-before-save))
 
                       (if (not (string-match "go" compile-command))
                           (set (make-local-variable 'compile-command)
