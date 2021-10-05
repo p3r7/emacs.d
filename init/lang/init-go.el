@@ -23,7 +23,8 @@
                             tab-width 2
                             standard-indent 2)
 
-                      (when (executable-find "goimports")
+                      (when (and (executable-find "goimports")
+                                 (executable-find "diff"))
                         (setq gofmt-command "goimports"))
                       (add-hook 'before-save-hook #'gofmt-before-save)
 
