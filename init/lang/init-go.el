@@ -22,7 +22,12 @@
                       (setq indent-tabs-mode nil
                             tab-width 2
                             standard-indent 2)
-                      (add-hook 'before-save-hook #'gofmt-before-save))))
+
+                      (add-hook 'before-save-hook #'gofmt-before-save)
+
+                      (if (not (string-match "go" compile-command))
+                          (set (make-local-variable 'compile-command)
+                               "go build -v && go test -v && go vet")))))
 
   :config
   ;; project.el integration
