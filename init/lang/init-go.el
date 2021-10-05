@@ -23,6 +23,8 @@
                             tab-width 2
                             standard-indent 2)
 
+                      (when (executable-find "goimports")
+                        (setq gofmt-command "goimports"))
                       (add-hook 'before-save-hook #'gofmt-before-save)
 
                       (if (not (string-match "go" compile-command))
