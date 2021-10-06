@@ -150,7 +150,8 @@
 	      (name . "^\\*Compile-Log\\*$")
               (name . "^\\*quelpa-build")
               (name . "^\\*straight-process\\*$")
-              (name . "^\\*kubel-process\\*$")))
+              (name . "^\\*kubel-process\\*$")
+              (name . "^\\*EGLOT .*\\*$")))
 	    ;; ("ERC"   (mode . erc-mode))
 	    ))))
 

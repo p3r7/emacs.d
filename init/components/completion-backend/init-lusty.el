@@ -22,6 +22,7 @@
 					    "^\\*quelpa.*$"
                                             "^\\*straight-process\\*$"
                                             "^\\*kubel-process\\*$"
+                                            "^\\*EGLOT .*\\*$"
 
                                             ;; clojure
 					    "^\\*nrepl-server .*$"
