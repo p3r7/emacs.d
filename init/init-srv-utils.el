@@ -242,7 +242,8 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
 
    ;; not originally in `shell-script-mode'
    ((s-suffix? ".py" filename) "python") ;; REVIEW: should ideally test if in virtual env
-   ((s-suffix? ".php" filename) "php")))
+   ((s-suffix? ".php" filename) "php")
+   ((s-suffix? ".go" filename) "go run")))
 
 (defun prf/exec-based-on-mode ()
   (cond
