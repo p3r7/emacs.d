@@ -35,7 +35,7 @@
 
 (defun prf/tramp/extract-remote-file-name (trampFilePath)
   (let (vec localname)
-    (setq vec (tramp-dissect-file-name trampFilePath))
+    (setq vec (ignore-errors (tramp-dissect-file-name trampFilePath)))
     (if vec
         (tramp-file-name-localname vec)
       ;; REVIEW: returning path unchanged instead of nil if not valid remote
@@ -48,7 +48,7 @@
   ;; prefix current srv
 
   (let (vec-remote localname-remote)
-    (setq vec-remote (tramp-dissect-file-name remoteFilePath))
+    (setq vec-remote (ignore-errors (tramp-dissect-file-name remoteFilePath)))
     (when vec-remote
       (setq localname-remote (tramp-file-name-localname vec-remote))
       (prf/tramp/path/with-new-localname currentFilePath localname-remote))))
