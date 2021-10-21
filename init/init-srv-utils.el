@@ -314,7 +314,7 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
       (kill-new filename)
       (message "Copied exec command '%s' to the clipboard." filename))))
 
-(defun prf/copy-buffer-basename-to-clipboard ()
+(defun prf/copy-buffer-dirname-to-clipboard ()
   "Copy the current buffer base name to the clipboard."
   (interactive)
   (let ((filename (prf/get-buffer-dirname)))
@@ -385,7 +385,7 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     ("c" prf/copy-buffer-filepath-to-clipboard-clean "clean")
     ("r" prf/copy-buffer-filepath-to-clipboard-raw "raw")
     ("f" prf/copy-buffer-filename-to-clipboard "file")
-    ("b" prf/copy-buffer-basename-to-clipboard "base name")
+    ("d" prf/copy-buffer-dirname-to-clipboard "dir")
     ("e" prf/copy-buffer-filepath-to-clipboard-with-exec "exec")
     ("g" nil "cancel")))
 
