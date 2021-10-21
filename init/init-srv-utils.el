@@ -290,6 +290,9 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     (when filename
       (file-name-nondirectory filename))))
 
+(defun prf/get-buffer-filename-no-ext ()
+  (file-name-sans-extension (prf/get-buffer-filename)))
+
 (defun prf/copy-buffer-filepath-to-clipboard-raw ()
   "Copy the current buffer file path to the clipboard (no sanitization)."
   (interactive)
@@ -329,6 +332,14 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     (when filename
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
+
+(defun prf/copy-buffer-filename-no-ext-to-clipboard ()
+  "Copy the current buffer file name to the clipboard, wo/ its extension."
+  (interactive)
+  (let ((filename (prf/get-buffer-filename-no-ext)))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name sans ext '%s' to the clipboard." filename))))
 
 (defalias '_cfp #'prf/copy-buffer-filepath-to-clipboard-clean)
 
@@ -385,6 +396,7 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     ("c" prf/copy-buffer-filepath-to-clipboard-clean "clean")
     ("r" prf/copy-buffer-filepath-to-clipboard-raw "raw")
     ("f" prf/copy-buffer-filename-to-clipboard "file")
+    ("F" prf/copy-buffer-filename-no-ext-to-clipboard "file-no-ext")
     ("d" prf/copy-buffer-dirname-to-clipboard "dir")
     ("e" prf/copy-buffer-filepath-to-clipboard-with-exec "exec")
     ("g" nil "cancel")))
