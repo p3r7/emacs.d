@@ -34,7 +34,47 @@
               ;; NB: recent bookmark+ introduced a key prefix "s" to sort bookmarks
               ;; we need a hook to override it
               (bind-key "s" #'prf/bmkp-bmenu-open-shell bookmark-bmenu-mode-map)
-              ))))
+              )))
+
+  :config
+  ;; NB: own version that reconstruct full tramp path, including multi-hop
+  (defun bookmark-buffer-file-name ()
+    "Return the current buffer's file in a way useful for bookmarks."
+    ;; Abbreviate the path, both so it's shorter and so it's more
+    ;; portable.  E.g., the user's home dir might be a different
+    ;; path on different machines, but "~/" will still reach
+    (let ((fn (cond
+               (buffer-file-name buffer-file-name)
+               ((and (boundp 'dired-directory) dired-directory)
+                (if (stringp dired-directory)
+                    dired-directory
+                  (car dired-directory)))
+               (t (error "Buffer not visiting a file or directory")))))
+      (if (ignore-errors (tramp-dissect-file-name fn))
+          (prf/tramp/complete-file-name fn)
+        (abbreviate-file-name fn))))
+
+  (defun bmkp-make-dired-record ()
+    "Create and return a Dired bookmark record."
+    (let ((hidden-dirs  (save-excursion (dired-remember-hidden))))
+      (unwind-protect
+          (let* ((dir      (expand-file-name (if (consp dired-directory)
+                                                 (file-name-directory (car dired-directory))
+                                               dired-directory)))
+                 (real-dir (if (ignore-errors (tramp-dissect-file-name dir))
+                               (prf/tramp/complete-file-name dir)
+                             dir))
+                 (subdirs  (bmkp-dired-subdirs))
+                 (mfiles   (bmkp-dired-remember-*-marks (point-min) (point-max))))
+            `(,dir
+              ,@(bookmark-make-record-default 'NO-FILE)
+              ;; (filename . ,real-dir) (dired-directory . ,dired-directory)
+              (filename . ,real-dir) (dired-directory . ,real-dir)
+              (dired-marked . ,mfiles) (dired-switches . ,dired-actual-switches)
+              (dired-subdirs . ,subdirs) (dired-hidden-dirs . ,hidden-dirs)
+              (handler . bmkp-jump-dired)))
+        (save-excursion                   ; Hide subdirs that were hidden.
+          (dolist (dir  hidden-dirs)  (when (dired-goto-subdir dir) (dired-hide-subdir 1))))))))
 
 
 

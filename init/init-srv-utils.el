@@ -33,6 +33,23 @@
 
 (require 'init-tramp)
 
+
+(defun prf/tramp/complete-file-name (filePath)
+  "Reconstruct complete multi-hop filename even if shortened."
+  (let* ((paths (--map
+                 (substring-no-properties (tramp-make-tramp-file-name it))
+                 (tramp-compute-multi-hops
+                  (tramp-dissect-file-name filePath))))
+         (first-p (car paths))
+         (middle-paths (butlast (cdr paths)))
+         (last-p (car (last paths))))
+    (concat (replace-regexp-in-string ":$" "" first-p)
+            (apply #'concat (--map (replace-regexp-in-string ":$" ""
+                                                             (replace-regexp-in-string "^/" "|" it))
+                                   middle-paths))
+            (replace-regexp-in-string "^/" "|" last-p))))
+
+
 (defun prf/tramp/extract-remote-file-name (trampFilePath)
   (let (vec localname)
     (setq vec (ignore-errors (tramp-dissect-file-name trampFilePath)))
