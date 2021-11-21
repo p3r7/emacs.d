@@ -108,10 +108,9 @@
 
 (--each p3r7/org-link-abbrev-alist
   (let* ((link-prefix (car it))
-         (url (cdr it))
          (browse-fn `(lambda (e)
                        (let ((org-link-abbrev-alist p3r7/org-link-abbrev-alist))
-                         (browse-url (org-link-expand-abbrev (concat ,url e)))))))
+                         (browse-url (org-link-expand-abbrev (concat ,link-prefix ":" e)))))))
     (org-link-set-parameters link-prefix :follow browse-fn)))
 
 (defun prf/org/link-apply-prefix (txt)
