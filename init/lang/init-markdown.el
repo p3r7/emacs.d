@@ -3,6 +3,17 @@
 (use-package markdown-mode
   :mode ("\\.md\\'" "\\.markdown\\'" "README\\.md\\'")
 
+  :bind (
+         :map markdown-mode-map
+         ("<M-up>" . markdown-move-up)
+         ("<M-down>" . markdown-move-down)
+         ("<M-right>" . markdown-demote)
+         ("<M-left>" . markdown-promote)
+         ("<M-S-up>" . markdown-table-delete-row)
+         ("<M-S-down>" . markdown-table-insert-row)
+         ("<M-S-right>" . markdown-table-insert-column)
+         ("<M-S-left>" . markdown-table-delete-column))
+
   ;; :hook
   ;; ((markdown-mode . emojify-mode))
 
