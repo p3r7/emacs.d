@@ -13,6 +13,6 @@ If you forgot it, you can add them afterwards:
 	cd .emacs.d
 	git submodule update --init --recursive
 
-If I ever forgot to refference last revision of each submodule, you might want to:
+If I ever forgot to reference last revision of each submodule, you might want to:
 
 	git submodule foreach --recursive git pull origin master
