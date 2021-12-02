@@ -2,7 +2,7 @@
 
 ;; VARS
 
-(defvar prd-highlight-keyword-warn-keywords "\\<\\(FIXME\\|TODO\\|TEST\\|NOTE\\|NOTES\\|NB\\|WARN\\|WARNING\\|BEWARE|BUG\\|HACK\\|ASK\\|EYESORE\\|BAD\\|FIXME\\|REVIEW\\):")
+(defvar prd-highlight-keyword-warn-keywords "\\<\\(FIXME\\|TODO\\|TEST\\|NOTE\\|NOTES\\|NB\\|WARN\\|WARNING\\|BEWARE|BUG\\|HACK\\|PATCH\\|ASK\\|EYESORE\\|BAD\\|FIXME\\|REVIEW\\):")
 (defvar prd-highlight-keyword-ok-keywords "\\<\\(DONE\\|OK\\|GOOD\\|SOLVED\\|FIXED\\|IDEA\\):")
 
 (defvar prd-highlight-keyword-modes
