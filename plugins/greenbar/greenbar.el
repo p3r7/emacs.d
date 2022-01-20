@@ -74,55 +74,106 @@
   "Stripe comint output like \"green bar\", or \"zebra stripe\" paper."
   :group 'comint)
 
-(defface greenbar-1-face
-  '(
-    (default
-      )
-    (((background light))
-     :background "#344034")
+(defface greenbar-1
+  '((((background light))
+     :background "#e4f0e4"
+     :extend t)
     (((background dark))
-     :background "#e4f0e4"))
+     :background "#344034"
+     :extend t))
   "1rst greenbar background face."
   :group 'greenbar)
 
-(defface greenbar-2-face
-  '(
-    (default
-      )
-    (((background light))
-     :foreground "#344034")
+(defface greenbar-2
+  '((((background light))
+     :background "#f0f0f0"
+     :extend t)
     (((background dark))
-     :foreground "#e4f0e4"))
+     :background "#343434"
+     :extend t))
   "2nd greenbar background face."
   :group 'greenbar)
 
-(defface greenbar-3-face
-  '(
-    (default))
-  "3rd greenbar background face."
+(defface greenbar-graybar-1
+  '((((background light))
+     :background "gray70"
+     :extend t)
+    (((background dark))
+     :background "gray30"
+     :extend t))
+  "1rst graybar background face."
   :group 'greenbar)
 
-(defface greenbar-4-face
-  '(
-    (default))
-  "4th greenbar background face."
+(defface greenbar-graybar-2
+  '((default
+      :inherit 'default))
+  "2nd graybar background face."
   :group 'greenbar)
 
-(defface greenbar-5-face
-  '(
-    (default))
-  "5th greenbar background face."
-  :group 'greenbar)
+(let ((x "f0")
+      (x-d "40")
+      (o "e4")
+      (o-d "34"))
 
-(defface greenbar-6-face
-  '(
-    (default))
-  "6th greenbar background face."
-  :group 'greenbar)
+  (defface greenbar-rainbow-1
+    `((((background light))
+       :background ,(apply #'concat "#" (list x x o))
+       :extend t)
+      (((background dark))
+       :background ,(apply #'concat "#" (list x-d x-d o-d))
+       :extend t))
+    "1rst rainbow background face."
+    :group 'greenbar)
 
-;; to compare attributes: (face-all-attributes 'greenbar-1-face (selected-frame))
+  (defface greenbar-rainbow-2
+    `((((background light))
+       :background ,(apply #'concat "#" (list x o o))
+       :extend t)
+      (((background dark))
+       :background ,(apply #'concat "#" (list x-d o-d o-d))
+       :extend t))
+    "2nd rainbow background face."
+    :group 'greenbar)
 
+  (defface greenbar-rainbow-3
+    `((((background light))
+       :background ,(apply #'concat "#" (list x o x))
+       :extend t)
+      (((background dark))
+       :background ,(apply #'concat "#" (list x-d o-d x-d))
+       :extend t))
+    "3rd rainbow background face."
+    :group 'greenbar)
 
+  (defface greenbar-rainbow-4
+    `((((background light))
+       :background ,(apply #'concat "#" (list o o x))
+       :extend t)
+      (((background dark))
+       :background ,(apply #'concat "#" (list o-d o-d x-d))
+       :extend t))
+    "4th rainbow background face."
+    :group 'greenbar)
+
+  (defface greenbar-rainbow-5
+    `((((background light))
+       :background ,(apply #'concat "#" (list o x x))
+       :extend t)
+      (((background dark))
+       :background ,(apply #'concat "#" (list o-d x-d x-d))
+       :extend t))
+    "5th rainbow background face."
+    :group 'greenbar)
+
+  (defface greenbar-rainbow-6
+    `((((background light))
+       :background ,(apply #'concat "#" (list o x o))
+       :extend t)
+      (((background dark))
+       :background ,(apply #'concat "#" (list o-d x-d o-d))
+       :extend t))
+    "6th rainbow background face."
+    :group 'greenbar))
 
 (defvar-local greenbar-current-bar 0
   "Index into `greenbar-background-colors' that is active.")
@@ -137,20 +188,12 @@
 (defvar greenbar-color-themes
   (list
    (cons 'greenbar
-         '(if (eq (frame-parameter nil 'background-mode) 'dark)
-              '("#344034" "#343434")
-            '("#e4f0e4" "#f0f0f0")))
+         '(greenbar-1 greenbar-2))
    (cons 'graybar
-         '(list
-           (if (eq (frame-parameter nil 'background-mode) 'dark)
-               "gray30" "gray70")
-           (face-background 'default)))
+         '(greenbar-graybar-1 greenbar-graybar-2))
    (cons 'rainbow
-         '(let ((x (if (eq (frame-parameter nil 'background-mode) 'dark) "40" "f0"))
-                (o (if (eq (frame-parameter nil 'background-mode) 'dark) "34" "e4")))
-
-            (mapcar (lambda (c) (apply #'concat "#" c))
-                    `((,x ,x ,o) (,x ,o ,o) (,x ,o ,x) (,o ,o ,x) (,o ,x ,x) (,o ,x ,o))))))
+         '(greenbar-rainbow-1 greenbar-rainbow-2 greenbar-rainbow-3 greenbar-rainbow-4
+                              greenbar-rainbow-5 greenbar-rainbow-6)))
   "A list of Greenbar themes.
 
 Each member of the list starts with a symbol that identifies the
@@ -167,18 +210,9 @@ theme followed by the list bar colors.")
   "Should prompts and command input be highlighted."
   :type 'booleanp)
 
-(defun greenbar-color-list ()
-  "Get the list of greenbar background colors."
-  (or (eval (cdr (assoc greenbar-background-colors
-                        greenbar-color-themes)))
-      greenbar-background-colors))
-
-(defun greenbar-is-valid-bar (color-list)
-  "Return non-nil, if COLOR-LIST is a list of valid colors."
-  (and color-list
-       (listp color-list)
-       (cl-every #'identity
-                 (mapcar #'color-defined-p color-list))))
+(defun greenbar-faces-list ()
+  (cdr (assoc greenbar-background-colors
+              greenbar-color-themes)))
 
 (defun greenbar-is-command-input (_start end)
   "Return non-nil, if input is in region betweeen START and END."
@@ -192,7 +226,7 @@ If `greenbar-lines' is zero, reset it to
 next one."
 
   (when (zerop greenbar-current-line)
-    (setq greenbar-current-bar (mod (1+ greenbar-current-bar) (length (greenbar-color-list)))
+    (setq greenbar-current-bar (mod (1+ greenbar-current-bar) (length (greenbar-faces-list)))
           greenbar-current-line (default-value 'greenbar-lines-per-bar))))
 
 (defun greenbar-output-filter (string)
@@ -202,14 +236,14 @@ Every `greenbar-lines-per-bar' lines are colored with a rotating
 set of background colors found in
 `greenbar-background-colors'."
 
-  (let ((bar (greenbar-color-list))
+  (let ((bar (greenbar-faces-list))
         (start comint-last-output-start)
         (end (process-mark (get-buffer-process (current-buffer)))))
 
-    (when (and (greenbar-is-valid-bar bar)
-               (not (= start end))
-               (or greenbar-highlight-input
-                   (not (greenbar-is-command-input start end))))
+    (when (and
+           (not (= start end))
+           (or greenbar-highlight-input
+               (not (greenbar-is-command-input start end))))
 
       (greenbar-next-bar) ; make sure greenbar state is valid
       (save-excursion
@@ -233,11 +267,10 @@ set of background colors found in
             (setq greenbar-current-line (forward-line greenbar-current-line))
 
             ;; Mark the bar
-            (let ((bar-bg (nth greenbar-current-bar bar)))
+            (let ((bar-face (nth greenbar-current-bar bar)))
               (font-lock-append-text-property
                start (point)
-               'font-lock-face (list :background bar-bg
-                                     :extend t)))
+               'font-lock-face bar-face))
 
             ;; Get ready for the next bar
             (setq start (point))
