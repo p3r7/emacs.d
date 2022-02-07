@@ -24,5 +24,11 @@
 
 
 
+;; FENNEL
+
+(use-package fennel-mode
+  :mode "\\.fnl\\'")
+
+
 
 (provide 'init-lua)
