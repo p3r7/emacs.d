@@ -73,6 +73,10 @@
               (mode . clojure-mode)
               (mode . clojurescript-mode)))
 
+            ("norns"
+	     (or
+	      (name . "^\\*maiden/")))
+
 	    ("CRON"
 	     (or (filename . "/etc/crontab")
 		 (filename . "/etc/cron.d/")))
