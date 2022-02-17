@@ -26,7 +26,11 @@
                       (when (executable-find "diff")
                         (when (executable-find "goimports")
                           (setq gofmt-command "goimports"))
-                        (add-hook 'before-save-hook #'gofmt-before-save))
+                        (add-hook 'before-save-hook
+                                  (lambda ()
+                                    ;; test everytime to handle cleanly remotely visited files
+                                    (when (executable-find gofmt-command)
+                                      gofmt-before-save))))
 
                       (if (not (string-match "go" compile-command))
                           (set (make-local-variable 'compile-command)
