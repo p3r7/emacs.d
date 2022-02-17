@@ -75,7 +75,7 @@
 ;; EXTRA COMMANDS
 
 (use-package dired-rsync
-  :after (dired)
+  :after (dired tramp)
   :config
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
 ;; NB: alternative https://oremacs.com/2016/02/24/dired-rsync/
