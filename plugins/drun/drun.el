@@ -5,7 +5,7 @@
 ;; Version: 0.1.0
 ;; Keywords: processes, terminals
 ;; URL: https://github.com/p3r7/drun
-;; Package-Requires: ((emacs "24.1")(cl-lib "0.6.1")(friendly-shell-command "0.2.0"))
+;; Package-Requires: ((emacs "27.1")(cl-lib "0.6.1")(friendly-shell-command "0.2.0"))
 ;;
 ;; SPDX-License-Identifier: MIT
 
@@ -118,33 +118,7 @@ Support remote paths in form /<method>:<user>@<host>:/.")
 TRAMP-aware replacement for `executable-find'"
   (setq cnnx (or cnnx default-directory))
   (let ((default-directory cnnx))
-    (drun--executable-find-dd command)))
-
-
-(defun drun--executable-find-dd (command &optional _args)
-  "Test COMMAND exists.
-Drop in replacement for `executable-find' w/ support for remote
-*nix servers.  The unused ARGS param makes it also a replacement
-for `eshell-find-interpreter' which is slow with tramp
-connections."
-  (if (file-remote-p default-directory)
-      (drun--executable-find-dd-cli command)
-    (executable-find command)))
-
-
-(defun drun--executable-find-dd-cli (command &optional _args)
-  "Test COMMAND exists via cli.
-Drop in replacement for `executable-find' for remote *nix
-servers.  The unused ARGS param makes it also a replacement for
-`eshell-find-interpreter' which is slow with tramp connections."
-  (let (errno
-        ;; (get-path-cmd (concat "which "command))
-        (get-path-cmd (concat "command -v "command)))
-    (with-temp-buffer
-      (setq errno (shell-command get-path-cmd (current-buffer)))
-      (when (eq errno 0)
-        ;; NB: removing trailing \n
-        (substring (buffer-string) 0 -1)))))
+    (executable-find command 'honor-dd)))
 
 
 

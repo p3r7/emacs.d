@@ -1,5 +1,5 @@
 
 (use-package yaml-mode
-  :mode "\\.ksy'")
+  :mode "\\.ksy$")
 
 (provide 'init-yaml)

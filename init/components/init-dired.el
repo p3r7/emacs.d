@@ -22,7 +22,16 @@
          ;; do not create other dired buffers when navigating
          ;; TODO: far from being perfect (closes all dired windows, not just current)
 	 ("<return>" . dired-find-alternate-file)
-	 ("^" . (lambda () (interactive) (find-alternate-file ".."))))
+	 ("^" . (lambda () (interactive) (find-alternate-file "..")))
+         ("Z" . (lambda () (interactive)
+                  (unless default-directory
+                    (user-error "Not browsing an actual on-disk directory."))
+
+                  (let ((dd (expand-file-name default-directory)))
+                    (when (tramp-tramp-file-p dd)
+                      (user-error "Cannot open a remote directory in file browser.")
+
+                      (browse-url-of-file dd))))))
   :custom
   (dired-recursive-copies 'always "Never prompt for recursive copies of a directory")
   (dired-recursive-deletes 'always "Never prompt for recursive deletes of a directory")

@@ -223,6 +223,7 @@
 (require 'init-php)
 (require 'init-js)
 (require 'init-lua)
+(require 'init-norns)
 (require 'init-python)
 (require 'init-groovy)
 (require 'init-scheme)

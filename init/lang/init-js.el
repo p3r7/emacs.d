@@ -7,7 +7,16 @@
   :mode "\\.js\\'"
   :config
   ;; (customize-set-variable 'js2-include-node-externs t)
-  )
+
+
+  (defun max-msp-js-hook ()
+    (when (and (buffer-file-name)
+	       (s-contains? "/Max for Live Devices/"  (buffer-file-name)))
+      (setq indent-tabs-mode t
+            tab-width 4
+            ;; standard-indent 4
+            )))
+  (add-hook 'js2-mode-hook #'max-msp-js-hook))
 
 (add-hook 'js3-mode-hook
 	  (lambda ()

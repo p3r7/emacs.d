@@ -12,7 +12,7 @@
     (when (and (buffer-file-name)
 	       (equal (file-name-extension (buffer-file-name)) "p8"))
       (setq-local lua-indent-level 1)))
-  (add-hook 'lua-mode-hook 'p8-hook))
+  (add-hook 'lua-mode-hook #'p8-hook))
 
 
 
@@ -22,6 +22,12 @@
   :after (lua-mode)
   :quelpa (pico8-mode :fetcher github :repo "Kaali/pico8-mode"))
 
+
+
+;; FENNEL
+
+(use-package fennel-mode
+  :mode "\\.fnl\\'")
 
 
 

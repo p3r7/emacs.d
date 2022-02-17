@@ -49,6 +49,7 @@
 ;; TOOLS
 
 (use-package w32-browser
+  :after dired
   :config
   (defun prf/show-in-file-explorer ()
     (interactive)

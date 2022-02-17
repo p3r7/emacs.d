@@ -33,9 +33,26 @@
 
 (require 'init-tramp)
 
+
+(defun prf/tramp/complete-file-name (filePath)
+  "Reconstruct complete multi-hop filename even if shortened."
+  (let* ((paths (--map
+                 (substring-no-properties (tramp-make-tramp-file-name it))
+                 (tramp-compute-multi-hops
+                  (tramp-dissect-file-name filePath))))
+         (first-p (car paths))
+         (middle-paths (butlast (cdr paths)))
+         (last-p (car (last paths))))
+    (concat (replace-regexp-in-string ":$" "" first-p)
+            (apply #'concat (--map (replace-regexp-in-string ":$" ""
+                                                             (replace-regexp-in-string "^/" "|" it))
+                                   middle-paths))
+            (replace-regexp-in-string "^/" "|" last-p))))
+
+
 (defun prf/tramp/extract-remote-file-name (trampFilePath)
   (let (vec localname)
-    (setq vec (tramp-dissect-file-name trampFilePath))
+    (setq vec (ignore-errors (tramp-dissect-file-name trampFilePath)))
     (if vec
         (tramp-file-name-localname vec)
       ;; REVIEW: returning path unchanged instead of nil if not valid remote
@@ -48,7 +65,7 @@
   ;; prefix current srv
 
   (let (vec-remote localname-remote)
-    (setq vec-remote (tramp-dissect-file-name remoteFilePath))
+    (setq vec-remote (ignore-errors (tramp-dissect-file-name remoteFilePath)))
     (when vec-remote
       (setq localname-remote (tramp-file-name-localname vec-remote))
       (prf/tramp/path/with-new-localname currentFilePath localname-remote))))
@@ -290,6 +307,9 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     (when filename
       (file-name-nondirectory filename))))
 
+(defun prf/get-buffer-filename-no-ext ()
+  (file-name-sans-extension (prf/get-buffer-filename)))
+
 (defun prf/copy-buffer-filepath-to-clipboard-raw ()
   "Copy the current buffer file path to the clipboard (no sanitization)."
   (interactive)
@@ -314,7 +334,7 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
       (kill-new filename)
       (message "Copied exec command '%s' to the clipboard." filename))))
 
-(defun prf/copy-buffer-basename-to-clipboard ()
+(defun prf/copy-buffer-dirname-to-clipboard ()
   "Copy the current buffer base name to the clipboard."
   (interactive)
   (let ((filename (prf/get-buffer-dirname)))
@@ -329,6 +349,14 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     (when filename
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
+
+(defun prf/copy-buffer-filename-no-ext-to-clipboard ()
+  "Copy the current buffer file name to the clipboard, wo/ its extension."
+  (interactive)
+  (let ((filename (prf/get-buffer-filename-no-ext)))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name sans ext '%s' to the clipboard." filename))))
 
 (defalias '_cfp #'prf/copy-buffer-filepath-to-clipboard-clean)
 
@@ -385,7 +413,8 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     ("c" prf/copy-buffer-filepath-to-clipboard-clean "clean")
     ("r" prf/copy-buffer-filepath-to-clipboard-raw "raw")
     ("f" prf/copy-buffer-filename-to-clipboard "file")
-    ("b" prf/copy-buffer-basename-to-clipboard "base name")
+    ("F" prf/copy-buffer-filename-no-ext-to-clipboard "file-no-ext")
+    ("d" prf/copy-buffer-dirname-to-clipboard "dir")
     ("e" prf/copy-buffer-filepath-to-clipboard-with-exec "exec")
     ("g" nil "cancel")))
 

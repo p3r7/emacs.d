@@ -13,11 +13,12 @@
          ("C-h C-f" . godef-jump))
   :hook (
          (go-mode . (lambda ()
-                      (eglot-ensure)
-                      (setq eglot-workspace-configuration
-                            '((:gopls
-                               . ((staticcheck . t)
-                                  (matcher . "CaseSensitive")))))))
+                      (when (executable-find "gopls")
+                        (eglot-ensure)
+                        (setq eglot-workspace-configuration
+                              '((:gopls
+                                 . ((staticcheck . t)
+                                    (matcher . "CaseSensitive"))))))))
          (go-mode . (lambda ()
                       (setq indent-tabs-mode nil
                             tab-width 2

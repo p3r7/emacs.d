@@ -124,7 +124,7 @@
   ;; (prf/theme/initialize)
   (let ((now-h (ts-hour (ts-now))))
     (if (or (< now-h 9)
-            (> now-h 19))
+            (> now-h 17))
         (prf/theme/set-theme-from-list 'chocolate)
       (prf/theme/set-theme-from-list 'white-sand)))
 
