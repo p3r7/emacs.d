@@ -1,6 +1,5 @@
 
 (require 'project)
-(require 'eglot)
 
 
 
@@ -13,7 +12,7 @@
          ("C-h C-f" . godef-jump))
   :hook (
          (go-mode . (lambda ()
-                      (when (executable-find "gopls")
+                      (when (executable-find "gopls" t)
                         (eglot-ensure)
                         (setq eglot-workspace-configuration
                               '((:gopls
@@ -24,13 +23,13 @@
                             tab-width 2
                             standard-indent 2)
 
-                      (when (executable-find "diff")
-                        (when (executable-find "goimports")
+                      (when (executable-find "diff" t)
+                        (when (executable-find "goimports" t)
                           (setq gofmt-command "goimports"))
                         (add-hook 'before-save-hook
                                   (lambda ()
                                     ;; test everytime to handle cleanly remotely visited files
-                                    (when (executable-find gofmt-command)
+                                    (when (executable-find gofmt-command t)
                                       gofmt-before-save))))
 
                       (if (not (string-match "go" compile-command))
