@@ -45,7 +45,7 @@
 ;;
 ;; (dolist (hook (list 'emacs-lisp-mode-hook
 ;;                     'c++-mode-hook))
-;;   (add-hook hook 'hideshowvis-enable))
+;;   (add-hook hook #'hideshowvis-enable))
 ;;
 ;; If enabling hideshowvis-minor-mode is slow on your machine use M-x,
 ;; customize-option, hideshowvis-ignore-same-line and set it to nil. This will

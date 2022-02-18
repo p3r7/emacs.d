@@ -5,7 +5,7 @@
 ;; Author: Michael Weber <michaelw@foldr.org>
 ;; Keywords: faces, games
 ;; Initial-Version: <2004-11-07 22:05:07 michaelw>
-;; Time-stamp: <2019-09-10 16:15:02 (jordan.besly)>
+;; Time-stamp: <2022-02-18 11:10:36 (JBESLY)>
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@
 ;;; Code:
 
 (eval-and-compile
-  (require 'cl)
+  (require 'cl-lib)
   (require 'rect)
   (require 'thingatpt))
 
@@ -107,14 +107,14 @@ Calls `mwe:color-box-color' with argument DEPTH to pick color."
         (setq reg-tok-fn (or reg-tok-fn #'mwe:tokenize-region))
         (let ((indent-tabs-mode nil))
           (save-match-data
-            (loop
+            (cl-loop
              for (type depth ov . ignore) in (funcall reg-tok-fn beg end)
              for beg = (overlay-start ov)
              for end = (overlay-end ov)
              for maxcol = (if (natnump rmargin) rmargin
                             (mwe:region-max-column beg end))
 
-             do (case type
+             do (cl-case type
                   ((sexp)
                    (mwe:rectangle-put-properties (overlay-start ov)
                                                  (overlay-end ov)
@@ -288,9 +288,9 @@ DEPTH is current nesting level.
 See also `mwe:sexp-tokenizer'."
   (setq depth (or depth 0))
   (mwe:skip-whitespace)
-  (loop until (or (looking-at ")") (eobp))
-	nconc (prog1 (mwe:sexp-tokenizer depth)
-		(mwe:skip-whitespace))))
+  (cl-loop until (or (looking-at ")") (eobp))
+	   nconc (prog1 (mwe:sexp-tokenizer depth)
+		   (mwe:skip-whitespace))))
 
 
 ;;; Miscellaneous Bill's rendering theme
@@ -298,11 +298,11 @@ See also `mwe:sexp-tokenizer'."
 ;;;###autoload
 (defun mwe:color-box-region/miscbill (beg end &optional rmargin)
   (interactive "*r")
-  (let ((*mwe:color-box-colors/miscbill* (copy-list *mwe:color-box-face-list*)))
+  (let ((*mwe:color-box-colors/miscbill* (cl-copy-list *mwe:color-box-face-list*)))
     (nconc *mwe:color-box-colors/miscbill* *mwe:color-box-colors/miscbill*)
     (mwe--flet ((mwe:color-box-color (depth)
 				     (pop *mwe:color-box-colors/miscbill*)))
-      (mwe:color-box-region beg end (case rmargin
+      (mwe:color-box-region beg end (cl-case rmargin
                                       ((0) nil)
                                       ((nil) 30)
                                       (t rmargin))))))

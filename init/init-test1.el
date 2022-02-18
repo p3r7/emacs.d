@@ -1,4 +1,5 @@
-(require 'noflet)
+;; (require 'noflet)
+(require 'cl-lib)
 (require 's)
 
 
@@ -31,9 +32,8 @@
   "wrapper around thing-at-point to support other types"
   (cond
    ((string= THING 'url)
-    (substring  (thing-at-point 'url) 7) )
-   (t (thing-at-point THING))
-   ) )
+    (substring  (thing-at-point 'url) 7))
+   (t (thing-at-point THING))))
 
 
 ;; https://www.emacswiki.org/emacs/SyntaxAtPoint
@@ -48,8 +48,11 @@
 
 ;; don't complain about runing processes when quiting
 
+;; (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+;;   (noflet ((process-list ())) ad-do-it))
+
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
-  (noflet ((process-list ())) ad-do-it))
+  (cl-flet ((process-list ())) ad-do-it))
 
 
 

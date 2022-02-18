@@ -32,7 +32,7 @@
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
 
 (if (featurep 'so-long)
     (use-package so-long

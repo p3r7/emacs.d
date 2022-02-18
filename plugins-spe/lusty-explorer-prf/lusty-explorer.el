@@ -56,7 +56,7 @@
 ;;
 ;; To modify the keybindings, use something like:
 ;;
-;;   (add-hook 'lusty-setup-hook 'my-lusty-hook)
+;;   (add-hook 'lusty-setup-hook #'my-lusty-hook)
 ;;   (defun my-lusty-hook ()
 ;;     (define-key lusty-mode-map "\C-j" 'lusty-highlight-next))
 ;;

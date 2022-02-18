@@ -158,7 +158,7 @@
 
 ;;; Require
 (require 'hide-lines)
-(eval-when-compile (require 'cl))
+(eval-when-compile (require 'cl-lib))
 (require 'ido)
 
 ;;; Code:
@@ -302,7 +302,7 @@ With prefix arg: remove lines matching regexp."
   :type 'directory)
 
 ;;;###autoload
-(defun* syslog-date-to-time (date &optional safe)
+(cl-defun syslog-date-to-time (date &optional safe)
   "Convert DATE string to time.
 If no year is present in the date then the current year is used.
 If DATE can't be parsed then if SAFE is non-nil return nil otherwise throw an error."
@@ -475,7 +475,7 @@ This function is added to `find-file-hooks'."
 These hooks will activate `syslog-mode' when visiting a file
 which has a syslog-like name (.fasta or .gb) or whose contents
 looks like syslog.  It will also turn enable fontification for `syslog-mode'."
-  ;; (add-hook 'find-file-hooks 'syslog-find-file-func)
+  ;; (add-hook 'find-file-hooks #'syslog-find-file-func)
   (add-to-list
    'auto-mode-alist
    '("\\(messages\\(\\.[0-9]\\)?\\|SYSLOG\\)\\'" . syslog-mode)))

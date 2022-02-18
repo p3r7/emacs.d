@@ -25,7 +25,7 @@
   :defer t
   :ensure nil
   :hook `(,prf/lisp-file-modes
-          . (lambda () (add-hook 'after-save-hook 'check-parens nil t))))
+          . (lambda () (add-hook 'after-save-hook #'check-parens nil t))))
 
 ;; NOTE: USEFUL case EOF, in addition to check-parens: highlight parens contents
 ;; (show-paren-mode 1)

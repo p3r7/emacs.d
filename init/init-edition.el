@@ -112,7 +112,7 @@
  time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)")
 
 ;; Update them when saving
-(add-hook 'write-file-hooks 'time-stamp)
+(add-hook 'write-file-hooks #'time-stamp)
 
 
 

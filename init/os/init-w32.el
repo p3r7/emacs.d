@@ -37,7 +37,7 @@
   (interactive)
   (setq buffer-display-table (make-display-table))
   (aset buffer-display-table ?\^M []))
-;; (add-hook 'text-mode-hook 'prf/hide-dos-eol)
+;; (add-hook 'text-mode-hook #'prf/hide-dos-eol)
 
 (defvar prf/quelpa-tar-executable "C:/MinGW/msys/1.0/bin/tar.exe")
 

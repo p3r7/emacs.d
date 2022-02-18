@@ -150,7 +150,7 @@
 (use-package rainbow-delimiters
   ;; :hook (prog-mode-hook . rainbow-delimiters-mode)
   :config
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 
 
@@ -161,9 +161,9 @@
 (use-package form-feed
   :delight
   :config
-  (add-hook 'prog-mode-hook 'form-feed-mode)
-  (add-hook 'compilation-mode-hook 'form-feed-mode)
-  (add-hook 'help-mode-hook 'form-feed-mode))
+  (add-hook 'prog-mode-hook #'form-feed-mode)
+  (add-hook 'compilation-mode-hook #'form-feed-mode)
+  (add-hook 'help-mode-hook #'form-feed-mode))
 
 
 

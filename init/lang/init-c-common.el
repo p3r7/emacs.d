@@ -14,7 +14,7 @@
   (setq comment-start "//"
 	comment-end   ""))
 
-(add-hook 'c-mode-common-hook 'prf/main-c-mode-common-hook)
+(add-hook 'c-mode-common-hook #'prf/main-c-mode-common-hook)
 
 
 
