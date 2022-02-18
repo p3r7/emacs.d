@@ -1,5 +1,6 @@
 
 (require 'project)
+(require 'eglot)
 
 
 
@@ -26,17 +27,17 @@
                       (when (executable-find "diff" t)
                         (when (executable-find "goimports" t)
                           (setq gofmt-command "goimports"))
-                        (add-hook 'before-save-hook
-                                  (lambda ()
-                                    ;; test everytime to handle cleanly remotely visited files
-                                    (when (executable-find gofmt-command t)
-                                      gofmt-before-save))))
+                        (add-hook 'before-save-hook #'prf/gofmt-before-save-hook))
 
                       (if (not (string-match "go" compile-command))
                           (set (make-local-variable 'compile-command)
                                "go build -v && go test -v && go vet")))))
 
   :config
+  (defun prf/gofmt-before-save-hook ()
+    (when (executable-find gofmt-command t)
+      (gofmt-before-save)))
+
   ;; project.el integration
   (defun project-find-go-module (dir)
     (when-let ((root (locate-dominating-file dir "go.mod")))
@@ -51,8 +52,6 @@
 ;; NB: gocode is deprecated, using eglot w/ company instead
 ;; (use-package go-autocomplete
 ;;   :after go)
-
-
 
 
 

@@ -188,7 +188,8 @@
 (require 'init-rice)
 
 
-;; GENERAL BEHAVIOUR
+
+;; GENERAL BEHAVIOUR
 
 (require 'init-main)
 (require 'init-ux)
@@ -198,7 +199,11 @@
 (require 'init-completion-backend)
 
 
-;; LANGUAGES & FORMATS
+
+;; LANGUAGES & FORMATS
+
+;; LSP
+(require 'init-eglot)
 
 ;; multilingual files
 (require 'init-mmm)
@@ -297,7 +302,6 @@
 (require 'init-yasnippet)
 
 (require 'init-flycheck)
-(require 'init-eglot)
 (require 'init-crypt)
 
 
