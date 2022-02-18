@@ -52,6 +52,8 @@
   :config
   ;; (setq tramp-verbose 6)
 
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
   ;; upstream value, takes into account recent ssh messages
   (setq tramp-yesno-prompt-regexp (concat
                                    (regexp-opt
