@@ -17,6 +17,7 @@
         lispy-yank
         org-self-insert-command
         prf/lispy-space-no-selection
+        sclang-electric-star
         special-digit-argument
         special-lh-knight/body
         special-lispy-ace-char
