@@ -15,7 +15,7 @@
 ;; http://www.emacswiki.org/emacs/IbufferMode
 
 (use-package ibuffer
-  :after (s)
+  :after (s norns)
 
   :bind (("C-x B" . ibuffer))
 
@@ -75,7 +75,11 @@
 
             ("norns"
 	     (or
-	      (name . "^\\*maiden/")))
+              (mode . norns-maiden-repl-mode)
+              (mode . norns-sc-repl-mode)
+              (predicate . norns-mode)
+              (predicate . (and (s-contains? "Code/monome/" default-directory t)
+                                (or (member major-mode '(lua-mode sclang-mode)))))))
 
 	    ("CRON"
 	     (or (filename . "/etc/crontab")
