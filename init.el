@@ -228,7 +228,6 @@
 (require 'init-php)
 (require 'init-js)
 (require 'init-lua)
-(require 'init-norns)
 (require 'init-python)
 (require 'init-groovy)
 (require 'init-scheme)
@@ -262,8 +261,9 @@
 ;; (require 'csv-mode)
 (require 'init-guitar-tab)
 
-;; - frameworks
+;; - frameworks / platforms
 (require 'init-arduino)
+(require 'init-norns)
 
 (require 'init-compilation)
 
