@@ -184,6 +184,9 @@
            (org-block :inherit default)
            (markdown-code-face :inherit nil))
           (zenburn
+           (bmkp-heading :foreground "#F0DFAF") ; same as font-lock-keyword-face
+           (bmkp-local-directory :foreground "#7CB8BB" :background nil)
+           (bmkp-remote-file :foreground "#DF6B75")
            (form-feed-line :strike-through "#7F9F7F")
            (hl-line :background "#4a3434")
            (highlight :background "#4a3434"))
