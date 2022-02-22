@@ -56,6 +56,17 @@
     (let ((dired-dwim-target nil))
       (dired-do-rename)))
 
+  (defadvice dired-do-copy
+      (around dired-do-copy-ivy-immediate activate)
+    (let ((ivy-minibuffer-map (copy-keymap ivy-minibuffer-map)))
+      (define-key ivy-minibuffer-map (kbd "RET") #'ivy-immediate-done)
+      ad-do-it))
+  (defadvice dired-do-rename
+      (around dired-do-rename-ivy-immediate activate)
+    (let ((ivy-minibuffer-map (copy-keymap ivy-minibuffer-map)))
+      (define-key ivy-minibuffer-map (kbd "RET") #'ivy-immediate-done)
+      ad-do-it))
+
   (put 'dired-find-alternate-file 'disabled nil))
 
 
