@@ -115,7 +115,8 @@
 	      (mode . perl-mode)
 	      (mode . python-mode)
 	      (mode . emacs-lisp-mode)
-              (mode . lua-mode)))
+              (mode . lua-mode)
+              (mode . go-mode)))
 
 	    ("Mail"
 	     (or
