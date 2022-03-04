@@ -375,9 +375,6 @@
 ;;   moved to init/lang/init-elisp.el
 ;; - [ ] https://github.com/Fuco1/fontify-face
 
-(when (fboundp 'prettify-symbols-mode)
-  (setq prettify-symbols-unprettify-at-point 'right-edge))
-
 (use-package mwe-color-box
   :load-path "~/.emacs.d/plugins/mwe-color-box"
   :init
