@@ -9,28 +9,40 @@
 
 ;; alt way to test: (when (find-font (font-spec :name "DejaVu Sans Mono") ...)
 
-(defvar prf/rice/font-family nil)
-(defvar prf/rice/variable-pitch-font-family nil)
 (defvar prf/rice/font nil)
+(defvar prf/rice/x-font nil)
+(defvar prf/rice/font-family nil)
 (defvar prf/rice/font-height nil)
+(defvar prf/rice/variable-pitch-font-family nil)
 (defvar prf/rice/variable-pitch-font-height nil)
 
-(when (and prf/rice/font-family
-	   (member prf/rice/font-family (font-family-list)))
-  (set-face-attribute 'default nil :family prf/rice/font-family))
+(cond
 
-(when (and prf/rice/variable-pitch-font-family
-           (member prf/rice/variable-pitch-font-family (font-family-list)))
-  (set-face-attribute 'variable-pitch nil :family prf/rice/variable-pitch-font-family))
+ ;; `fontp' or "<FONT_FAMILY>-<SIZE>"
+ ;; NB: this format allows setting decimal size
+ ((and prf/rice/font
+       (or (fontp prf/rice/font)
+           (member (s-join "-" (butlast (s-split "-" prf/rice/font))) (font-family-list))))
+  (set-frame-font prf/rice/font))
 
-(when prf/rice/font
+ ;; older x-format font
+ (prf/rice/x-font
   ;; (setq default-frame-alist `((font . ,prf/rice/font)))
-  (set-face-attribute 'default nil :font prf/rice/font))
+  (set-face-attribute 'default nil :font prf/rice/x-font))
 
-(when prf/rice/font-height
-  (set-face-attribute 'default nil :height prf/rice/font-height))
-(when prf/rice/variable-pitch-font-height
-  (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))
+ ;; split familly & height conf
+ (:default
+  (when (and prf/rice/font-family
+	     (member prf/rice/font-family (font-family-list)))
+    (set-face-attribute 'default nil :family prf/rice/font-family))
+  (when prf/rice/font-height
+    (set-face-attribute 'default nil :height prf/rice/font-height))
+
+  (when (and prf/rice/variable-pitch-font-family
+             (member prf/rice/variable-pitch-font-family (font-family-list)))
+    (set-face-attribute 'variable-pitch nil :family prf/rice/variable-pitch-font-family))
+  (when prf/rice/variable-pitch-font-height
+    (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))))
 
 
 
@@ -157,7 +169,9 @@
            (org-block :inherit default)
            (markdown-code-face :inherit nil)
            (bmkp-local-directory :foreground "#00ffff")
-           (bmkp-remote-file :foreground "#ffc0cb"))
+           (bmkp-remote-file :foreground "#ffc0cb")
+           (fixed-pitch :family nil)    ; org block delimiters
+           )
           (plan9
            (form-feed-line :strike-through "#40883f")
            (org-level-1 :weight bold :height 1.0 :box nil :background nil :foreground "#4fa8a8")
@@ -170,7 +184,9 @@
            (cursor :background "#585858")
            (region :background "#a4a4a4" :foreground "white")
            (form-feed-line :strike-through "#a9a9a9")
-           (markdown-code-face :inherit nil))
+           (markdown-code-face :inherit nil)
+           (fixed-pitch :family nil)    ; org block delimiters
+           )
           (tango
            (hl-line :inherit nil :background "#dbdbd7")
            (form-feed-line :strike-through "#b7b8b5")
@@ -182,8 +198,18 @@
           (flucui-light
            (form-feed-line :strike-through "#95a5a6")
            (org-block :inherit default)
-           (markdown-code-face :inherit nil))
+           (markdown-code-face :inherit nil)
+           (fixed-pitch :family nil)    ; org block delimiters
+           )
           (zenburn
+           (fixed-pitch :family nil)    ; org block delimiters
+           (diredp-read-priv :foreground nil :background "#5F7F5F")
+           (diredp-write-priv :foreground nil :background "#DC8CC3")
+           (diredp-exec-priv :foreground nil :background "#CC9393")
+           ;; (diredp-read-priv :foreground nil :background "#999932325555")
+           ;; (diredp-write-priv :foreground nil :background "#25258F8F2929")
+           ;; (diredp-exec-priv :foreground nil :background "#4F4F3B3B2121")
+           ;; (diredp-no-priv :foreground nil :background "#2C2C2C2C2C2C")
            (bmkp-heading :foreground "#F0DFAF") ; same as font-lock-keyword-face
            (bmkp-local-directory :foreground "#7CB8BB" :background nil)
            (bmkp-remote-file :foreground "#DF6B75")
@@ -203,7 +229,9 @@
            (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
            (bmkp-remote-file :foreground "#ff79c6") ; rainbow-4
            (org-block :inherit default)
-           (markdown-code-face :inherit nil))
+           (markdown-code-face :inherit nil)
+           (fixed-pitch :family nil)    ; org block delimiters
+           )
           (chocolate
            ;; NB: file face for dired is `default'
            (dired-directory :foreground "#EAEAFE") ; chocolate-hue-2
@@ -217,6 +245,7 @@
            (show-paren-match :background "white" :foreground "black")
            (show-paren-mismatch :background "red" :foreground "white")
            (form-feed-line :strike-through "#705B5F") ;; :foreground of `font-lock-comment-delimiter-face'
+           (fixed-pitch :family nil)
            (bmkp-local-directory :foreground "#45AFBD")
            (bmkp-remote-file :foreground "#C55D67"))))
   ;; to reload: (space-theming-update-current-theme)
