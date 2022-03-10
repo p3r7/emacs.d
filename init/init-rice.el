@@ -171,7 +171,10 @@
            (bmkp-local-directory :foreground "#00ffff")
            (bmkp-remote-file :foreground "#ffc0cb")
            (fixed-pitch :family nil)    ; org block delimiters
+           (diredp-other-priv :foreground "Black" :background "PaleGoldenrod")
            )
+          (solarized-dark
+           (diredp-other-priv :foreground "Black" :background "PaleGoldenrod"))
           (plan9
            (form-feed-line :strike-through "#40883f")
            (org-level-1 :weight bold :height 1.0 :box nil :background nil :foreground "#4fa8a8")
@@ -206,10 +209,12 @@
            (diredp-read-priv :foreground nil :background "#5F7F5F")
            (diredp-write-priv :foreground nil :background "#DC8CC3")
            (diredp-exec-priv :foreground nil :background "#CC9393")
+           (diredp-other-priv :foreground "Black" :background "#E0CF9F")
            ;; (diredp-read-priv :foreground nil :background "#999932325555")
            ;; (diredp-write-priv :foreground nil :background "#25258F8F2929")
            ;; (diredp-exec-priv :foreground nil :background "#4F4F3B3B2121")
            ;; (diredp-no-priv :foreground nil :background "#2C2C2C2C2C2C")
+           ;; (diredp-other-priv :foreground nil :background "PaleGoldenrod")
            (bmkp-heading :foreground "#F0DFAF") ; same as font-lock-keyword-face
            (bmkp-local-directory :foreground "#7CB8BB" :background nil)
            (bmkp-remote-file :foreground "#DF6B75")
@@ -231,7 +236,7 @@
            (org-block :inherit default)
            (markdown-code-face :inherit nil)
            (fixed-pitch :family nil)    ; org block delimiters
-           )
+           (diredp-other-priv :foreground "Black" :background "PaleGoldenrod"))
           (chocolate
            ;; NB: file face for dired is `default'
            (dired-directory :foreground "#EAEAFE") ; chocolate-hue-2
@@ -247,7 +252,8 @@
            (form-feed-line :strike-through "#705B5F") ;; :foreground of `font-lock-comment-delimiter-face'
            (fixed-pitch :family nil)
            (bmkp-local-directory :foreground "#45AFBD")
-           (bmkp-remote-file :foreground "#C55D67"))))
+           (bmkp-remote-file :foreground "#C55D67")
+           (diredp-other-priv :foreground "Black" :background "PaleGoldenrod"))))
   ;; to reload: (space-theming-update-current-theme)
   :config
   ;; current frame
