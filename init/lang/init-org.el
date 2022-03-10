@@ -128,6 +128,10 @@
       (kill-new new-kill t))
     ad-do-it))
 
+
+
+;; ORG INDEX
+
 (defun prf/org/file-path-org-p (f)
   "Return t if file path F corresponds to an org file."
   (let ((cleaned-f (s-chop-suffixes '("gpg" "bak") f)))
