@@ -29,6 +29,12 @@
   :after shell
 
   :config
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat "\\(\\<" it "\\>\\) .*\\'") 1 'font-lock-constant-face))
+   '("cat" "df" "du"
+     "nc" "netstat" "iptables" "tshark" "tcpdump"
+     "vagrant" "docker" "ansible" "kubectl" "k"))
+
   ;; NB: as `with-shell-interpreter' does not local-set `explicit-shell-file-name', we force it
   (defadvice shx--validate-shell-file-name (around shx--validate-shell-file-name-default-remote-interpreter activate)
     "Set `explicit-shell-file-name' to `with-shell-interpreter-default-remote' if exists"
