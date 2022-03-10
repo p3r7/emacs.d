@@ -84,7 +84,7 @@
   ;; disabling this keybinding solves the issue
   (unbind-key "M-O" dired-mode-map)
 
-  ;; (eval-after-load "dired-aux"
+  ;; (eval-after-load 'dired-aux
   ;;     '(require 'dired-async))
   )
 

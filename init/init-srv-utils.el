@@ -395,7 +395,7 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
 ;; ------------------------------------------------------------------------
 ;; HYDRAS
 
-(with-eval-after-load "hydra"
+(with-eval-after-load 'hydra
   (defhydra hydra-srvUtils (:color blue)
     "server utils"
     ("s" friendly-shell "shell")

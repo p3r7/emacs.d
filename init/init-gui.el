@@ -129,7 +129,7 @@
   ;; This only needs to change the `interactive` spec, so:
   nil)
 
-(eval-after-load "hl-line"
+(eval-after-load 'hl-line
   '(advice-add 'describe-face :before #'prf/describe-face))
 
 

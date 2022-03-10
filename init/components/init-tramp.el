@@ -131,7 +131,7 @@
     :after (tramp)
     :config
     (tramp-kitty-set-session-map-cache)
-    (with-eval-after-load "putty-open"
+    (with-eval-after-load 'putty-open
       (add-to-list 'putty-open-putty--session-methods "klinkx")
       (add-to-list 'putty-open-putty--ssh-methods "kscp")
       (add-to-list 'putty-open-putty--ssh-methods "klink"))))

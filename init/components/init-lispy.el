@@ -69,7 +69,7 @@
   (defun prf/lispy-enable-hook ()
     (lispy-mode 1))
   (add-hook 'eval-expression-minibuffer-setup-hook #'prf/lispy-enable-hook)
-  (with-eval-after-load "eval-expr"
+  (with-eval-after-load 'eval-expr
     (add-hook 'prf/eval-expr-minibuffer-setup-hook #'prf/lispy-enable-hook))
 
   ;; disable when region active

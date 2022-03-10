@@ -341,7 +341,7 @@
 
 (require 'init-hydra)
 
-(with-eval-after-load "hydra"
+(with-eval-after-load 'hydra
   ;; https://github.com/abo-abo/hydra/wiki/Conditional-Hydra
   (defhydra hydra-visual (:color blue)
     "visual"

@@ -160,7 +160,7 @@
 		    (lambda (candidate)
 		      (message-box (concat "selected: %s" candidate))))))))
 
-(eval-after-load "helm"
+(eval-after-load 'helm
   '(defun helm-kitty-session-connect ()
      (interactive)
      (helm :sources '(tramp-kitty-session-helm-source))))

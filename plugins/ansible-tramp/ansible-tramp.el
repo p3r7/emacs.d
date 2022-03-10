@@ -153,7 +153,7 @@ If not available, returns nil but tries reloading cache via an async API call (s
 
 ;; HELM INTEGRATION
 
-(with-eval-after-load "helm"
+(with-eval-after-load 'helm
 
   (eval-when-compile
     (require 'helm-source nil t))

@@ -79,7 +79,7 @@ Optionally, we can change namespace by specifying NS."
 
 ;; NB: from https://github.com/djblue/portal#emacs-integration
 
-(with-eval-after-load "cider"
+(with-eval-after-load 'cider
   (setq cider-clojure-cli-global-options "-A:portal")
 
   (defun portal.api/open ()
