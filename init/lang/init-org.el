@@ -335,7 +335,7 @@
 
 ;; AGENDA
 
-(use-package org-babel
+(use-package org-agenda
   :ensure nil
   :no-require
   :demand
