@@ -465,18 +465,20 @@ READONLY If true buffer will be in readonly mode(view-mode)."
   (when (equal process-name "")
     (setq process-name "kubel-command"))
   (let ((buffer-name (format "*%s*" process-name))
-        (error-buffer (kubel--process-error-buffer process-name))
-        (cmd (append (list "kubectl") (kubel--get-context-namespace) args)))
+        (error-buffer-name (kubel--process-error-buffer process-name))
+        (cmd (append (list "kubectl") (kubel--get-context-namespace) args))
+        error-buffer)
     (when (get-buffer buffer-name)
       (kill-buffer buffer-name))
-    (when (get-buffer error-buffer)
-      (kill-buffer error-buffer))
+    ;; (when (get-buffer error-buffer)
+    ;;   (kill-buffer error-buffer))
+    (setq error-buffer (get-buffer-create error-buffer-name))
     (kubel--log-command process-name cmd)
     (make-process :name process-name
                   :buffer buffer-name
                   :sentinel #'kubel--sentinel
                   :file-handler t
-                  :stderr error-buffer
+                  ;; :stderr error-buffer
                   :command cmd)
     (pop-to-buffer buffer-name)
     (if readonly
