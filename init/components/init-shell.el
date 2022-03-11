@@ -1,4 +1,5 @@
 
+(require 'rx)
 (require 'org)
 
 
@@ -38,9 +39,36 @@
   :config
   (--map
    (add-to-list 'shx-shell-mode-font-locks (list (concat "\\(\\<" it "\\>\\) .*\\'") 1 'font-lock-constant-face))
-   '("cat" "df" "du"
+   '("bash" "sh"
+     "df" "du" "dd"
+     "xargs" "cat" "find" "sed" "awk" "bc"
+     "nano" "view" "vi"
+     "ssh" "ssh-copy-id" "scp"
      "nc" "netstat" "iptables" "tshark" "tcpdump"
-     "vagrant" "docker" "ansible" "kubectl" "k"))
+     "vagrant" "docker" "ansible" "kubectl" "k" "helm"))
+
+  ;; kube
+  ;; - ns
+  (setq prf/kube/instance-name-re (rx (one-or-more (any "a-z" "A-Z" "0-9" "-"))))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<-n *\\(\\<" prf/kube/instance-name-re "\\>\\) .*\\'") 1 'font-lock-function-name-face))
+   '("kubectl" "k" "helm"))
+  ;; - resource
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<get *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-keyword-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\(\\<logs\\>\\).*") 1 'font-lock-keyword-face))
+   '("kubectl" "k"))
+  ;; - instance
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<get *\\<" prf/kube/instance-name-re "\\> \\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<logs *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face))
+   '("kubectl" "k"))
+  (add-to-list 'shx-shell-mode-font-locks (list (concat "helm .*\\<uninstall *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face))
+
 
   ;; NB: as `with-shell-interpreter' does not local-set `explicit-shell-file-name', we force it
   (defadvice shx--validate-shell-file-name (around shx--validate-shell-file-name-default-remote-interpreter activate)
