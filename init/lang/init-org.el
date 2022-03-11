@@ -13,7 +13,9 @@
          ;; NB: og bound to `org-fill-paragraph'
          ("M-q" . toggle-truncate-lines)
          ;; NB: got overriden by `cua-selection-mode'
-         ("C-y" . org-yank))
+         ("C-y" . org-yank)
+         ("C-c O" . prf/org-link-open-alt)
+         )
 
   :hook ((org-mode . (lambda () (setq word-wrap t))))
 
@@ -91,34 +93,63 @@
   ;; 	    org-fontify-quote-and-verse-blocks
   ;; 	    )
   ;;     (setq prf/org/wysiwyg-active t)))
-  )
+
+
+
+  
+  ;; LINKS
+
+  ;; TODO: use https://orgmode.org/manual/Link-Abbreviations.html instead for those
+
+  (setq p3r7/org-link-abbrev-alist '(("archwiki" . "https://wiki.archlinux.org/index.php/")
+                                     ("gh" . "https://github.com/")
+                                     ("gl" . "https://gitlab.com/")
+                                     ("hn" . "https://news.ycombinator.com/item?id=")
+                                     ("lines" . "https://llllllll.co/t/")
+                                     ("thing" . "https://www.thingiverse.com/thing:")))
+
+  (--each p3r7/org-link-abbrev-alist
+    (let* ((link-prefix (car it))
+           (browse-fn `(lambda (e)
+                         (let ((org-link-abbrev-alist p3r7/org-link-abbrev-alist))
+                           (browse-url (org-link-expand-abbrev (concat ,link-prefix ":" e)))))))
+      (org-link-set-parameters link-prefix :follow browse-fn)))
+
+  (defun prf/org/link-apply-prefix (txt)
+    "Rework link TXT, swapping prefix w/ shorted one if matches `p3r7/org-link-abbrev-alist'."
+    (let ((prfx (--some (and (s-starts-with? (cdr it) txt) (not (string= (cdr it) txt)) it) p3r7/org-link-abbrev-alist)))
+      (if prfx
+          (s-replace (cdr prfx) (concat (car prfx) ":") txt)
+        txt)))
+
+
+  (defvar prf/org-link-alt-type-alist nil "Alist of link type to alt link type mapping, for `prf/org-link-open-alt'")
+
+  (defvar prf/fn-v/org-element-context nil "Copy of original value of fn `org-element-context'")
+  (with-eval-after-load 'org-element
+    (setq prf/fn-v/org-element-context (symbol-function #'org-element-context)))
+
+  (defun prf/org-element-alt-context ()
+    "Same as `org-element-context' but replaces link type with alternative one from `prf/org-link-alt-type-alist'.
+
+If thing under point is not a link or has no matching alt type"
+    (if-let* ((context (funcall prf/fn-v/org-element-context))
+              (type (car context))
+              (_ (eq type 'link))
+              (link-type (plist-get (cadr context) :type))
+              (alt-link-type (symbol-name (alist-get (intern link-type) prf/org-link-alt-type-alist))))
+        (list 'link
+              (plist-put (cadr context) :type alt-link-type))
+      (user-error "No alt link method available for thing at point.")))
+
+  (defun prf/org-link-open-alt ()
+    (interactive)
+    (cl-letf (((symbol-function #'org-element-context) #'prf/org-element-alt-context))
+      (org-open-at-point))))
 
 
 
-;; LINKS
-
-;; TODO: use https://orgmode.org/manual/Link-Abbreviations.html instead for those
-
-(setq p3r7/org-link-abbrev-alist '(("archwiki" . "https://wiki.archlinux.org/index.php/")
-                                   ("gh" . "https://github.com/")
-                                   ("gl" . "https://gitlab.com/")
-                                   ("hn" . "https://news.ycombinator.com/item?id=")
-                                   ("lines" . "https://llllllll.co/t/")
-                                   ("thing" . "https://www.thingiverse.com/thing:")))
-
-(--each p3r7/org-link-abbrev-alist
-  (let* ((link-prefix (car it))
-         (browse-fn `(lambda (e)
-                       (let ((org-link-abbrev-alist p3r7/org-link-abbrev-alist))
-                         (browse-url (org-link-expand-abbrev (concat ,link-prefix ":" e)))))))
-    (org-link-set-parameters link-prefix :follow browse-fn)))
-
-(defun prf/org/link-apply-prefix (txt)
-  "Rework link TXT, swapping prefix w/ shorted one if matches `p3r7/org-link-abbrev-alist'."
-  (let ((prfx (--some (and (s-starts-with? (cdr it) txt) (not (string= (cdr it) txt)) it) p3r7/org-link-abbrev-alist)))
-    (if prfx
-        (s-replace (cdr prfx) (concat (car prfx) ":") txt)
-      txt)))
+;; COMMANDS
 
 (defadvice org-yank (around prf/org-yank-prefix-link activate)
   "Advice around `org-yank' that will auto-compact current entry in `kill-ring' if it matches `p3r7/org-link-abbrev-alist'."

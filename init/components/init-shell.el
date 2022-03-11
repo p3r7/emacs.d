@@ -1,4 +1,6 @@
 
+(require 'org)
+
 
 ;; SHELL - MAIN
 
@@ -15,7 +17,12 @@
 (use-package friendly-shell
   :config
   (when (not (fboundp '_sh))
-    (defalias '_sh 'friendly-shell)))
+    (defalias '_sh 'friendly-shell))
+
+  (org-link-set-parameters "sh"
+                           :follow (lambda (path)
+                                     (friendly-shell :path path)))
+  (add-to-list 'prf/org-link-alt-type-alist (cons 'file 'sh)))
 
 (use-package friendly-shell-command)
 
