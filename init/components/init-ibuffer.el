@@ -1,3 +1,9 @@
+
+(require 's)
+
+
+
+
 ;; TODO: customize ibuffer-formats for larger name column
 
 ;; gotten from https://emacs.stackexchange.com/a/2094
@@ -15,8 +21,6 @@
 ;; http://www.emacswiki.org/emacs/IbufferMode
 
 (use-package ibuffer
-  :after (s norns)
-
   :bind (("C-x B" . ibuffer))
 
   :init
@@ -64,7 +68,41 @@
 	    ("Ansible"
 	     (predicate . (prf/ibuffer/ansible-buffer-p)))
 
-	    ("Clojure"
+            ("Kubernetes (live)"
+             (or (mode . kubel-mode)
+                 (name . "^\\*kubel - ")))
+
+            ("Config: Kubernetes"
+             (predicate . (and (eq major-mode 'yaml-mode)
+                               (--some (s-contains? it default-directory)
+                                       '("/chart/" "/helm-charts-" "/deploy/")))))
+
+            ("norns"
+	     (or
+              (mode . norns-maiden-repl-mode)
+              (mode . norns-sc-repl-mode)
+              (predicate . (and (fboundp #'norns-mode)
+                                norns-mode))
+              (predicate . (and (s-contains? "Code/monome/" default-directory t)
+                                (or (member major-mode '(lua-mode sclang-mode)))))))
+
+	    ("Config: Emacs"
+	     (filename . ".emacs.d"))
+
+	    ("Config"
+	     (or (filename . "AutoHotkey.ahk")
+	         (mode . yaml-mode)
+                 (mode . json-mode)
+                 (mode . fvwm-mode)))
+
+            ("CRON"
+	     (or (filename . "/etc/crontab")
+	         (filename . "/etc/cron.d/")))
+
+	    ("Provi"
+	     (filename . "^provi"))
+
+            ("Clojure"
 	     (or
 	      (name . "^\\*nrepl-server")
 	      (name . "^\\*cider-repl")
@@ -72,33 +110,6 @@
 	      (mode . clojurec-mode)
               (mode . clojure-mode)
               (mode . clojurescript-mode)))
-
-            ("norns"
-	     (or
-              (mode . norns-maiden-repl-mode)
-              (mode . norns-sc-repl-mode)
-              (predicate . norns-mode)
-              (predicate . (and (s-contains? "Code/monome/" default-directory t)
-                                (or (member major-mode '(lua-mode sclang-mode)))))))
-
-	    ("CRON"
-	     (or (filename . "/etc/crontab")
-		 (filename . "/etc/cron.d/")))
-
-	    ("Logs"
-	     (mode . syslog-mode))
-
-	    ("Config: Emacs"
-	     (filename . ".emacs.d"))
-
-	    ("Config"
-	     (or (filename . "AutoHotkey.ahk")
-		 (mode . yaml-mode)
-                 (mode . json-mode)
-                 (mode . fvwm-mode)))
-
-	    ("Provi"
-	     (filename . "^provi"))
 
 	    ("Dev"
 	     (or
@@ -117,6 +128,11 @@
 	      (mode . emacs-lisp-mode)
               (mode . lua-mode)
               (mode . go-mode)))
+
+            ("Logs"
+             (or
+	      (mode . syslog-mode)
+              (name . "^\\*kubel - logs - ")))
 
 	    ("Mail"
 	     (or
