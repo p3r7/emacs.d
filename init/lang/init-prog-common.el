@@ -15,28 +15,51 @@
 
 ;; LIGATURES
 
-(defvar prf/fav-ligature-backend 'prettify-symbols
-  "Ligature system to use.
+(defvar prf/ligature/default-backend nil
+  "Default ligature backedn (minor-mode) to use.")
 
-Either native \"prettify-symbols\" (works on all fonts) or \"ligature\" (uses the current font ligatures).")
+(defvar prf/ligature/lang-backends
+  '((emacs-lisp-mode . (prettify-symbols-mode
+                        prf/ligature/ligature-mode))
+    (clojure-mode . (prettify-symbols-mode))
+    (python-mode . nil))
+  "Ligature backend (minor-mode) override for each major-mode.")
 
-(defun prf/ligature-minor-mode ()
-  "Get ligature minor-mode according to `prf/fav-ligature-backend'."
-  (cond
-   ((eq prf/fav-ligature-backend 'ligature)
-    #'ligature-mode)
+(defun prf/derived-mode-assq (alist &optional buff-mode)
+  "Like `assq' but expects keys to be a major mode.
+Tests that BUFF-MODE (opt., defaults to `major-mode')"
+  (let ((buff-mode (or buff-mode major-mode)))
+    (--some
+     (and (provided-mode-derived-p buff-mode (car it))
+          it)
+     alist)))
 
-   ((fboundp #'prettify-symbols-mode)
-    #'prettify-symbols-mode)
+(defun prf/derived-mode-alist-get (alist &optional buff-mode)
+  "Like `alist-get' but expects keys to be a major mode.
+Tests that BUFF-MODE (opt., defaults to `major-mode')"
+  (cdr (prf/derived-mode-assq alist buff-mode)))
 
-   (:default
-    nil)))
+(defun prf/ligature/modes-for-current ()
+  "Get ligature minor-modes for current buffer's majore-mode."
+  (if-let* ((modes-w-override (-map #'car prf/ligature/lang-backends))
+            (_ (apply #'derived-mode-p modes-w-override)))
+      (prf/derived-mode-alist-get prf/ligature/lang-backends)
+    (list prf/ligature/default-backend)))
+
+(defvar prf/ligature/available-backends '() "List of available ligature backends")
+
+(when (fboundp #'prettify-symbols-mode)
+  (setq prettify-symbols-unprettify-at-point 'right-edge)
+
+  (setq prf/ligature/default-backend #'prettify-symbols-mode)
+  (add-to-list 'prf/ligature/available-backends #'prettify-symbols-mode))
 
 (when (>= emacs-major-version 28)
   (use-package ligature
     :quelpa (ligature :fetcher github :repo "mickeynp/ligature.el")
     :init
-    (setq prf/fav-ligature-backend 'ligature)
+    (setq prf/ligature/default-backend #'ligature-mode)
+    (add-to-list 'prf/ligature/available-backends #'ligature-mode)
     :config
     (ligature-set-ligatures 't '("www"))
     ;; (ligature-set-ligatures '(html-mode nxml-mode web-mode) '("<!--" "-->" "</>" "</" "/>" "://"))
@@ -52,17 +75,28 @@ Either native \"prettify-symbols\" (works on all fonts) or \"ligature\" (uses th
                                          "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
                                          "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
                                          "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                         "\\\\" "://"))))
+                                         "\\\\" "://"))
+    (defvar prf/ligature-el/restricted-mode-ligatures
+      '((emacs-lisp-mode . ("www" ";;" "<=" ">="
+                            ;; dash
+                            "->" "->>" "-->"
+                            ))))
 
-(when (fboundp 'prettify-symbols-mode)
-  (setq prettify-symbols-unprettify-at-point 'right-edge))
-
-(setq prf/ligature-mode-blacklist '(python-mode))
+    (defun prf/ligature/ligature-mode (activate)
+      "Custom wrapper around `ligature-mode' that allows ignoring global ligatures config, replacing it w/ one custom for current mode (from `prf/ligature-el/restricted-mode-ligatures')."
+      (interactive)
+      (if-let* ((custom-ligatures (prf/derived-mode-alist-get prf/ligature-el/restricted-mode-ligatures)))
+          (let ((ligature-composition-table nil))
+            (ligature-set-ligatures 't custom-ligatures)
+            (ligature-mode activate))
+        (ligature-mode activate)))))
 
 (defun prf/ligatures-prog-mode-hook ()
-  (when-let ((mode (prf/ligature-minor-mode)))
-    (unless (derived-mode-p prf/ligature-mode-blacklist)
-      (funcall mode 1))))
+  (when-let ((modes (prf/ligature/modes-for-current)))
+    (--map
+     (when (fboundp it)
+       (funcall it 1))
+     modes)))
 
 (add-hook 'prog-mode-hook #'prf/ligatures-prog-mode-hook)
 
