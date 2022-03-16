@@ -11,7 +11,7 @@
 
 ;; PROMPTS: Y/N
 
-(fset 'yes-or-no-p 'y-or-n-p)
+(fset #'yes-or-no-p #'y-or-n-p)
 
 (defadvice yes-or-no-p (around prevent-dialog activate)
   "Prevent yes-or-no-p from activating a dialog"
