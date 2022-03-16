@@ -32,7 +32,10 @@
                                             ;; newer style magit buffers
 					    "^magit:.*$"
 					    "^magit-diff:.*$"
-					    "^magit-process:.*$")
+					    "^magit-process:.*$"
+
+					    "^\\* docker .*$"
+                                            )
 	lusty--shell-open-here-fun #'friendly-shell
 	lusty--M-x-fun #'helm-M-x)
   :config
