@@ -40,12 +40,16 @@
   (--map
    (add-to-list 'shx-shell-mode-font-locks (list (concat "\\(\\<" it "\\>\\) .*\\'") 1 'font-lock-constant-face))
    '("bash" "sh"
+     "wc"
      "df" "du" "dd"
-     "xargs" "cat" "find" "sed" "awk" "bc"
+     "top" "htop" "atop" "ctop" "ps_mem"
+     "xargs" "echo" "cat" "find" "fd" "grep" "rg" "sed" "awk" "bc"
      "nano" "view" "vi"
-     "ssh" "ssh-copy-id" "scp"
+     "ssh" "ssh-copy-id" "scp" "rsync"
      "nc" "netstat" "iptables" "tshark" "tcpdump"
-     "vagrant" "docker" "ansible" "kubectl" "k" "helm"))
+     "python" "go" "php" "perl"
+     "lein" "sass"
+     "vagrant" "docker" "ansible" "ansible-galaxy" "kubectl" "k" "helm"))
 
   ;; kube
   ;; - ns
