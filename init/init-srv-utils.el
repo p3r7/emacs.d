@@ -213,9 +213,12 @@
 ;; FILESYSTEM HELPERS
 
 (defun prf/get-buffer-filepath-complete ()
-  (if (member major-mode '(dired-mode shell-mode))
-      default-directory
-    (buffer-file-name)))
+  (let ((filename (if (member major-mode '(dired-mode shell-mode))
+                      default-directory
+                    (buffer-file-name))))
+    (if (file-remote-p filename)
+        (prf/tramp/complete-file-name filename)
+      filename)))
 
 (defun prf/get-buffer-filepath-clean ()
   (let ((filename (prf/get-buffer-filepath-complete)))
