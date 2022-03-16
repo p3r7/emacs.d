@@ -1,6 +1,6 @@
 
 
-(defun buffer-grid-diplay (buf-list &optional delete-other-winds max-columns)
+(defun buffer-grid-diplay (buf-list &optional delete-other-wins max-columns)
   (unless max-columns
     (setq max-columns 4))
 
@@ -14,7 +14,7 @@
 	  (string-match "\\*Minibuf-" (buffer-name (window-buffer))))
 	(select-window (next-window nil 'ignore-minibuf)))
 
-    (when delete-other-winds
+    (when delete-other-wins
       (delete-other-windows))
 
     (setq nb-cells (length buf-list)

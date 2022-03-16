@@ -20,9 +20,27 @@
 
 
 
+;; HELPER MACROS
+
+;; Plagiarized from `emerge-defvar-local' / `ediff-defvar-local'.
+(defmacro multi-buffer-mode-defvar-local (symbol value &optional doc)
+  "Define SYMBOL as an advertised buffer-local variable.
+Run `defvar-local', setting the value of the variable to VALUE
+and its docstring to DOC.
+
+Then set the `permanent-local' property, so that
+`kill-all-local-variables' (called by major-mode setting
+commands) won't destroy Ediff control variables."
+  (declare (indent defun) (doc-string 3))
+  `(progn
+     (defvar-local ,symbol ,value ,doc)
+     (put ',symbol 'permanent-local t)))
+
+
+
 ;; MAJOR MODE
 
-(ediff-defvar-local prf-multi-buffer-mode--buffer-list nil
+(multi-buffer-mode-defvar-local prf-multi-buffer-mode--buffer-list nil
   "List of buffers handled by current multi-buffer session")
 
 (defun prf-multi-buffer-mode--catch-all-key-fun ()
