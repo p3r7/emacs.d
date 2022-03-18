@@ -22,7 +22,10 @@
 					    "^\\*quelpa.*$"
                                             "^\\*straight-process\\*$"
                                             "^\\*kubel-process\\*$"
+					    "^\\*kubel - .*$"
+					    "^\\* docker .*$"
                                             "^\\*EGLOT .*\\*$"
+                                            "^\\*Multi Buffer.*\\*$"
 
                                             ;; clojure
 					    "^\\*nrepl-server .*$"
@@ -33,9 +36,7 @@
 					    "^magit:.*$"
 					    "^magit-diff:.*$"
 					    "^magit-process:.*$"
-
-					    "^\\* docker .*$"
-                                            )
+					    )
 	lusty--shell-open-here-fun #'friendly-shell
 	lusty--M-x-fun #'helm-M-x)
   :config
