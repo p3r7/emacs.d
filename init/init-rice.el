@@ -23,7 +23,7 @@
  ((and prf/rice/font
        (or (fontp prf/rice/font)
            (member (s-join "-" (butlast (s-split "-" prf/rice/font))) (font-family-list))))
-  (set-frame-font prf/rice/font))
+  (set-frame-font prf/rice/font nil t))
 
  ;; older x-format font
  (prf/rice/x-font
