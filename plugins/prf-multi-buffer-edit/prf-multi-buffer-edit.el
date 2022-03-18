@@ -1,5 +1,19 @@
 
-(require 'buffer-grid)
+
+;; IDEA is to have something like ediff buffer to enter multi-buffer editing mode
+
+
+;; https://emacs.stackexchange.com/questions/44093/edit-simultaneously-many-buffers-and-save-all-of-them-after-edit
+;; https://nicolas.petton.fr/blog/mutli-occur-on-projects.html
+
+;; https://github.com/magnars/multifiles.el
+
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Two_002dColumn.html
+;; https://emacs.stackexchange.com/questions/47200/copy-paste-text-among-split-window-buffers
+
+;; catch all keys function mode map
+;; https://stackoverflow.com/a/13215367
+
 
 ;; https://emacs.stackexchange.com/a/21478
 
@@ -20,10 +34,33 @@
 
 
 
-;; HELPER MACROS
+;; TEST
+
+(defun multi-buffer/test ()
+  (let ((buffs (-take 4
+                      (--filter (and (not (-some
+                                           (lambda (re)
+                                             (s-matches? re (buffer-name it)))
+                                           '("\\*Minibuf-" "\\*Helm" "\\*Lusty" "\\*Multi Buffer"))))
+                                (buffer-list))
+                      )))
+    (prf-multi-buffer-mode--display buffs)
+    )
+  )
+
+
+
+;; DEPS
+
+(require 'dash)
+(require 'buffer-grid)
+
+
+
+;; CORE HELPERS - STRINGS
 
 ;; Plagiarized from `emerge-defvar-local' / `ediff-defvar-local'.
-(defmacro multi-buffer-mode-defvar-local (symbol value &optional doc)
+(defmacro multi-buffer-defvar-local (symbol value &optional doc)
   "Define SYMBOL as an advertised buffer-local variable.
 Run `defvar-local', setting the value of the variable to VALUE
 and its docstring to DOC.
@@ -38,9 +75,74 @@ commands) won't destroy Ediff control variables."
 
 
 
+;; CORE HELPERS - STRINGS
+
+;; Plagiarized from `ediff-whitespace'.
+;; \240 is Unicode symbol for nonbreakable whitespace
+(defvar-local multi-buffer-whitespace " \n\t\f\r\240"
+  "Characters constituting white space.
+These characters are ignored when differing regions are split into words.")
+
+
+
+;; CORE HELPERS - BUFFERS
+
+;; Plagiarized from `ediff-buffer-live-p'.
+(defsubst multi-buffer-buffer-live-p (buf)
+  (and buf (get-buffer buf) (buffer-name (get-buffer buf))))
+
+;; Plagiarized from `ediff-with-current-buffer'.
+;; Macro to switch to BUFFER, evaluate BODY, returns to original buffer.
+;; Doesn't save the point and mark.
+;; This is `with-current-buffer' with the added test for live buffers."
+(defmacro multi-buffer-with-current-buffer (buffer &rest body)
+  "Evaluate BODY in BUFFER."
+  (declare (indent 1) (debug (form body)))
+  `(if (multi-buffer-buffer-live-p ,buffer)
+       (save-current-buffer
+	 (set-buffer ,buffer)
+	 ,@body)
+     (or (eq this-command 'ediff-quit)
+	 (error ediff-KILLED-VITAL-BUFFER))
+     ))
+
+;; Plagiarized from `ediff-unique-buffer-name'.
+;; Construct a unique buffer name.
+;; The first one tried is prefixsuffix, then prefix<2>suffix,
+;; prefix<3>suffix, etc.
+(defun multi-buffer-unique-buffer-name (prefix suffix)
+  (if (null (get-buffer (concat prefix suffix)))
+      (concat prefix suffix)
+    (let ((n 2))
+      (while (get-buffer (format "%s<%d>%s" prefix n suffix))
+	(setq n (1+ n)))
+      (format "%s<%d>%s" prefix n suffix))))
+
+;; Plagiarized from `ediff-select-lowest-window'.
+;; Select the lowest window on the frame.
+(defun multi-buffer-select-lowest-window ()
+  (let* ((lowest-window (selected-window))
+	 (bottom-edge (car (cdr (cdr (cdr (window-edges))))))
+	 (last-window (save-excursion
+			(other-window -1) (selected-window)))
+	 (window-search t))
+    (while window-search
+      (let* ((this-window (next-window))
+	     (next-bottom-edge
+	      (car (cdr (cdr (cdr (window-edges this-window)))))))
+	(if (< bottom-edge next-bottom-edge)
+	    (setq bottom-edge next-bottom-edge
+		  lowest-window this-window))
+	(select-window this-window)
+	(when (eq last-window this-window)
+	  (select-window lowest-window)
+	  (setq window-search nil))))))
+
+
+
 ;; MAJOR MODE
 
-(multi-buffer-mode-defvar-local prf-multi-buffer-mode--buffer-list nil
+(multi-buffer-defvar-local prf-multi-buffer-mode--buffer-list nil
   "List of buffers handled by current multi-buffer session")
 
 (defun prf-multi-buffer-mode--catch-all-key-fun ()
@@ -53,22 +155,36 @@ commands) won't destroy Ediff control variables."
            (t (key-binding (vector last-input-event)))))
 
     (message "Caught %S" key)
-    (prf-multi-buffer-edit--play-key-multi prf-multi-buffer-mode--buffer-list key)
-    ))
-
-(defvar prf-multi-buffer-mode-map nil "Keymap for `prf-multi-buffer-mode'")
+    (prf-multi-buffer-edit--play-key-multi prf-multi-buffer-mode--buffer-list key)))
 
 (define-derived-mode prf-multi-buffer-mode fundamental-mode "prf-multi-buffer"
   "major mode for editing multiple buffers at once."
+  :keymap (let ((mmap (make-sparse-keymap)))
 
-  (setq prf-multi-buffer-mode-map (make-sparse-keymap))
-  (define-key prf-multi-buffer-mode-map [remap self-insert-command] #'prf-multi-buffer-mode--self-insert-command)
-  (define-key prf-multi-buffer-mode-map (kbd "C-h k") #'helpful-key)
-  (define-key prf-multi-buffer-mode-map (kbd "C-h v") #'helpful-variable)
-  (define-key prf-multi-buffer-mode-map (kbd "C-h o") #'helpful-at-point)
-  ;; (define-key prf-multi-buffer-mode-map [t] #'prf-multi-buffer-mode--catch-all-key-fun)
-  )
+            ;; chars
+            (define-key mmap [remap self-insert-command] #'prf-multi-buffer-mode--self-insert-command)
 
+            ;; cursor
+            (define-key mmap [remap left-char] (prf-multi-buffer-edit--make-command-all #'left-char))
+            (define-key mmap [remap right-char] (prf-multi-buffer-edit--make-command-all #'right-char))
+            (define-key mmap [remap previous-line] (prf-multi-buffer-edit--make-command-all #'previous-line))
+            (define-key mmap [remap next-line] (prf-multi-buffer-edit--make-command-all #'next-line))
+            (define-key mmap [remap forward-line] (prf-multi-buffer-edit--make-command-all #'forward-line))
+            (define-key mmap [remap backward-sentence] (prf-multi-buffer-edit--make-command-all #'backward-sentence))
+            (define-key mmap [remap forward-sentence] (prf-multi-buffer-edit--make-command-all #'forward-sentence))
+            (define-key mmap [remap beginning-of-buffer] (prf-multi-buffer-edit--make-command-all #'beginning-of-buffer))
+            (define-key mmap [remap end-of-buffer] (prf-multi-buffer-edit--make-command-all #'end-of-buffer))
+
+            ;; debugging
+            (define-key mmap (kbd "C-h k") #'helpful-key)
+            (define-key mmap (kbd "C-h v") #'helpful-variable)
+            (define-key mmap (kbd "C-h o") #'helpful-at-point)
+
+            ;; (define-key mmap (kbd "<left>") (prf-multi-buffer-edit--make-command-all #'left-char))
+            ;; (define-key mmap (kbd "<right>") (prf-multi-buffer-edit--make-command-all #'right-char))
+            ;; (define-key mmap [remap back-to-indentation] (prf-multi-buffer-edit--make-command-all #'back-to-indentation))
+            ;; (define-key mmap [t] #'prf-multi-buffer-mode--catch-all-key-fun)
+            ))
 
 
 
@@ -87,14 +203,14 @@ Inspired by `ediff-setup' (called by `ediff-files-internal')
     (setq split-window-function #'split-window-horizontally))
 
   (let* ((control-buffer-name
-          (ediff-unique-buffer-name "*Multi Buffer" "*"))
-         (control-buffer (ediff-with-current-buffer (car buf-list)
+          (multi-buffer-unique-buffer-name "*Multi Buffer" "*"))
+         (control-buffer (multi-buffer-with-current-buffer (car buf-list)
                            (get-buffer-create control-buffer-name)))
          (i 0)
          wind-A
          wind-width wind-height
-         nb-cells nb-cols nb-rows)
-    (ediff-with-current-buffer control-buffer
+         multi-buffer-with-current-buffer)
+    (multi-buffer-with-current-buffer control-buffer
       (prf-multi-buffer-mode)
 
       (make-local-variable 'window-min-height)
@@ -107,7 +223,7 @@ Inspired by `ediff-setup' (called by `ediff-files-internal')
     (delete-other-windows)
     (set-window-dedicated-p (selected-window) nil)
     (split-window-vertically)
-    (ediff-select-lowest-window)
+    (multi-buffer-select-lowest-window)
 
     ;; from `ediff-setup-control-buffer'
     (if (window-dedicated-p)
@@ -120,13 +236,13 @@ Inspired by `ediff-setup' (called by `ediff-files-internal')
       (set-buffer-modified-p nil)
       (set-window-dedicated-p (selected-window) t)
       (goto-char (point-min))
-      (skip-chars-forward ediff-whitespace))
+      (skip-chars-forward multi-buffer-whitespace))
 
     (other-window 1)
 
     (buffer-grid-diplay buf-list nil prf-multi-buffer--max-columns)
 
-    (ediff-select-lowest-window)))
+    (multi-buffer-select-lowest-window)))
 
 
 
@@ -169,8 +285,7 @@ Inspired by `ediff-setup' (called by `ediff-files-internal')
 (defun prf-multi-buffer-mode--self-insert-command ()
   (interactive)
   (let ((key (this-command-keys)))
-    (prf-multi-buffer-edit--insert-all key prf-multi-buffer-mode--buffer-list)
-    ))
+    (prf-multi-buffer-edit--insert-all prf-multi-buffer-mode--buffer-list key)))
 
 (defun prf-multi-buffer-edit--insert (buffer text)
   (with-current-buffer buffer
@@ -179,6 +294,31 @@ Inspired by `ediff-setup' (called by `ediff-files-internal')
 (defun prf-multi-buffer-edit--insert-all (buffer-list text)
   (let ((predicate (lambda (x) (prf-multi-buffer-edit--insert x text))))
     (mapc predicate buffer-list)))
+
+(defun prf-multi-buffer-edit--exec-command-all (cmd)
+  (-map
+   (lambda (buff)
+     (when-let* ((_ (buffer-live-p buff))
+                 (buff-wins (get-buffer-window-list buff)))
+       (-map
+        (lambda (win)
+          (with-selected-window win
+            (call-interactively cmd)))
+        buff-wins)))
+   prf-multi-buffer-mode--buffer-list))
+
+(defun prf-multi-buffer-edit--make-command-all (cmd)
+  `(lambda ()
+     (interactive)
+     (prf-multi-buffer-edit--exec-command-all #',cmd)))
+
+
+
+;; INTERRACTION FUNCS - SPECIFICS (TO DELETE)
+
+(defun prf-multi-buffer-edit--forward-line-all ()
+  (interactive)
+  (--map (prf-multi-buffer-edit--forward-line it) prf-multi-buffer-mode--buffer-list))
 
 (defun prf-multi-buffer-edit--forward-line (buffer &optional n)
   (with-current-buffer buffer
@@ -189,20 +329,6 @@ Inspired by `ediff-setup' (called by `ediff-files-internal')
     (next-line &optional arg try-vscroll)))
 
 
-
-;; IDEA is to have something like ediff buffer to enter multi-buffer editing mode
-
-
-;; https://emacs.stackexchange.com/questions/44093/edit-simultaneously-many-buffers-and-save-all-of-them-after-edit
-;; https://nicolas.petton.fr/blog/mutli-occur-on-projects.html
-
-;; https://github.com/magnars/multifiles.el
-
-;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Two_002dColumn.html
-;; https://emacs.stackexchange.com/questions/47200/copy-paste-text-among-split-window-buffers
-
-;; catch all keys function mode map
-;; https://stackoverflow.com/a/13215367
-
+
 
 (provide 'prf-multi-buffer-edit)
