@@ -3,6 +3,24 @@
 (require 's)
 
 
+
+
+;; find-file
+
+;; REVIEW: advice `find-file' to test if FILENAME is remote and pply in absolute mode in that case
+
+(defun find-file-absolute (&optional filename wildcards)
+  "`file-file' that always asume file-name is absolute.
+
+This behaves differently to to the default relative behaviour.
+
+Useful when pasting complete TRAMP paths while already on a remote host."
+  (interactive)
+  (let ((filename (or filename (read-string "Filename: ")))
+        (default-directory "/"))
+    (find-file filename wildcards)))
+
+
 
 ;; multi-scratch
 
