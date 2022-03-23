@@ -30,6 +30,8 @@
         ;; org-hide-leading-stars t
         org-startup-folded t)
 
+  (setq org-adapt-indentation t)
+
   ;; EDITING BEAHVIOURS
   ;; adjust level while pasting, if not wanted do C-u C-y
   (setq org-yank-adjusted-subtrees t)
