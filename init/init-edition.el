@@ -33,6 +33,13 @@
 
 ;; UNDO
 
+(use-package undo-hl
+  :quelpa (undo-hl :fetcher github :repo "casouri/undo-hl")
+  :delight
+  :config
+  (add-hook 'prog-mode-hook #'undo-hl-mode)
+  (add-hook 'text-mode #'undo-hl-mode))
+
 (use-package undo-tree
   ;; The visual tree feature is great, but I have trouble adjusting to
   ;; the change of behaviour (no C-g to reverse direction)
