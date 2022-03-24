@@ -22,7 +22,7 @@
   '((emacs-lisp-mode . (prettify-symbols-mode
                         prf/ligature/ligature-mode))
     (clojure-mode . (prettify-symbols-mode))
-    (python-mode . nil))
+    (python-mode . prf/ligature/ligature-mode))
   "Ligature backend (minor-mode) override for each major-mode.")
 
 (defun prf/derived-mode-assq (alist &optional buff-mode)
