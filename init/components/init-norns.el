@@ -4,12 +4,16 @@
 
 
 
-;; NB: bug w/ `encode-time' in current pre-release of Emacs 28, breaks `osc'
-(unless (eq emacs-major-version 28)
-  (use-package norns
-    :config
-    (add-hook 'lua-mode-hook #'norns-mode-maybe-activate)
-    (add-hook 'sclang-mode-hook #'norns-mode-maybe-activate)))
+;; NB: bug w/ `encode-time' under WinNT doesn't like times before Unix Epoch, breaks `osc'
+(when (windows-nt-p)
+  (use-package osc
+    :load-path "~/.emacs.d/plugins-spe/osc-0.4"))
+
+(use-package norns
+  :after osc
+  :config
+  (add-hook 'lua-mode-hook #'norns-mode-maybe-activate)
+  (add-hook 'sclang-mode-hook #'norns-mode-maybe-activate))
 
 
 
