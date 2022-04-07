@@ -40,7 +40,7 @@
   :group 'prf-wysiwyg
   :type 'string)
 
-(defvar prf/org/wysiwyg-vars-og-pickle nil)
+(defvar-local prf/org/wysiwyg-vars-og-pickle nil)
 (defvar prf/org/wysiwyg-vars-pickle
   '((org-startup-indented . t)
     (org-bullets-bullet-list . '(" "))
@@ -51,7 +51,34 @@
     (org-fontify-done-headline . t)
     (org-fontify-quote-and-verse-blocks . t)))
 
-(defvar prf/org/wysiwyg-faces-og-pickle nil)
+(defvar prf/org/wysiwyg-faces-og-pickle
+  '((org-document-title
+     (:inherit . nil)
+     (:height . nil))
+    (org-level-1
+     (:inherit . nil)
+     (:height . nil))
+    (org-level-2
+     (:inherit . nil)
+     (:height . nil))
+    (org-level-3
+     (:inherit . nil)
+     (:height . nil))
+    (org-level-4
+     (:inherit . nil)
+     (:height . nil))
+    (org-level-5
+     (:inherit . nil)
+     (:height . nil))
+    (org-level-6
+     (:inherit . nil)
+     (:height . nil))
+    (org-level-7
+     (:inherit . nil)
+     (:height . nil))
+    (org-level-8
+     (:inherit . nil)
+     (:height . nil))))
 (defvar prf/org/wysiwyg-faces-pickle
   '((org-document-title
      (:inherit . variable-pitch)
@@ -81,7 +108,7 @@
      (:inherit . variable-pitch)
      (:height . 1.1))))
 
-(defvar prf/org/wysiwyg-minor-modes-og-pickle nil)
+(defvar-local prf/org/wysiwyg-minor-modes-og-pickle nil)
 (defvar prf/org/wysiwyg-minor-modes-pickle
   '((mixed-pitch-mode . t)
     ;; (writeroom-mode . t)
@@ -105,24 +132,28 @@
 
 ;; ENABLE / DISABLE FUNCTIONS
 
+;; TODO: https://emacs.stackexchange.com/questions/7281/how-to-modify-face-for-a-specific-buffer
+;; TODO: https://stackoverflow.com/questions/4462126/emacs-minor-mode-for-temporarily-modifying-the-default-face
+
 (defun prf-wysiwyg-text-mode--enable ()
   (message "Enabled WYSIWYG")
-  (setq prf/org/wysiwyg-vars-og-pickle
-  	(pickle-var-list prf/org/wysiwyg-vars-pickle))
-  (setq prf/org/wysiwyg-faces-og-pickle
-  	(pickle-face-list prf/org/wysiwyg-faces-pickle))
+  ;; (setq prf/org/wysiwyg-vars-og-pickle
+  ;; 	(pickle-var-list prf/org/wysiwyg-vars-pickle))
+  ;; (setq prf/org/wysiwyg-faces-og-pickle
+  ;; 	(pickle-face-list prf/org/wysiwyg-faces-pickle))
   (setq prf/org/wysiwyg-minor-modes-og-pickle
   	(pickle-minor-mode-list prf/org/wysiwyg-minor-modes-pickle))
-  (unpickle-var-list prf/org/wysiwyg-vars-pickle)
-  (unpickle-face-list prf/org/wysiwyg-faces-pickle)
+  (unpickle-var-list-buff-local prf/org/wysiwyg-vars-pickle)
+  (unpickle-face-list-buff-local prf/org/wysiwyg-faces-pickle)
   (unpickle-minor-mode-list prf/org/wysiwyg-minor-modes-pickle)
   (when font-lock-mode
     (with-no-warnings (font-lock-fontify-buffer))))
 
 
 (defun prf-wysiwyg-text-mode--disable ()
-  (unpickle-var-list prf/org/wysiwyg-vars-og-pickle)
-  (unpickle-face-list prf/org/wysiwyg-faces-og-pickle)
+  ;; (unpickle-var-list prf/org/wysiwyg-vars-og-pickle)
+  (unbuff-local-var-list prf/org/wysiwyg-vars-pickle)
+  (unpickle-face-list-buff-local prf/org/wysiwyg-faces-og-pickle)
   (unpickle-minor-mode-list prf/org/wysiwyg-minor-modes-og-pickle)
   (when font-lock-mode
     (with-no-warnings (font-lock-fontify-buffer))))
