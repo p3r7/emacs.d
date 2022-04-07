@@ -70,11 +70,23 @@
 (defun unpickle-var (pickled-var)
   (set (car pickled-var) (cdr pickled-var)))
 
+(defun unpickle-var-buff-local (pickled-var)
+  (set (make-local-variable (car pickled-var)) (cdr pickled-var)))
+
+(defun unbuff-local-var (pickled-var)
+  (kill-local-variable (car pickled-var)))
+
 (defun pickle-var-list (var-name-list)
   (mapcar #'pickle-var var-name-list))
 
 (defun unpickle-var-list (pickled-var-list)
   (mapc #'unpickle-var pickled-var-list))
+
+(defun unpickle-var-list-buff-local (pickled-var-list)
+  (mapc #'unpickle-var-buff-local pickled-var-list))
+
+(defun unbuff-local-var-list (pickled-var-list)
+  (mapc #'unbuff-local-var pickled-var-list))
 
 
 
@@ -91,14 +103,22 @@
 (defun unpickle-face (pickled-face)
   (let ((face-name (car pickled-face))
 	(face-attrs (cdr pickled-face)))
-    (apply 'set-face-attribute face-name nil
+    (apply #'set-face-attribute face-name nil
 	   (--mapcat (list (car it) (cdr it)) face-attrs))))
+
+(defun unpickle-face-buff-local (pickled-face)
+  (let ((face-name (car pickled-face))
+	(face-attrs (cdr pickled-face)))
+    (face-remap-add-relative face-name (--mapcat (list (car it) (cdr it)) face-attrs))))
 
 (defun pickle-face-list (face-name-list)
   (mapcar #'pickle-face face-name-list))
 
 (defun unpickle-face-list (pickled-face-list)
   (mapc #'unpickle-face pickled-face-list))
+
+(defun unpickle-face-list-buff-local (pickled-face-list)
+  (mapc #'unpickle-face-buff-local pickled-face-list))
 
 
 

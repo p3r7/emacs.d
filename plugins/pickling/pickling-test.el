@@ -52,6 +52,15 @@
        :weight bold))
   "Face for testing pickling parameters.")
 
+(defface pickling-test-face2
+  '((t :foreground "black"
+       :background "PaleGoldenrod"
+       :inherit font-lock-comment-face))
+  "Face for testing pickling parameters.")
+
+
+;; NB; might wanna use `internal-lisp-face-attributes'
+
 (ert-deftest face-pickle-test ()
   "Ensure face gets pickled correctly"
   (let* ((pickle (pickle-face 'pickling-test-face)))
@@ -64,6 +73,7 @@
                             (:slant . unspecified)
                             (:underline . unspecified)
                             (:overline . unspecified)
+                            (:extend . unspecified)
                             (:strike-through . unspecified)
                             (:box . unspecified)
                             (:inverse-video . unspecified)
@@ -75,10 +85,42 @@
 (ert-deftest face-unpickle-test ()
   "Ensure face gets unpickled correctly"
   (let* ((pickle (pickle-face 'pickling-test-face)))
+    ;; modify face
     (set-face-underline 'pickling-test-face 't)
     (should (equal (face-attribute 'pickling-test-face :underline) 't))
+    ;; restore its original definition through pickle
     (unpickle-face pickle)
     (should (equal (face-attribute 'pickling-test-face :underline) 'unspecified))))
+
+(ert-deftest face-unpickle-prop-test ()
+  "Ensure face gets unpickled correctly"
+  (let* ((override-pickle '(pickling-test-face (:underline . t)))
+         (nil-pickle '(pickling-test-face (:underline . nil)))
+         (restore-pickle '(pickling-test-face (:underline . unspecified))))
+    ;; modify face
+    (unpickle-face override-pickle)
+    (should (equal (face-attribute 'pickling-test-face :underline) 't))
+
+    ;; nil
+    ;; REVIEW: how to handle it?
+    ;; -> really stores nil, which gets in fine interpreted as unspecified
+    ;; -> for buff-local variant, only nil works to "unset"
+    (unpickle-face nil-pickle)
+    (should (equal (face-attribute 'pickling-test-face :underline) nil))
+
+    ;; restore its original definition through pickle
+    (unpickle-face restore-pickle)
+    (should (equal (face-attribute 'pickling-test-face :underline) 'unspecified))
+    ))
+
+(ert-deftest face-unpickle-buff-local-test ()
+  "Ensure face gets unpickled correctly buffer-local"
+  (let* ((pickle '(pickling-test-face (:underline . t))))
+    (with-temp-buffer
+      (unpickle-face-buff-local pickle)
+      (should (equal (alist-get 'pickling-test-face face-remapping-alist)
+                     '((:underline t)
+                       pickling-test-face))))))
 
 
 
