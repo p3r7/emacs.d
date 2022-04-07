@@ -118,7 +118,7 @@
   (mapc #'unpickle-face pickled-face-list))
 
 (defun unpickle-face-list-buff-local (pickled-face-list)
-  (mapc #'unpickle-face-buff-local pickled-face-list))
+  (mapcar #'unpickle-face-buff-local pickled-face-list))
 
 
 
