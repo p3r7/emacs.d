@@ -33,6 +33,9 @@
 
 (require 'init-tramp)
 
+;; (use-package with-editor
+;;   :config
+;;   (add-hook 'shell-mode-hook #'with-editor-export-editor))
 
 (defun prf/tramp/complete-file-name (filePath)
   "Reconstruct complete multi-hop filename even if shortened."
