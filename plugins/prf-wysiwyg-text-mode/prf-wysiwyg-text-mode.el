@@ -33,7 +33,7 @@
 ;; VARS
 
 (defcustom prf-wysiwyg-text-mode-lighter " WYSIWYG"
-  "String to display in the mode line when md-shiatsu mode is active.
+  "String to display in the mode line when prf-wysiwyg-text-mode mode is active.
 
 \(When the string is not empty, make sure that it has a leading space.)"
   :tag "prf-wysiwyg lighter"            ; To separate it from `global-...'
@@ -53,24 +53,33 @@
 
 (defvar prf/org/wysiwyg-faces-og-pickle nil)
 (defvar prf/org/wysiwyg-faces-pickle
-  '((org-document-title ((:inherit . variable-pitch)
-			 (:height . 1.3)))
-    (org-level-1 ((:inherit . variable-pitch)
-		  (:height . 1.3)))
-    (org-level-2 ((:inherit . variable-pitch)
-		  (:height . 1.2)))
-    (org-level-3 ((:inherit . variable-pitch)
-		  (:height . 1.1)))
-    (org-level-4 ((:inherit . variable-pitch)
-		  (:height . 1.1)))
-    (org-level-5 ((:inherit . variable-pitch)
-		  (:height . 1.1)))
-    (org-level-6 ((:inherit . variable-pitch)
-		  (:height . 1.1)))
-    (org-level-7 ((:inherit . variable-pitch)
-		  (:height . 1.1)))
-    (org-level-8 ((:inherit . variable-pitch)
-		  (:height . 1.1)))))
+  '((org-document-title
+     (:inherit . variable-pitch)
+     (:height . 1.3))
+    (org-level-1
+     (:inherit . variable-pitch)
+     (:height . 1.3))
+    (org-level-2
+     (:inherit . variable-pitch)
+     (:height . 1.2))
+    (org-level-3
+     (:inherit . variable-pitch)
+     (:height . 1.1))
+    (org-level-4
+     (:inherit . variable-pitch)
+     (:height . 1.1))
+    (org-level-5
+     (:inherit . variable-pitch)
+     (:height . 1.1))
+    (org-level-6
+     (:inherit . variable-pitch)
+     (:height . 1.1))
+    (org-level-7
+     (:inherit . variable-pitch)
+     (:height . 1.1))
+    (org-level-8
+     (:inherit . variable-pitch)
+     (:height . 1.1))))
 
 (defvar prf/org/wysiwyg-minor-modes-og-pickle nil)
 (defvar prf/org/wysiwyg-minor-modes-pickle
