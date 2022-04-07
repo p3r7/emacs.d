@@ -51,34 +51,35 @@
     (org-fontify-done-headline . t)
     (org-fontify-quote-and-verse-blocks . t)))
 
-(defvar prf/org/wysiwyg-faces-og-pickle
-  '((org-document-title
-     (:inherit . nil)
-     (:height . nil))
-    (org-level-1
-     (:inherit . nil)
-     (:height . nil))
-    (org-level-2
-     (:inherit . nil)
-     (:height . nil))
-    (org-level-3
-     (:inherit . nil)
-     (:height . nil))
-    (org-level-4
-     (:inherit . nil)
-     (:height . nil))
-    (org-level-5
-     (:inherit . nil)
-     (:height . nil))
-    (org-level-6
-     (:inherit . nil)
-     (:height . nil))
-    (org-level-7
-     (:inherit . nil)
-     (:height . nil))
-    (org-level-8
-     (:inherit . nil)
-     (:height . nil))))
+(defvar-local prf/org/wysiwyg-faces-remap-cookies nil)
+;; (defvar prf/org/wysiwyg-faces-og-pickle
+;;   '((org-document-title
+;;      (:inherit . nil)
+;;      (:height . nil))
+;;     (org-level-1
+;;      (:inherit . nil)
+;;      (:height . nil))
+;;     (org-level-2
+;;      (:inherit . nil)
+;;      (:height . nil))
+;;     (org-level-3
+;;      (:inherit . nil)
+;;      (:height . nil))
+;;     (org-level-4
+;;      (:inherit . nil)
+;;      (:height . nil))
+;;     (org-level-5
+;;      (:inherit . nil)
+;;      (:height . nil))
+;;     (org-level-6
+;;      (:inherit . nil)
+;;      (:height . nil))
+;;     (org-level-7
+;;      (:inherit . nil)
+;;      (:height . nil))
+;;     (org-level-8
+;;      (:inherit . nil)
+;;      (:height . nil))))
 (defvar prf/org/wysiwyg-faces-pickle
   '((org-document-title
      (:inherit . variable-pitch)
@@ -144,7 +145,8 @@
   (setq prf/org/wysiwyg-minor-modes-og-pickle
   	(pickle-minor-mode-list prf/org/wysiwyg-minor-modes-pickle))
   (unpickle-var-list-buff-local prf/org/wysiwyg-vars-pickle)
-  (unpickle-face-list-buff-local prf/org/wysiwyg-faces-pickle)
+  (setq prf/org/wysiwyg-faces-remap-cookies
+        (unpickle-face-list-buff-local prf/org/wysiwyg-faces-pickle))
   (unpickle-minor-mode-list prf/org/wysiwyg-minor-modes-pickle)
   (when font-lock-mode
     (with-no-warnings (font-lock-fontify-buffer))))
@@ -153,7 +155,8 @@
 (defun prf-wysiwyg-text-mode--disable ()
   ;; (unpickle-var-list prf/org/wysiwyg-vars-og-pickle)
   (unbuff-local-var-list prf/org/wysiwyg-vars-pickle)
-  (unpickle-face-list-buff-local prf/org/wysiwyg-faces-og-pickle)
+  ;; (unpickle-face-list-buff-local prf/org/wysiwyg-faces-og-pickle)
+  (mapc #'face-remap-remove-relative prf/org/wysiwyg-faces-remap-cookies)
   (unpickle-minor-mode-list prf/org/wysiwyg-minor-modes-og-pickle)
   (when font-lock-mode
     (with-no-warnings (font-lock-fontify-buffer))))
