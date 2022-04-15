@@ -111,7 +111,7 @@
 (defconst osc-ntp-offset
   (round
    (float-time (time-subtract (time-convert 0)
-			      (encode-time '(0 0 0 1 1 1970 nil nil t))))))
+			      '(-33707 33152)))))
 
 (defun osc-timetag (&optional time)
   (if (not time)
