@@ -5,9 +5,10 @@
 
 
 ;; NB: bug w/ `encode-time' under WinNT doesn't like times before Unix Epoch, breaks `osc'
-(when (windows-nt-p)
-  (use-package osc
-    :load-path "~/.emacs.d/plugins-spe/osc-0.4"))
+(if (windows-nt-p)
+    (use-package osc
+      :load-path "~/.emacs.d/plugins-spe/osc-0.4")
+  (use-package osc))
 
 (use-package norns
   :after osc
