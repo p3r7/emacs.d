@@ -18,7 +18,8 @@
   ;; `(prf/lispy-mode . lispy-mode)
   (((
      emacs-lisp-mode inferior-emacs-lisp-mode
-     clojure-mode clojurescript-mode cider-repl-mode) . lispy-mode)
+     clojure-mode clojurescript-mode cider-repl-mode
+     fennel-mode) . lispy-mode)
    (lispy-mode
     . (lambda ()
         ;; disable conflicting module: autopair
