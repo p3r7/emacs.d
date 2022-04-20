@@ -12,7 +12,8 @@
              python-mode ruby-mode tcl-mode
              scheme-mode sgml-mode sh-mode sml-mode markdown-mode org-mode
              yaml-mode clojure-mode clojurescript-mode clojurec-mode
-             go-mode))
+             go-mode
+             fennel-mode))
 
 
 
