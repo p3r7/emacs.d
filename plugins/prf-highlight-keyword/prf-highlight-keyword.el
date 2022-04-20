@@ -6,14 +6,16 @@
 (defvar prd-highlight-keyword-ok-keywords "\\<\\(DONE\\|OK\\|GOOD\\|SOLVED\\|FIXED\\|IDEA\\):")
 
 (defvar prd-highlight-keyword-modes
-  '(ada-mode c-mode emacs-lisp-mode java-mode haskell-mode web-mode
-             literate-haskell-mode html-mode lisp-mode
-             ;; php-mode
-             python-mode ruby-mode tcl-mode
-             scheme-mode sgml-mode sh-mode sml-mode markdown-mode org-mode
-             yaml-mode clojure-mode clojurescript-mode clojurec-mode
-             go-mode
-             fennel-mode))
+  '(
+    lisp-mode emacs-lisp-mode scheme-mode fennel-mode
+    clojure-mode clojurescript-mode clojurec-mode
+    c-mode java-mode go-mode
+    ;; php-mode
+    sh-mode python-mode ruby-mode tcl-mode
+    ada-mode haskell-mode literate-haskell-mode sml-mode
+    web-mode html-mode sgml-mode
+    markdown-mode org-mode
+    yaml-mode))
 
 
 
