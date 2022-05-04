@@ -40,8 +40,11 @@
   (add-hook 'prog-mode-hook #'undo-hl-mode)
   (add-hook 'text-mode #'undo-hl-mode))
 
+(when (version<= "28.1" emacs-version)
+  (use-package vundo))
+
 (use-package undo-tree
-  ;; The visual tree feature is great, but I have trouble adjusting to
+  ;; NB: The visual tree feature is great, but I have trouble adjusting to
   ;; the change of behaviour (no C-g to reverse direction)
   :disabled
   :demand
