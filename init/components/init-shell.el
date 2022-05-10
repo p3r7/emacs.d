@@ -37,6 +37,21 @@
   :after shell
 
   :config
+
+  (defun shx-cmd-stopall (args)
+    "(SAFE) Stop ALL shx timers.
+\nExamples:\n
+  :stopall"
+    (let ((shx-timer-list (shx--get-timer-list)))
+      (--map (progn
+               (cancel-timer it)
+               (shx-insert "Stopped " 'font-lock-string-face
+                           (shx--format-timer-string it)
+                           "\n"))
+             shx-timer-list)
+
+      (shx-insert-timer-list)))
+
   (--map
    (add-to-list 'shx-shell-mode-font-locks (list (concat "\\(\\<" it "\\>\\) .*\\'") 1 'font-lock-constant-face))
    '("bash" "sh"
