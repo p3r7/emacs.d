@@ -46,11 +46,13 @@
          (first-p (car paths))
          (middle-paths (butlast (cdr paths)))
          (last-p (car (last paths))))
-    (concat (replace-regexp-in-string ":$" "" first-p)
-            (apply #'concat (--map (replace-regexp-in-string ":$" ""
-                                                             (replace-regexp-in-string "^/" "|" it))
-                                   middle-paths))
-            (replace-regexp-in-string "^/" "|" last-p))))
+    (if (eq 1 (length paths))
+        first-p
+      (concat (replace-regexp-in-string ":$" "" first-p)
+              (apply #'concat (--map (replace-regexp-in-string ":$" ""
+                                                               (replace-regexp-in-string "^/" "|" it))
+                                     middle-paths))
+              (replace-regexp-in-string "^/" "|" last-p)))))
 
 
 (defun prf/tramp/extract-remote-file-name (trampFilePath)
