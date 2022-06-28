@@ -35,6 +35,10 @@ Expected to be called with option \"--list\".")
 (defvar ansible-tramp-inventory-cache nil "Cache for Ansible Inventory")
 (defvar ansible-tramp-inventory-cache-set-time nil "Timestamp at which `ansible-tramp-inventory-cache' last got set.")
 
+(defvar ansible-tramp-host-path-transform-fn
+  #'identity
+  "Function to modify (TRAMP) path towards remote host.")
+
 
 
 ;; HOST FACTS
@@ -99,8 +103,8 @@ If not available, returns nil but tries reloading cache via an async API call (s
   (interactive)
   (ansible-tramp--cli-inventory-callback
    '(lambda (response)
-      (setq ansible-tramp-inventory-cache (request-response-data response)
-	    ansible-tramp-inventory-cache-set-time (current-time))
+      (setq ansible-tramp-inventory-cache response
+            ansible-tramp-inventory-cache-set-time (current-time))
       (message "Ansible Inventory cache set"))
    inventory-bin ansible-cnnx))
 
@@ -121,13 +125,14 @@ The latter targets either INVENTORY-HTTP-URL or `ansible-tramp-inventory-http-ur
   (setq ansible-tramp-inventory-cache nil
 	ansible-tramp-inventory-cache-set-time nil))
 
-(defun ansible-tramp-get-inventory-hostnames (&optional inventory-http-url)
+(defun ansible-tramp-get-inventory-hostnames ()
   "Attempts retrieving list of hostnames in Ansible inventory.
 First looks up local cache `ansible-tramp-inventory-cache' if not empty or not too old.
 If not available, returns nil but tries reloading cache via an async API call (see `ansible-tramp-set-inventory-cache-http')."
-  ;; TODO: make it generic (work w/ cli)
-  ;; (let ((inventory-hosts-hash-table (ansible-tramp-get-inventory-hosts :inventory-http-url inventory-http-url)))
-  (let ((inventory-hosts-hash-table (ansible-tramp-get-inventory-hosts-http inventory-http-url)))
+  ;; REVIEW: make it possible to override http-url / cli args, using keyword args (cl-defun)?
+  (let ((inventory-hosts-hash-table (if (eq ansible-tramp-inventory-lookup-method 'cli)
+                                        (ansible-tramp-get-inventory-hosts-cli)
+                                      (ansible-tramp-get-inventory-hosts-http))))
     (when inventory-hosts-hash-table
       (hash-table-keys inventory-hosts-hash-table))))
 
@@ -174,14 +179,17 @@ If not available, returns nil but tries reloading cache via an async API call (s
                               buf-list)
                          (mapc
                           (lambda (e)
-                            (add-to-list 'buf-list (friendly-remote-shell :path (ansible-tramp-get-inventory-address-for-host e)) 't))
+                            (add-to-list 'buf-list
+                                         (friendly-remote-shell
+                                          :path (funcall ansible-tramp-host-path-transform-fn (ansible-tramp-get-inventory-address-for-host e)))
+                                         't))
                           marked-candidates)
                          (when (< 1 nb-marked-candidates)
                            (buffer-grid-diplay buf-list 't)))))
                     ("dired" .
                      (lambda (candidate)
                        (let ((host-address (ansible-tramp-get-inventory-address-for-host candidate)))
-                         (friendly-remote-shell :path host-address ))))
+                         (friendly-remote-shell :path (funcall ansible-tramp-host-path-transform-fn host-address)))))
                     ("debug" .
                      (lambda (candidate)
                        (let ((hostname candidate)
