@@ -11,9 +11,15 @@
   (use-package osc))
 
 (use-package norns
-  :after osc
+  :bind (
+         :map norns-mode-map
+         ("C-c e b" . norns-load-current-script)
+         ("<XF86Open>" . norns-load-current-script)
+         ("C-c e r" . norns-send-selection)
+         ("M-<XF86Open>" . norns-send-selection))
   :config
   (add-hook 'lua-mode-hook #'norns-mode-maybe-activate)
+  (add-hook 'fennel-mode-hook #'norns-mode-maybe-activate)
   (add-hook 'sclang-mode-hook #'norns-mode-maybe-activate))
 
 
