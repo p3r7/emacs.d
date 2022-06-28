@@ -120,6 +120,8 @@
   (apply-cmd-on-delimited-region (lambda ()
                                    (interactive)
                                    (replace-regexp (regexp-quote "\\n") "\n"
+                                                   nil (region-beginning) (region-end))
+                                   (replace-regexp (regexp-quote "\\r") ""
                                                    nil (region-beginning) (region-end)))))
 
 
