@@ -26,6 +26,8 @@
 					    "^\\* docker .*$"
                                             "^\\*EGLOT .*\\*$"
                                             "^\\*Multi Buffer.*\\*$"
+                                            ;; "^\\*ediff-diff\\*$"
+                                            ;; "^\\*ediff-errors\\*$"
 
                                             ;; clojure
 					    "^\\*nrepl-server .*$"
