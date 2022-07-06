@@ -1,12 +1,12 @@
 
 (use-package mixed-pitch)
 
-(use-package prf-wysiwyg-text-mode
-  :load-path "~/.emacs.d/plugins/prf-wysiwyg-text-mode"
+(use-package wysiwyg-text-mode
+  :load-path "~/.emacs.d/plugins/wysiwyg-text-mode"
   :after (mixed-pitch pickling)
   :bind (
          :map org-mode-map
-	 ("C-c v" . prf-wysiwyg-text-mode)))
+	 ("C-c v" . wysiwyg-text-mode)))
 
 
 

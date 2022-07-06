@@ -1,10 +1,10 @@
-;;; prf-wysiwyg-text-mode.el --- Toggle WYSIWYG view in text-mode
+;;; wysiwyg-text-mode.el --- Toggle WYSIWYG view in text-mode
 
 ;; Copyright (C) 2019-2020 Jordan Besly
 ;;
 ;; Version: 0.1.0
 ;; Keywords: processes, terminals
-;; URL: https://github.com/p3r7/prf-wysiwyg-text-mode
+;; URL: https://github.com/p3r7/wysiwyg-text-mode
 ;; Package-Requires: ((cl-lib "0.6.1"))
 ;;
 ;; Permission is hereby granted to use and distribute this code, with or
@@ -32,16 +32,16 @@
 
 ;; VARS
 
-(defcustom prf-wysiwyg-text-mode-lighter " WYSIWYG"
-  "String to display in the mode line when prf-wysiwyg-text-mode mode is active.
+(defcustom wysiwyg-text-mode-lighter " WYSIWYG"
+  "String to display in the mode line when wysiwyg-text-mode mode is active.
 
 \(When the string is not empty, make sure that it has a leading space.)"
-  :tag "prf-wysiwyg lighter"            ; To separate it from `global-...'
-  :group 'prf-wysiwyg
+  :tag "wysiwyg lighter"            ; To separate it from `global-...'
+  :group 'wysiwyg
   :type 'string)
 
-(defvar-local prf/org/wysiwyg-vars-og-pickle nil)
-(defvar prf/org/wysiwyg-vars-pickle
+(defvar-local wysiwyg-text-mode-vars-og-pickle nil)
+(defvar wysiwyg-text-mode-vars-pickle
   '((org-startup-indented . t)
     (org-bullets-bullet-list . '(" "))
     (org-pretty-entities . t)
@@ -51,8 +51,8 @@
     (org-fontify-done-headline . t)
     (org-fontify-quote-and-verse-blocks . t)))
 
-(defvar-local prf/org/wysiwyg-faces-remap-cookies nil)
-;; (defvar prf/org/wysiwyg-faces-og-pickle
+(defvar-local wysiwyg-text-mode-faces-remap-cookies nil)
+;; (defvar wysiwyg-text-mode-faces-og-pickle
 ;;   '((org-document-title
 ;;      (:inherit . nil)
 ;;      (:height . nil))
@@ -80,7 +80,7 @@
 ;;     (org-level-8
 ;;      (:inherit . nil)
 ;;      (:height . nil))))
-(defvar prf/org/wysiwyg-faces-pickle
+(defvar wysiwyg-text-mode-faces-pickle
   '((org-document-title
      (:inherit . variable-pitch)
      (:height . 1.3))
@@ -109,8 +109,8 @@
      (:inherit . variable-pitch)
      (:height . 1.1))))
 
-(defvar-local prf/org/wysiwyg-minor-modes-og-pickle nil)
-(defvar prf/org/wysiwyg-minor-modes-pickle
+(defvar-local wysiwyg-text-mode-minor-modes-og-pickle nil)
+(defvar wysiwyg-text-mode-minor-modes-pickle
   '((mixed-pitch-mode . t)
     ;; (writeroom-mode . t)
     ;; (hl-line-mode . nil)
@@ -120,14 +120,14 @@
 
 ;; MODE DEFINITION
 
-(define-minor-mode prf-wysiwyg-text-mode
+(define-minor-mode wysiwyg-text-mode
   "Eye candy for text modes"
-  :lighter prf-wysiwyg-text-mode-lighter
+  :lighter wysiwyg-text-mode-lighter
   :init-value nil
   :global nil
-  (if prf-wysiwyg-text-mode
-      (prf-wysiwyg-text-mode--enable)
-    (prf-wysiwyg-text-mode--disable)))
+  (if wysiwyg-text-mode
+      (wysiwyg-text-mode--enable)
+    (wysiwyg-text-mode--disable)))
 
 
 
@@ -136,34 +136,34 @@
 ;; TODO: https://emacs.stackexchange.com/questions/7281/how-to-modify-face-for-a-specific-buffer
 ;; TODO: https://stackoverflow.com/questions/4462126/emacs-minor-mode-for-temporarily-modifying-the-default-face
 
-(defun prf-wysiwyg-text-mode--enable ()
+(defun wysiwyg-text-mode--enable ()
   (message "Enabled WYSIWYG")
-  ;; (setq prf/org/wysiwyg-vars-og-pickle
-  ;; 	(pickle-var-list prf/org/wysiwyg-vars-pickle))
-  ;; (setq prf/org/wysiwyg-faces-og-pickle
-  ;; 	(pickle-face-list prf/org/wysiwyg-faces-pickle))
-  (setq prf/org/wysiwyg-minor-modes-og-pickle
-  	(pickle-minor-mode-list prf/org/wysiwyg-minor-modes-pickle))
-  (unpickle-var-list-buff-local prf/org/wysiwyg-vars-pickle)
-  (setq prf/org/wysiwyg-faces-remap-cookies
-        (unpickle-face-list-buff-local prf/org/wysiwyg-faces-pickle))
-  (unpickle-minor-mode-list prf/org/wysiwyg-minor-modes-pickle)
+  ;; (setq wysiwyg-text-mode-vars-og-pickle
+  ;; 	(pickle-var-list wysiwyg-text-mode-vars-pickle))
+  ;; (setq wysiwyg-text-mode-faces-og-pickle
+  ;; 	(pickle-face-list wysiwyg-text-mode-faces-pickle))
+  (setq wysiwyg-text-mode-minor-modes-og-pickle
+  	(pickle-minor-mode-list wysiwyg-text-mode-minor-modes-pickle))
+  (unpickle-var-list-buff-local wysiwyg-text-mode-vars-pickle)
+  (setq wysiwyg-text-mode-faces-remap-cookies
+        (unpickle-face-list-buff-local wysiwyg-text-mode-faces-pickle))
+  (unpickle-minor-mode-list wysiwyg-text-mode-minor-modes-pickle)
   (when font-lock-mode
     (with-no-warnings (font-lock-fontify-buffer))))
 
 
-(defun prf-wysiwyg-text-mode--disable ()
-  ;; (unpickle-var-list prf/org/wysiwyg-vars-og-pickle)
-  (unbuff-local-var-list prf/org/wysiwyg-vars-pickle)
-  ;; (unpickle-face-list-buff-local prf/org/wysiwyg-faces-og-pickle)
-  (mapc #'face-remap-remove-relative prf/org/wysiwyg-faces-remap-cookies)
-  (unpickle-minor-mode-list prf/org/wysiwyg-minor-modes-og-pickle)
+(defun wysiwyg-text-mode--disable ()
+  ;; (unpickle-var-list wysiwyg-text-mode-vars-og-pickle)
+  (unbuff-local-var-list wysiwyg-text-mode-vars-pickle)
+  ;; (unpickle-face-list-buff-local wysiwyg-text-mode-faces-og-pickle)
+  (mapc #'face-remap-remove-relative wysiwyg-text-mode-faces-remap-cookies)
+  (unpickle-minor-mode-list wysiwyg-text-mode-minor-modes-og-pickle)
   (when font-lock-mode
     (with-no-warnings (font-lock-fontify-buffer))))
 
 
 
 
-(provide 'prf-wysiwyg-text-mode)
+(provide 'wysiwyg-text-mode)
 
-;;; prf-wysiwyg-text-mode.el ends here
+;;; wysiwyg-text-mode.el ends here
