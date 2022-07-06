@@ -16,6 +16,7 @@
         lispy-tick
         lispy-yank
         org-self-insert-command
+        org-yank
         prf/lispy-space-no-selection
         sclang-electric-star
         special-digit-argument
