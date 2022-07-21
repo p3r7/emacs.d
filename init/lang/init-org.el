@@ -180,15 +180,18 @@ If thing under point is not a link or has no matching alt type"
        (not (f-descendant-of? f prf-auto-save-dir))
        (not (string-match-p prf/org/index-file-exclude-regexp f))))
 
+(defun prf/org/index/update-id-locations-no-open (files)
+  "Wrapper around `org-id-update-id-locations' that closes files after they got opened for indexing."
+  (let ((buffs-snapshot (buffer-list)))
+    (org-id-update-id-locations files)
+    (mapc #'kill-buffer
+          (-difference (buffer-list) buffs-snapshot))))
+
 (defun prf/org/index-rescan-all ()
   "Populate `org-id-locations' by rescaning recursively all files in `prf/dir/notes'."
   (interactive)
-  (let ((buffs-snapshot (buffer-list)))
-    (org-id-update-id-locations
-     (f-files prf/dir/notes #'prf/org/file-path-indexable-p t))
-    ;; NB: `org-id-update-id-locations' opens matching files
-    (mapc #'kill-buffer
-          (-difference (buffer-list) buffs-snapshot))))
+  (prf/org/index/update-id-locations-no-open
+   (f-files prf/dir/notes #'prf/org/file-path-indexable-p t)))
 
 
 
@@ -233,7 +236,7 @@ If thing under point is not a link or has no matching alt type"
         (org-id-get-create)
         (call-interactively #'save-buffer))
 
-      (org-id-update-id-locations (list (buffer-file-name)))
+      (prf/org/index/update-id-locations-no-open (list (buffer-file-name)))
 
       (org-roam-db-update-file))
 
