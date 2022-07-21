@@ -11,6 +11,7 @@
   (use-package osc))
 
 (use-package norns
+  :demand
   :bind (
          :map norns-mode-map
          ("C-c e b" . norns-load-current-script)
