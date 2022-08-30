@@ -194,7 +194,7 @@
            (form-feed-line :strike-through "#a9a9a9")
            (markdown-code-face :inherit nil)
            (fixed-pitch :family nil)    ; org block delimiters
-           )
+           (org-headline-done :foreground nil))
           (tango
            (hl-line :inherit nil :background "#dbdbd7")
            (form-feed-line :strike-through "#b7b8b5")
@@ -208,7 +208,7 @@
            (org-block :inherit default)
            (markdown-code-face :inherit nil)
            (fixed-pitch :family nil)    ; org block delimiters
-           )
+           (org-headline-done :foreground nil))
           (zenburn
            (fixed-pitch :family nil)    ; org block delimiters
            (diredp-read-priv :foreground nil :background "#5F7F5F")
@@ -225,7 +225,8 @@
            (bmkp-remote-file :foreground "#DF6B75")
            (form-feed-line :strike-through "#7F9F7F")
            (hl-line :background "#4a3434")
-           (highlight :background "#4a3434"))
+           (highlight :background "#4a3434")
+           (org-headline-done :foreground nil))
           (late-night
            ;; (hl-line :inherit nil :background "#192a2a")
            (hl-line :inherit nil :background "#2a1919")
@@ -240,8 +241,9 @@
            (bmkp-remote-file :foreground "#ff79c6") ; rainbow-4
            (org-block :inherit default)
            (markdown-code-face :inherit nil)
-           (fixed-pitch :family nil)    ; org block delimiters
-           (diredp-other-priv :foreground "Black" :background "PaleGoldenrod"))
+           (fixed-pitch :family nil)   ; org block delimiters
+           (diredp-other-priv :foreground "Black" :background "PaleGoldenrod")
+           (org-headline-done :foreground nil))
           (chocolate
            ;; NB: file face for dired is `default'
            (dired-directory :foreground "#EAEAFE") ; chocolate-hue-2
@@ -258,7 +260,9 @@
            (fixed-pitch :family nil)
            (bmkp-local-directory :foreground "#45AFBD")
            (bmkp-remote-file :foreground "#C55D67")
-           (diredp-other-priv :foreground "Black" :background "PaleGoldenrod"))))
+           (diredp-other-priv :foreground "Black" :background "PaleGoldenrod")
+           (org-headline-done :foreground nil))
+          ))
   ;; to reload: (space-theming-update-current-theme)
   :config
   ;; current frame
