@@ -36,13 +36,13 @@
 	     (member prf/rice/font-family (font-family-list)))
     (set-face-attribute 'default nil :family prf/rice/font-family))
   (when prf/rice/font-height
-    (set-face-attribute 'default nil :height prf/rice/font-height))
+    (set-face-attribute 'default nil :height prf/rice/font-height))))
 
-  (when (and prf/rice/variable-pitch-font-family
-             (member prf/rice/variable-pitch-font-family (font-family-list)))
-    (set-face-attribute 'variable-pitch nil :family prf/rice/variable-pitch-font-family))
-  (when prf/rice/variable-pitch-font-height
-    (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))))
+(when (and prf/rice/variable-pitch-font-family
+           (member prf/rice/variable-pitch-font-family (font-family-list)))
+  (set-face-attribute 'variable-pitch nil :family prf/rice/variable-pitch-font-family))
+(when prf/rice/variable-pitch-font-height
+  (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))
 
 
 
