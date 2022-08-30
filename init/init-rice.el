@@ -133,6 +133,11 @@
   ;; (setq prf/theme/theme-list prf/theme/list/retro-dark)
   :config
 
+  (add-hook 'prf/theme/after-update-hook
+            (lambda ()
+              (when (fboundp #'org-roam-ui--update-theme)
+                (org-roam-ui-sync-theme))))
+
   ;; (prf/theme/initialize)
   (let ((now-h (ts-hour (ts-now))))
     (if (or (< now-h 9)
