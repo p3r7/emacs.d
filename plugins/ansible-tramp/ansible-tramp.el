@@ -244,7 +244,10 @@ If not available, returns nil but tries reloading cache via an async API call (s
     (deferred:$
       (deferred:next
         `(lambda ()
-           (friendly-shell-command-to-string ,ansible-inventory-cmd :path ,ansible-cnnx)))
+           ;; NB: force remote command execution from the host running Emacs
+           ;; otherwise, when visiting a remote file, would try connecting from it which has high chances of failing
+           (let ((default-directory "/"))
+             (friendly-shell-command-to-string ,ansible-inventory-cmd :path ,ansible-cnnx))))
       (deferred:nextc it
         (lambda (x)
           (let ((json-object-type 'hash-table)
@@ -294,7 +297,8 @@ If not available, returns nil but tries reloading cache via an async API call (s
   "Launch Ansible shell command targeting HOST with module \"setup\", at remote path REMOTE-ANSIBLE-CNNX."
   (let ((ansible-cnnx (or ansible-cnnx ansible-tramp-cnnx default-directory))
         (ansible-cmd (ansible-tramp--build-ansible-cmd-setup host ansible-bin ansible-user)))
-    (friendly-shell-command-to-string ansible-cmd :path ansible-cnnx)))
+    (let ((default-directory "/"))
+      (friendly-shell-command-to-string ansible-cmd :path ansible-cnnx))))
 
 
 (defun ansible-tramp--parse-task-setup-output (raw-res host)
