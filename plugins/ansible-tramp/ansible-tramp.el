@@ -169,7 +169,7 @@ If not available, returns nil but tries reloading cache via an async API call (s
       (thing-at-point 'symbol)))
 
   (setq ansible-tramp-helm-source
-        (helm-build-sync-source "Connect to Ansible host"
+        (helm-build-sync-source "Connect to Ansible-managed host"
           :candidates #'ansible-tramp-get-inventory-hostnames
           :fuzzy-match t
           :action '(("shell" .
