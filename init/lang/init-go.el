@@ -37,6 +37,7 @@
   (defun prf/go/lsp-activate-hook ()
     (when (and
            (not (s-ends-with? ".org" (buffer-file-name))) ; don't trigger when using babel
+           (not (s-ends-with? ".md" (buffer-file-name))) ; don't trigger when using Polymode
            (or (not (file-remote-p default-directory)) prf/go/lsp-on-remote)
            (executable-find "gopls" t))
       (eglot-ensure)
