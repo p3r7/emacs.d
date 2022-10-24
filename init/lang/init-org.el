@@ -28,7 +28,8 @@
   (setq org-highlight-latex-and-related '(latex)
         org-ellipsis "⤵"
         ;; org-hide-leading-stars t
-        org-startup-folded t)
+        org-startup-folded t
+        org-startup-with-inline-images t)
 
   (setq org-adapt-indentation t)
 
