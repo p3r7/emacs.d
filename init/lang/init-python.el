@@ -24,10 +24,12 @@
   ;; - conf
   (add-to-list 'auto-mode-alist '("[/.]c\\(?:on\\)?f\\(?:i?g\\)?\\(?:\\.[a-zA-Z0-9._-]+\\)?\\.j2\\'" . conf-mode-maybe))
   (add-to-list 'auto-mode-alist '("\\.\\(?:[iI][nN][iI]\\|[lL][sS][tT]\\|[rR][eE][gG]\\|[sS][yY][sS]\\)\\.j2\\'" . conf-mode))
+  (add-to-list 'auto-mode-alist '("\\.desktop\\.j2\\'" . conf-desktop-mode))
   ;; (mmm-add-mode-ext-class 'conf-mode "\\.j2\\'" 'jinja2)
   (mmm-add-mode-ext-class 'conf-space-mode "\\.j2\\'" 'jinja2)
   (mmm-add-mode-ext-class 'conf-unix-mode "\\.j2\\'" 'jinja2)
   (mmm-add-mode-ext-class 'conf-windows-mode "\\.j2\\'" 'jinja2)
+  (mmm-add-mode-ext-class 'conf-desktop-mode "\\.j2\\'" 'jinja2)
 
   ;; - toml
   (add-to-list 'auto-mode-alist '("\\.toml\\.j2\\'" . toml-mode))
