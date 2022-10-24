@@ -9,7 +9,7 @@
   '(
     lisp-mode emacs-lisp-mode scheme-mode fennel-mode
     clojure-mode clojurescript-mode clojurec-mode
-    c-mode java-mode go-mode
+    c-mode java-mode go-mode arduino-mode
     ;; php-mode
     sh-mode python-mode ruby-mode tcl-mode
     ada-mode haskell-mode literate-haskell-mode sml-mode
