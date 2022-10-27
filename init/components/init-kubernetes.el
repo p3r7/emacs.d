@@ -12,6 +12,50 @@
 
 
 
+;; SHELL FONT LOCK
+
+(with-eval-after-load 'shx
+  ;; - ns
+  (setq prf/kube/instance-name-re (rx (one-or-more (any "a-z" "A-Z" "0-9" "-"))))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<-n *\\(\\<" prf/kube/instance-name-re "\\>\\) .*\\'") 1 'font-lock-function-name-face))
+   '("kubectl" "k" "helm"))
+  ;; - resource
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<get *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-keyword-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<describe *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-keyword-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<label *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-keyword-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<delete *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-keyword-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\(\\<logs\\>\\).*") 1 'font-lock-keyword-face))
+   '("kubectl" "k"))
+  ;; - instance
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<get *\\<" prf/kube/instance-name-re "\\> \\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<describe *\\<" prf/kube/instance-name-re "\\> \\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<label *\\<" prf/kube/instance-name-re "\\> \\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<delete *\\<" prf/kube/instance-name-re "\\> \\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face))
+   '("kubectl" "k"))
+  (--map
+   (add-to-list 'shx-shell-mode-font-locks (list (concat it " .*\\<logs *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face))
+   '("kubectl" "k"))
+  (add-to-list 'shx-shell-mode-font-locks (list (concat "helm .*\\<uninstall *\\(\\<" prf/kube/instance-name-re "\\>\\).*") 1 'font-lock-variable-name-face)))
+
+
+
 ;; DIRECT SHELL INTEGRATIONS
 
 (with-eval-after-load 'friendly-shell-command
