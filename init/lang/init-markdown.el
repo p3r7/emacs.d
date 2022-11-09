@@ -145,6 +145,7 @@ current filename, but with the extension removed and replaced with .html."
 ;; CODE BLOCKS
 
 (use-package poly-markdown
+  :disabled
   :after polymode
   :hook (markdown-mode . poly-markdown-mode))
 
