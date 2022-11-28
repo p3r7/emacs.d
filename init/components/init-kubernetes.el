@@ -101,6 +101,12 @@
     (pcase resource-abrev
       ("pod" "pod")
       ("po" "pod")
+      ("deployment" "deployment")
+      ("deploy" "deployment")
+      ("cronjob" "cronjob")
+      ("cj" "cronjob")
+      ("daemonset" "daemonset")
+      ("ds" "daemonset")
       ("service" "service")
       ("svc" "service")
       ("node" "node")
@@ -115,7 +121,13 @@
   (defun kubectl-logs (ns resource object)
     (unless (string= resource "pod")
       (user-error "Can only get logs of pod objects"))
-    (friendly-shell-command-async (concat "kubectl -n " ns " logs " pod) :output-buffer (concat "*kubectl - logs - " ns "/" object "*")))
+    (friendly-shell-command-async (concat "kubectl -n " ns " logs " object) :output-buffer (concat "*kubectl - logs - " ns "/" object "*")))
+
+  (defun kubectl-logs-tail (ns resource object &optional nb-lines)
+    (unless (string= resource "pod")
+      (user-error "Can only get logs of pod objects"))
+    (let ((nb-lines (or nb-lines 100)))
+      (friendly-shell-command-async (concat "kubectl -n " ns " logs " object " --tail " nb-lines) :output-buffer (concat "*kubectl - logs - " ns "/" object "*"))))
 
   (defun kubectl-get-yaml (ns resource object)
     (friendly-shell-command-async (concat "kubectl -n " ns " get " resource " " object " -o yaml") :output-buffer (concat "*kubectl - yaml " resource "/" ns "/" object "*")))
@@ -199,6 +211,10 @@
     (interactive)
     (kubectl-action-on-object-at-point #'kubectl-logs))
 
+  (defun kubectl-logs-tail-at-point ()
+    (interactive)
+    (kubectl-action-on-object-at-point #'kubectl-logs-tail))
+
   (defun kubectl-yaml-at-point ()
     (interactive)
     (kubectl-action-on-object-at-point #'kubectl-get-yaml))
@@ -214,7 +230,8 @@
 (with-eval-after-load 'hydra
   (defhydra hydra-kube (:color blue)
     "kubernetes"
-    ("l" kubectl-logs-at-point "logs")
+    ("l" kubectl-logs-tail-at-point "logs (last)")
+    ("L" kubectl-logs-at-point "logs (all)")
     ("y" kubectl-yaml-at-point "yaml def")
     ("i" kubectl-describe-at-point "describe")
     ("K" kubectl-delete-at-point "delete")
