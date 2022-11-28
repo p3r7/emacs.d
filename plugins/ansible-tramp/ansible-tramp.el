@@ -9,6 +9,7 @@
 
 ;; REQUIRES
 
+(require 'dash)
 (require 'json)
 (require 'request-deferred)
 (require 's)
@@ -87,7 +88,8 @@ First looks up local cache `ansible-tramp-inventory-cache' if not empty or not t
   (if ansible-tramp-inventory-cache
       (prf/gethash-recursive ansible-tramp-inventory-cache "_meta" "hostvars")
     (message "Reloading inventory cache, retry later")
-    (ansible-tramp-set-inventory-cache-cli inventory-bin ansible-cnnx)))
+    (-> (ansible-tramp-set-inventory-cache-cli inventory-bin ansible-cnnx)
+        (prf/gethash-recursive "_meta" "hostvars"))))
 
 (defun ansible-tramp-get-inventory-hosts-http (&optional inventory-http-url)
   "Attempts retrieving list of hosts in Ansible inventory.
@@ -98,15 +100,23 @@ If not available, returns nil but tries reloading cache via an async API call (s
     (message "Reloading inventory cache, retry later")
     (ansible-tramp-set-inventory-cache-http inventory-http-url)))
 
-(defun ansible-tramp-set-inventory-cache-cli (&optional inventory-bin ansible-cnnx)
+(defun ansible-tramp-set-inventory-cache-cli (&optional inventory-bin ansible-cnnx async)
   "Sets cache `ansible-tramp-inventory-cache' by doing an async API call."
   (interactive)
-  (ansible-tramp--cli-inventory-callback
-   '(lambda (response)
-      (setq ansible-tramp-inventory-cache response
+  (if async
+      ;; async
+      (ansible-tramp--cli-inventory-callback
+       '(lambda (response)
+          (setq ansible-tramp-inventory-cache response
+                ansible-tramp-inventory-cache-set-time (current-time))
+          (message "Ansible Inventory cache set"))
+       inventory-bin ansible-cnnx)
+
+    ;; sync
+    (let ((inventory (ansible-tramp--cli-inventory-sync inventory-bin ansible-cnnx)))
+      (setq ansible-tramp-inventory-cache inventory
             ansible-tramp-inventory-cache-set-time (current-time))
-      (message "Ansible Inventory cache set"))
-   inventory-bin ansible-cnnx))
+      ansible-tramp-inventory-cache)))
 
 (defun ansible-tramp-set-inventory-cache-http (&optional inventory-http-url)
   "Sets cache `ansible-tramp-inventory-cache' by doing an async API call.
@@ -236,6 +246,19 @@ If not available, returns nil but tries reloading cache via an async API call (s
   (ansible-tramp--http-inventory-callback
    '(lambda (response)
       (message "Got: %S" (request-response-data response)))))
+
+(defun ansible-tramp--cli-inventory-sync (&optional inventory-bin ansible-cnnx)
+  (let* ((ansible-cnnx (or ansible-cnnx ansible-tramp-cnnx default-directory))
+         (inventory-bin (or inventory-bin ansible-tramp-inventory-cli-exec))
+         (ansible-inventory-cmd (concat inventory-bin " --list"))
+         ;; NB: force remote command execution from the host running Emacs
+         ;; otherwise, when visiting a remote file, would try connecting from it which has high chances of failing
+         (default-directory "/")
+         (raw-inventory (friendly-shell-command-to-string ansible-inventory-cmd :path ansible-cnnx))
+         (json-object-type 'hash-table)
+         (json-array-type 'list)
+         (json-key-type 'string))
+    (json-read-from-string raw-inventory)))
 
 (defun ansible-tramp--cli-inventory-callback (callback &optional inventory-bin ansible-cnnx)
   (let* ((ansible-cnnx (or ansible-cnnx ansible-tramp-cnnx default-directory))
