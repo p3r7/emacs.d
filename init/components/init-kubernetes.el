@@ -121,23 +121,43 @@
   (defun kubectl-logs (ns resource object)
     (unless (string= resource "pod")
       (user-error "Can only get logs of pod objects"))
-    (friendly-shell-command-async (concat "kubectl -n " ns " logs " object) :output-buffer (concat "*kubectl - logs - " ns "/" object "*")))
+    (friendly-shell-command-async (concat "kubectl -n " ns " logs " object)
+                                  :output-buffer (concat "*kubectl - logs - " ns "/" object "*")))
 
   (defun kubectl-logs-tail (ns resource object &optional nb-lines)
     (unless (string= resource "pod")
       (user-error "Can only get logs of pod objects"))
     (let ((nb-lines (or nb-lines 100)))
-      (friendly-shell-command-async (concat "kubectl -n " ns " logs " object " --tail " (number-to-string nb-lines)) :output-buffer (concat "*kubectl - logs - " ns "/" object "*"))))
+      (friendly-shell-command-async (concat "kubectl -n " ns " logs " object " --tail " (number-to-string nb-lines))
+                                    :output-buffer (concat "*kubectl - logs - " ns "/" object "*"))))
 
   (defun kubectl-get-yaml (ns resource object)
-    (friendly-shell-command-async (concat "kubectl -n " ns " get " resource " " object " -o yaml") :output-buffer (concat "*kubectl - yaml " resource "/" ns "/" object "*")))
+    (let ((buff-name (concat "*kubectl - yaml " resource "/" ns "/" object "*")))
+      (friendly-shell-command-async (concat "kubectl -n " ns " get " resource " " object " -o yaml")
+                                    :output-buffer buff-name
+                                    :callback `(lambda ()
+                                                 (let ((buff (get-buffer ,buff-name)))
+                                                   (when (buffer-live-p buff)
+                                                     (save-excursion
+                                                       (set-buffer buff)
+                                                       (goto-char (point-min))
+                                                       (when (re-search-forward (rx bol
+                                                                                    (literal "Connection to ")
+                                                                                    (one-or-more (any "a-z" "A-Z" "0-9" "-" "_" "."))
+                                                                                    (literal " closed.")
+                                                                                    eol)
+                                                                                nil t)
+                                                         (replace-match ""))
+                                                       (yaml-mode))))))))
 
   (defun kubectl-describe (ns resource object)
-    (friendly-shell-command-async (concat "kubectl -n " ns " describe " resource " " object) :output-buffer (concat "*kubectl - desc " resource "/" ns "/" object "*")))
+    (friendly-shell-command-async (concat "kubectl -n " ns " describe " resource " " object)
+                                  :output-buffer (concat "*kubectl - desc " resource "/" ns "/" object "*")))
 
   (defun kubectl-delete (ns resource object)
     (when (y-or-n-p (concat "Really delete " resource "/" object " in ns " ns " ?"))
-      (friendly-shell-command-async (concat "kubectl -n " ns " delete " resource " " object) :output-buffer (concat "*kubectl - delete - " resource "/" ns "/" object "*"))))
+      (friendly-shell-command-async (concat "kubectl -n " ns " delete " resource " " object)
+                                    :output-buffer (concat "*kubectl - delete - " resource "/" ns "/" object "*"))))
 
   ;; similar to `kubel-exec-shell-pod'
   (defun kubectl-shell (ns resource object)
