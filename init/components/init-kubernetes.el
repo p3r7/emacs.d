@@ -139,6 +139,28 @@
     (when (y-or-n-p (concat "Really delete " resource "/" object " in ns " ns " ?"))
       (friendly-shell-command-async (concat "kubectl -n " ns " delete " resource " " object) :output-buffer (concat "*kubectl - delete - " resource "/" ns "/" object "*"))))
 
+  ;; similar to `kubel-exec-shell-pod'
+  (defun kubectl-shell (ns resource object)
+    (unless (string= resource "pod")
+      (user-error "Cannot jump into a resource other than a pod"))
+    (let* ((dir-prefix (or
+                        (when (tramp-tramp-file-p default-directory)
+                          (with-parsed-tramp-file-name default-directory nil
+                            (format "%s%s:%s@%s|" (or hop "") method user host))) ""))
+           (containers (kube--get-pod-containers ns object))
+           (container (if (equal (length containers) 1)
+                          (car containers)
+                        (completing-read "Select container: " containers))))
+      (friendly-shell
+       :path (format "/%skubectl:%s@%s:/" dir-prefix container object)
+       :buffer-name (concat "*kubectl - sh - " resource "/" ns "/" object "*"))))
+
+
+  ;; stateless version of `kubel--get-containers'
+  (defun kube--get-pod-containers (ns pod)
+    (split-string
+     (kubel--exec-to-string
+      (format "kubectl -n %s get pod %s -o jsonpath='{.spec.%s[*].name}'" ns pod "containers")) " "))
 
   ;; shell-mode command parsing
 
@@ -211,6 +233,10 @@
     (interactive)
     (kubectl-action-on-object-at-point #'kubectl-logs))
 
+  (defun kubectl-shell-at-point ()
+    (interactive)
+    (kubectl-action-on-object-at-point #'kubectl-shell))
+
   (defun kubectl-logs-tail-at-point ()
     (interactive)
     (kubectl-action-on-object-at-point #'kubectl-logs-tail))
@@ -232,6 +258,7 @@
     "kubernetes"
     ("l" kubectl-logs-tail-at-point "logs (last)")
     ("L" kubectl-logs-at-point "logs (all)")
+    ("S" kubectl-shell-at-point "shell")
     ("y" kubectl-yaml-at-point "yaml def")
     ("i" kubectl-describe-at-point "describe")
     ("K" kubectl-delete-at-point "delete")
