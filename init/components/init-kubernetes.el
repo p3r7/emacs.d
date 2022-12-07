@@ -153,7 +153,7 @@
                         (completing-read "Select container: " containers))))
       (friendly-shell
        :path (format "/%skubectl:%s@%s:/" dir-prefix container object)
-       :buffer-name (concat "*kubectl - sh - " resource "/" ns "/" object "*"))))
+       :buffer-name (concat "kubectl - sh - " resource "/" ns "/" object))))
 
 
   ;; stateless version of `kubel--get-containers'
