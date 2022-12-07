@@ -127,7 +127,7 @@
     (unless (string= resource "pod")
       (user-error "Can only get logs of pod objects"))
     (let ((nb-lines (or nb-lines 100)))
-      (friendly-shell-command-async (concat "kubectl -n " ns " logs " object " --tail " nb-lines) :output-buffer (concat "*kubectl - logs - " ns "/" object "*"))))
+      (friendly-shell-command-async (concat "kubectl -n " ns " logs " object " --tail " (number-to-string nb-lines)) :output-buffer (concat "*kubectl - logs - " ns "/" object "*"))))
 
   (defun kubectl-get-yaml (ns resource object)
     (friendly-shell-command-async (concat "kubectl -n " ns " get " resource " " object " -o yaml") :output-buffer (concat "*kubectl - yaml " resource "/" ns "/" object "*")))
