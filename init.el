@@ -332,7 +332,8 @@
 ;; OPEN FILES
 
 (--each prf/startup-open-files
-  (find-file-noselect it))
+  (when (file-exists-p it)
+    (find-file-noselect it)))
 
 
  ;; SHORTCUTS
