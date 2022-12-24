@@ -210,8 +210,8 @@
     (ibuffer-tramp-set-filter-groups-by-tramp-connection)
     (ibuffer-do-sort-by-alphabetic))
 
-  (define-key ibuffer-mode-map (kbd "s t") 'prf/ibuffer/switch-to-tramp-filter-group)
-  (define-key ibuffer-mode-map (kbd "s d") 'prf/ibuffer/switch-to-default-filter-group))
+  (define-key ibuffer-mode-map (kbd "s t") #'prf/ibuffer/switch-to-tramp-filter-group)
+  (define-key ibuffer-mode-map (kbd "s d") #'prf/ibuffer/switch-to-default-filter-group))
 
 
 

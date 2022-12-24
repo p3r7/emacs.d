@@ -54,13 +54,13 @@
   (defun prf/show-in-file-explorer ()
     (interactive)
     (let ((filename (if (equal major-mode 'dired-mode)
-			default-directory
-		      (buffer-file-name))))
+			            default-directory
+		              (buffer-file-name))))
       ;; (shell-command (concat "explorer.exe " (prf/system/get-path-system-format filename)))
       (w32explore (prf/system/get-path-system-format filename))))
   (defalias '_exp 'prf/show-in-file-explorer)
-  (define-key dired-mode-map (kbd "Z") 'dired-w32-browser)
-  (define-key dired-mode-map (kbd "E") 'prf/show-in-file-explorer))
+  (define-key dired-mode-map (kbd "Z") #'dired-w32-browser)
+  (define-key dired-mode-map (kbd "E") #'prf/show-in-file-explorer))
 
 
 (defvar prf/setup/app/bash
@@ -157,9 +157,9 @@
 ;; - method 1 using AHK (bound to f11)
 ;; - method 2, kinda crappy, has to be tweaked
 ;; (defun toggle-full-screen () (interactive) (shell-command "C:/Users/jordan.besly/AppData/Roaming/.emacs.d/emacs_fullscreen.exe"))
-;; (global-set-key (kbd "C-<f11>") 'toggle-full-screen)
+;; (global-set-key (kbd "C-<f11>") #'toggle-full-screen)
 ;; (defun toggle-full-screen-topmost () (interactive) (shell-command "C:/Users/jordan.besly/AppData/Roaming/.emacs.d/emacs_fullscreen.exe --topmost"))
-;; (global-set-key (kbd "M-<f11>") 'toggle-full-screen-topmost)
+;; (global-set-key (kbd "M-<f11>") #'toggle-full-screen-topmost)
 ;; - method  3, use toggle-frame-fullscreen from frame.el
 
 
@@ -185,8 +185,8 @@
   (server-edit)
   (make-frame-invisible nil t))
 (when (equal system-type 'windows-nt)
-  (global-set-key (kbd "C-x C-c") 'xy/done) ;; virtually kill a frame
-  (global-set-key (kbd "C-x M-c") 'save-buffers-kill-emacs)) ;; kill emacs
+  (global-set-key (kbd "C-x C-c") #'xy/done) ;; virtually kill a frame
+  (global-set-key (kbd "C-x M-c") #'save-buffers-kill-emacs)) ;; kill emacs
 (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function)
 
 

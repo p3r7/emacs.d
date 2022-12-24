@@ -124,11 +124,11 @@
   :config
   (cond
    ((featurep 'helm-rg)
-    (global-set-key (kbd "C-S-f") 'helm-projectile-rg))
+    (global-set-key (kbd "C-S-f") #'helm-projectile-rg))
    ((executable-find "ag")
-    (global-set-key (kbd "C-S-f") 'helm-projectile-ag))
+    (global-set-key (kbd "C-S-f") #'helm-projectile-ag))
    (t
-    (global-set-key (kbd "C-S-f") 'helm-projectile))))
+    (global-set-key (kbd "C-S-f") #'helm-projectile))))
 
 
 
