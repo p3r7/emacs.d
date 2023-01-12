@@ -30,6 +30,10 @@
 (global-set-key (kbd "C-c TAB") 'prf/reindent-buffer)
 
 
+;; don't retain case when replacing strings
+(setq case-replace nil)
+
+
 
 ;; UNDO
 
