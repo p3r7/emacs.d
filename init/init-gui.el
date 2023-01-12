@@ -20,10 +20,10 @@
 ;; FRAME
 
 (customize-set-variable 'menu-bar-mode nil)
-(global-set-key (kbd "C-<f2>") 'menu-bar-mode)
+(global-set-key (kbd "C-<f2>") #'menu-bar-mode)
 
 (customize-set-variable 'tool-bar-mode nil)
-(global-set-key (kbd "M-<f2>") 'tool-bar-mode)
+(global-set-key (kbd "M-<f2>") #'tool-bar-mode)
 
 (defvar prf/frame/width-default 80)
 (defvar prf/frame/height-default 40)
@@ -93,9 +93,9 @@
        'line-number-current-line
        '((t :inherit 'line-number :foreground "Firebrick"))
        'face-defface-spec)
-      (global-set-key (kbd "C-<f5>") 'display-line-numbers-mode))
+      (global-set-key (kbd "C-<f5>") #'display-line-numbers-mode))
   (autoload 'linum-mode "linum" "toggle line numbers on/off" t)
-  (global-set-key (kbd "C-<f5>") 'linum-mode))
+  (global-set-key (kbd "C-<f5>") #'linum-mode))
 
 
 
@@ -170,7 +170,7 @@
 ;; INVISIBLE CHARACTERS
 
 (require 'whitespace)
-(global-set-key (kbd "C-<f7>") 'whitespace-mode)
+(global-set-key (kbd "C-<f7>") #'whitespace-mode)
 ;; NOTE: do not use w/ web-mode, might break stuff
 
 

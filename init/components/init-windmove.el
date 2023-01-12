@@ -11,10 +11,10 @@
   :config
   (windmove-default-keybindings 'super)
 
-  (global-set-key (read-kbd-macro prf/key-split-window-vertically)   'split-window-vertically)
-  (global-set-key (read-kbd-macro prf/key-split-window-horizontally) 'split-window-horizontally)
-  (global-set-key (read-kbd-macro prf/key-delete-other-windows)      'delete-other-windows)
-  (global-set-key (read-kbd-macro prf/key-delete-window)             'delete-window))
+  (global-set-key (read-kbd-macro prf/key-split-window-vertically)   #'split-window-vertically)
+  (global-set-key (read-kbd-macro prf/key-split-window-horizontally) #'split-window-horizontally)
+  (global-set-key (read-kbd-macro prf/key-delete-other-windows)      #'delete-other-windows)
+  (global-set-key (read-kbd-macro prf/key-delete-window)             #'delete-window))
 
 
 
@@ -42,8 +42,8 @@
   (prf/rotate-windows-helper (window-list) (window-buffer (car (window-list))))
   (select-window (car (last (window-list)))))
 
-(global-set-key (kbd "<C-tab>") 'prf/rotate-windows)
-(define-key org-mode-map (kbd "<C-tab>") 'prf/rotate-windows)
+(global-set-key (kbd "<C-tab>") #'prf/rotate-windows)
+(define-key org-mode-map (kbd "<C-tab>") #'prf/rotate-windows)
 
 
 ;; ------------------------------------------------------------------------

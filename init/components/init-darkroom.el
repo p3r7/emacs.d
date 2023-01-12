@@ -9,18 +9,20 @@
     (interactive)
     (let ((fullscreen (frame-parameter nil 'fullscreen)))
       (if (memq fullscreen '(fullscreen fullboth))
-	  (progn
-	    (if (bound-and-true-p darkroom-tentative-mode)
-		(let ((darkroom-mode nil))
-		  (darkroom-tentative-mode -1)))
-	    (if (bound-and-true-p darkroom-mode)
-		(let ((darkroom-tentative-mode nil))
-		  (darkroom-mode -1))))
-	(darkroom-mode))
+	      (progn
+	        (if (bound-and-true-p darkroom-tentative-mode)
+		        (let ((darkroom-mode nil))
+		          (darkroom-tentative-mode -1)))
+	        (if (bound-and-true-p darkroom-mode)
+		        (let ((darkroom-tentative-mode nil))
+		          (darkroom-mode -1))))
+	    (darkroom-mode))
       (toggle-frame-fullscreen)))
 
 
-  (global-set-key (kbd "C-<f11>") 'prf/frame/toggle-fullscreen-darkroom))
+  (global-set-key (kbd "C-<f11>") #'prf/frame/toggle-fullscreen-darkroom))
 
+
+
 
 (provide 'init-darkroom)

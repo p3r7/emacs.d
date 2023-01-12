@@ -27,7 +27,7 @@
   (interactive)
   (save-excursion
     (indent-region (point-min) (point-max) nil)))
-(global-set-key (kbd "C-c TAB") 'prf/reindent-buffer)
+(global-set-key (kbd "C-c TAB") #'prf/reindent-buffer)
 
 
 ;; don't retain case when replacing strings

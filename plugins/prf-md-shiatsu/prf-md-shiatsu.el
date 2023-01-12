@@ -311,8 +311,8 @@
   "Additional font locks and shortcuts."
   :lighter md-shiatsu-mode-text
   :keymap (let ((map (make-sparse-keymap)))
-            (define-key map (kbd "C-c c") 'prf/md-shiatsu/quote-chinese)
-            (define-key map (kbd "C-c j") 'prf/md-shiatsu/quote-japanese)
+            (define-key map (kbd "C-c c") #'prf/md-shiatsu/quote-chinese)
+            (define-key map (kbd "C-c j") #'prf/md-shiatsu/quote-japanese)
             map)
 
   (message "Enabled shiatsu mode")

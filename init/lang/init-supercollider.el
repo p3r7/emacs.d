@@ -1,5 +1,8 @@
 
 
+
+;; ENV
+
 (defvar prf/supercolider-scel-path "~/.local/share/SuperCollider/Emacs/scel")
 
 (let ((sclang-dir (concat prf/supercolider-scel-path "/el")))
@@ -8,12 +11,18 @@
 
 
 
+;; MODE(S)
 
 (when (and (locate-library "sclang")
            (locate-library "sclang-vars"))
   (use-package sclang
     :ensure nil
-    :demand))
+    :demand)
+
+  ;; (use-package sclang-extensions
+  ;;   :after (sclang auto-complete)
+  ;;   :hook ((sclang-mode . sclang-extensions-mode)))
+  )
 
 
 

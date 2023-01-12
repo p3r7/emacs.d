@@ -332,7 +332,8 @@
 ;; OPEN FILES
 
 (--each prf/startup-open-files
-  (find-file-noselect it))
+  (when (file-exists-p it)
+    (find-file-noselect it)))
 
 
  ;; SHORTCUTS
@@ -377,8 +378,8 @@
 
   ;; http://kitchingroup.cheme.cmu.edu/blog/2015/06/24/Conditional-hydra-menus/
 
-  (global-set-key (kbd "<apps>") 'hydra-main/body)
-  (global-set-key (kbd "<menu>") 'hydra-main/body))
+  (global-set-key (kbd "<apps>") #'hydra-main/body)
+  (global-set-key (kbd "<menu>") #'hydra-main/body))
 
 
 

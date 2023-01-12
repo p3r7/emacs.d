@@ -358,7 +358,7 @@
 
 (define-key global-map (kbd "C-+") #'text-scale-increase)
 ;; (define-key global-map [C-kp-add] #'text-scale-increase)
-;; (define-key global-map (kbd "C--") 'text-scale-decrease)
+;; (define-key global-map (kbd "C--") #'text-scale-decrease)
 (define-key global-map (kbd "C-°") #'text-scale-decrease)
 ;; (define-key global-map [C-kp-subtract] #'text-scale-decrease)
 (define-key global-map (kbd "C-=") #'prf/text-scale-reset)
