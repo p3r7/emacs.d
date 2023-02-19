@@ -2,6 +2,7 @@
 (use-package aggressive-indent
   :hook
   (prog-mode . (lambda ()
+                 ;; NB: `aggressive-indent-excluded-modes' only eval'ed when using `global-aggressive-indent-mode'
                  (unless (cl-member-if #'derived-mode-p aggressive-indent-excluded-modes)
                    aggressive-indent-mode)))
   :init
