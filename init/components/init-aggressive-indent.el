@@ -1,8 +1,17 @@
 
 (use-package aggressive-indent
   :hook
-  (prog-mode . aggressive-indent-mode)
-  ;; REVIEW: could be cleaner to: (add-to-list 'aggressive-indent-excluded-modes 'python-mode)
-  ((python-mode sql-mode sass-mode dotenv-mode dockerfile-mode makefile-gmake-mode) . (lambda () (aggressive-indent-mode -1))))
+  (prog-mode . (lambda ()
+                 (unless (cl-member-if #'derived-mode-p aggressive-indent-excluded-modes)
+                   aggressive-indent-mode)))
+  :init
+  (add-to-list 'aggressive-indent-excluded-modes 'sql-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'sass-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'dotenv-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'dockerfile-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'makefile-mode))
+
+
+
 
 (provide 'init-aggressive-indent)
