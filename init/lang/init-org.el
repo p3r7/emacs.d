@@ -264,11 +264,13 @@ If thing under point is not a link or has no matching alt type"
 ;; TABLES
 
 (use-package valign
+  :disabled
   :quelpa (valign :fetcher github :repo "casouri/valign")
   :ensure t
   :config
   (add-hook 'org-mode-hook #'valign-mode)
-  (setq valign-fancy-bar t))
+  ;; (setq valign-fancy-bar t)
+  )
 
 
 
