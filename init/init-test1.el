@@ -33,6 +33,13 @@ Useful when pasting complete TRAMP paths while already on a remote host."
 
 
 
+;; WIP EE BOM
+
+(use-package bom
+  :load-path "~/.emacs.d/plugins/bom")
+
+
+
 ;; WIP PUSHBULLET PACKAGE
 
 (use-package pushbullet-api
