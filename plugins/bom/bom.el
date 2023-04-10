@@ -14,7 +14,16 @@
 (defvar bom/inventory-file nil)
 
 (defvar bom/mouser-api-key nil)
+(defvar bom/mouser-api-base-url "https://api.mouser.com/api/")
 
+
+
+;; CORE
+
+(defun assoc-path (alist &rest keys)
+  (while keys
+    (setq alist (cdr (assoc (pop keys) alist))))
+  alist)
 
 
 ;; ORG TABLE - TABLE
@@ -193,11 +202,124 @@
 
 
 
-;; PROVIDER - MOUSER
+;; PROVIDER - MOUSER - GENERIC
+
+;; https://api.mouser.com/api/docs/ui/index
 
 (defun bom/mouser/seach-url (term)
   (concat "https://www.mouser.fr/c/?q=" term))
 
+(defun bom/mouser/api-url (version path)
+  (concat bom/mouser-api-base-url version path))
+
+
+
+;; PROVIDER - MOUSER - API V2
+
+(defun bom/mouser/api/v2/search/manufacturerlist ()
+  (request (bom/mouser/api-url "v2" "/search/manufacturerlist")
+    :type "GET"
+    :params (list (cons "apiKey" bom/mouser-api-key))
+    :parser #'json-read
+    :success (cl-function
+              (lambda (&key data &allow-other-keys)
+                (setq prf/manufacturers
+                      (--map (cdr (assoc 'ManufacturerName it))
+                             (assoc-path data 'MouserManufacturerList 'ManufacturerList)))
+                ))))
+
+;; (bom/mouser/api/v2/search/manufacturerlist)
+
+(cl-defun bom/mouser/api/v2/search/keywordandmanufacturer (keyword
+                                                           &key manufacturer
+                                                           search-options
+                                                           records page
+                                                           use-signup-lang)
+  (let ((manufacturer (or manufacturer ""))
+        (search-options (or search-options "None"))
+        (records (or records 0))
+        (page (or page 0))
+        (use-signup-lang (if use-signup-lang "true" "false")))
+    (request (bom/mouser/api-url "v2" "/search/keywordandmanufacturer")
+      :type "POST"
+      :params (list (cons "apiKey" bom/mouser-api-key))
+      :data (json-encode
+             `(("SearchByKeywordMfrNameRequest"
+                . (("manufacturerName" . ,manufacturer)
+                   ("keyword" . ,keyword)
+                   ("records" . ,records)
+                   ("pageNumber" . ,page)
+                   ("searchOptions" . ,search-options)
+                   ("searchWithYourSignUpLanguage" . ,use-signup-lang)))))
+      :headers '(("Content-Type" . "application/json"))
+      :parser #'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  (setq prf/toto data)
+                  ;; (setq prf/manufacturers
+                  ;;       (--map (cdr (assoc 'ManufacturerName it))
+                  ;;              (assoc-path data 'MouserManufacturerList 'ManufacturerList)))
+                  )))))
+
+;; (bom/mouser/api/v2/search/keywordandmanufacturer "SN74HC595DR" :manufacturer "Texas Instruments")
+
+
+
+;; PROVIDER - MOUSER - API V1
+
+;; https://www.mouser.com/service/searchapi.asmx?op=SearchByKeyword
+
+(cl-defun bom/mouser/api-search-keyword (keyword
+                                         &key
+                                         records starting-record
+                                         search-options)
+  (let ((search-options (or search-options "None"))
+        (records (or records 0))
+        (starting-record (or starting-record 0)))
+    (request (bom/mouser/api-url "v1.0" "/search/keyword")
+      :type "POST"
+      :params (list (cons "apiKey" bom/mouser-api-key))
+      :data (json-encode
+             `(("SearchByKeywordRequest"
+                . (("keyword" . ,keyword)
+                   ("records" . ,records)
+                   ("startingRecord" . ,starting-record)
+                   ("searchOptions" . ,search-options)
+                   ("searchWithYourSignUpLanguage" . 0)))))
+      :headers '(("Content-Type" . "application/json"))
+      :parser #'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  ;; (message "GOT: %S" data)
+
+                  (setq prf/mouser-res data)
+
+                  (let ((errors (assoc 'Errors data))
+                        (parts (assoc-path data 'SearchResults 'Parts)))
+                    )
+                  )))))
+
+(cl-defun bom/mouser/api-search-partnumber (sku &key search-options)
+  (let ((search-options (or search-options "None")))
+    (request (bom/mouser/api-url "v1.0" "/search/partnumber")
+      :type "POST"
+      :params (list (cons "apiKey" bom/mouser-api-key))
+      :data (json-encode
+             `(("SearchByPartRequest"
+                . (("mouserPartNumber" . ,sku)
+                   ("partSearchOptions" . ,search-options)))))
+      :headers '(("Content-Type" . "application/json"))
+      :parser #'json-read
+      :success (cl-function
+                (lambda (&key data &allow-other-keys)
+                  ;; (message "GOT: %S" data)
+
+                  (let ((errors (assoc 'Errors data))
+                        (parts (assoc-path data 'SearchResults 'Parts)))
+                    )
+                  )))))
+
+;; (bom/mouser/api-search-partnumber "926-LM4040DIM3X50NPB")
 
 
 
