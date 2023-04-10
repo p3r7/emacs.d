@@ -52,10 +52,10 @@
 
 (use-package helpful
   :bind (("C-h f" . helpful-callable)
-	 ("C-h v" . helpful-variable)
-	 ("C-h k" . helpful-key)
-	 ("C-h o" . helpful-at-point)
-	 ("C-h F" . helpful-function)))
+	     ("C-h v" . helpful-variable)
+	     ("C-h k" . helpful-key)
+	     ("C-h o" . helpful-at-point)
+	     ("C-h F" . helpful-function)))
 
 (use-package which-key
   :delight
