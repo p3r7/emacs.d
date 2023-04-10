@@ -1,7 +1,26 @@
 ;; (require 'noflet)
 (require 'cl-lib)
 (require 's)
+(require 'tramp)
 
+
+
+;; disable lock
+
+;; NB: ever since mocing to emacs 28 pretest, regurlarly getting self-lock while on TRAMP
+;; this is a drastic way to solve the issue
+
+(setq create-lockfiles nil)
+
+
+
+;; debug pauses
+
+(use-package explain-pause-mode
+  :disabled
+  :straight (explain-pause-mode :type git :host github :repo "lastquestion/explain-pause-mode")
+  :config
+  (explain-pause-mode))
 
 
 
