@@ -163,7 +163,8 @@
   :config
   (add-hook 'prog-mode-hook #'form-feed-mode)
   (add-hook 'compilation-mode-hook #'form-feed-mode)
-  (add-hook 'help-mode-hook #'form-feed-mode))
+  (add-hook 'help-mode-hook #'form-feed-mode)
+  (add-hook 'comint-mode-hook #'form-feed-mode))
 
 
 
