@@ -241,6 +241,7 @@
 (require 'init-devilspie)
 (require 'init-r)
 (require 'init-supercollider)
+(require 'init-gnuplot)
 
 ;; - shell
 (require 'init-dos)
