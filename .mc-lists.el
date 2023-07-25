@@ -95,6 +95,7 @@
 
 (setq mc/cmds-to-run-once
       '(
+        beginning-of-buffer
         cut-line-or-region
         handle-switch-frame
         helpful-key
