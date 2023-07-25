@@ -10,6 +10,7 @@
         lispy-hash
         lispy-kill
         lispy-move-beginning-of-line
+        lispy-move-end-of-line
         lispy-parens
         lispy-quotes
         lispy-space
