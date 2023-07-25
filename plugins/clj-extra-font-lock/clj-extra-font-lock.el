@@ -24,7 +24,7 @@
      (concat
       "\\(" ns "\\)/\\("
       (s-join "\\|"
-	      (sort (copy-seq word-list) (lambda (a b) (> (length a) (length b)))))
+	      (sort (cl-copy-seq word-list) (lambda (a b) (> (length a) (length b)))))
       ;; (sort word-list 'string-lessp))
       "\\)\\_>") limit t)))
 
