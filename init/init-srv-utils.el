@@ -1,6 +1,7 @@
 
 (require 'dash)
 (require 's)
+(require 'rx)
 
 
 
@@ -385,17 +386,37 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     (move-to-column col t)))
 
 
+(defvar prf/ffap-with-pos-rx (rx bol (group (one-or-more anything)) ":" (group (one-or-more digit)) ":" (group (one-or-more digit)) (zero-or-more ":") eol))
+
+(defun prf/guess-file-at-point ()
+  (when-let ((file (ffap-guess-file-name-at-point)))
+    (if (s-matches-p prf/ffap-with-pos-rx file)
+        (pcase-let ((`(,_input ,file ,line ,col) (s-match prf/ffap-with-pos-rx file)))
+          (list file (string-to-number line) (string-to-number col)))
+      (list file))))
+
 ;; REVIEW: could use directly find-file-at-point aka ffap
 (defun prf/find-file-at-point ()
   "Find file at point if it exists."
   (interactive)
-  (let ((file (ffap-guess-file-name-at-point)))
-    (cond (file
-           (find-file file))
+
+  (pcase-let ((`(,file ,line ,col) (prf/guess-file-at-point)))
+    (unless file
+      (user-error "Could find a valid file at point"))
+
+    (cond ((file-exists-p file)
+           (find-file file)
+           (when line
+             (goto-line line))
+           (when col
+             (beginning-of-line)
+             (forward-char (- col 1))))
 
           ((and (bound-and-true-p shell-mode)
                 (clojure-project-root-path)) ; is in a Clojure project
-           (prf/ffap-cider)))))
+           (prf/ffap-cider))
+
+          (t (user-error "File %s doesn't seem to exist" file)))))
 
 (defalias '_ffap #'prf/find-file-at-point)
 

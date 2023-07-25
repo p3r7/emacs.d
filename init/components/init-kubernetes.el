@@ -109,6 +109,8 @@
       ("ds" "daemonset")
       ("service" "service")
       ("svc" "service")
+      ("ingress" "ingress")
+      ("ing" "ingress")
       ("node" "node")
       ("nodes" "node")
       ("pv" "pv")

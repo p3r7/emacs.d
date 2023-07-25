@@ -200,11 +200,14 @@ Throws an error if not found unless NOERROR is non-nil."
 (defvar kubel-resource "Pods"
   "Current resource.")
 
-(defun kubel--fetch-context (&optional noerror)
+(defun kubel--fetch-context (&optional _noerror)
   "Fetch current context from kubectl."
-  (when-let ((fetch-raw-res (kubel--exec-to-string "kubectl config current-context" noerror)))
-    (replace-regexp-in-string
-     "\n" "" fetch-raw-res)))
+  (let ((fetch-raw-res (kubel--exec-to-string "kubectl config current-context" 'noerror)))
+    (if (and fetch-raw-res
+             (not (s-contains? "error: current-context is not set" fetch-raw-res)))
+        (replace-regexp-in-string
+         "\n" "" fetch-raw-res)
+      "")))
 
 (defvar kubel-context
   (kubel--fetch-context 'noerror)
