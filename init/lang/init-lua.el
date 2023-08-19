@@ -47,10 +47,16 @@
 
 ;; CUSTOM FNS - BYTES
 
+(defvar prf/lua/table-max-width 18)
+
 (defun prf/hex-str-to-lua (str)
-  (->> (s-split " " str)
-       (--map (concat "0x" (s-downcase it)))
-       (s-join ", ")))
+  (let* ((hex-list (->> (s-replace "\n" " " str)
+                        (s-split " ")
+                        (--remove (string= "" it))
+                        (--map (concat "0x" (s-downcase it)))))
+         (lines (--map (s-join ", " it)
+                       (-partition-all prf/lua/table-max-width hex-list))))
+    (s-join "\n" lines)))
 
 (defun prf/lua/hex-to-table (start end)
   (interactive "r")
