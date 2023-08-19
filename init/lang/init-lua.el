@@ -54,8 +54,8 @@
                         (s-split " ")
                         (--remove (string= "" it))
                         (--map (concat "0x" (s-downcase it)))))
-         (lines (--map (s-join ", " it)
-                       (-partition-all prf/lua/table-max-width hex-list))))
+         (lines (concat (--map (s-join ", " it)
+                               (-partition-all prf/lua/table-max-width hex-list)) ", ")))
     (s-join "\n" lines)))
 
 (defun prf/lua/hex-to-table (start end)
