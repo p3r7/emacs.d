@@ -51,9 +51,10 @@
 
   :config
 
-  ;; NB: org-mode loading specifity
+  ;; NB: org-mode loading specifity, needed pre emacs 29
   ;; http://orgmode.org/worg/org-faq.html#load-org-after-setting-variables
-  (require 'org-install)
+  (when (featurep 'org-install)
+    (require 'org-install))
 
   ;; enable back easy-template
   (when (>= emacs-major-version 27)
