@@ -216,6 +216,8 @@
 
 ;; PROVIDER - MOUSER - API V2
 
+;; https://api.mouser.com/api/docs/ui/index?urls.primaryName=api%2Fdocs%2FV2
+
 (defun bom/mouser/api/v2/search/manufacturerlist ()
   (request (bom/mouser/api-url "v2" "/search/manufacturerlist")
     :type "GET"
@@ -228,13 +230,20 @@
                              (assoc-path data 'MouserManufacturerList 'ManufacturerList)))
                 ))))
 
+;; (with-environment-variables (("HTTP_PROXY" "")
+;;                              ("HTTPS_PROXY" "")
+;;                              ("http_proxy" "")
+;;                              ("https_proxy" ""))
+;;   (bom/mouser/api/v2/search/manufacturerlist))
+
 ;; (bom/mouser/api/v2/search/manufacturerlist)
 
-(cl-defun bom/mouser/api/v2/search/keywordandmanufacturer (keyword
-                                                           &key manufacturer
-                                                           search-options
-                                                           records page
-                                                           use-signup-lang)
+(cl-defun bom/mouser/api/v2/search/keywordandmanufacturer
+    (manufacturer keyword
+                  &key
+                  search-options
+                  records page
+                  use-signup-lang)
   (let ((manufacturer (or manufacturer ""))
         (search-options (or search-options "None"))
         (records (or records 0))
@@ -261,18 +270,18 @@
                   ;;              (assoc-path data 'MouserManufacturerList 'ManufacturerList)))
                   )))))
 
-;; (bom/mouser/api/v2/search/keywordandmanufacturer "SN74HC595DR" :manufacturer "Texas Instruments")
+;; (bom/mouser/api/v2/search/keywordandmanufacturer "Texas Instruments" "SN74HC595DR")
 
 
 
 ;; PROVIDER - MOUSER - API V1
 
-;; https://www.mouser.com/service/searchapi.asmx?op=SearchByKeyword
+;; https://api.mouser.com/api/docs/ui/index?urls.primaryName=api%2Fdocs%2FV1
 
-(cl-defun bom/mouser/api-search-keyword (keyword
-                                         &key
-                                         records starting-record
-                                         search-options)
+(cl-defun bom/mouser/api/v1/search/keyword (keyword
+                                            &key
+                                            records starting-record
+                                            search-options)
   (let ((search-options (or search-options "None"))
         (records (or records 0))
         (starting-record (or starting-record 0)))
@@ -299,7 +308,7 @@
                     )
                   )))))
 
-(cl-defun bom/mouser/api-search-partnumber (sku &key search-options)
+(cl-defun bom/mouser/api/v1/search/partnumber (sku &key search-options)
   (let ((search-options (or search-options "None")))
     (request (bom/mouser/api-url "v1.0" "/search/partnumber")
       :type "POST"
@@ -319,7 +328,7 @@
                     )
                   )))))
 
-;; (bom/mouser/api-search-partnumber "926-LM4040DIM3X50NPB")
+;; (bom/mouser/api/v1/search/partnumber "926-LM4040DIM3X50NPB")
 
 
 
