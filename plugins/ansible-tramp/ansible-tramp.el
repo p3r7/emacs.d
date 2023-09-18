@@ -190,7 +190,7 @@ If not available, returns nil but tries reloading cache via an async API call (s
                          (mapc
                           (lambda (e)
                             (add-to-list 'buf-list
-                                         (friendly-remote-shell
+                                         (friendly-shell
                                           :path (funcall ansible-tramp-host-path-transform-fn (ansible-tramp-get-inventory-address-for-host e)))
                                          't))
                           marked-candidates)
