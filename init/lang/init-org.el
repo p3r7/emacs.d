@@ -10,7 +10,7 @@
 (use-package org
   :bind (
          :map org-mode-map
-         ;; NB: og bound to `org-fill-paragraph'
+              ;; NB: og bound to `org-fill-paragraph'
          ("M-q" . toggle-truncate-lines)
          ;; NB: got overriden by `cua-selection-mode'
          ("C-y" . org-yank)
@@ -42,7 +42,7 @@
   ;; Safe as long as I only use my own org files
   ;; (require 'org-link-sshell)
   (setq org-confirm-shell-link-function nil
-	org-confirm-elisp-link-function nil)
+	    org-confirm-elisp-link-function nil)
   ;; (setq org-link-abbrev-alist
   ;;       '(
   ;;         ("google"   . "http://www.google.com/search?q=")
