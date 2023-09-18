@@ -16,11 +16,20 @@
 
 ;; debug pauses
 
-(use-package explain-pause-mode
-  :disabled
-  :straight (explain-pause-mode :type git :host github :repo "lastquestion/explain-pause-mode")
+;; (use-package explain-pause-mode
+;;   :disabled
+;;   :straight (explain-pause-mode :type git :host github :repo "lastquestion/explain-pause-mode")
+;;   :config
+;;   (explain-pause-mode))
+
+
+(use-package ob-http
+  :after org
   :config
-  (explain-pause-mode))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (http . t))))
 
 
 
