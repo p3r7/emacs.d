@@ -228,6 +228,7 @@
 (require 'init-c-common)
 (require 'init-c)
 (require 'init-go)
+(require 'init-zig)
 (require 'init-php)
 (require 'init-js)
 (require 'init-lua)
@@ -242,6 +243,7 @@
 (require 'init-devilspie)
 (require 'init-r)
 (require 'init-supercollider)
+(require 'init-gnuplot)
 
 ;; - shell
 (require 'init-dos)
@@ -267,6 +269,7 @@
 ;; - frameworks / platforms
 (require 'init-arduino)
 (require 'init-norns)
+(require 'init-seamstress)
 
 (require 'init-compilation)
 
