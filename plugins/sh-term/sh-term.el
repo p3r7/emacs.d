@@ -40,6 +40,7 @@
 ;; TODO: find equivalent of eshell-interactive-output-p
 ;; TODO: port eshell-flatten-list / eshell-stringify-list (maybe from dash.el)
 
+
 
 ;; REQUIRES
 
@@ -270,15 +271,19 @@ visual command, returns non-nil."
 ARGS are passed to the program.  At the moment, no piping of input is
 allowed."
   (let* (shell-interpreter-alist
-	 (interp (prf/tramp/executable-find (car args) (cdr args)))
-	 (program (car interp))
-	 (args (eshell-flatten-list
-		(eshell-stringify-list (append (cdr interp)
-					       (cdr args)))))
-	 (term-buf
-	  (generate-new-buffer
-	   (concat "*" (file-name-nondirectory program) "*")))
-	 (shell-buf (current-buffer)))
+         (interp (prf/tramp/executable-find (car args) (cdr args)))
+	 (program interp)
+         (_ (message (concat "program: " program)))
+         (args (eshell-flatten-list
+	        (eshell-stringify-list
+                 (cdr args)
+                 ;; (append program (cdr args))
+                 )))
+         (_ (message "args: %s" args))
+         (term-buf
+          (generate-new-buffer
+           (concat "*" (file-name-nondirectory program) "*")))
+         (shell-buf (current-buffer)))
     (save-current-buffer
       (switch-to-buffer term-buf)
       (term-mode)
@@ -287,7 +292,7 @@ allowed."
       (setq sh-term-parent-buffer shell-buf)
       (term-exec term-buf program program nil args)
       (let ((proc (get-buffer-process term-buf)))
-	(if (and proc (eq 'run (process-status proc)))
+        (if (and proc (eq 'run (process-status proc)))
 	    (set-process-sentinel proc 'sh-term-sentinel)
 	  (error "Failed to invoke visual command")))
       (term-char-mode)
@@ -411,6 +416,148 @@ shell-mode to have them play in a term buffer."
 
 (defun sh-term--shell-unquote-args (args)
   (-map #'sh-term--shell-unquote-argument args))
+
+
+
+
+;; REMOTE TERM (w/ TRAMP)
+
+;; NB: taken directly from https://github.com/cuspymd/tramp-term.el
+;; but attempting to address:
+;; - `tramp-default-method' other than ssh
+;; - multi-hops
+
+(defvar tramp-term-after-initialized-hook nil
+  "Hook called after tramp has been initialized on the remote host.
+Hooks should expect a single arg which contains the
+hostname used to connect to the remote machine.")
+
+;;;###autoload
+(defun tramp-term (&optional host-arg)
+  "Create an `ansi-term` running ssh session.
+And automatically enable tramp integration in that terminal.
+Optional argument HOST-ARG is a list or one or two elements,
+the last of which is the host name."
+  (interactive)
+  (let* ((host (or host-arg (tramp-term--select-host)))
+         (hostname (car (last host)))
+         (_ (message "hostname: %s" hostname))
+         (prompt-bound nil))
+    (if (or (> (length host) 2)
+            (eql (length hostname) 0))
+        (message "Invalid host string")
+      (unless (eql (catch 'tramp-term--abort (tramp-term--do-ssh-login host)) 'tramp-term--abort)
+        (tramp-term--initialize hostname)
+        (run-hook-with-args 'tramp-term-after-initialized-hook hostname)
+        (message "tramp-term initialized")))))
+
+;; I imagine TRAMP has utility functions that would replace most of
+;; this.  Needs investigation.
+(defun tramp-term--do-ssh-login (host)
+  "Perform the ssh login at HOST."
+  (let* ((user "")
+         (hostname (car (last host))))
+    (when (= (length host) 2)
+      (setq user (format "%s@" (car host))))
+    (tramp-term--create-term hostname tramp-default-method (format "%s%s" user hostname)))
+  (save-excursion
+    (let ((bound 0))
+      (while (not (tramp-term--find-shell-prompt bound))
+        (let ((yesno-prompt (tramp-term--find-yesno-prompt bound))
+              (passwd-prompt (tramp-term--find-passwd-prompt bound))
+              (service-unknown (tramp-term--find-service-unknown bound)))
+          (cond (yesno-prompt
+                 (tramp-term--confirm)
+                 (setq bound (1+ yesno-prompt)))
+                (passwd-prompt
+                 (tramp-term--handle-passwd-prompt)
+                 (setq bound (1+ passwd-prompt)))
+                (service-unknown (throw 'tramp-term--abort 'tramp-term--abort))
+                (t (sleep-for 0.1))))))))
+
+(defun tramp-term--find-shell-prompt (bound)
+  "Find shell prompt with a buffer position BOUND."
+  (re-search-backward tramp-shell-prompt-pattern bound t))
+
+(defun tramp-term--find-yesno-prompt (bound)
+  "Find yesno prompt with a buffer position BOUND."
+  (re-search-backward tramp-yesno-prompt-regexp bound t))
+
+(defun tramp-term--find-passwd-prompt (bound)
+  "Find password prompt with a buffer position BOUND."
+  (re-search-backward tramp-password-prompt-regexp bound t))
+
+(defun tramp-term--find-service-unknown (bound)
+  "Find service unknown with a buffer position BOUND."
+  (re-search-backward "Name or service not known" bound t))
+
+(defun tramp-term--handle-passwd-prompt ()
+  "Read a password from the user and sends it to the server."
+  (term-send-raw-string
+   (concat (read-passwd "Password: ") (kbd "RET"))))
+
+(defun tramp-term--confirm ()
+  "Prompts the user to continue, aborts if they decline."
+  (if (yes-or-no-p "Continue? ")
+      (term-send-raw-string (concat "yes" (kbd "RET")))
+    (term-send-raw-string (concat "no" (kbd "RET")))
+    (throw 'tramp-term--abort 'tramp-term--abort)))
+
+(defun tramp-term--initialize (hostname)
+  "Send bash commands to set up tramp integration for HOSTNAME."
+  (term-send-raw-string (format "
+function set-eterm-dir {
+    echo -e \"\\033AnSiTu\" \"%s$USER\"
+    echo -e \"\\033AnSiTc\" \"$PWD\"
+    echo -e \"\\033AnSiTh\" \"%s\"
+    history -a
+}
+PROMPT_COMMAND=\"${PROMPT_COMMAND:+$PROMPT_COMMAND ;} set-eterm-dir\"
+clear
+" (if (version= emacs-version "26.1") (concat tramp-default-method ":") "") hostname)))
+
+(defun tramp-term--select-host ()
+  "Return a host from a list of hosts."
+  (let* ((crm-separator "@")
+         (default-host (tramp-term-default-host)))
+    (completing-read-multiple
+     (tramp-term-prompt default-host)
+     (tramp-term--parse-hosts "~/.ssh/config")
+     nil
+     nil
+     nil
+     nil
+     default-host
+     )))
+
+(defun tramp-term-prompt (default-host)
+  "Make prompt string with DEFAULT-HOST."
+  (let ((default-string (when default-host
+                          (format " (default %s)" default-host))))
+    (concat "[user@]host" default-string ": ")))
+
+(defun tramp-term-default-host ()
+  "Return default host based on `default-directory` which is a tramp file."
+  (when (tramp-tramp-file-p default-directory)
+    (let* ((user (file-remote-p default-directory 'user))
+           (host (file-remote-p default-directory 'host)))
+      (if user (format "%s@%s" user host) host))))
+
+(defun tramp-term--parse-hosts (ssh-config)
+  "Parse any host directives from SSH-CONFIG file and return them as a list of strings."
+  (mapcar 'cadr (delete nil (tramp-parse-sconfig ssh-config))))
+
+(defun tramp-term--create-term (new-buffer-name cmd &rest switches)
+  "Create an `ansi-term` running an arbitrary CMD with NEW-BUFFER-NAME.
+Including extra parameters SWITCHES."
+  (let ((new-buffer-name (generate-new-buffer-name (format "*%s*" new-buffer-name))))
+    (with-current-buffer (make-term new-buffer-name cmd nil (car switches))
+      (rename-buffer new-buffer-name)   ; Undo the extra "*"s that
+                                        ; make-term insists on adding
+      (term-mode)
+      (term-char-mode)
+      (term-set-escape-char ?\C-x))
+    (switch-to-buffer new-buffer-name)))
 
 
 
