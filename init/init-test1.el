@@ -31,6 +31,17 @@
    '((emacs-lisp . t)
      (http . t))))
 
+(eval-after-load 'org
+  ;; 2 lines of padding instead of 2
+  ;; please not that `org-blank-before-new-entry' may do this as well but didn't got it working.
+  (add-hook 'org-insert-heading-hook
+            (lambda ()
+              (save-excursion
+                (beginning-of-line)
+                (open-line 1)
+                (forward-line -1)
+                (indent-according-to-mode)))))
+
 
 
 ;; find-file
