@@ -9,9 +9,10 @@
   :init
   (setq ediff-split-window-function 'split-window-horizontally
 	ediff-window-setup-function 'ediff-setup-windows-plain
+    ;; NB: best option is `--ignore-goedel' but only avail on modern versions
 	;; ediff-diff-options "--text -w"
-	;; ediff-diff-options "-w" ;; ignore all white spaces
-	ediff-diff-options "-Z -E" ;; ignore trailing white spaces + tab expansion
+	ediff-diff-options "-w" ;; ignore all white spaces
+	;; ediff-diff-options "-Z -E -b" ;; ignore trailing white spaces + tab expansion
 	)
   :config
   (defun ediff-toggle ()
