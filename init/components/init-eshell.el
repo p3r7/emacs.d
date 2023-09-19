@@ -2,11 +2,18 @@
 (use-package eshell
   :ensure nil
   :commands eshell-mode
+  :bind (
+         :map eshell-mode-map
+         ((kbd "<up>") . nil)
+         ((kbd "<down>") . nil)
+         :map eshell-hist-mode-map
+         ((kbd "<up>") . nil)
+         ((kbd "<down>") . nil))
   :hook '(eshell-mode
-	  . (lambda () (setq global-hl-line-mode nil)))
+	      . (lambda () (setq global-hl-line-mode nil)))
   :init
   (setq eshell-history-size 1000000
-	eshell-destroy-buffer-when-process-dies t))
+	    eshell-destroy-buffer-when-process-dies t))
 
 ;; TODO: em-smart ? plan9 concepts ported to emacs shells
 ;; http://www.opensource.apple.com/source/emacs/emacs-51/emacs/lisp/eshell/em-smart.el
