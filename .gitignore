@@ -54,6 +54,7 @@ org-roam.db
 tldr-master/
 
 # private folders
+tree-sitter/
 auto-save-list/
 eshell/
 info/
