@@ -1,14 +1,10 @@
 
 (use-package eshell
-  :ensure nil
   :commands eshell-mode
   :bind (
-         :map eshell-mode-map
-         ((kbd "<up>") . nil)
-         ((kbd "<down>") . nil)
          :map eshell-hist-mode-map
-         ((kbd "<up>") . nil)
-         ((kbd "<down>") . nil))
+         ("<up>" . nil)
+         ("<down>" . nil))
   :hook '(eshell-mode
 	      . (lambda () (setq global-hl-line-mode nil)))
   :init
