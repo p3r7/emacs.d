@@ -4,22 +4,28 @@
 
 (use-package prf-smart-edit
   :quelpa (prf-smart-edit :fetcher github :repo "p3r7/prf-smart-edit")
-  ;; :after (org groovy-mode)
   :after (org)
   :demand
-  :bind (
-	 ("M-w" . copy-line-or-region)
-	 ("C-w" . cut-line-or-region)
-	 ("C-d" . duplicate-line-or-region)
-	 ("C-<f8>" . comment-or-uncomment-line-or-region)
-	 ("<C-kp-divide>" . comment-or-uncomment-line-or-region)
-	 :map org-mode-map
-	 ("M-w" . copy-line-or-region-org)
-	 ("C-w" . cut-line-or-region-org)
-	 ;; :map groovy-mode-map
-	 ;; ("C-d" . duplicate-line-or-region)
-	 )
-  )
+  :bind (("M-w" . smed-copy-line-or-region)
+	     ("M-W" . smed-copy-buffer)
+	     ("C-w" . smed-kill-line-or-region)
+	     ("C-d" . smed-duplicate-line-or-region)
+	     ("C-<f8>" . smed-toggle-comment)
+	     ("<C-kp-divide>" . smed-toggle-comment)
+	     ("C-x C-o" . smed-trim-here)
+         ("C-x W" . smed-rename-file-and-buffer)
+	     :map org-mode-map
+	     ("M-w" . smed-copy-line-or-region-org)
+	     ("C-w" . smed-kill-line-or-region-org)
+	     ;; :map groovy-mode-map
+	     ;; ("C-d" . duplicate-line-or-region)
+	     )
+  :config
+  (smed-register-auto-indent)
+  (add-hook 'c-mode-common-hook
+ 	        #'(lambda()
+	            (local-set-key (kbd "C-<f8>") #'smed-toggle-comment-c)
+	            (local-set-key (kbd "<C-kp-divide>") #'smed-toggle-comment-c))))
 
 ;; REVIEW: what about c-electric-delete-forward on recent emacs versions
 
