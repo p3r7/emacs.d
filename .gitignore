@@ -22,6 +22,7 @@ unused.el
 
 # private cache files
 .org-id-locations
+org-persist/
 abbrev_defs
 bookmarks
 ac-comphist.dat
