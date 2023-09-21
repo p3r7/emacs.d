@@ -1,12 +1,12 @@
 
 (use-package eshell
   :commands eshell-mode
-  :bind (
-         :map eshell-hist-mode-map
-         ("<up>" . nil)
-         ("<down>" . nil))
   :hook '(eshell-mode
-	      . (lambda () (setq global-hl-line-mode nil)))
+	      . (lambda ()
+              (setq global-hl-line-mode nil)
+              ;; NB: can't use :bind as not declared by `eshell' directly but by `em-hist'
+              (define-key eshell-hist-mode-map (kbd "<up>") nil)
+              (define-key eshell-hist-mode-map (kbd "<down>") nil)))
   :init
   (setq eshell-history-size 1000000
 	    eshell-destroy-buffer-when-process-dies t))
