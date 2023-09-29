@@ -16,7 +16,6 @@ image-dired/
 
 # private source files
 custom.el
-init/host/*
 plugins/perf-web/
 unused.el
 
