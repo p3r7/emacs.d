@@ -116,8 +116,9 @@ Wrapper around `elisp-slime-nav-find-elisp-thing-at-point'."
 
 (use-package macrostep
   :after elisp-mode
-  :bind (:map emacs-lisp-mode-map
-	      ("C-c e m" . macrostep-expand)))
+  :bind (
+         :map emacs-lisp-mode-map
+	     ("C-c e m" . macrostep-expand)))
 
 
 

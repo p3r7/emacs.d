@@ -3,7 +3,11 @@
 ;; COMMON LISP
 
 (require 'cl-lib)
-(use-package noflet)
+
+(with-eval-after-load 'dash
+  ;; NB: uses `-map' wo/ importing dash...
+  ;; REVIEW: still used? unmaintained so maybe remove it?
+  (use-package noflet))
 
 
 
