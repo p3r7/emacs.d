@@ -3,6 +3,12 @@
 
 
 
+;; WARNINGS
+
+(setq warning-minimum-level :error)
+
+
+
 ;; HISTORY
 
 (setq history-delete-duplicates t)
