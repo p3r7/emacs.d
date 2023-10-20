@@ -92,7 +92,7 @@ calling `seamstress-repl-switch-fn'.")
       (concat d "/" f))))
 
 (defun seamstress--repl-buffer-name ()
-  (seamstress-buffer-name)
+  seamstress-buffer-name
   ;; (if (derived-mode-p 'seamstress-repl-mode)
   ;;     (buffer-name)
   ;;   (if-let ((script-path (seamstress--script-path)))
