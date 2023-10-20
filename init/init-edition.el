@@ -18,7 +18,7 @@
 	     ("M-w" . smed-copy-line-or-region-org)
 	     ("C-w" . smed-kill-line-or-region-org)
 	     ;; :map groovy-mode-map
-	     ;; ("C-d" . duplicate-line-or-region)
+	     ;; ("C-d" . smed-duplicate-line-or-region)
 	     )
   :config
   (smed-register-auto-indent)
