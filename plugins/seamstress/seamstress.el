@@ -189,8 +189,9 @@ Please note that it will only work properly for non-local lua vars."
     (if proc-alive
         (seamstress-reset-lvm)
       (with-current-buffer buffer
-        (apply 'make-comint-in-buffer "seamstress" buffer
-               seamstress-program nil seamstress-cli-arguments)
+        (with-environment-variables (("PWD" default-directory))
+          (apply 'make-comint-in-buffer "seamstress" buffer
+                 seamstress-program nil seamstress-cli-arguments))
         (when seamstress-repl-script-path
           (message (concat "SCRIPT: " seamstress-repl-script-path))
           (set (make-local-variable 'seamstress-repl-script-path) og-seamstress-repl-script-path))
