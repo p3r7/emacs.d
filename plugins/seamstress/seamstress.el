@@ -92,12 +92,14 @@ calling `seamstress-repl-switch-fn'.")
       (concat d "/" f))))
 
 (defun seamstress--repl-buffer-name ()
-  (if (derived-mode-p 'seamstress-repl-mode)
-      (buffer-name)
-    (if-let ((script-path (seamstress--script-path)))
-        (concat "*seamstress/"
-                (seamstress--script-path-to-shortname script-path) "*")
-      seamstress-buffer-name)))
+  seamstress-buffer-name
+  ;; (if (derived-mode-p 'seamstress-repl-mode)
+  ;;     (buffer-name)
+  ;;   (if-let ((script-path (seamstress--script-path)))
+  ;;       (concat "*seamstress/"
+  ;;               (seamstress--script-path-to-shortname script-path) "*")
+  ;;     seamstress-buffer-name))
+  )
 
 
 
@@ -189,8 +191,9 @@ Please note that it will only work properly for non-local lua vars."
     (if proc-alive
         (seamstress-reset-lvm)
       (with-current-buffer buffer
-        (apply 'make-comint-in-buffer "seamstress" buffer
-               seamstress-program nil seamstress-cli-arguments)
+        (with-environment-variables (("PWD" default-directory))
+          (apply 'make-comint-in-buffer "seamstress" buffer
+                 seamstress-program nil seamstress-cli-arguments))
         (when seamstress-repl-script-path
           (message (concat "SCRIPT: " seamstress-repl-script-path))
           (set (make-local-variable 'seamstress-repl-script-path) og-seamstress-repl-script-path))

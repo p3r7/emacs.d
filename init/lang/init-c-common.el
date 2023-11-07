@@ -15,9 +15,9 @@
   ;; Switch between header/source
   (local-set-key  (kbd "C-c o") 'ff-find-other-file)
   ;; C-d for deleting
-  (local-set-key (kbd "C-d") 'duplicate-line-or-region)
+  (local-set-key (kbd "C-d") 'smed-duplicate-line-or-region)
   (setq comment-start "//"
-	comment-end   ""))
+	    comment-end   ""))
 
 (add-hook 'c-mode-common-hook #'prf/main-c-mode-common-hook)
 
