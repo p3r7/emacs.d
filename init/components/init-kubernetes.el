@@ -161,6 +161,11 @@
       (friendly-shell-command-async (concat "kubectl -n " ns " delete " resource " " object)
                                     :output-buffer (concat "*kubectl - delete - " resource "/" ns "/" object "*"))))
 
+  (defun kubectl-delete-force (ns resource object)
+    (when (y-or-n-p (concat "Really force delete " resource "/" object " in ns " ns " ?"))
+      (friendly-shell-command-async (concat "kubectl -n " ns " delete " resource " " object " --force --grace-period=0")
+                                    :output-buffer (concat "*kubectl - delete (force) - " resource "/" ns "/" object "*"))))
+
   ;; similar to `kubel-exec-shell-pod'
   (defun kubectl-shell (ns resource object)
     (unless (string= resource "pod")
@@ -273,7 +278,11 @@
 
   (defun kubectl-delete-at-point ()
     (interactive)
-    (kubectl-action-on-object-at-point #'kubectl-delete)))
+    (kubectl-action-on-object-at-point #'kubectl-delete))
+
+  (defun kubectl-delete-force-at-point ()
+    (interactive)
+    (kubectl-action-on-object-at-point #'kubectl-delete-force)))
 
 (with-eval-after-load 'hydra
   (defhydra hydra-kube (:color blue)
@@ -283,7 +292,8 @@
     ("S" kubectl-shell-at-point "shell")
     ("y" kubectl-yaml-at-point "yaml def")
     ("i" kubectl-describe-at-point "describe")
-    ("K" kubectl-delete-at-point "delete")
+    ("k" kubectl-delete-at-point "delete")
+    ("K" kubectl-delete-force-at-point "delete (f)")
     ("g" nil "cancel")))
 
 
