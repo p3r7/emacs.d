@@ -8,29 +8,30 @@
   :after (s)
   :init
   (setq ediff-split-window-function 'split-window-horizontally
-	ediff-window-setup-function 'ediff-setup-windows-plain
-    ;; NB: best option is `--ignore-goedel' but only avail on modern versions
-	;; ediff-diff-options "--text -w"
-	ediff-diff-options "-w" ;; ignore all white spaces
-	;; ediff-diff-options "-Z -E -b" ;; ignore trailing white spaces + tab expansion
-	)
+	    ediff-window-setup-function 'ediff-setup-windows-plain
+        ediff-auto-refine 'on
+        ;; NB: best option is `--ignore-goedel' but only avail on modern versions
+	    ;; ediff-diff-options "--text -w"
+	    ediff-diff-options "-w" ;; ignore all white spaces
+	    ;; ediff-diff-options "-Z -E -b" ;; ignore trailing white spaces + tab expansion
+	    )
   :config
   (defun ediff-toggle ()
     (interactive)
     (if (= (length (window-list)) 2)
-	(let ((prf/left-buffer (buffer-file-name (window-buffer (car (window-list)))))
-	      (prf/right-buffer (buffer-file-name (window-buffer (car (cdr (window-list))))))
-	      (ediff-diff-options ediff-diff-options))
+	    (let ((prf/left-buffer (buffer-file-name (window-buffer (car (window-list)))))
+	          (prf/right-buffer (buffer-file-name (window-buffer (car (cdr (window-list))))))
+	          (ediff-diff-options ediff-diff-options))
 
-	  ;; NB: we re-enable whitespace matching for python files ...
-	  (when (s-ends-with? ".py" prf/left-buffer)
-	    (setq ediff-diff-options ""))
-	  (when (s-ends-with? ".py" prf/right-buffer)
-	    (setq ediff-diff-options ""))
+	      ;; NB: we re-enable whitespace matching for python files ...
+	      (when (s-ends-with? ".py" prf/left-buffer)
+	        (setq ediff-diff-options ""))
+	      (when (s-ends-with? ".py" prf/right-buffer)
+	        (setq ediff-diff-options ""))
 
-	  (ediff
-	   (buffer-file-name (window-buffer (car (window-list))))
-	   (buffer-file-name (window-buffer (car (cdr (window-list)))))))
+	      (ediff
+	       (buffer-file-name (window-buffer (car (window-list))))
+	       (buffer-file-name (window-buffer (car (cdr (window-list)))))))
       (message "invalid number of visible buffers (expected 2)"))))
 
 
