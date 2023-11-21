@@ -47,7 +47,7 @@
  ;; split familly & height conf
  (:default
   (when (and prf/rice/font-family
-	     (member prf/rice/font-family (font-family-list)))
+	         (member prf/rice/font-family (font-family-list)))
     (set-face-attribute 'default nil :family prf/rice/font-family))
   (when prf/rice/font-height
     (set-face-attribute 'default nil :height prf/rice/font-height))))
