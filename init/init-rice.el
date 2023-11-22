@@ -3,20 +3,6 @@
 
 
 
-;; titlebar
-
-(when (eq system-type 'darwin)
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (use-package ns-auto-titlebar
-    :config
-    (ns-auto-titlebar-mode))
-  (setq frame-title-format "")
-  ;; NB: also did this in the terminal
-  ;; defaults write org.gnu.Emacs HideDocumentIcon YES
-  )
-
-
-
 ;; FONT
 
 ;; (set-face-bold-p 'bold nil)
