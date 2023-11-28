@@ -9,11 +9,29 @@
 (global-font-lock-mode t)
 
 (setq
- frame-title-format "%b"   ;; current buffer name in title bar
  inhibit-startup-message   t
- inhibit-startup-echo-area-message t
- )
+ inhibit-startup-echo-area-message t)
+
 (setq-default initial-scratch-message ";;                            Hello  Master\n\n")
+
+
+
+;; TITLEBAR
+
+;; current buffer name in title bar
+(setq frame-title-format "%b")
+
+(when (eq system-type 'darwin)
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (use-package ns-auto-titlebar
+    :config
+    (ns-auto-titlebar-mode))
+  (setq frame-title-format "")
+
+  (setq ns-use-proxy-icon nil)
+  ;; NB: also did this in the terminal, which might be equivalent
+  ;; defaults write org.gnu.Emacs HideDocumentIcon YES
+  )
 
 
 

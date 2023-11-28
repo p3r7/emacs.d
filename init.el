@@ -384,7 +384,9 @@
   ;; http://kitchingroup.cheme.cmu.edu/blog/2015/06/24/Conditional-hydra-menus/
 
   (global-set-key (kbd "<apps>") #'hydra-main/body)
-  (global-set-key (kbd "<menu>") #'hydra-main/body))
+  (global-set-key (kbd "<menu>") #'hydra-main/body)
+  (when (eq system-type 'darwin)
+    (global-set-key (kbd "<f14>") #'hydra-main/body)))
 
 
 
