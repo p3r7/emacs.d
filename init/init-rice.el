@@ -16,6 +16,20 @@
 (defvar prf/rice/variable-pitch-font-family nil)
 (defvar prf/rice/variable-pitch-font-height nil)
 
+(defun prf/font/list-available ()
+  "List available fonts on system.
+NB: on linux, we don't call `font-family-list' but rely on command `fc-list' instead.
+Indeed, on recent Emacs version, `font-family-list' returns nil when launched in daemon mode as a systemd service."
+  (if (string-equal system-type "gnu/linux")
+      (split-string (shell-command-to-string "fc-list"))
+    (font-family-list)))
+
+(defun prf/font/exist-p (searched-fonts)
+  "Return the first available font in SEARCHED-FONTS that is present on system."
+  (let ((available-fonts (prf/font/list-available)))
+    (-some (lambda (f) (when (member f available-fonts) f))
+           searched-fonts)))
+
 (cond
 
  ;; `fontp' or "<FONT_FAMILY>-<SIZE>"
@@ -33,7 +47,7 @@
  ;; split familly & height conf
  (:default
   (when (and prf/rice/font-family
-	     (member prf/rice/font-family (font-family-list)))
+	         (member prf/rice/font-family (font-family-list)))
     (set-face-attribute 'default nil :family prf/rice/font-family))
   (when prf/rice/font-height
     (set-face-attribute 'default nil :height prf/rice/font-height))))
