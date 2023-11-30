@@ -131,6 +131,10 @@
 (when (and module-file-suffix
            (executable-find "cmake"))
   (use-package vterm
+    :bind (
+           :map vterm-mode-map
+           ("C-c C-y" . vterm-yank)
+           ("C-c C-v" . vterm-yank))
     :init
     (setq vterm-always-compile-module t))
 
