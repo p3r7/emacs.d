@@ -268,6 +268,7 @@
 
 ;; - frameworks / platforms
 (require 'init-arduino)
+(require 'init-circuitpython)
 (require 'init-norns)
 (require 'init-seamstress)
 
