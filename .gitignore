@@ -5,6 +5,7 @@ network-security.data
 **.elc
 **.exe
 **~
+eln-cache/
 
 # packages
 elpa/
