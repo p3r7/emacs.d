@@ -57,8 +57,9 @@ These are not handles here.
  ((gnu/linux-p)
   (require 'init-linux))
  ((windows-nt-p)
-  (require 'init-w32)
-  ))
+  (require 'init-w32))
+ ((darwin-p)
+  (require 'init-mac)))
 
 
 
