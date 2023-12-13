@@ -183,7 +183,7 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
 
   (setq space-theming-headings-same-size '(flatui plan9))
   (setq space-theming-modifications
-	'((comidia-mod
+	    '((comidia-mod
            (form-feed-line :strike-through "chocolate1")
            (org-block :inherit default)
            (markdown-code-face :inherit nil)
@@ -191,7 +191,7 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (bmkp-remote-file :foreground "#ffc0cb")
            (fixed-pitch :family nil)    ; org block delimiters
            (diredp-other-priv :foreground "Black" :background "PaleGoldenrod")
-           )
+           (bmkp-no-local :foreground "orange" :background nil))
           (solarized-dark
            (diredp-other-priv :foreground "Black" :background "PaleGoldenrod"))
           (plan9
@@ -240,7 +240,8 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (form-feed-line :strike-through "#7F9F7F")
            (hl-line :background "#4a3434")
            (highlight :background "#4a3434")
-           (org-headline-done :foreground nil))
+           (org-headline-done :foreground nil)
+           (bmkp-no-local :foreground "orange" :background nil))
           (late-night
            ;; (hl-line :inherit nil :background "#192a2a")
            (hl-line :inherit nil :background "#2a1919")
@@ -248,16 +249,18 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (link :foreground "#006262")
            ;; (markdown-code-face :inherit nil)
            (org-block-begin-line :foreground "#594A3B")
-           (org-block-end-line :foreground "#594A3B"))
+           (org-block-end-line :foreground "#594A3B")
+           (bmkp-no-local :foreground "orange" :background nil))
           (dracula-mod
            (form-feed-line :strike-through "#6272a4")
            (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
            (bmkp-remote-file :foreground "#ff79c6") ; rainbow-4
            (org-block :inherit default)
            (markdown-code-face :inherit nil)
-           (fixed-pitch :family nil)   ; org block delimiters
+           (fixed-pitch :family nil)    ; org block delimiters
            (diredp-other-priv :foreground "Black" :background "PaleGoldenrod")
-           (org-headline-done :foreground nil))
+           (org-headline-done :foreground nil)
+           (bmkp-no-local :foreground "orange" :background nil))
           (chocolate
            ;; NB: file face for dired is `default'
            (dired-directory :foreground "#EAEAFE") ; chocolate-hue-2
@@ -275,7 +278,8 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (bmkp-local-directory :foreground "#45AFBD")
            (bmkp-remote-file :foreground "#C55D67")
            (diredp-other-priv :foreground "Black" :background "PaleGoldenrod")
-           (org-headline-done :foreground nil))
+           (org-headline-done :foreground nil)
+           (bmkp-no-local :foreground "orange" :background nil))
           ))
   ;; to reload: (space-theming-update-current-theme)
   :config
