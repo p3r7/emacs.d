@@ -192,8 +192,10 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (fixed-pitch :family nil)    ; org block delimiters
            (diredp-other-priv :foreground "Black" :background "PaleGoldenrod")
            (bmkp-no-local :foreground "orange" :background nil))
+
           (solarized-dark
            (diredp-other-priv :foreground "Black" :background "PaleGoldenrod"))
+
           (plan9
            (form-feed-line :strike-through "#40883f")
            (org-level-1 :weight bold :height 1.0 :box nil :background nil :foreground "#4fa8a8")
@@ -202,6 +204,7 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (org-level-4 :weight bold :foreground "#40883f")
            (org-level-5 :weight bold :foreground "#0287c8")
            (org-level-6 :weight bold :foreground "#8888c8"))
+
           (white-sand
            (cursor :background "#585858")
            (region :background "#a4a4a4" :foreground "white")
@@ -209,20 +212,24 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (markdown-code-face :inherit nil)
            (fixed-pitch :family nil)    ; org block delimiters
            (org-headline-done :foreground nil))
+
           (tango
            (hl-line :inherit nil :background "#dbdbd7")
            (form-feed-line :strike-through "#b7b8b5")
            (font-lock-comment-face :foreground "#b7b8b5")
            (markdown-code-face :inherit nil))
+
           (flatui
            (org-block :inherit default)
            (markdown-code-face :inherit nil))
+
           (flucui-light
            (form-feed-line :strike-through "#95a5a6")
            (org-block :inherit default)
            (markdown-code-face :inherit nil)
            (fixed-pitch :family nil)    ; org block delimiters
            (org-headline-done :foreground nil))
+
           (zenburn
            (fixed-pitch :family nil)    ; org block delimiters
            (diredp-read-priv :foreground nil :background "#5F7F5F")
@@ -242,6 +249,7 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (highlight :background "#4a3434")
            (org-headline-done :foreground nil)
            (bmkp-no-local :foreground "orange" :background nil))
+
           (late-night
            ;; (hl-line :inherit nil :background "#192a2a")
            (hl-line :inherit nil :background "#2a1919")
@@ -251,6 +259,7 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (org-block-begin-line :foreground "#594A3B")
            (org-block-end-line :foreground "#594A3B")
            (bmkp-no-local :foreground "orange" :background nil))
+
           (dracula-mod
            (form-feed-line :strike-through "#6272a4")
            (bmkp-local-directory :background nil :foreground "#8be9fd") ; rainbow-2
@@ -261,6 +270,7 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            (diredp-other-priv :foreground "Black" :background "PaleGoldenrod")
            (org-headline-done :foreground nil)
            (bmkp-no-local :foreground "orange" :background nil))
+
           (chocolate
            ;; NB: file face for dired is `default'
            (dired-directory :foreground "#EAEAFE") ; chocolate-hue-2
