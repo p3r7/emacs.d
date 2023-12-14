@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         cua-paste
+        indent-for-tab-command
         lispy-braces
         lispy-brackets
         lispy-delete
