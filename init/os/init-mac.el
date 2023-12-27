@@ -8,6 +8,7 @@
 (define-key global-map (kbd "M-l") "|")
 (define-key global-map (kbd "M-n") "~")
 
+;; TODO: remap `comint-next-input' in `comint-mode-map'
 
 
 
