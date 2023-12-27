@@ -31,12 +31,11 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
            searched-fonts)))
 
 (cond
-
  ;; `fontp' or "<FONT_FAMILY>-<SIZE>"
  ;; NB: this format allows setting decimal size
  ((and prf/rice/font
        (or (fontp prf/rice/font)
-           (member (s-join "-" (butlast (s-split "-" prf/rice/font))) (font-family-list))))
+           (member (s-join "-" (butlast (s-split "-" prf/rice/font))) (prf/font/list-available))))
   (set-frame-font prf/rice/font nil t))
 
  ;; older x-format font
