@@ -12,7 +12,7 @@
 (use-package syslog-mode
   :load-path "~/.emacs.d/plugins-spe/syslog-mode-prf"
   :mode (".*\.log'" ".*\.log\..*\.gz'" "/var/log.*\\'"
-	 "\\catalina.out\\'"))
+	     "\\catalina.out\\'"))
 
 
 
@@ -21,6 +21,12 @@
 ;; http://www.emacswiki.org/emacs/Sunrise_Commander
 
 (require 'init-dired)
+
+
+
+;; OS FILE EXPLORER
+
+(use-package reveal-in-folder)
 
 
 
@@ -445,6 +451,7 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     ("F" prf/copy-buffer-filename-no-ext-to-clipboard "file-no-ext")
     ("d" prf/copy-buffer-dirname-to-clipboard "dir")
     ("e" prf/copy-buffer-filepath-to-clipboard-with-exec "exec")
+    ("o" reveal-in-folder "reveal")
     ("g" nil "cancel")))
 
 
