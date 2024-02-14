@@ -28,8 +28,7 @@
 
 (use-package reveal-in-folder
 
-  :init
-
+  :config
   (defun prf/reveal ()
     (interactive)
     (when (file-remote-p default-directory)
