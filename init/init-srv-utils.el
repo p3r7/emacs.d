@@ -26,7 +26,20 @@
 
 ;; OS FILE EXPLORER
 
-(use-package reveal-in-folder)
+(use-package reveal-in-folder
+
+  :init
+
+  (defun prf/reveal ()
+    (interactive)
+    (when (file-remote-p default-directory)
+      (user-error "Cannot use OS file browser of remote path"))
+
+    (let ((fp (prf/get-buffer-filepath-clean)))
+
+      (if (file-directory-p fp)
+          (reveal-in-folder--signal-shell fp)
+        (reveal-in-folder)))))
 
 
 
