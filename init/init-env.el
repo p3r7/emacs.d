@@ -189,8 +189,8 @@ See the documentation of `framep' for possible return values."
        (concat "init-host-"
 	       (if (windows-nt-p) (downcase prf/system-name) prf/system-name))))
 
-(if (prf/plugin-available-locally-p prf/init/host-feature)
-    (require prf/init/host-feature))
+(when (prf/plugin-available-locally-p prf/init/host-feature)
+  (require prf/init/host-feature))
 
 (unless (boundp 'prf-backup-dir)
   (setq prf-backup-dir "~/.emacs.d/.saves"))
