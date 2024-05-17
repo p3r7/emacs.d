@@ -244,6 +244,7 @@
 (require 'init-r)
 (require 'init-supercollider)
 (require 'init-gnuplot)
+(require 'ld-script)
 
 ;; - shell
 (require 'init-dos)
