@@ -180,8 +180,8 @@ See the documentation of `framep' for possible return values."
 
 ;; case Android
 (when (and (string= system-name "localhost")
-	   (gnu/linux-p)
-	   (executable-find "getprop"))
+	       (gnu/linux-p)
+	       (executable-find "getprop"))
   (shell-command-to-string "getprop net.hostname"))
 
 (setq prf/init/host-feature
