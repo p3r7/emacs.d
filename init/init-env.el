@@ -175,7 +175,8 @@ See the documentation of `framep' for possible return values."
 
 (defvar homedir-truename (directory-file-name (file-truename "~")))
 
-(defvar prf/system-name system-name)
+(defvar prf/system-name (->> system-name
+                             (s-chop-suffixes '(".local" ".lan"))))
 
 ;; case Android
 (when (and (string= system-name "localhost")
