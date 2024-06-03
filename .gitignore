@@ -69,3 +69,6 @@ var/
 emojis/
 package-src/
 *.lnk
+
+# mac
+.DS_Store
