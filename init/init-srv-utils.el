@@ -27,18 +27,16 @@
 ;; OS FILE EXPLORER
 
 (use-package reveal-in-folder
-
   :config
-  (defun prf/reveal ()
+
+  ;; NB: override to support dired, shell-mode...
+  (defun reveal-in-folder-this-buffer ()
+    "Reveal the current buffer in folder."
     (interactive)
-    (when (file-remote-p default-directory)
-      (user-error "Cannot use OS file browser of remote path"))
-
     (let ((fp (prf/get-buffer-filepath-clean)))
-
-      (if (file-directory-p fp)
-          (reveal-in-folder--signal-shell fp)
-        (reveal-in-folder)))))
+      (when (file-remote-p default-directory)
+        (user-error "Cannot use OS file browser of remote path"))
+      (reveal-in-folder--signal-shell fp))))
 
 
 
