@@ -21,6 +21,7 @@
         org-yank
         prf/lispy-space-no-selection
         sclang-electric-star
+        smed-copy-line-or-region
         special-digit-argument
         special-lh-knight/body
         special-lispy-ace-char
