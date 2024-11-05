@@ -55,6 +55,8 @@
   (defun prf/ztree-same-host-p (&optional _file1 _file2) t)
   (defalias 'ztree-same-host-p #'prf/ztree-same-host-p)
 
+  ;; NB: default value is '("^\\.")
+  (setq ztree-diff-filter-list '("\\.o$" "\\.bin$" "\\.elf$" "\\.hex$"))
 
   (defun ztree-toggle ()
     (interactive)
