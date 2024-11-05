@@ -19,12 +19,14 @@
          ("C-c e r" . norns-send-selection)
          ("M-<XF86Open>" . norns-send-selection)
 
-         :map norns-maiden-repl-mode-map
+         :map norns-matron-repl-mode-map
          ("C-c e b" . norns-rerun)
          ("<XF86Open>" . norns-rerun)
 
          :map norns-sc-repl-mode-map
          ("C-." . norns-sc-stop))
+  :init
+  (setq norns-lan-domain "lan")
   :config
   (add-hook 'lua-mode-hook #'norns-mode-maybe-activate)
   (add-hook 'fennel-mode-hook #'norns-mode-maybe-activate)

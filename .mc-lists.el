@@ -24,7 +24,11 @@
         org-yank
         prf/lispy-space-no-selection
         sclang-electric-star
+<<<<<<< HEAD
         smed-copy-line-or-region-org
+=======
+        smed-copy-line-or-region
+>>>>>>> c79c051b1bc5661d6260f325e5ba46d809b7eb78
         special-digit-argument
         special-lh-knight/body
         special-lispy-ace-char
