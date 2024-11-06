@@ -14,9 +14,9 @@
   :hook (
          (go-mode . prf/go/lsp-activate-hook)
          (go-mode . (lambda ()
-                      (setq indent-tabs-mode nil
-                            tab-width 2
-                            standard-indent 2)
+                      (setq indent-tabs-mode 't
+                            tab-width 4
+                            standard-indent 4)
 
                       (when (executable-find "goimports" t)
                         (setq gofmt-command "goimports"))
