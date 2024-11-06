@@ -17,10 +17,15 @@
         lispy-space
         lispy-tick
         lispy-yank
+        org-end-of-line
+        org-kill-line
         org-self-insert-command
         org-yank
         prf/lispy-space-no-selection
         sclang-electric-star
+        smed-copy-line-or-region
+        smed-kill-line-or-region
+        smed-trim-here
         special-digit-argument
         special-lh-knight/body
         special-lispy-ace-char
