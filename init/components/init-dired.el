@@ -17,12 +17,12 @@
   :demand
   :bind (
          :map dired-mode-map
-	 ("C-c C" . prf/dired-do-copy-not-dwin)
-	 ("C-c R" . prf/dired-do-rename-not-dwin)
+	     ("C-c C" . prf/dired-do-copy-not-dwin)
+	     ("C-c R" . prf/dired-do-rename-not-dwin)
          ;; do not create other dired buffers when navigating
          ;; TODO: far from being perfect (closes all dired windows, not just current)
-	 ("<return>" . dired-find-alternate-file)
-	 ("^" . (lambda () (interactive) (find-alternate-file "..")))
+	     ("<return>" . dired-find-alternate-file)
+	     ("^" . (lambda () (interactive) (find-alternate-file "..")))
          ("Z" . (lambda () (interactive)
                   (unless default-directory
                     (user-error "Not browsing an actual on-disk directory."))
