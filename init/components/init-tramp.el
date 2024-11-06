@@ -112,8 +112,11 @@
 ;; MORE METHODS
 
 ;; Docker
-(use-package docker-tramp
-  :after tramp)
+;; (with-eval-after-load 'tramp
+;;   ;; NB: `featurep' doesn't seem to work in that case
+;;   (if (locate-library (format "%s" 'tramp-container))
+;;       (require 'tramp-container)
+;;     (use-package docker-tramp)))
 
 ;; Vagrant
 ;;(when (and (executable-find "vagrant")
