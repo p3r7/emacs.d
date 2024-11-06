@@ -125,7 +125,7 @@
 
 ;; KiTTY
 (when (and (executable-find "kscp")
-	   (executable-find "klink"))
+	       (executable-find "klink"))
   (use-package tramp-kitty
     :load-path "~/.emacs.d/plugins/tramp-kitty"
     :after (tramp)
