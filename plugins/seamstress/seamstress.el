@@ -207,7 +207,7 @@ Please note that it will only work properly for non-local lua vars."
   (let* ((script-path (buffer-file-name))
          (seamstress-repl-script-path script-path)
          (default-directory (file-name-directory script-path))
-         (seamstress-cli-arguments `("-s" ,(file-name-sans-extension (file-name-nondirectory script-path)))))
+         (seamstress-cli-arguments `("-s" ,(file-name-sans-extension script-path))))
     (seamstress-run)))
 
 

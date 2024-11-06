@@ -17,6 +17,8 @@
         lispy-space
         lispy-tick
         lispy-yank
+        org-beginning-of-line
+        org-cycle
         org-end-of-line
         org-kill-line
         org-self-insert-command
@@ -24,6 +26,7 @@
         prf/lispy-space-no-selection
         sclang-electric-star
         smed-copy-line-or-region
+        smed-copy-line-or-region-org
         smed-kill-line-or-region
         smed-trim-here
         special-digit-argument

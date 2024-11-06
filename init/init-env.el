@@ -175,12 +175,13 @@ See the documentation of `framep' for possible return values."
 
 (defvar homedir-truename (directory-file-name (file-truename "~")))
 
-(defvar prf/system-name system-name)
+(defvar prf/system-name (->> system-name
+                             (s-chop-suffixes '(".local" ".lan"))))
 
 ;; case Android
 (when (and (string= system-name "localhost")
-	   (gnu/linux-p)
-	   (executable-find "getprop"))
+	       (gnu/linux-p)
+	       (executable-find "getprop"))
   (shell-command-to-string "getprop net.hostname"))
 
 (setq prf/init/host-feature
@@ -188,8 +189,8 @@ See the documentation of `framep' for possible return values."
        (concat "init-host-"
 	       (if (windows-nt-p) (downcase prf/system-name) prf/system-name))))
 
-(if (prf/plugin-available-locally-p prf/init/host-feature)
-    (require prf/init/host-feature))
+(when (prf/plugin-available-locally-p prf/init/host-feature)
+  (require prf/init/host-feature))
 
 (unless (boundp 'prf-backup-dir)
   (setq prf-backup-dir "~/.emacs.d/.saves"))
