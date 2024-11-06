@@ -58,7 +58,8 @@
 
 ;; DIRECT SHELL INTEGRATIONS
 
-(with-eval-after-load 'friendly-shell-command
+;; (with-eval-after-load 'friendly-shell-command
+(progn
 
   (setq kubectl-kls-command-rx
         (rx bol
@@ -105,8 +106,11 @@
       ("deploy" "deployment")
       ("cronjob" "cronjob")
       ("cj" "cronjob")
+      ("configmap" "configmap")
+      ("cm" "configmap")
       ("daemonset" "daemonset")
       ("ds" "daemonset")
+      ("secret" "secret")
       ("service" "service")
       ("svc" "service")
       ("ingress" "ingress")
@@ -115,27 +119,52 @@
       ("nodes" "node")
       ("pv" "pv")
       ("pvc" "pvc")
+      ("statefulset" "sts")
+      ("sts" "sts")
       (t (user-error (concat "Unexpected kube resource or resource abrev " resource-abrev)))))
 
+  (defun kubectl-fq-name (ns resource object)
+    (concat resource "/" ns "/" object))
 
-  ;; actions
+
+  ;; shell commands
+
+  (defun kubectl-logs-shell-command (ns resource object &optional nb-lines)
+    (concat "kubectl -n " ns " logs " resource "/" object
+            (if nb-lines (concat " --tail " (number-to-string nb-lines)) "")))
+
+  (defun kubectl-get-yaml-shell-command (ns resource object)
+    (concat "kubectl -n " ns " get " resource " " object " -o yaml"))
+
+  (defun kubectl-describe-shell-command (ns resource object)
+    (concat "kubectl -n " ns " describe " resource " " object " -o yaml"))
+
+  (defun kubectl-delete-shell-command (ns resource object &optional force)
+    (concat "kubectl -n " ns " delete " resource " " object
+            (if force " --force --grace-period=0" "")))
+
+
+  ;; emacs commands
+
+  (defun kubectl-delete-force-shell-command (ns resource object)
+    (concat "kubectl -n " ns " delete " resource " " object))
 
   (defun kubectl-logs (ns resource object)
     (unless (string= resource "pod")
-      (user-error "Can only get logs of pod objects"))
-    (friendly-shell-command-async (concat "kubectl -n " ns " logs " object)
-                                  :output-buffer (concat "*kubectl - logs - " ns "/" object "*")))
+      (user-error (concat "Cannot get logs of " resource " objects")))
+    (friendly-shell-command-async (kubectl-logs-shell-command ns resource object)
+                                  :output-buffer (concat "*kubectl - logs - " (kubectl-fq-name ns resource object) "*")))
 
   (defun kubectl-logs-tail (ns resource object &optional nb-lines)
     (unless (string= resource "pod")
       (user-error "Can only get logs of pod objects"))
     (let ((nb-lines (or nb-lines 100)))
-      (friendly-shell-command-async (concat "kubectl -n " ns " logs " object " --tail " (number-to-string nb-lines))
-                                    :output-buffer (concat "*kubectl - logs - " ns "/" object "*"))))
+      (friendly-shell-command-async (kubectl-logs-shell-command ns resource object nb-lines)
+                                    :output-buffer (concat "*kubectl - logs - " (kubectl-fq-name ns resource object) "*"))))
 
   (defun kubectl-get-yaml (ns resource object)
-    (let ((buff-name (concat "*kubectl - yaml " resource "/" ns "/" object "*")))
-      (friendly-shell-command-async (concat "kubectl -n " ns " get " resource " " object " -o yaml")
+    (let ((buff-name (concat "*kubectl - yaml " (kubectl-fq-name ns resource object) "*")))
+      (friendly-shell-command-async (kubectl-get-yaml-shell-command ns resource object)
                                     :output-buffer buff-name
                                     :callback `(lambda ()
                                                  (let ((buff (get-buffer ,buff-name)))
@@ -153,18 +182,18 @@
                                                        (yaml-mode))))))))
 
   (defun kubectl-describe (ns resource object)
-    (friendly-shell-command-async (concat "kubectl -n " ns " describe " resource " " object)
-                                  :output-buffer (concat "*kubectl - desc " resource "/" ns "/" object "*")))
+    (friendly-shell-command-async (kubectl-describe-shell-command ns resource object)
+                                  :output-buffer (concat "*kubectl - desc " (kubectl-fq-name ns resource object) "*")))
 
   (defun kubectl-delete (ns resource object)
     (when (y-or-n-p (concat "Really delete " resource "/" object " in ns " ns " ?"))
-      (friendly-shell-command-async (concat "kubectl -n " ns " delete " resource " " object)
-                                    :output-buffer (concat "*kubectl - delete - " resource "/" ns "/" object "*"))))
+      (friendly-shell-command-async (kubectl-delete-shell-command ns resource object)
+                                    :output-buffer (concat "*kubectl - delete - " (kubectl-fq-name ns resource object) "*"))))
 
   (defun kubectl-delete-force (ns resource object)
     (when (y-or-n-p (concat "Really force delete " resource "/" object " in ns " ns " ?"))
-      (friendly-shell-command-async (concat "kubectl -n " ns " delete " resource " " object " --force --grace-period=0")
-                                    :output-buffer (concat "*kubectl - delete (force) - " resource "/" ns "/" object "*"))))
+      (friendly-shell-command-async (kubectl-delete-shell-command ns resource object 't)
+                                    :output-buffer (concat "*kubectl - delete (force) - " (kubectl-fq-name ns resource object) "*"))))
 
   ;; similar to `kubel-exec-shell-pod'
   (defun kubectl-shell (ns resource object)
@@ -180,7 +209,7 @@
                         (completing-read "Select container: " containers))))
       (friendly-shell
        :path (format "/%skubectl:%s@%s:/" dir-prefix container object)
-       :buffer-name (concat "kubectl - sh - " resource "/" ns "/" object))))
+       :buffer-name (concat "kubectl - sh - " (kubectl-fq-name ns resource object)))))
 
 
   ;; stateless version of `kubel--get-containers'
@@ -232,12 +261,49 @@
 
   ;; shell-mode output parsing
 
-  (defun kubectl-object-at-point-shell-mode (ns-maybe)
-    (let* ((line (thing-at-point 'line))
-           (split-line (s-split " " line 't)))
-      (let ((ns (or ns-maybe (car split-line)))
-            (object (if ns-maybe (car split-line) (cadr split-line))))
-        (list ns object))))
+  (defun kubectl-object-in-line-shell-mode (line ns-maybe resource)
+    (let* ((split-line (s-split " " line 't))
+           (ns (or ns-maybe (car split-line)))
+           (object (if ns-maybe (car split-line) (cadr split-line))))
+      (list ns resource object)))
+
+  (defun kubectl-object-at-point-shell-mode (ns-maybe resource)
+    (let ((line (thing-at-point 'line)))
+      (kubectl-object-in-line-shell-mode line ns-maybe resource)))
+
+  (defun get-region-whole-lines ()
+    "Return the content of the complete lines between the mark and point."
+    (interactive)
+    ;; Ensure the region is active and the mark is set
+    (when (not (region-active-p))
+      (user-error "No active region"))
+    ;; Determine the start and end of the region
+    (let ((start (line-beginning-position))
+          (end (line-end-position)))
+      ;; Check the positions of mark and point
+      (if (> (point) (mark))
+          (setq start (save-excursion
+                        (goto-char (mark))
+                        (line-beginning-position))
+                end (save-excursion
+                      (goto-char (point))
+                      (line-end-position)))
+        (setq end (save-excursion
+                    (goto-char (mark))
+                    (line-end-position))
+              start (save-excursion
+                      (goto-char (point))
+                      (line-beginning-position))))
+      ;; Extract the string from the buffer
+      (buffer-substring-no-properties start end)))
+
+  (defun kubectl-object-in-region-shell-mode ()
+    (interactive)
+    (let* ((ctx (get-previous-kubectl-shell-command-context))
+           (resource (car ctx))
+           (ns-maybe (cadr ctx))
+           (lines (split-string (get-region-whole-lines) "\n")))
+      (--map (kubectl-object-in-line-shell-mode it ns-maybe resource) lines)))
 
 
   ;; action commands
@@ -248,9 +314,9 @@
       (let* ((ctx (get-previous-kubectl-shell-command-context))
              (resource (car ctx))
              (ns-maybe (cadr ctx))
-             (namespaced-object (kubectl-object-at-point-shell-mode ns-maybe))
+             (namespaced-object (kubectl-object-at-point-shell-mode ns-maybe resource))
              (ns (car namespaced-object))
-             (object (cadr namespaced-object)))
+             (object (nth 2 namespaced-object)))
         (funcall action-fn ns resource object)
         ;; (message "%s" (list action-fn ns resource object))
         ))
