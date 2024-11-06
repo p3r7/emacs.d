@@ -282,7 +282,9 @@ set of background colors found in
 ;;;###autoload
 (define-minor-mode greenbar-mode
   "Enable \"green bar striping\" of comint output"
-  nil nil nil
+  :init-value nil
+  :lighter nil
+  :keymap nil
   (if greenbar-mode
       (add-hook 'comint-output-filter-functions
                 #'greenbar-output-filter t t)

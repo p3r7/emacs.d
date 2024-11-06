@@ -357,7 +357,10 @@ the mode if ARG is omitted or nil.
 Lusty Explorer mode is a global minor mode that enables switching
 between buffers and finding files using substrings, fuzzy matching,
 and recency information."
-  nil nil lusty-global-map :global t)
+  ;; :init-value nil
+  ;; :lighter nil
+  :keymap lusty-global-map
+  :global t)
 
 ;;;###autoload
 (defun lusty-highlight-next ()
