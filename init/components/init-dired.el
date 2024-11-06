@@ -41,7 +41,8 @@
    ls-lisp-dirs-first t ;; display dirs 1st
    dired-listing-switches prf/dired-listing-switches
    diredp-hide-details-initially-flag nil
-   diredp-hide-details-propagate-flag nil)
+   diredp-hide-details-propagate-flag nil
+   dired-generate-thumbnail nil)
 
   (when (executable-find "busybox")
     (setq dired-use-ls-dired nil))
