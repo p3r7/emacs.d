@@ -121,7 +121,7 @@
       ("pvc" "pvc")
       ("statefulset" "sts")
       ("sts" "sts")
-      (t (user-error (concat "Unexpected kube resource or resource abrev " resource-abrev)))))
+      (_ (user-error (concat "Unexpected kube resource or resource abrev " resource-abrev)))))
 
   (defun kubectl-fq-name (ns resource object)
     (concat resource "/" ns "/" object))
