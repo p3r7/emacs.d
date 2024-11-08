@@ -3,11 +3,11 @@
 
 ;; -e doesn't appear to work, need to use --eval w/ a load-file http://stackoverflow.com/questions/2803037/emacsclient-eval-insert-something-is-not-working-for-me
 
-(mapc
- (lambda (frame)
-   (with-selected-frame frame
-     (space-theming-update-current-theme)))
- (frame-list))
+;; (mapc
+;;  (lambda (frame)
+;;    (with-selected-frame frame
+;;      (space-theming-update-current-theme)))
+;;  (frame-list))
 
 
 ;; (message "frame-list")

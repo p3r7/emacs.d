@@ -65,6 +65,7 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
             (with-selected-frame frame
               (prf/font/update-frame))))
 
+
 
 ;; THEMES
 
@@ -303,12 +304,10 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
   (space-theming-init-theming)
 
   ;; future frames
-  ;; NB: not working, might not be the appropriate hook
-  ;; running it in client-init.el instead
-  ;; (add-hook 'after-make-frame-functions
-  ;;           (lambda (_current-frame)
-  ;;             (space-theming-update-current-theme)))
-  )
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (with-selected-frame frame
+                (space-theming-update-current-theme)))))
 
 ;; allows converting emacs older (color-)themes to ~/.Xresources
 (use-package color-theme-x)
