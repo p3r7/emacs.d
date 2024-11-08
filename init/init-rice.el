@@ -30,33 +30,40 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
     (-some (lambda (f) (when (member f available-fonts) f))
            searched-fonts)))
 
-(cond
- ;; `fontp' or "<FONT_FAMILY>-<SIZE>"
- ;; NB: this format allows setting decimal size
- ((and prf/rice/font
-       (or (fontp prf/rice/font)
-           (member (s-join "-" (butlast (s-split "-" prf/rice/font))) (prf/font/list-available))))
-  (set-frame-font prf/rice/font nil t))
+(defun prf/font/update-frame ()
+  (cond
+   ;; `fontp' or "<FONT_FAMILY>-<SIZE>"
+   ;; NB: this format allows setting decimal size
+   ((and prf/rice/font
+         (or (fontp prf/rice/font)
+             (member (s-join "-" (butlast (s-split "-" prf/rice/font))) (prf/font/list-available))))
+    (set-frame-font prf/rice/font nil t))
 
- ;; older x-format font
- (prf/rice/x-font
-  ;; (setq default-frame-alist `((font . ,prf/rice/font)))
-  (set-face-attribute 'default nil :font prf/rice/x-font))
+   ;; older x-format font
+   (prf/rice/x-font
+    ;; (setq default-frame-alist `((font . ,prf/rice/font)))
+    (set-face-attribute 'default nil :font prf/rice/x-font))
 
- ;; split familly & height conf
- (:default
-  (when (and prf/rice/font-family
-	         (member prf/rice/font-family (font-family-list)))
-    (set-face-attribute 'default nil :family prf/rice/font-family))
-  (when prf/rice/font-height
-    (set-face-attribute 'default nil :height prf/rice/font-height))))
+   ;; split familly & height conf
+   (:default
+    (when (and prf/rice/font-family
+	           (member prf/rice/font-family (font-family-list)))
+      (set-face-attribute 'default nil :family prf/rice/font-family))
+    (when prf/rice/font-height
+      (set-face-attribute 'default nil :height prf/rice/font-height))))
 
-(when (and prf/rice/variable-pitch-font-family
-           (member prf/rice/variable-pitch-font-family (font-family-list)))
-  (set-face-attribute 'variable-pitch nil :family prf/rice/variable-pitch-font-family))
-(when prf/rice/variable-pitch-font-height
-  (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height))
+  (when (and prf/rice/variable-pitch-font-family
+             (member prf/rice/variable-pitch-font-family (font-family-list)))
+    (set-face-attribute 'variable-pitch nil :family prf/rice/variable-pitch-font-family))
+  (when prf/rice/variable-pitch-font-height
+    (set-face-attribute 'variable-pitch nil :height prf/rice/variable-pitch-font-height)))
 
+(prf/font/update-frame)
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (with-selected-frame frame
+              (prf/font/update-frame))))
 
 
 ;; THEMES
