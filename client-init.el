@@ -5,8 +5,8 @@
 
 (mapc
  (lambda (frame)
-   (select-frame frame 't)
-   (space-theming-update-current-theme))
+   (with-selected-frame frame
+     (space-theming-update-current-theme)))
  (frame-list))
 
 
