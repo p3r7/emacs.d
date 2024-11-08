@@ -116,9 +116,6 @@
 (use-package paradox)
 (use-package delight)
 
-(use-package esup
-  :init
-  (setq esup-depth 0))
 (require 'init-auto-compile)
 
 
