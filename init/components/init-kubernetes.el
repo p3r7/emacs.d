@@ -104,6 +104,7 @@
       ("po" "pod")
       ("deployment" "deployment")
       ("deploy" "deployment")
+      ("job" "job")
       ("cronjob" "cronjob")
       ("cj" "cronjob")
       ("configmap" "configmap")
