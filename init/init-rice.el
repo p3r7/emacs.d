@@ -430,7 +430,8 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
 ;; REVIEW: might be better to use https://github.com/istib/rainbow-blocks or https://github.com/alphapapa/prism.el
 
 
- ;; WRITEROOM / DARKROOM
+
+;; WRITEROOM / DARKROOM
 
 (when (display-graphic-p)
   (require 'init-writeroom))
