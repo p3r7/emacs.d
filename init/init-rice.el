@@ -430,10 +430,75 @@ Indeed, on recent Emacs version, `font-family-list' returns nil when launched in
 ;; REVIEW: might be better to use https://github.com/istib/rainbow-blocks or https://github.com/alphapapa/prism.el
 
 
- ;; WRITEROOM / DARKROOM
+
+;; WRITEROOM / DARKROOM
 
 (when (display-graphic-p)
   (require 'init-writeroom))
+
+
+
+;; custom about emacs
+
+;; NB: can let-bind `fancy-splash-image' to customize
+
+(defun prf/about-emacs ()
+  "Custom `about-emacs'"
+  (interactive)
+  (let* ((buffer (get-buffer-create "*About Emacs*"))
+         (welcom-msg "welcome")
+         (img-file (fancy-splash-image-file))
+         (img (create-image
+               img-file
+               ;; nil nil :ascent 'center
+               ))
+         (img-width (and img (car (image-size img))))
+	     (window-width (window-width))
+         )
+    (with-current-buffer buffer
+      (read-only-mode -1)
+      (erase-buffer)
+
+      (insert "\n\n")
+
+      (insert (propertize " " 'display
+                          `(space :align-to (+ ,(- (/ window-width 2)
+                                                   ;; (/ (* img-width 0.5) 2)
+                                                   0
+                                                   )
+                                               (-0.5 . ,img)))))
+
+      (insert-image img)
+
+      ;; (fancy-splash-head)
+
+
+      (insert "\n")
+      (insert (propertize (concat "Emacs " emacs-version "." (format "%s" emacs-build-number)) 'face '(:height 1.0 :weight bold)))
+      (center-line)
+
+      ;; (when system-configuration
+      ;;   ;; (insert "\n")
+      ;;   (insert (propertize (format-time-string (concat
+	  ;;   			                             (if (called-interactively-p
+	  ;;   			                                  'interactive)
+	  ;;   			                                 "" "\n")
+	  ;;   			                             "%s")
+	  ;;   			                            system-configuration) 'face '(:height 1.0 :weight bold)))
+      ;;   (center-line))
+
+      (when emacs-build-time
+        ;; (insert "\n")
+        (insert (propertize (format-time-string (concat
+					                             (if (called-interactively-p
+					                                  'interactive)
+					                                 "" "\n")
+					                             "%Y-%m-%d")
+					                            emacs-build-time) 'face '(:height 1.0 :weight bold)))
+        (center-line))
+
+      (read-only-mode 1))
+    (display-buffer buffer)))
 
 
 

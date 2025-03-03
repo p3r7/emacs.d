@@ -39,6 +39,8 @@
 ;; ZTREE
 
 (use-package ztree
+  :init
+  (setq ztree-diff-additional-options '("-w"))
   :config
 
   ;; less aggressive faces

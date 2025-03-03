@@ -8,6 +8,14 @@
 
 ;; OPTIMIZATIONS
 
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
+
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
 ;; (setq garbage-collection-messages t)

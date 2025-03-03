@@ -68,6 +68,8 @@
                 vc-ignore-dir-regexp
                 tramp-file-name-regexp))
 
+  (setq enable-remote-dir-locals t)
+
   ;; enable X11 forwarding
   ;; TODO: dynamically bind those w/ `with-shell-interpreter'
   ;; - local
