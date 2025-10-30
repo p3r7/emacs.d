@@ -186,15 +186,25 @@
     (friendly-shell-command-async (kubectl-describe-shell-command ns resource object)
                                   :output-buffer (concat "*kubectl - desc " (kubectl-fq-name ns resource object) "*")))
 
-  (defun kubectl-delete (ns resource object)
-    (when (y-or-n-p (concat "Really delete " resource "/" object " in ns " ns " ?"))
-      (friendly-shell-command-async (kubectl-delete-shell-command ns resource object)
-                                    :output-buffer (concat "*kubectl - delete - " (kubectl-fq-name ns resource object) "*"))))
+  (defun kubectl-delete (ns resource object
+                            ;; ask-confirm
+                            )
+    ;; (when (or (eq ask-confirm 'no-ask)
+    ;;           (y-or-n-p (concat "Really delete " resource "/" object " in ns " ns " ?")))
+    (friendly-shell-command-async (kubectl-delete-shell-command ns resource object)
+                                  :output-buffer (concat "*kubectl - delete - " (kubectl-fq-name ns resource object) "*"))
+    ;; )
+    )
 
-  (defun kubectl-delete-force (ns resource object)
-    (when (y-or-n-p (concat "Really force delete " resource "/" object " in ns " ns " ?"))
-      (friendly-shell-command-async (kubectl-delete-shell-command ns resource object 't)
-                                    :output-buffer (concat "*kubectl - delete (force) - " (kubectl-fq-name ns resource object) "*"))))
+  (defun kubectl-delete-force (ns resource object
+                                  ;; ask-confirm
+                                  )
+    ;; (when (or (eq ask-confirm 'no-ask)
+    ;;           (y-or-n-p (concat "Really force delete " resource "/" object " in ns " ns " ?")))
+    (friendly-shell-command-async (kubectl-delete-shell-command ns resource object 't)
+                                  :output-buffer (concat "*kubectl - delete (force) - " (kubectl-fq-name ns resource object) "*"))
+    ;; )
+    )
 
   ;; similar to `kubel-exec-shell-pod'
   (defun kubectl-shell (ns resource object)
@@ -272,6 +282,19 @@
     (let ((line (thing-at-point 'line)))
       (kubectl-object-in-line-shell-mode line ns-maybe resource)))
 
+  (defun kubectl-objects-selected-shell-mode (ns-maybe resource)
+    (let ((results '()))
+      (if (use-region-p)
+          (save-excursion
+            (let ((start (region-beginning))
+                  (end (region-end)))
+              (goto-char start)
+              (while (< (point) end)
+                (push (kubectl-object-at-point-shell-mode ns-maybe resource) results)
+                (forward-line 1))))
+        (push (kubectl-object-at-point-shell-mode ns-maybe resource) results))
+      (reverse results)))
+
   (defun get-region-whole-lines ()
     "Return the content of the complete lines between the mark and point."
     (interactive)
@@ -323,6 +346,21 @@
         ))
      (t (user-error "Unsupported operation for current buffer"))))
 
+  (defun kubectl-action-on-objects-selected (action-fn ask-confirm)
+    (cond
+     ((eq major-mode 'shell-mode)
+      (let* ((ctx (get-previous-kubectl-shell-command-context))
+             (resource (car ctx))
+             (ns-maybe (cadr ctx))
+             (namespaced-objects (kubectl-objects-selected-shell-mode ns-maybe resource)))
+        (--map (funcall action-fn (car it) resource (nth 2 it)) namespaced-objects
+               ;; 'no-ask
+               )
+        (funcall action-fn ns resource object)
+        ;; (message "%s" (list action-fn ns resource object))
+        ))
+     (t (user-error "Unsupported operation for current buffer"))))
+
   (defun kubectl-logs-at-point ()
     (interactive)
     (kubectl-action-on-object-at-point #'kubectl-logs))
@@ -349,7 +387,8 @@
 
   (defun kubectl-delete-force-at-point ()
     (interactive)
-    (kubectl-action-on-object-at-point #'kubectl-delete-force)))
+    ;; (kubectl-action-on-object-at-point #'kubectl-delete-force)
+    (kubectl-action-on-objects-selected #'kubectl-delete-force 'no-ask)))
 
 (with-eval-after-load 'hydra
   (defhydra hydra-kube (:color blue)
