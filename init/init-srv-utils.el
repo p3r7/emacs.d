@@ -191,27 +191,6 @@
     (when p
       (goto-char p))))
 
-
-;;TODO: lotta stuff don't work as expected
-(add-hook 'shell-mode-hook
-	  (lambda ()
-	    (local-set-key (kbd "<f8>") (lambda nil (interactive) (syslog-mode)))
-	    (local-set-key (kbd "<f7>") (erase-buffer))
-	    (local-set-key (kbd "<f6>") (lambda nill (interactive) (progn
-								(move-beginning-of-line)
-								(set-mark)
-								(move-end-of-line)
-								(json-format))))))
-
-(add-hook 'syslog-mode-hook
-	  (lambda ()
-	    (local-set-key (kbd "<f8>") (lambda nil (interactive) (progn
-							       (shell-mode)
-							       ;; (toggle-read-only)
-							       (setq current-prefix-arg '(-1)) ; C-u
-							       (call-interactively 'read-only-mode))))))
-
-
 ;; [[http://snarfed.org/why_i_run_shells_inside_emacs]]
 ;; TODO: make comments using pager work (apt-get install ?)
 ;; http://stackoverflow.com/questions/12166295/disable-all-paging-in-git
