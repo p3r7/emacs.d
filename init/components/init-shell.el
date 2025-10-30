@@ -8,12 +8,21 @@
 (use-package shell
   :ensure nil
   :demand
-  :after comint
+  ;; :after comint
+  )
 
-  :config
-  (when (>= emacs-major-version 25)
-    (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window))))
+(when (>= emacs-major-version 25)
+  (add-to-list 'display-buffer-alist '("*shell*" display-buffer-same-window)))
 
+;; (when (= emacs-major-version 30)
+;;   (add-hook 'shell-mode-hook
+;;             (lambda ()
+;;               (message "running shell-mode hook")
+;;               (setq comint-process-echoes t)
+;;               (font-lock-mode 1)
+;;               ;; (setq shell-font-lock-keywords nil)
+;;               ;; (setf ansi-color-for-comint-mode 'filter)
+;;               )))
 
 (use-package friendly-shell
   :config
@@ -34,7 +43,7 @@
 
 (use-package shx
   :hook (shell-mode . shx-mode)
-  :after shell
+  ;; :after shell
 
   :config
 
@@ -101,28 +110,29 @@
   (cond
    ((member prf/fav-completion-at-point '(ac auto-complete))
     (add-to-list 'ac-modes 'shell-mode)
-    (add-hook 'shell-mode-hook
-              (lambda ()
-                (when (string= explicit-shell-file-name "/bin/bash")
-                  ;; TODO: support other bash paths
-                  (ac-rlc-setup-sources)))))
+    ;; (add-hook 'shell-mode-hook
+    ;;           (lambda ()
+    ;;             (when (string= explicit-shell-file-name "/bin/bash")
+    ;;               ;; TODO: support other bash paths
+    ;;               (ac-rlc-setup-sources))))
+    )
    ((eq prf/fav-completion-at-point 'company)
     (push 'company-readline company-backends)
     (add-hook 'rlc-no-readline-hook (lambda () (company-mode -1))))))
 
 
-(use-package native-complete
-  :disabled
-  :config
-  (with-eval-after-load 'shell
-    (native-complete-setup-bash)))
+;; (use-package native-complete
+;;   :disabled
+;;   :config
+;;   (with-eval-after-load 'shell
+;;     (native-complete-setup-bash)))
 
-(use-package company-native-complete
-  :disabled
-  :after (auto-complete company)
-  :config
-  (push 'company-native-complete company-backends)
-  (add-hook 'shell-mode-hook (lambda () (company-mode 1))))
+;; (use-package company-native-complete
+;;   :disabled
+;;   :after (auto-complete company)
+;;   :config
+;;   (push 'company-native-complete company-backends)
+;;   (add-hook 'shell-mode-hook (lambda () (company-mode 1))))
 
 
 
