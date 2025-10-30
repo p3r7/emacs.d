@@ -1,8 +1,11 @@
 
 (use-package anaconda-mode
-  :hook ((python-mode-hook . anaconda-mode)
-	 (python-mode-hook . anaconda-eldoc-mode))
+  :hook ((python-mode-hook . prf/py/anaconda-activate-hook))
   :config
+  (defun prf/py/anaconda-activate-hook ()
+    (unless (file-remote-p default-directory)
+      (anaconda-mode)
+      (anaconda-eldoc-mode)))
   (setenv "no_proxy" "127.0.0.1"))
 
 (use-package pyvenv
