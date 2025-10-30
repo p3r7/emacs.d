@@ -11,6 +11,7 @@ eln-cache/
 elpa/
 quelpa/
 straight/
+package-archive-contents.el
 
 # dired thumbnail cache
 image-dired/

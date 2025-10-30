@@ -97,31 +97,72 @@
 
 ;; TODO: choose which of /plugins or /elpa has biggest priority -> add to load path in correct order
 
-(setq package-check-signature nil)
+(setq prf/package/archive-cache-fp "~/.emacs.d/package-archive-contents.el")
+
+(add-to-list 'load-path "~/.emacs.d/plugins/elpa-mirror")
+(require 'elpa-mirror)
+(setq elpamr-default-output-directory "~/elpa-mirror")
+(setq prf/package-refetch-at-startup nil)
+
+(setq package-check-signature nil
+
+      ;; package-enable-at-startup nil
+      ;; package--init-file-ensured t
+
+      )
 
 (when (and (>= libgnutls-version 30603)
-	   (version<= emacs-version "26.2"))
+	       (version<= emacs-version "26.2"))
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 (when (require 'package nil 'noerror)
+
+  (if prf/package-refetch-at-startup
+      ;; (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+      (setq package-archives '(("gnu" . "https://elpa.mirrorservice.org/")))
+    (setq package-archives `(("elpa-mirror" . ,(concat elpamr-default-output-directory "/")))))
+
   ;; still some issues w/ marmalade's certif https://github.com/nicferrier/elmarmalade/issues/55
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
   ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   ;; (add-to-list 'package-archives '("bagolyodu" . "https://bagolyodu.dyndns.hu/emacs-packages/") t)
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
+  (unless (or prf/package-refetch-at-startup
+              (not (file-exists-p prf/package/archive-cache-fp)))
+    (message "package init - reading cached package archive")
+    (with-temp-buffer
+      (insert-file-contents prf/package/archive-cache-fp)
+      (cl-assert (eq (point) (point-min)))
+      (setq package-archive-contents (read (current-buffer)))))
+
+  (unless package-archive-contents
+    (message "package init - missing package archive, featching and caching")
+    (package-refresh-contents)
+    (with-temp-file prf/package/archive-cache-fp
+      (prin1 package-archive-contents (current-buffer))
+      ;; (insert (prin1-to-string package-archive-contents))
+      ))
+
   (package-initialize)
-  (when (not package-archive-contents)
-    (package-refresh-contents))
+
+  (when prf/package-refetch-at-startup
+    (message "package init - creating local elpa cache")
+    (elpamr-create-mirror-for-installed))
   )
 
-(require 'prf-require)
-(prf/require-plugin 'use-package)
-(setq use-package-always-ensure t)
-;; (setq use-package-verbose t)
+(setq use-package-always-ensure t
+      ;; use-package-always-defer t
+      ;; use-package-verbose t
+      )
 
-(use-package paradox)
+(require 'prf-require)
+(if (= emacs-major-version 30)
+    (require 'use-package)
+  (prf/require-plugin 'use-package))
+
+
+;; (use-package paradox)
 (use-package delight)
 
 (require 'init-auto-compile)
