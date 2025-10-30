@@ -121,6 +121,14 @@
 
 (require 'init-highlighting)
 
+;; disabel secondary selection
+;; https://www.reddit.com/r/emacs/comments/3c61zl/abolish_the_secondary_selection_quick_and_easy/
+(progn
+  (global-unset-key (kbd "<M-drag-mouse-1>")) ; was mouse-set-secondary
+  (global-unset-key (kbd "<M-down-mouse-1>")) ; was mouse-drag-secondary
+  (global-unset-key (kbd "<M-mouse-1>"))      ; was mouse-start-secondary
+  (global-unset-key (kbd "<M-mouse-2>"))      ; was mouse-yank-secondary
+  (global-unset-key (kbd "<M-mouse-3>")))	  ; was mouse-secondary-save-then-kill
 
 
 ;; TIMESTAMPS: AUTOMATIC
