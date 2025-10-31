@@ -114,9 +114,7 @@ calling `seamstress-repl-switch-fn'.")
          (visiting-windows (get-buffer-window-list comint-buff)))
 
     ;; send command
-    ;; REVIEW: replace w/ `with-current-buffer'!
-    (save-excursion
-      (set-buffer comint-buff)
+    (with-current-buffer comint-buff
       (let ((proc (get-buffer-process (current-buffer))))
         (comint-simple-send proc cmd)))
 
@@ -182,25 +180,34 @@ Please note that it will only work properly for non-local lua vars."
   "Run an inferior instance of `seamstress' inside Emacs."
   (interactive)
   (let* ((seamstress-program seamstress-file-path)
-         (buffer (get-buffer-create (seamstress--repl-buffer-name)))
-         (proc-alive (comint-check-proc buffer))
-         (process (get-buffer-process buffer))
-         (og-seamstress-repl-script-path seamstress-repl-script-path))
+         (repl-buffer (get-buffer-create (seamstress--repl-buffer-name)))
+         (proc-alive (comint-check-proc repl-buffer))
+         (process (get-buffer-process repl-buffer))
+         (og-seamstress-repl-script-path (buffer-local-value 'seamstress-repl-script-path repl-buffer))
+         (new-seamstress-repl-script-path seamstress-repl-script-path))
+
+    (message og-seamstress-repl-script-path)
+
     ;; if the process is dead then re-create the process and reset the
     ;; mode.
-    (if proc-alive
+    (if (and proc-alive
+             (string= og-seamstress-repl-script-path new-seamstress-repl-script-path))
         (seamstress-reset-lvm)
-      (with-current-buffer buffer
+
+      ;; if not, kill previous one and launch new one
+      (when proc-alive
+        (kill-process process))
+      (with-current-buffer repl-buffer
         (with-environment-variables (("PWD" default-directory))
-          (apply 'make-comint-in-buffer "seamstress" buffer
+          (apply 'make-comint-in-buffer "seamstress" repl-buffer
                  seamstress-program nil seamstress-cli-arguments))
         (when seamstress-repl-script-path
           (message (concat "SCRIPT: " seamstress-repl-script-path))
-          (set (make-local-variable 'seamstress-repl-script-path) og-seamstress-repl-script-path))
+          (set (make-local-variable 'seamstress-repl-script-path) new-seamstress-repl-script-path))
         (seamstress-repl-mode)))
     ;; Regardless, provided we have a valid buffer, we pop to it.
-    (when buffer
-      (pop-to-buffer buffer))))
+    (when repl-buffer
+      (pop-to-buffer repl-buffer))))
 
 (defun seamstress-run-current-script ()
   (interactive)
