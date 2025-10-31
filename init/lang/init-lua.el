@@ -64,6 +64,20 @@
     (kill-region start end)
     (insert lua-table)))
 
+(defun prf/decimal-bytes-to-hex (byte-string)
+  "Convert a string of comma-separated decimal bytes to a list of hexadecimal strings."
+  (-map (lambda (byte)
+          (format "%02X" (string-to-number byte)))
+        (s-split "," byte-string)))
+
+(defun prf/repl-deci-to-hex (start end)
+  (interactive "r")
+  (let* ((hex-bytes (prf/decimal-bytes-to-hex (buffer-substring start end)))
+         (formatted (s-join " " hex-bytes))
+         (formatted-multiline (s-join "\n" (s-split-up-to " " formatted 17))))
+    (kill-region start end)
+    (insert formatted-multiline)))
+
 
 
 
