@@ -10,6 +10,15 @@
   (dolist (hook '(python-mode-hook python-ts-mode-hook))
     (add-hook hook
               (lambda () (local-set-key (kbd "C-y") #'prf/cua-paste-no-indent)))))
+
+(use-package pip-requirements
+  :config
+  (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
+
+
+
+;; venv
+
 (use-package anaconda-mode
   :hook ((python-mode-hook . prf/py/anaconda-activate-hook))
   :config
@@ -19,6 +28,9 @@
       (anaconda-eldoc-mode)))
   (setenv "no_proxy" "127.0.0.1"))
 
+;; (use-package ac-anaconda
+;;   :hook (python-mode-hook . ac-anaconda-setup))
+
 (use-package pyvenv
   :config
   (let ((w32-conda-envs-dir "C:/ProgramData/Anaconda2/envs"))
@@ -26,12 +38,9 @@
                (file-directory-p w32-conda-envs-dir))
       (setenv "WORKON_HOME" w32-conda-envs-dir))))
 
-(use-package pip-requirements
-  :config
-  (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
 
-;; (use-package ac-anaconda
-;;   :hook (python-mode-hook . ac-anaconda-setup))
+
+;; jinja2
 
 (use-package mmm-jinja2
   :config
@@ -66,4 +75,5 @@
   (mmm-add-mode-ext-class 'shell-script-mode "\\.j2\\'" 'jinja2))
 
 
+
 (provide 'init-python)
