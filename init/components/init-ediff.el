@@ -17,21 +17,26 @@
 	    )
   :config
 
-  (defun prf/ediff-adjust-options ()
-    "Adjust `ediff-diff-options` according to buffer types."
+  (defun prf/buffer-python-p (buf)
+    (and (buffer-live-p buf)
+         (with-current-buffer buf
+           (derived-mode-p 'python-mode 'python-ts-mode))))
 
-    ;; remove "-w" opt (ignore whitespaces) for python
-    (when (and (boundp 'ediff-buffer-A) (buffer-live-p ediff-buffer-A)
-               (with-current-buffer ediff-buffer-A
-                 (derived-mode-p 'python-mode 'python-ts-mode)))
-      ;; (setq-local ediff-ignore-similar-regions nil)
-      (setq-local ediff-diff-options "")
+  (defun prf/ediff-session-has-python-p ()
+    (or (prf/buffer-python-p (bound-and-true-p ediff-buffer-A))
+        (prf/buffer-python-p (bound-and-true-p ediff-buffer-B))
+        (prf/buffer-python-p (bound-and-true-p ediff-buffer-C))))
 
-      ;; `ediff-set-actual-diff-options' is force-setting `ediff-actual-diff-options' to -w!!!
-      (setq-local ediff-actual-diff-options "")
-      ))
-
-  (add-hook 'ediff-startup-hook #'prf/ediff-adjust-options)
+  ;; NB: we disable the "-w" option for python buffers
+  ;; (in fact any options)
+  ;; we have to use an advice as `ediff' does weird shenanigans w/ using an internal `ediff-set-actual-diff-options' which can't be `setq-local' and that shadows `ediff-diff-options'
+  (defun prf/ediff--around-make-diff-buffer (orig &rest args)
+    (let* ((has-python (prf/ediff-session-has-python-p))
+           (ediff-diff-options (if has-python "" ediff-diff-options))
+           (ediff-actual-diff-options (if has-python "" ediff-actual-diff-options)))
+      (apply orig args)))
+  (advice-add 'ediff-make-diff2-buffer :around
+              #'prf/ediff--around-make-diff-buffer)
 
   (defun ediff-toggle ()
     (interactive)
