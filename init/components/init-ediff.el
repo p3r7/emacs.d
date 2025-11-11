@@ -16,22 +16,29 @@
 	    ;; ediff-diff-options "-Z -E -b" ;; ignore trailing white spaces + tab expansion
 	    )
   :config
+
+  (defun prf/ediff-adjust-options ()
+    "Adjust `ediff-diff-options` according to buffer types."
+
+    ;; remove "-w" opt (ignore whitespaces) for python
+    (when (and (boundp 'ediff-buffer-A) (buffer-live-p ediff-buffer-A)
+               (with-current-buffer ediff-buffer-A
+                 (derived-mode-p 'python-mode 'python-ts-mode)))
+      ;; (setq-local ediff-ignore-similar-regions nil)
+      (setq-local ediff-diff-options "")
+
+      ;; `ediff-set-actual-diff-options' is force-setting `ediff-actual-diff-options' to -w!!!
+      (setq-local ediff-actual-diff-options "")
+      ))
+
+  (add-hook 'ediff-startup-hook #'prf/ediff-adjust-options)
+
   (defun ediff-toggle ()
     (interactive)
     (if (= (length (window-list)) 2)
-	    (let ((prf/left-buffer (buffer-file-name (window-buffer (car (window-list)))))
-	          (prf/right-buffer (buffer-file-name (window-buffer (car (cdr (window-list))))))
-	          (ediff-diff-options ediff-diff-options))
-
-	      ;; NB: we re-enable whitespace matching for python files ...
-	      (when (s-ends-with? ".py" prf/left-buffer)
-	        (setq ediff-diff-options ""))
-	      (when (s-ends-with? ".py" prf/right-buffer)
-	        (setq ediff-diff-options ""))
-
-	      (ediff
-	       (buffer-file-name (window-buffer (car (window-list))))
-	       (buffer-file-name (window-buffer (car (cdr (window-list)))))))
+	    (let ((left-buffer (buffer-file-name (window-buffer (car (window-list)))))
+	          (right-buffer (buffer-file-name (window-buffer (car (cdr (window-list)))))))
+	      (ediff left-buffer right-buffer))
       (message "invalid number of visible buffers (expected 2)"))))
 
 
