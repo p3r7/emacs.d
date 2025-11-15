@@ -7,6 +7,8 @@
     (setq c-basic-offset 2))
   (add-hook 'arduino-mode-hook #'prf/arduino-offset-hook))
 
+(use-package platformio-mode)
+
 
 
 
