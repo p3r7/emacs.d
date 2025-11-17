@@ -17,14 +17,14 @@ Wrap the function `shell-command-to-string', ensuring variable `shell-file-name'
                                   "/bin/sh")))
           (shell-command-to-string command)))
 
-      ;; (with-eval-after-load 'tramp
-      ;;   (let ((docker-tramp-method "crictl")
-      ;;         (docker-tramp-docker-executable "crictl"))
-      ;;     (docker-tramp-add-method)
-      ;;     ;; NB: this doesn't work for remote paths
-      ;;     ;; indeed, `docker-tramp--running-containers' relies on `process-lines' which isn't TRAMP-aware
-      ;;     ;; (tramp-set-completion-function docker-tramp-method docker-tramp-completion-function-alist)
-      ;;     ))
+      (with-eval-after-load 'tramp
+        (let ((docker-tramp-method "crictl")
+              (docker-tramp-docker-executable "crictl"))
+          (docker-tramp-add-method)
+          ;; NB: this doesn't work for remote paths
+          ;; indeed, `docker-tramp--running-containers' relies on `process-lines' which isn't TRAMP-aware
+          ;; (tramp-set-completion-function docker-tramp-method docker-tramp-completion-function-alist)
+          ))
       )))
 
 
