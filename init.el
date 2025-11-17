@@ -151,10 +151,10 @@
     (elpamr-create-mirror-for-installed))
   )
 
-(setq use-package-always-ensure t
-      ;; use-package-always-defer t
-      ;; use-package-verbose t
-      )
+;; (setq use-package-always-ensure t
+;;       ;; use-package-always-defer t
+;;       ;; use-package-verbose t
+;;       )
 
 (require 'prf-require)
 (if (= emacs-major-version 30)
