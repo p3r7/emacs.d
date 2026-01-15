@@ -3,8 +3,8 @@
 ;;     (message "darkroom is on")
 ;;   (message "darkroom is off"))
 
-(when (prf/require-plugin 'darkroom nil 'noerror)
-
+(use-package darkroom
+  :config
   (defun prf/frame/toggle-fullscreen-darkroom ()
     (interactive)
     (let ((fullscreen (frame-parameter nil 'fullscreen)))
@@ -18,7 +18,6 @@
 		          (darkroom-mode -1))))
 	    (darkroom-mode))
       (toggle-frame-fullscreen)))
-
 
   (global-set-key (kbd "C-<f11>") #'prf/frame/toggle-fullscreen-darkroom))
 
