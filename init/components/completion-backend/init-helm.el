@@ -86,15 +86,15 @@ On error (read-only), quit without selecting."
   :after helm
   :bind (
          :map helm-grep-mode-map
-	 ("<return>" . helm-grep-mode-jump-other-window)
-	 ("p" . helm-grep-mode-jump-other-window-backward)
-	 ("n" . helm-grep-mode-jump-other-window-forward)))
+	     ("<return>" . helm-grep-mode-jump-other-window)
+	     ("p" . helm-grep-mode-jump-other-window-backward)
+	     ("n" . helm-grep-mode-jump-other-window-forward)))
 
 
 ;; NB: swiper & helm-swoop are very close
 
-(use-package helm-swoop
-  :after helm)
+;; (use-package helm-swoop
+;;   :after helm)
 
 (use-package swiper-helm
   :after helm)
