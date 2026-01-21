@@ -15,6 +15,18 @@
   :config
   (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
 
+(use-package python
+  :config
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (when (file-remote-p default-directory)
+                ;; disable spawning of python subprocess, that'd call: project, vc, dir-locals...
+                ;; making TRAMP unresponsive
+                (setq python-shell-completion-native-enable nil)
+                (setq python-shell-interpreter nil)
+                (setq python-shell-interpreter-args "")
+                (eldoc-mode -1)))))
+
 
 
 ;; venv
