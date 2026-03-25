@@ -27,6 +27,12 @@
 
 
 
+;; VERTICO
+
+(require 'init-vertico)
+
+
+
 ;; HELM
 
 (require 'init-helm)
