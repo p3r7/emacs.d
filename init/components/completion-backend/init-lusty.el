@@ -7,40 +7,40 @@
   ;;        ("C-x C-b" . lusty-buffer-explorer))
   :init
   (setq lusty--completion-ignored-regexps '("^\\*tramp/.*\\*$"
-					    "^\\*Help\\*$"
-					    "^\\*helpful .*$"
-					    ;; "^\\*scratch\\*$"
-					    ;; "^\\*Messages\\*$"
-					    "^\\*Completions\\*$"
-					    "^\\*Bookmark List\\*$"
-					    "^\\*Ibuffer\\*$"
-					    "^\\*Compile-Log\\*$"
-					    "^\\*Ediff Registry\\*$"
-					    "^\\*Occur\\*$"
-					    "^\\*vc\\*$"
-					    "^\\*helm .*$"
-					    "^\\*quelpa.*$"
+					                        "^\\*Help\\*$"
+					                        "^\\*helpful .*$"
+					                        ;; "^\\*scratch\\*$"
+					                        ;; "^\\*Messages\\*$"
+					                        "^\\*Completions\\*$"
+					                        "^\\*Bookmark List\\*$"
+					                        "^\\*Ibuffer\\*$"
+					                        "^\\*Compile-Log\\*$"
+					                        "^\\*Ediff Registry\\*$"
+					                        "^\\*Occur\\*$"
+					                        "^\\*vc\\*$"
+					                        "^\\*helm .*$"
+					                        "^\\*quelpa.*$"
                                             "^\\*straight-process\\*$"
                                             "^\\*kubel-process\\*$"
-					    "^\\*kubel - .*$"
-					    "^\\* docker .*$"
+					                        "^\\*kubel - .*$"
+					                        "^\\* docker .*$"
                                             "^\\*EGLOT .*\\*$"
                                             "^\\*Multi Buffer.*\\*$"
                                             ;; "^\\*ediff-diff\\*$"
                                             ;; "^\\*ediff-errors\\*$"
 
                                             ;; clojure
-					    "^\\*nrepl-server .*$"
+					                        "^\\*nrepl-server .*$"
 
                                             ;; older-style magit buffers
-					    "^\\*magit:.*$"
+					                        "^\\*magit:.*$"
                                             ;; newer style magit buffers
-					    "^magit:.*$"
-					    "^magit-diff:.*$"
-					    "^magit-process:.*$"
-					    )
-	lusty--shell-open-here-fun #'friendly-shell
-	lusty--M-x-fun #'helm-M-x)
+					                        "^magit:.*$"
+					                        "^magit-diff:.*$"
+					                        "^magit-process:.*$"
+					                        )
+	    lusty--shell-open-here-fun #'friendly-shell
+	    lusty--M-x-fun #'helm-M-x)
   :config
 
   (with-eval-after-load 'ibuffer
