@@ -62,6 +62,25 @@
   (lusty-register-custom-explorer-action "M-x" #'helm-M-x "M-x")
   (lusty-register-custom-explorer-action "magit-status" #'prf/magit-status-maybe "C-x g"))
 
+;; NB: as vertico is global for all commands that use `completion-read', we need to disable it
+(with-eval-after-load 'vertico
+  (defun p3r7/with-vertico-disabled (orig-fn &rest args)
+    "Run ORIG-FN with Vertico temporarily disabled."
+    (let ((was-active vertico-mode))
+      (when was-active
+        (vertico-mode -1))
+      (unwind-protect
+          (apply orig-fn args)
+        (when was-active
+          (vertico-mode 1)))))
+
+  (advice-add 'lusty-file-explorer :around #'p3r7/with-vertico-disabled)
+  (advice-add 'lusty-buffer-explorer :around #'p3r7/with-vertico-disabled)
+  ;; (advice-add 'lusty-select-match :around #'p3r7/with-vertico-disabled)
+  ;; (advice-add 'lusty-open-this :around #'p3r7/with-vertico-disabled)
+  )
+
+
 
 
 (provide 'init-lusty)
