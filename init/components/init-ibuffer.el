@@ -70,12 +70,16 @@
 
             ("Kubernetes (live)"
              (or (mode . kubel-mode)
-                 (name . "^\\*kubel - ")))
+                 (name . "^\\*kubel - ")
+                 (name . "^\\*kubectl - ")
+                 (name . "^\\*kubectl - ")))
 
             ("Config: Kubernetes"
-             (predicate . (and (eq major-mode 'yaml-mode)
-                               (--some (s-contains? it default-directory)
-                                       '("/chart/" "/helm-charts-" "/deploy/")))))
+             (or
+              (name . "^\\*kubel-resource:")
+              (predicate . (and (eq major-mode 'yaml-mode)
+                                (--some (s-contains? it default-directory)
+                                        '("/chart/" "/helm-charts-" "/deploy/"))))))
 
             ("norns"
 	         (or
