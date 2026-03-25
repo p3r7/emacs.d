@@ -14,7 +14,7 @@
   :after (helm ivy lusty-explorer)
 
   :init
-  (setq prf/M-x-completion-backend 'helm
+  (setq prf/M-x-completion-backend 'vertico
         prf/find-file-completion-backend 'lusty
         prf/switch-to-buffer-completion-backend 'lusty
         ;; prf/completing-read-completion-backend 'ivy
