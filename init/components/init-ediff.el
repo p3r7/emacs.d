@@ -2,6 +2,29 @@
 ;; http://trey-jackson.blogspot.fr/2010/10/emacs-tip-38-automatically-diff-binary.html
 
 
+;; DIFF
+
+(defun diff-lines-a-minus-b (buf-a buf-b)
+  "Show lines in BUF-A that are not in BUF-B."
+  (interactive "bBuffer A: \nbBuffer B: ")
+  (let* ((lines-b (with-current-buffer buf-b
+                    (split-string (buffer-string) "\n")))
+         (set-b (make-hash-table :test 'equal :size (length lines-b)))
+         (lines-a (with-current-buffer buf-a
+                    (split-string (buffer-string) "\n")))
+         result)
+    (dolist (line lines-b)
+      (puthash line t set-b))
+    (dolist (line lines-a)
+      (unless (gethash line set-b)
+        (push line result)))
+    (with-current-buffer (get-buffer-create "*A minus B*")
+      (erase-buffer)
+      (insert (mapconcat #'identity (nreverse result) "\n"))
+      (pop-to-buffer (current-buffer)))))
+
+
+
 ;; EDIFF
 
 (use-package ediff
