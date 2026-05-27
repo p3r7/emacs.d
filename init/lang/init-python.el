@@ -1,15 +1,15 @@
 
-;; since we use `cua-selection-mode', pasting w/ `cua-yank' results in an auto-indent
+;; since we use `cua-selection-mode', pasting w/ `cua-paste' results in an auto-indent
 ;; we force the `C-u' prefix for python mode to disable this behavior
-(with-eval-after-load 'cua-base
-  (defun prf/cua-paste-no-indent ()
-    (interactive)
-    (let ((current-prefix-arg '(4)))    ; C-u
-      (call-interactively #'cua-paste)))
+;; (with-eval-after-load 'cua-base
+;;   ;;   (defun prf/cua-paste-no-indent ()
+;;   ;;     (interactive)
+;;   ;;     (let ((current-prefix-arg '(4)))    ; C-u
+;;   ;;       (call-interactively #'cua-paste)))
 
-  (dolist (hook '(python-mode-hook python-ts-mode-hook))
-    (add-hook hook
-              (lambda () (local-set-key (kbd "C-y") #'prf/cua-paste-no-indent)))))
+;;   (dolist (hook '(python-mode-hook python-ts-mode-hook))
+;;     (add-hook hook
+;;               (lambda () (local-set-key (kbd "C-y") #'cua-paste)))))
 
 (use-package pip-requirements
   :config
