@@ -7,6 +7,8 @@
 
 ;; MAIN
 
+(defvar p3r7/org-link-abbrev-alist '() "Wrapper around `org-link-abbrev-alist', providing auto-folding of pasted links")
+
 (use-package org
   :bind (
          :map org-mode-map
@@ -105,12 +107,12 @@
 
   ;; TODO: use https://orgmode.org/manual/Link-Abbreviations.html instead for those
 
-  (setq p3r7/org-link-abbrev-alist '(("archwiki" . "https://wiki.archlinux.org/index.php/")
-                                     ("gh" . "https://github.com/")
-                                     ("gl" . "https://gitlab.com/")
-                                     ("hn" . "https://news.ycombinator.com/item?id=")
-                                     ("lines" . "https://llllllll.co/t/")
-                                     ("thing" . "https://www.thingiverse.com/thing:")))
+  (add-to-list 'p3r7/org-link-abbrev-alist '("archwiki" . "https://wiki.archlinux.org/index.php/"))
+  (add-to-list 'p3r7/org-link-abbrev-alist '("gh" . "https://github.com/"))
+  (add-to-list 'p3r7/org-link-abbrev-alist '("gl" . "https://gitlab.com/"))
+  (add-to-list 'p3r7/org-link-abbrev-alist '("hn" . "https://news.ycombinator.com/item?id="))
+  (add-to-list 'p3r7/org-link-abbrev-alist '("lines" . "https://llllllll.co/t/"))
+  (add-to-list 'p3r7/org-link-abbrev-alist '("thing" . "https://www.thingiverse.com/thing:"))
 
   (--each p3r7/org-link-abbrev-alist
     (let* ((link-prefix (car it))
