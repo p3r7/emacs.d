@@ -97,33 +97,28 @@
 
 ;; TODO: choose which of /plugins or /elpa has biggest priority -> add to load path in correct order
 
-(setq package-check-signature nil
-      package-enable-at-startup nil
-      package--init-file-ensured t)
+(setq package-check-signature nil)
 
 (when (and (>= libgnutls-version 30603)
 	       (version<= emacs-version "26.2"))
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
-(when (require 'package nil 'noerror)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 
-  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/")
-                           ("org" . "http://orgmode.org/elpa/")))
-
-  (package-initialize)
-
-  ;; NB: call `package-refresh-contents' iif we're missing the cached inde  of any of the `package-archives'
-  (let ((missing (cl-remove-if
-                  (lambda (archive)
-                    (file-exists-p
-                     (expand-file-name (concat "archives/" (car archive) "/archive-contents")
-                                       package-user-dir)))
-                  package-archives)))
-    (when missing
-      (message "package init - calling `package-refresh-contents' as we're missing the local index cache for: %s"
-               (mapconcat #'car missing ", "))
-      (package-refresh-contents))))
+;; NB: `package-activate-all' is called automatically before init.el (Emacs 27+).
+;; Only call `package-refresh-contents' if any archive is missing its local index cache.
+(let ((missing (cl-remove-if
+                (lambda (archive)
+                  (file-exists-p
+                   (expand-file-name (concat "archives/" (car archive) "/archive-contents")
+                                     package-user-dir)))
+                package-archives)))
+  (when missing
+    (message "package init - calling `package-refresh-contents' as we're missing the local index cache for: %s"
+             (mapconcat #'car missing ", "))
+    (package-refresh-contents)))
 
 (setq
  ;; use-package-always-ensure t
