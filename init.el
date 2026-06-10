@@ -97,64 +97,34 @@
 
 ;; TODO: choose which of /plugins or /elpa has biggest priority -> add to load path in correct order
 
-(setq prf/package/archive-cache-fp "~/.emacs.d/package-archive-contents.el")
-
-(add-to-list 'load-path "~/.emacs.d/plugins/elpa-mirror")
-(require 'elpa-mirror)
-(setq elpamr-default-output-directory "~/elpa-mirror")
-(setq prf/package-refetch-at-startup nil)
-
-(setq package-check-signature nil
-
-      ;; package-enable-at-startup nil
-      ;; package--init-file-ensured t
-
-      )
+(setq package-check-signature nil)
 
 (when (and (>= libgnutls-version 30603)
 	       (version<= emacs-version "26.2"))
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
-(when (require 'package nil 'noerror)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 
-  (if prf/package-refetch-at-startup
-      ;; (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-      (setq package-archives '(("gnu" . "https://elpa.mirrorservice.org/")))
-    (setq package-archives `(("elpa-mirror" . ,(concat elpamr-default-output-directory "/")))))
+;; NB: `package-activate-all' is called automatically before init.el (Emacs 27+).
+;; Only call `package-refresh-contents' if any archive is missing its local index cache.
+(let ((missing (cl-remove-if
+                (lambda (archive)
+                  (file-exists-p
+                   (expand-file-name (concat "archives/" (car archive) "/archive-contents")
+                                     package-user-dir)))
+                package-archives)))
+  (when missing
+    (message "package init - calling `package-refresh-contents' as we're missing the local index cache for: %s"
+             (mapconcat #'car missing ", "))
+    (package-refresh-contents)))
 
-  ;; still some issues w/ marmalade's certif https://github.com/nicferrier/elmarmalade/issues/55
-  ;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  ;; (add-to-list 'package-archives '("bagolyodu" . "https://bagolyodu.dyndns.hu/emacs-packages/") t)
-  (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
-
-  (unless (or prf/package-refetch-at-startup
-              (not (file-exists-p prf/package/archive-cache-fp)))
-    (message "package init - reading cached package archive")
-    (with-temp-buffer
-      (insert-file-contents prf/package/archive-cache-fp)
-      (cl-assert (eq (point) (point-min)))
-      (setq package-archive-contents (read (current-buffer)))))
-
-  (unless package-archive-contents
-    (message "package init - missing package archive, featching and caching")
-    (package-refresh-contents)
-    (with-temp-file prf/package/archive-cache-fp
-      (prin1 package-archive-contents (current-buffer))
-      ;; (insert (prin1-to-string package-archive-contents))
-      ))
-
-  (package-initialize)
-
-  (when prf/package-refetch-at-startup
-    (message "package init - creating local elpa cache")
-    (elpamr-create-mirror-for-installed))
-  )
-
-;; (setq use-package-always-ensure t
-;;       ;; use-package-always-defer t
-;;       ;; use-package-verbose t
-;;       )
+(setq
+ ;; use-package-always-ensure t
+ ;; use-package-always-defer t
+ ;;       ;; use-package-verbose t
+ )
 
 (require 'prf-require)
 (if (= emacs-major-version 30)
@@ -178,23 +148,6 @@
   :after (quelpa)
   :config
   (quelpa-use-package-activate-advice))
-
-
-
-;; FEATURES - STRAIGHT
-
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
 
 
 

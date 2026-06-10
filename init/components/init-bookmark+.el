@@ -65,12 +65,12 @@
                                (prf/tramp/complete-file-name dir)
                              dir))
                  (subdirs  (bmkp-dired-subdirs))
-                 (mfiles   (bmkp-dired-remember-*-marks (point-min) (point-max))))
+                 (mark-alist (dired-remember-marks (point-min) (point-max))))
             `(,dir
               ,@(bookmark-make-record-default 'NO-FILE)
               ;; (filename . ,real-dir) (dired-directory . ,dired-directory)
               (filename . ,real-dir) (dired-directory . ,real-dir)
-              (dired-marked . ,mfiles) (dired-switches . ,dired-actual-switches)
+              (dired-marked . ,mark-alist) (dired-switches . ,dired-actual-switches)
               (dired-subdirs . ,subdirs) (dired-hidden-dirs . ,hidden-dirs)
               (handler . bmkp-jump-dired)))
         (save-excursion                   ; Hide subdirs that were hidden.

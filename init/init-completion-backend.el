@@ -14,16 +14,22 @@
   :after (helm ivy lusty-explorer)
 
   :init
-  (setq prf/M-x-completion-backend 'helm
+  (setq prf/M-x-completion-backend 'vertico
         prf/find-file-completion-backend 'lusty
         prf/switch-to-buffer-completion-backend 'lusty
         ;; prf/completing-read-completion-backend 'ivy
         )
   :bind (("C-x C-f" . prf/find-file-fun)
-	 ("C-x f" . prf/find-file-fun)
-	 ("C-x b" . prf/switch-to-buffer-fun)
-	 ("C-x C-b" . prf/switch-to-buffer-fun)
-	 ("M-x" . prf/M-x-fun)))
+	     ("C-x f" . prf/find-file-fun)
+	     ("C-x b" . prf/switch-to-buffer-fun)
+	     ("C-x C-b" . prf/switch-to-buffer-fun)
+	     ("M-x" . prf/M-x-fun)))
+
+
+
+;; VERTICO
+
+(require 'init-vertico)
 
 
 

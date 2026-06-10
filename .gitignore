@@ -39,6 +39,7 @@ tramp
 session.*
 .cache/
 tldr/
+history
 
 # requests
 request/

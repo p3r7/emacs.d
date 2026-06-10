@@ -7,40 +7,40 @@
   ;;        ("C-x C-b" . lusty-buffer-explorer))
   :init
   (setq lusty--completion-ignored-regexps '("^\\*tramp/.*\\*$"
-					    "^\\*Help\\*$"
-					    "^\\*helpful .*$"
-					    ;; "^\\*scratch\\*$"
-					    ;; "^\\*Messages\\*$"
-					    "^\\*Completions\\*$"
-					    "^\\*Bookmark List\\*$"
-					    "^\\*Ibuffer\\*$"
-					    "^\\*Compile-Log\\*$"
-					    "^\\*Ediff Registry\\*$"
-					    "^\\*Occur\\*$"
-					    "^\\*vc\\*$"
-					    "^\\*helm .*$"
-					    "^\\*quelpa.*$"
+					                        "^\\*Help\\*$"
+					                        "^\\*helpful .*$"
+					                        ;; "^\\*scratch\\*$"
+					                        ;; "^\\*Messages\\*$"
+					                        "^\\*Completions\\*$"
+					                        "^\\*Bookmark List\\*$"
+					                        "^\\*Ibuffer\\*$"
+					                        "^\\*Compile-Log\\*$"
+					                        "^\\*Ediff Registry\\*$"
+					                        "^\\*Occur\\*$"
+					                        "^\\*vc\\*$"
+					                        "^\\*helm .*$"
+					                        "^\\*quelpa.*$"
                                             "^\\*straight-process\\*$"
                                             "^\\*kubel-process\\*$"
-					    "^\\*kubel - .*$"
-					    "^\\* docker .*$"
+					                        "^\\*kubel - .*$"
+					                        "^\\* docker .*$"
                                             "^\\*EGLOT .*\\*$"
                                             "^\\*Multi Buffer.*\\*$"
                                             ;; "^\\*ediff-diff\\*$"
                                             ;; "^\\*ediff-errors\\*$"
 
                                             ;; clojure
-					    "^\\*nrepl-server .*$"
+					                        "^\\*nrepl-server .*$"
 
                                             ;; older-style magit buffers
-					    "^\\*magit:.*$"
+					                        "^\\*magit:.*$"
                                             ;; newer style magit buffers
-					    "^magit:.*$"
-					    "^magit-diff:.*$"
-					    "^magit-process:.*$"
-					    )
-	lusty--shell-open-here-fun #'friendly-shell
-	lusty--M-x-fun #'helm-M-x)
+					                        "^magit:.*$"
+					                        "^magit-diff:.*$"
+					                        "^magit-process:.*$"
+					                        )
+	    lusty--shell-open-here-fun #'friendly-shell
+	    lusty--M-x-fun #'helm-M-x)
   :config
 
   (with-eval-after-load 'ibuffer
@@ -61,6 +61,25 @@
   (lusty-register-custom-explorer-action "eval-expression" #'eval-expression "M-:")
   (lusty-register-custom-explorer-action "M-x" #'helm-M-x "M-x")
   (lusty-register-custom-explorer-action "magit-status" #'prf/magit-status-maybe "C-x g"))
+
+;; NB: as vertico is global for all commands that use `completion-read', we need to disable it
+(with-eval-after-load 'vertico
+  (defun p3r7/with-vertico-disabled (orig-fn &rest args)
+    "Run ORIG-FN with Vertico temporarily disabled."
+    (let ((was-active vertico-mode))
+      (when was-active
+        (vertico-mode -1))
+      (unwind-protect
+          (apply orig-fn args)
+        (when was-active
+          (vertico-mode 1)))))
+
+  (advice-add 'lusty-file-explorer :around #'p3r7/with-vertico-disabled)
+  (advice-add 'lusty-buffer-explorer :around #'p3r7/with-vertico-disabled)
+  ;; (advice-add 'lusty-select-match :around #'p3r7/with-vertico-disabled)
+  ;; (advice-add 'lusty-open-this :around #'p3r7/with-vertico-disabled)
+  )
+
 
 
 

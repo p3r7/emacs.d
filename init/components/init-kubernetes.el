@@ -60,6 +60,16 @@
 
 
 
+;; formatting helpers
+
+(defun p3r7/base64-encode-region-no-break (start end)
+  "Base64 encode the region between START and END without inserting line breaks.
+Useful for Kubernetes secrets."
+  (interactive "r")
+  (base64-encode-region start end t))
+
+
+
 ;; DIRECT SHELL INTEGRATIONS
 
 ;; (with-eval-after-load 'friendly-shell-command
@@ -404,6 +414,8 @@
     ("i" kubectl-describe-at-point "describe")
     ("k" kubectl-delete-at-point "delete")
     ("K" kubectl-delete-force-at-point "delete (f)")
+    ("b" p3r7/base64-encode-region-no-break "b64 encode")
+    ("B" base64-decode-region "b64 decode")
     ("g" nil "cancel")))
 
 
