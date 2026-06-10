@@ -26,7 +26,8 @@
          :map norns-sc-repl-mode-map
          ("C-." . norns-sc-stop))
   :init
-  (setq norns-lan-domain "lan")
+  ;; (setq norns-lan-domain "lan")
+  (setq norns-lan-domain nil)
   :config
   (add-hook 'lua-mode-hook #'norns-mode-maybe-activate)
   (add-hook 'fennel-mode-hook #'norns-mode-maybe-activate)
