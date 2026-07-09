@@ -436,6 +436,36 @@ Useful for Kubernetes secrets."
     (insert
      (base64-encode-string password t))))
 
+
+;; ------------------------------------------------------------------------
+;; QUICKRUN
+
+(use-package quickrun)
+
+(use-package prf-quickrun-detect
+  :load-path "~/.emacs.d/plugins/prf-quickrun-detect"
+  :after quickrun
+  :config
+  (setq prf/quickrun-custom-cmd-list
+        '((:name "kubectl-apply"
+           :command "kubectl"
+           :exec "%c apply -f %s"
+           :description "Apply Kubernetes manifest"
+           :match ((mode . (yaml-mode yaml-ts-mode))
+                   (content . ("^apiVersion:" "^kind:"))))
+
+          (:name "ansible-playbook"
+           :command "ansible-playbook"
+           :exec "%c %s"
+           :description "Run Ansible playbook"
+           :match ((mode . (yaml-mode yaml-ts-mode))
+                   (content . ("^- \\(hosts\\|name\\):"
+                               "^  \\(tasks\\|roles\\):"))))))
+
+  (add-hook 'find-file-hook #'prf/quickrun-detect-custom-cmd))
+
+
+
 ;; ------------------------------------------------------------------------
 ;; HYDRAS
 
