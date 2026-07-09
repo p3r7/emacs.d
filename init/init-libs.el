@@ -38,18 +38,25 @@
 ;; OBJECT MANIPULATION
 
 (use-package dash
+  :ensure t
+  :demand t
   :config
   (dash-enable-font-lock))
 
 (use-package kv)
 
-(use-package f)                         ; files
+(use-package f
+  :ensure t
+  :demand t)
 
-(use-package s)                         ; strings
+(use-package s
+  :ensure t
+  :demand t)
 (use-package prf-string
   :quelpa (prf-string :fetcher github :repo "p3r7/prf-string"))
 
-(use-package ts)                        ; time
+(use-package ts
+  :ensure t)
 
 ;; (use-package ht)
 ;; https://github.com/plexus/a.el
