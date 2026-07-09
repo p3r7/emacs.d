@@ -14,11 +14,13 @@
   :after (helm ivy lusty-explorer)
 
   :init
-  (setq prf/M-x-completion-backend 'vertico
-        prf/find-file-completion-backend 'lusty
-        prf/switch-to-buffer-completion-backend 'lusty
-        ;; prf/completing-read-completion-backend 'ivy
-        )
+  (setq
+   prf/M-x-completion-backend 'helm
+   ;; prf/M-x-completion-backend 'vertico
+   prf/find-file-completion-backend 'lusty
+   prf/switch-to-buffer-completion-backend 'lusty
+   ;; prf/completing-read-completion-backend 'ivy
+   )
   :bind (("C-x C-f" . prf/find-file-fun)
 	     ("C-x f" . prf/find-file-fun)
 	     ("C-x b" . prf/switch-to-buffer-fun)
