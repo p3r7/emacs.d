@@ -51,6 +51,7 @@
   :demand
   :config
   ;; (setq tramp-verbose 6)
+  (setq tramp-verbose 1)
 
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 
@@ -62,13 +63,30 @@
                                     t)
                                    "\\s-*"))
 
-  ;; disable vc for remote files (speed increase)
-  (setq vc-ignore-dir-regexp
-        (format "\\(%s\\)\\|\\(%s\\)"
-                vc-ignore-dir-regexp
-                tramp-file-name-regexp))
+  ;; use scp for remote-to-remote copying
+  ;; (setq tramp-use-scp-direct-remote-copying t)
 
-  (setq enable-remote-dir-locals t)
+  ;; disable various stuff to speed things up
+  (setq
+   enable-remote-dir-locals t
+   remote-file-name-inhibit-locks t
+   remote-file-name-inhibit-auto-save-visited t
+   vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)"
+                                vc-ignore-dir-regexp
+                                tramp-file-name-regexp))
+
+  ;; ;; enable direct-async-process
+  ;; (unless (version< tramp-version "2.7")
+  ;;   (connection-local-set-profile-variables
+  ;;    'remote-direct-async-process
+  ;;    '((tramp-direct-async-process . t)))
+
+  ;;   (connection-local-set-profiles
+  ;;    '(:application tramp :protocol "scp")
+  ;;    'remote-direct-async-process)
+
+  ;;   (with-eval-after-load 'magit
+  ;;     (setq magit-tramp-pipe-stty-settings 'pty)))
 
   ;; enable X11 forwarding
   ;; TODO: dynamically bind those w/ `with-shell-interpreter'
