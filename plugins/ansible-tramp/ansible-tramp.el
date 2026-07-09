@@ -166,17 +166,73 @@ If not available, returns nil but tries reloading cache via an async API call (s
 
 
 
+;; UTILS: COMPLETION
+
+(defun ansible-tramp--hostname-at-point ()
+  (with-syntax-table (make-syntax-table (syntax-table))
+    (modify-syntax-entry ?. "_")
+    (thing-at-point 'symbol)))
+
+
+
+;; EMBARK INTEGRATION
+
+;; NB: contrary to the helm version, we need to call `embark-act' (generally `C-.') in the vertico buffer
+
+(with-eval-after-load 'embark
+  (defvar-keymap embark-ansible-host-map
+    :doc "Keymap for actions on Ansible inventory hosts."
+    :parent embark-general-map
+    "s" #'ansible-tramp-shell
+    "d" #'ansible-tramp-dired
+    "i" #'ansible-tramp-debug-info)
+
+  (add-to-list 'embark-keymap-alist '(ansible-host embark-ansible-host-map))
+
+  (defun ansible-tramp-shell (hostname)
+    "Open shell on Ansible-managed HOSTNAME."
+    (interactive "sHost: ")
+    (let ((path (funcall ansible-tramp-host-path-transform-fn
+                         (ansible-tramp-get-inventory-address-for-host hostname))))
+      (friendly-shell :path path)))
+
+  (defun ansible-tramp-dired (hostname)
+    "Open dired on Ansible-managed HOSTNAME."
+    (interactive "sHost: ")
+    (let ((path (funcall ansible-tramp-host-path-transform-fn
+                         (ansible-tramp-get-inventory-address-for-host hostname))))
+      (friendly-remote-shell :path path)))
+
+  (defun ansible-tramp-debug-info (hostname)
+    "Show debug info for Ansible-managed HOSTNAME."
+    (interactive "sHost: ")
+    (message-box "selected: %s (%s)" hostname
+                 (ansible-tramp-get-inventory-address-for-host hostname)))
+
+  (defun ansible-tramp-connect (hostname)
+    "Connect to an Ansible-managed host."
+    (interactive
+     (list (let ((hostnames (ansible-tramp-get-inventory-hostnames)))
+             (completing-read "Ansible host: "
+                              (lambda (str pred action)
+                                (if (eq action 'metadata)
+                                    '(metadata (category . ansible-host))
+                                  (complete-with-action action hostnames str pred)))
+                              nil t
+                              (let ((tap (ansible-tramp--hostname-at-point)))
+                                (when (member tap hostnames) tap))))))
+    (let* ((address (ansible-tramp-get-inventory-address-for-host hostname))
+           (path (funcall ansible-tramp-host-path-transform-fn address)))
+      (friendly-shell :path path))))
+
+
+
 ;; HELM INTEGRATION
 
 (with-eval-after-load 'helm
 
   (eval-when-compile
     (require 'helm-source nil t))
-
-  (defun ansible-tramp--hostname-at-point ()
-    (with-syntax-table (make-syntax-table (syntax-table))
-      (modify-syntax-entry ?. "_")
-      (thing-at-point 'symbol)))
 
   (setq ansible-tramp-helm-source
         (helm-build-sync-source "Connect to Ansible-managed host"
