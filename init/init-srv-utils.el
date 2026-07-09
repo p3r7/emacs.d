@@ -417,6 +417,26 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
 
 
 ;; ------------------------------------------------------------------------
+;; secrets
+
+(use-package password-generator)
+
+(defun p3r7/base64-encode-region-no-break (start end)
+  "Base64 encode the region between START and END without inserting line breaks.
+Useful for Kubernetes secrets."
+  (interactive "r")
+  (base64-encode-region start end t))
+
+(defun p3r7/gen-password-b64 ()
+  "Generate a base64-encoded password"
+  (interactive)
+  (let* ((symbols-for-pass "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ!@^()_-+=/?,.><[]{}")
+         (password (password-generator-generate-internal symbols-for-pass password-generator-paranoid-length)))
+    password
+    (insert
+     (base64-encode-string password t))))
+
+;; ------------------------------------------------------------------------
 ;; HYDRAS
 
 (with-eval-after-load 'hydra
@@ -430,6 +450,14 @@ Modified to return nil instead of `sh-shell-file' as defautl value."
     ("f" prf/find-file-at-point "find at point")
     ("#" ff-as-root "as root")
     ("S" root-shell "root shell")
+    ("g" nil "cancel"))
+
+  (defhydra hydra-secrets (:color blue)
+    "secrets"
+    ("p" password-generator-paranoid "gen password")
+    ("P" p3r7/gen-password-b64 "gen password (b64)")
+    ("b" p3r7/base64-encode-region-no-break "b64 encode")
+    ("B" base64-decode-region "b64 decode")
     ("g" nil "cancel"))
 
   (defhydra hydra-copyPath (:color blue)

@@ -376,6 +376,7 @@
     ("m" magit-status "magit")
     ("c" hydra-copyPath/body "copy path")
     ("s" hydra-srvUtils/body "server utils")
+    ("S" hydra-secrets/body "secrets")
     ("k" hydra-kube/body "kube")
     ("p" hydra-projectSearch/body "project utils")
     ("v" hydra-visual/body "visual")
