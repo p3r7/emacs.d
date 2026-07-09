@@ -7,6 +7,7 @@
         indent-for-tab-command
         lispy-braces
         lispy-brackets
+        lispy-colon
         lispy-delete
         lispy-hash
         lispy-kill
