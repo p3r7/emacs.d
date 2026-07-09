@@ -206,6 +206,8 @@ buffer names in the matches window; 0.10 = %10."
 
 (defvar lusty--custom-explorer-actions (make-hash-table :test 'equal))
 (defvar lusty--custom-explorer-actions-keys (make-hash-table :test 'equal))
+(defvar lusty--pending-custom-action nil
+  "When non-nil, a custom action keyword (e.g. :launch-shell) to execute\ninstead of opening the file. Set by `lusty-custom-explorer-action' within\nthe dynamic extent of `lusty-file-explorer'.")
 (defvar lusty--shell-open-here-fun nil)
 (defvar lusty--shell-command-fun #'shell-command)
 (defvar lusty--async-shell-command-fun #'async-shell-command)
@@ -281,59 +283,21 @@ Uses the faces `lusty-directory-face', `lusty-slash-face', and
 	   (lusty--ignored-buffer-regex
 	    (mapconcat 'identity lusty--completion-ignored-regexps "\\|"))
            (minibuffer-local-filename-completion-map lusty-mode-map)
+           (lusty--pending-custom-action nil)
            (file
             ;; read-file-name is silly in that if the result is equal to the
             ;; dir argument, it gets converted to the default-filename
             ;; argument.  Set it explicitly to "" so if lusty-launch-dired is
             ;; called in the directory we start at, the result is that directory
             ;; instead of the name of the current buffer.
-            (lusty--run 'read-file-name default-directory ""))
-	   (action :file-open))
+            (lusty--run 'read-file-name default-directory "")))
       (when file
-	(when (s-contains? "!!!lusty!!!" file)
-	  (pcase-let ((`(,file-tmp ,action-tmp) (s-split "!!!lusty!!!" file)))
-	    (setq file file-tmp
-		  action (intern (concat ":" action-tmp)))))
         (setq file (expand-file-name file))
-
-        (if (eq action :file-open)
+        (if (null lusty--pending-custom-action)
             (switch-to-buffer
-             (find-file-noselect
-              (expand-file-name file)))
+             (find-file-noselect file))
           (let ((default-directory file))
-            (call-interactively (gethash action lusty--custom-explorer-actions))))
-
-        ;; (cond
-        ;;  ((eq action :file-open)
-        ;;   (switch-to-buffer
-        ;;    (find-file-noselect
-        ;;     (expand-file-name file))))
-        ;;  ((eq action :launch-shell)
-        ;;   (if lusty--shell-open-here-fun
-        ;;       (progn
-        ;; 	(cd (expand-file-name file))
-        ;; 	(call-interactively lusty--shell-open-here-fun))
-        ;;     (message "No `lusty--shell-open-here-fun' defined")))
-        ;;  ((eq action :shell-command)
-        ;;   (if lusty--shell-command-fun
-        ;;       (progn
-        ;; 	(cd (expand-file-name file))
-        ;; 	(call-interactively lusty--shell-command-fun))
-        ;;     (message "No `lusty--shell-command-fun' defined")))
-        ;;  ((eq action :async-shell-command)
-        ;;   (if lusty--async-shell-command-fun
-        ;;       (progn
-        ;; 	(cd (expand-file-name file))
-        ;; 	(call-interactively lusty--async-shell-command-fun))
-        ;;     (message "No `lusty--async-shell-command-fun' defined")))
-        ;;  ((eq action :M-x)
-        ;;   (if lusty--M-x-fun
-        ;;       (progn
-        ;; 	(cd (expand-file-name file))
-        ;; 	(call-interactively lusty--M-x-fun))
-        ;;     (message "No `lusty--M-x-fun' defined")))
-        ;;  (t (message "unsupported action")))
-        ))))
+            (call-interactively (gethash lusty--pending-custom-action lusty--custom-explorer-actions))))))))
 
 ;;;###autoload
 (defun lusty-buffer-explorer ()
@@ -553,12 +517,17 @@ Inspired by `lispy-yank'"
 ;; ###PRF
 ;;;###autoload
 (defun lusty-custom-explorer-action (action)
-  "Launch shell at the current directory."
+  "Trigger a custom explorer ACTION instead of opening the file.
+Sets `lusty--pending-custom-action' and exits the minibuffer.
+The action will be looked up in `lusty--custom-explorer-actions'
+and called interactively with `default-directory' set to the
+current lusty path."
   (interactive)
   (when (eq lusty--active-mode :file-explorer)
     (let* ((path (minibuffer-contents-no-properties))
            (dir (lusty-normalize-dir (file-name-directory path))))
-      (lusty-set-minibuffer-text (concat dir "!!!lusty!!!" action))
+      (setq lusty--pending-custom-action (intern (concat ":" action)))
+      (lusty-set-minibuffer-text dir)
       (exit-minibuffer))))
 
 (defun lusty-custom-explorer-action-fun-name (keyword)
