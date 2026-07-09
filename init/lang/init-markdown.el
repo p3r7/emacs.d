@@ -1,6 +1,7 @@
 ;; [[http://jblevins.org/projects/markdown-mode/]]
 
 (use-package markdown-mode
+  :defer t
   :mode ("\\.md\\'" "\\.markdown\\'" "README\\.md\\'")
 
   :bind (

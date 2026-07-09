@@ -32,6 +32,7 @@
 ;; venv
 
 (use-package anaconda-mode
+  :defer t
   :hook ((python-mode-hook . prf/py/anaconda-activate-hook))
   :config
   (defun prf/py/anaconda-activate-hook ()

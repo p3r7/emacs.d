@@ -1,5 +1,6 @@
 
 (use-package haskell-mode
+  :defer t
   :mode "\.hs$"
   :load-path "~/.emacs.d/plugins/haskell-mode/haskell-site-file"
   :config

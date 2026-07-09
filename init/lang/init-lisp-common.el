@@ -39,6 +39,7 @@
 (require 'init-lispy)
 
 (use-package redshank
+  :defer t
   :delight
   :hook ((lisp-mode emacs-lisp-mode scheme-mode) . redshank-mode))
 

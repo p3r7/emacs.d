@@ -51,6 +51,7 @@
 ;; HELP
 
 (use-package helpful
+  :defer t
   :bind (("C-h f" . helpful-callable)
 	     ("C-h v" . helpful-variable)
 	     ("C-h k" . helpful-key)
@@ -221,6 +222,7 @@ Wrapper around `elisp-slime-nav-find-elisp-thing-at-point'."
 
 
 (use-package easy-escape
+  :defer t
   :delight easy-escape-minor-mode
   :hook ((emacs-lisp-mode ielm-mode) . easy-escape-minor-mode))
 

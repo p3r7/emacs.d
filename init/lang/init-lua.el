@@ -7,6 +7,7 @@
 ;; http://stackoverflow.com/questions/4643206/how-to-configure-indentation-in-emacs-lua-mode
 
 (use-package lua-mode
+  :defer t
   :mode "\\.p8$"
   :bind (("M-." . prf/lua/xref-find-definitions))
 
@@ -33,6 +34,7 @@
 ;; FENNEL
 
 (use-package fennel-mode
+  :defer t
   :mode "\\.fnl\\'")
 
 

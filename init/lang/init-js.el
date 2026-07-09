@@ -3,6 +3,7 @@
 ;; JS
 
 (use-package js2-mode
+  :defer t
   :delight (js2-mode "JS2")
   :mode "\\.js\\'"
 

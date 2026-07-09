@@ -10,9 +10,10 @@
 (defvar p3r7/org-link-abbrev-alist '() "Wrapper around `org-link-abbrev-alist', providing auto-folding of pasted links")
 
 (use-package org
+  :defer t
   :bind (
          :map org-mode-map
-              ;; NB: og bound to `org-fill-paragraph'
+         ;; NB: og bound to `org-fill-paragraph'
          ("M-q" . toggle-truncate-lines)
          ;; NB: got overriden by `cua-selection-mode'
          ("C-y" . org-yank)
@@ -204,6 +205,7 @@ If thing under point is not a link or has no matching alt type"
 (unless (windows-nt-p)
 
   (use-package org-roam
+    :defer t
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert)

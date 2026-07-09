@@ -3,6 +3,7 @@
 ;; MAJOR MODE
 
 (use-package web-mode
+  :defer t
   :mode ("\\.phtml\\'"
 	 "\\.tpl\\.php\\'"
 	 "\\.jsp\\'"
@@ -35,6 +36,7 @@
 ;; TEMPLATING
 
 (use-package emmet-mode
+  :defer t
   :hook (sgml-mode web-mode))
 
 
@@ -42,6 +44,7 @@
 ;; LIVE RELOAD
 
 (use-package skewer-mode
+  :defer t
   :hook (web-mode . skewer-html-mode)
   :init
   (setq httpd-port 8123)

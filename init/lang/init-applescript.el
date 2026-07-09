@@ -1,5 +1,6 @@
 
 (use-package applescript-mode
+  :defer t
   :mode "\\.applescript$")
 
 

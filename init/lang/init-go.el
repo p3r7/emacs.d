@@ -19,6 +19,7 @@
          (treesit-language-available-p 'gomod))
 
     (use-package go-ts-mode
+      :defer t
       :hook
       (go-ts-mode . lsp-deferred)
       (go-ts-mode . go-format-on-save-mode)

@@ -1,5 +1,6 @@
 
 (use-package php-mode
+  :defer t
   :mode "\\.php?\\'"
   :hook
   ((php-mode . #'php-enable-default-coding-style)
