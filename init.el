@@ -127,7 +127,7 @@
  )
 
 (require 'prf-require)
-(if (= emacs-major-version 30)
+(if (>= emacs-major-version 30)
     (require 'use-package)
   (prf/require-plugin 'use-package))
 
