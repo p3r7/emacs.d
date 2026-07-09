@@ -145,12 +145,16 @@
 ;; FEATURES - QUELPA
 
 (use-package quelpa
+  :demand t
   :init
   (setq quelpa-self-upgrade-p nil))
 (use-package quelpa-use-package
   :after (quelpa)
+  :demand t
   :config
   (quelpa-use-package-activate-advice))
+
+;; REVIEW: `quelpa' logs "Newer package has been installed. Not upgrading.", it isn't supposed to do any network call (unless we set `quelpa-upgrade-p' to a non-nil value). idk if this logs means it goes network calls anyway...
 
 
 
