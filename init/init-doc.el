@@ -181,11 +181,5 @@
 
 
 
-;; WEBSITES / ARTICLES
-
-(require 'init-pocket)
-
-
-
 
 (provide 'init-doc)
