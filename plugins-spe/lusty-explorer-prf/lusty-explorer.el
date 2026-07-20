@@ -129,6 +129,14 @@ buffer names in the matches window; 0.10 = 10%."
   :type 'boolean
   :group 'lusty-explorer)
 
+(defcustom lusty-matches-show-mode-line t
+  "Whether to display a mode-line in the *Lusty-Matches* window.
+When nil, the mode-line is hidden to gain an extra display row.
+When non-nil (the default), the mode-line is shown, providing a
+visual separator between the matches and the minibuffer."
+  :type 'boolean
+  :group 'lusty-explorer)
+
 (defface lusty-match-face
   '((t :inherit highlight))
   "The face used for the current match."
@@ -784,8 +792,8 @@ Not relevant to the user, generally."
           (let ((message-log-max nil))
             (toggle-truncate-lines 1)
             (message "")))
-        ;; No mode-line -- acquire an extra display row.
-        (when mode-line-format
+        (when (and mode-line-format
+                   (not lusty-matches-show-mode-line))
           (setq-local mode-line-format nil))
         ;; Minor look-and-feel tweaks. We disable these display settings in
         ;; the completions buffer in case the user has enabled them globally.
