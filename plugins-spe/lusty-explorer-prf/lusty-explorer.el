@@ -877,7 +877,7 @@ Not relevant to the user, generally."
                    (- (max (lusty--min-matches-window-height)
                            (with-current-buffer matches-buffer
                              (count-lines (point-min) (point-max))))
-                      (window-height window)))))
+                      (window-body-height window)))))
         (set-window-hscroll window 0)  ; probably not necessary
         (unless (zerop delta)
           (window-resize window
