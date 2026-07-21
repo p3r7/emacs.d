@@ -168,6 +168,16 @@ visual separator between the matches and the minibuffer."
   "The face used for normal files."
   :group 'lusty-explorer)
 
+(defface lusty-no-matches
+  '((t :inherit isearch-fail :weight bold))
+  "Face used for styling the \"NO MATCHES\" line."
+  :group 'lusty-explorer)
+
+(defface lusty-truncated
+  '((t :inherit shadow :weight bold))
+  "Face used for styling the \"TRUNCATED\" token."
+  :group 'lusty-explorer)
+
 (defvar lusty-buffer-name " *Lusty-Matches*")
 (defvar lusty-prompt ">> ")
 (defvar lusty-column-separator "    ")
