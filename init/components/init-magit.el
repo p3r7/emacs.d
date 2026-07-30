@@ -2,6 +2,8 @@
 ;; (magit-debug-git-executable)
 
 (use-package magit
+  ;; NB: using older version, latest is buggy...
+  :load-path "~/.emacs.d/plugins-spe/magit-20260325.2258"
   :defer 5
   ;; :custom
   ;; (magit-git-executable "C:/cygwin64/usr/libexec/git-core/git.exe")
@@ -19,7 +21,7 @@
 
   :init
   (setq magit-auto-revert-mode 1
-	magit-last-seen-setup-instructions "1.4.0")
+	    magit-last-seen-setup-instructions "1.4.0")
   (add-to-list 'display-buffer-alist '("^magit:\\(.*\\)$" display-buffer-same-window))
 
   :config
