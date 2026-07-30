@@ -40,6 +40,7 @@ session.*
 .cache/
 tldr/
 history
+.github/
 
 # requests
 request/
