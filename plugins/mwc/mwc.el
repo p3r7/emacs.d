@@ -58,6 +58,10 @@
   "Alist of (window . overlay) for region highlighting in target windows.")
 (put 'mwc--region-overlays 'permanent-local t)
 
+(defvar-local mwc--hl-line-overlays nil
+  "Alist of (window . overlay) for cursor line highlighting in target windows.")
+(put 'mwc--hl-line-overlays 'permanent-local t)
+
 (defvar-local mwc--active nil
   "Non-nil when mwc-mode is active in this buffer.
 Used as the toggle in `emulation-mode-map-alists' so that
@@ -111,6 +115,7 @@ Used by the global `post-command-hook' to update overlays.")
                 (move-overlay ov beg end buf)
               (setq ov (make-overlay beg end buf nil t))
               (overlay-put ov 'face 'region)
+              (overlay-put ov 'priority 0)
               (overlay-put ov 'mwc-region t)
               (setf (alist-get win mwc--region-overlays) ov)))
         (when ov
@@ -124,13 +129,53 @@ Used by the global `post-command-hook' to update overlays.")
       (delete-overlay (cdr entry))))
   (setq mwc--region-overlays nil))
 
+
+;; hl-line overlay management
+
+(defun mwc--update-hl-line-overlays (active-p)
+  "Update cursor line overlays in target windows.
+When ACTIVE-P is non-nil, show highlights at each window\='s point.
+When nil, remove them."
+  (dolist (win (mwc--live-target-windows))
+    (let* ((buf (window-buffer win))
+           (ov (alist-get win mwc--hl-line-overlays)))
+      (if active-p
+          (let* ((pt (window-point win))
+                 (beg (with-current-buffer buf
+                        (save-excursion
+                          (goto-char pt)
+                          (line-beginning-position))))
+                 (end (with-current-buffer buf
+                        (save-excursion
+                          (goto-char pt)
+                          (line-beginning-position 2)))))
+            (if ov
+                (move-overlay ov beg end buf)
+              (setq ov (make-overlay beg end buf))
+              (overlay-put ov 'face 'hl-line)
+              (overlay-put ov 'priority -50)
+              (overlay-put ov 'mwc-hl-line t)
+              (setf (alist-get win mwc--hl-line-overlays) ov)))
+        (when ov
+          (delete-overlay ov)
+          (setf (alist-get win mwc--hl-line-overlays) nil))))))
+
+(defun mwc--cleanup-hl-line-overlays ()
+  "Remove all hl-line overlays."
+  (dolist (entry mwc--hl-line-overlays)
+    (when (overlayp (cdr entry))
+      (delete-overlay (cdr entry))))
+  (setq mwc--hl-line-overlays nil))
+
 (defun mwc--global-post-command-hook ()
-  "Update region overlays for the active mwc session.
+  "Update overlays for the active mwc session.
 Added to the global `post-command-hook'; does nothing if no session is active."
   (when (and mwc--active-control-buffer
              (buffer-live-p mwc--active-control-buffer))
-    (with-current-buffer mwc--active-control-buffer
-      (mwc--update-region-overlays))))
+    (let ((in-control-p (eq (current-buffer) mwc--active-control-buffer)))
+      (with-current-buffer mwc--active-control-buffer
+        (mwc--update-region-overlays)
+        (mwc--update-hl-line-overlays in-control-p)))))
 
 ;; core logic: command propagation across windows
 
@@ -404,6 +449,7 @@ activating the control buffer."
   (let ((prev-config mwc--previous-window-config)
         (control-buffer (current-buffer)))
     (mwc--cleanup-region-overlays)
+    (mwc--cleanup-hl-line-overlays)
     (dolist (win (mwc--live-target-windows))
       (with-selected-window win
         (deactivate-mark)))
