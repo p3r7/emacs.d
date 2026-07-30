@@ -37,6 +37,13 @@
   (interactive)
   (call-interactively (prf/get-find-file-fun)))
 
+(defun prf/multi-find-file-fun ()
+  (interactive)
+  (call-interactively
+   (if (eq prf/find-file-completion-backend 'lusty)
+       #'lusty-multi-find-file
+     (prf/get-find-file-fun))))
+
 (defun prf/switch-to-buffer-fun ()
   (interactive)
   (call-interactively (prf/get-switch-to-buffer-fun)))
