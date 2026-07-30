@@ -64,6 +64,10 @@ Used as the toggle in `emulation-mode-map-alists' so that
 mwc bindings override CUA and similar packages.")
 (put 'mwc--active 'permanent-local t)
 
+(defvar mwc--active-control-buffer nil
+  "The currently active mwc control buffer, or nil.
+Used by the global `post-command-hook' to update overlays.")
+
 
 
 ;; private helpers
@@ -120,6 +124,14 @@ mwc bindings override CUA and similar packages.")
       (delete-overlay (cdr entry))))
   (setq mwc--region-overlays nil))
 
+(defun mwc--global-post-command-hook ()
+  "Update region overlays for the active mwc session.
+Added to the global `post-command-hook'; does nothing if no session is active."
+  (when (and mwc--active-control-buffer
+             (buffer-live-p mwc--active-control-buffer))
+    (with-current-buffer mwc--active-control-buffer
+      (mwc--update-region-overlays))))
+
 ;; core logic: command propagation across windows
 
 (defun mwc--exec-in-targets (cmd)
@@ -148,20 +160,23 @@ mwc bindings override CUA and similar packages.")
 
 (defun mwc--toggle-mark ()
   "Toggle mark in all target windows, respecting CUA mode.
-If the mark is active, deactivate it.  Otherwise, set it."
+If the mark is active, deactivate it.  Otherwise, set it.
+When multiple windows display the same buffer, the mark is
+only toggled once per buffer (since the mark is buffer-local)."
   (interactive)
-  (dolist (win (mwc--live-target-windows))
-    (with-selected-window win
-      ;; Clear any stale deactivate-mark flag from a previous command;
-      ;; the command loop normally does this but only for the current buffer.
-      (setq deactivate-mark nil)
-      (if (bound-and-true-p cua-mode)
-          (call-interactively #'cua-set-mark)
-        (call-interactively #'set-mark-command))
-      ;; Process deactivate-mark immediately and clear the flag.
-      (when deactivate-mark
-        (deactivate-mark)
-        (setq deactivate-mark nil)))))
+  (let ((seen-buffers nil))
+    (dolist (win (mwc--live-target-windows))
+      (let ((buf (window-buffer win)))
+        (unless (memq buf seen-buffers)
+          (push buf seen-buffers)
+          (with-selected-window win
+            (setq deactivate-mark nil)
+            (if (bound-and-true-p cua-mode)
+                (call-interactively #'cua-set-mark)
+              (call-interactively #'set-mark-command))
+            (when deactivate-mark
+              (deactivate-mark)
+              (setq deactivate-mark nil))))))))
 
 (defun mwc--keyboard-quit ()
   "Deactivate mark in all target windows, then call `keyboard-quit'."
@@ -277,8 +292,7 @@ propagated to the target windows.
 
 \\{mwc-mode-map}"
   (setq cursor-type 'box)
-  (setq mwc--active t)
-  (add-hook 'post-command-hook #'mwc--update-region-overlays nil t))
+  (setq mwc--active t))
 
 
 
@@ -330,6 +344,9 @@ typed in the control buffer are propagated to the target windows."
     (mwc--setup-control-buffer
      control-buffer target-windows prev-config)
 
+    (setq mwc--active-control-buffer control-buffer)
+    (add-hook 'post-command-hook #'mwc--global-post-command-hook)
+
     ;; Display control buffer in a side window at the bottom
     (let ((control-window (display-buffer-in-side-window
                            control-buffer
@@ -369,6 +386,9 @@ activating the control buffer."
       (mwc--setup-control-buffer
        control-buffer target-windows prev-config)
 
+      (setq mwc--active-control-buffer control-buffer)
+      (add-hook 'post-command-hook #'mwc--global-post-command-hook)
+
       ;; Display control buffer in a side window at the bottom
       (let ((control-window (display-buffer-in-side-window
                              control-buffer
@@ -387,6 +407,8 @@ activating the control buffer."
     (dolist (win (mwc--live-target-windows))
       (with-selected-window win
         (deactivate-mark)))
+    (setq mwc--active-control-buffer nil)
+    (remove-hook 'post-command-hook #'mwc--global-post-command-hook)
     (when (buffer-live-p control-buffer)
       (kill-buffer control-buffer))
     (when (window-configuration-p prev-config)
