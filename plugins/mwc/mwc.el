@@ -98,7 +98,10 @@ Used by the global `post-command-hook' to update overlays.")
         (format "%s<%d>%s" prefix n suffix)))))
 
 
-;; region overlay management
+
+;; overlays
+;; - fake region
+;; - fake hl-line
 
 (defun mwc--update-region-overlays ()
   "Update region highlight overlays in all target windows."
@@ -106,7 +109,7 @@ Used by the global `post-command-hook' to update overlays.")
     (let* ((buf (window-buffer win))
            (ov (alist-get win mwc--region-overlays))
            (mark-pos (and (buffer-local-value 'mark-active buf)
-                         (with-current-buffer buf (mark t)))))
+                          (with-current-buffer buf (mark t)))))
       (if mark-pos
           (let* ((pt (window-point win))
                  (beg (min mark-pos pt))
@@ -128,9 +131,6 @@ Used by the global `post-command-hook' to update overlays.")
     (when (overlayp (cdr entry))
       (delete-overlay (cdr entry))))
   (setq mwc--region-overlays nil))
-
-
-;; hl-line overlay management
 
 (defun mwc--update-hl-line-overlays (active-p)
   "Update cursor line overlays in target windows.
@@ -177,7 +177,107 @@ Added to the global `post-command-hook'; does nothing if no session is active."
         (mwc--update-region-overlays)
         (mwc--update-hl-line-overlays in-control-p)))))
 
-;; core logic: command propagation across windows
+
+
+;; isearch bindings
+
+(defvar mwc--isearch-overlays nil
+  "List of overlays for isearch match highlighting in non-primary windows.")
+
+(defvar mwc--isearch-saved-points nil
+  "Alist of (window . point) saving original positions for isearch in secondary windows.")
+
+(defun mwc--isearch-forward ()
+  "Start forward isearch, broadcasting to all target windows."
+  (interactive)
+  (mwc--isearch-start #'isearch-forward))
+
+(defun mwc--isearch-backward ()
+  "Start backward isearch, broadcasting to all target windows."
+  (interactive)
+  (mwc--isearch-start #'isearch-backward))
+
+(defun mwc--isearch-forward-regexp ()
+  "Start forward regexp isearch, broadcasting to all target windows."
+  (interactive)
+  (mwc--isearch-start #'isearch-forward-regexp))
+
+(defun mwc--isearch-backward-regexp ()
+  "Start backward regexp isearch, broadcasting to all target windows."
+  (interactive)
+  (mwc--isearch-start #'isearch-backward-regexp))
+
+(defun mwc--isearch-start (isearch-fn)
+  "Start isearch in target windows using ISEARCH-FN."
+  (when-let* ((ctrl-buf mwc--active-control-buffer)
+              (wins (with-current-buffer ctrl-buf
+                      (mwc--live-target-windows)))
+              (primary-win (car wins)))
+    ;; Save original points for secondary windows
+    (setq mwc--isearch-saved-points
+          (mapcar (lambda (w) (cons w (window-point w))) (cdr wins)))
+    (select-window primary-win)
+    (add-hook 'isearch-update-post-hook #'mwc--isearch-update nil t)
+    (add-hook 'isearch-mode-end-hook #'mwc--isearch-end nil t)
+    (unwind-protect
+        (funcall isearch-fn)
+      (mwc--isearch-cleanup-overlays)
+      (setq mwc--isearch-saved-points nil)
+      (when-let* ((_ (buffer-live-p ctrl-buf))
+                  (ctrl-win (get-buffer-window ctrl-buf)))
+        (select-window ctrl-win)))))
+
+(defun mwc--isearch-update ()
+  "Propagate current isearch string to other target windows."
+  (when (and mwc--active-control-buffer
+             (buffer-live-p mwc--active-control-buffer)
+             (> (length isearch-string) 0))
+    (let ((str isearch-string)
+          (regexp-p isearch-regexp)
+          (forward-p isearch-forward)
+          (fold-p isearch-case-fold-search)
+          (primary-win (selected-window))
+          ;; When user presses C-s/C-r to advance, search from current point.
+          ;; Otherwise (string changed), re-search from the saved origin.
+          (advancing-p (memq this-command
+                             '(isearch-repeat-forward isearch-repeat-backward))))
+      (mwc--isearch-cleanup-overlays)
+      (with-current-buffer mwc--active-control-buffer
+        (dolist (win (mwc--live-target-windows))
+          (unless (eq win primary-win)
+            (with-selected-window win
+              (let* ((case-fold-search fold-p)
+                     (search-from (if advancing-p
+                                      (window-point win)
+                                    (or (alist-get win mwc--isearch-saved-points)
+                                        (window-point win))))
+                     (search-fn (if regexp-p
+                                    (if forward-p #'re-search-forward #'re-search-backward)
+                                  (if forward-p #'search-forward #'search-backward)))
+                     (found (save-excursion
+                              (goto-char search-from)
+                              (funcall search-fn str nil t))))
+                (when found
+                  (goto-char (if forward-p (match-end 0) (match-beginning 0)))
+                  (let ((ov (make-overlay (match-beginning 0) (match-end 0))))
+                    (overlay-put ov 'face 'isearch)
+                    (overlay-put ov 'priority 1001)
+                    (push ov mwc--isearch-overlays)))))))))))
+
+(defun mwc--isearch-end ()
+  "Remove isearch hooks when isearch ends."
+  (remove-hook 'isearch-update-post-hook #'mwc--isearch-update t)
+  (remove-hook 'isearch-mode-end-hook #'mwc--isearch-end t))
+
+(defun mwc--isearch-cleanup-overlays ()
+  "Remove all isearch highlight overlays."
+  (mapc #'delete-overlay mwc--isearch-overlays)
+  (setq mwc--isearch-overlays nil))
+
+
+
+;; core logic
+;; command propagation across windows
 
 (defun mwc--exec-in-targets (cmd)
   "Execute CMD interactively in each live target window."
@@ -274,6 +374,16 @@ only toggled once per buffer (since the mark is buffer-local)."
 (mwc--make-command kill-region)
 (mwc--make-command copy-region-as-kill)
 
+(defvar mwc--override-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-SPC") #'mwc--toggle-mark)
+    map)
+  "Keymap for mwc bindings that must override emulation-mode maps.\n
+Registered in `emulation-mode-map-alists' so it takes priority over\nCUA's `cua-global-keymap' and similar high-priority keymaps.")
+
+(defvar mwc--keymap-alist `((mwc--active . ,mwc--override-map)))
+(add-to-list 'emulation-mode-map-alists 'mwc--keymap-alist)
+
 (defvar mwc-mode-map
   (let ((map (make-sparse-keymap)))
     ;; chars
@@ -321,6 +431,12 @@ only toggled once per buffer (since the mark is buffer-local)."
     (define-key map [remap exchange-point-and-mark] #'mwc--broadcast-exchange-point-and-mark)
     (define-key map [remap kill-region] #'mwc--broadcast-kill-region)
     (define-key map [remap copy-region-as-kill] #'mwc--broadcast-copy-region-as-kill)
+
+    ;; search
+    (define-key map [remap isearch-forward] #'mwc--isearch-forward)
+    (define-key map [remap isearch-backward] #'mwc--isearch-backward)
+    (define-key map [remap isearch-forward-regexp] #'mwc--isearch-forward-regexp)
+    (define-key map [remap isearch-backward-regexp] #'mwc--isearch-backward-regexp)
 
     ;; quit / cancel
     (define-key map [remap keyboard-quit] #'mwc--keyboard-quit)
@@ -462,19 +578,6 @@ activating the control buffer."
 
 
 
-
-;; emulation-level keymap (overrides CUA and similar packages)
-
-(defvar mwc--override-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-SPC") #'mwc--toggle-mark)
-    map)
-  "Keymap for mwc bindings that must override emulation-mode maps.\n
-Registered in `emulation-mode-map-alists' so it takes priority over\nCUA's `cua-global-keymap' and similar high-priority keymaps.")
-
-(defvar mwc--keymap-alist `((mwc--active . ,mwc--override-map)))
-(add-to-list 'emulation-mode-map-alists 'mwc--keymap-alist)
-
 
 (provide 'mwc)
 ;;; mwc.el ends here
