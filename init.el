@@ -228,6 +228,7 @@
 ;; - dev
 (require 'init-prog-common)
 (require 'init-lisp-common)
+(require 'init-treesitter)
 (require 'init-elisp)
 (require 'init-clojure)
 (require 'init-common-lisp)
@@ -237,6 +238,7 @@
 (require 'init-zig)
 (require 'init-php)
 (require 'init-js)
+(require 'init-ts)
 (require 'init-lua)
 (require 'init-python)
 (require 'init-groovy)
