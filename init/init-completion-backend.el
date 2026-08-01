@@ -11,7 +11,7 @@
 
 (use-package prf-completion-backend
   :load-path "~/.emacs.d/plugins/prf-completion-backend"
-  :after (helm ivy lusty-explorer)
+  :after (helm ivy lusty-explorer lusty-multi-explorer)
 
   :init
   (setq
@@ -23,6 +23,7 @@
    )
   :bind (("C-x C-f" . prf/find-file-fun)
 	     ("C-x f" . prf/find-file-fun)
+         ("C-x F" . prf/multi-find-file-fun)
 	     ("C-x b" . prf/switch-to-buffer-fun)
 	     ("C-x C-b" . prf/switch-to-buffer-fun)
 	     ("M-x" . prf/M-x-fun)))

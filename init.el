@@ -336,6 +336,7 @@
 
 (require 'init-grep)
 (require 'init-vcs)
+(require 'init-llm)
 
 (require 'init-doc)
 

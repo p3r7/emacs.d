@@ -41,6 +41,7 @@
 					                        )
 	    lusty--shell-open-here-fun #'friendly-shell
 	    lusty--M-x-fun #'helm-M-x)
+  ;; (setq lusty-matches-show-mode-line t)
   :config
 
   (with-eval-after-load 'ibuffer
@@ -79,6 +80,10 @@
   ;; (advice-add 'lusty-select-match :around #'p3r7/with-vertico-disabled)
   ;; (advice-add 'lusty-open-this :around #'p3r7/with-vertico-disabled)
   )
+
+(use-package lusty-multi-explorer
+  :after lusty-explorer
+  :load-path "~/.emacs.d/plugins-spe/lusty-multi-explorer")
 
 
 

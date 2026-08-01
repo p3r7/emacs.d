@@ -1,4 +1,6 @@
 
+
+;; mc
 
 (use-package multiple-cursors
   :demand
@@ -11,6 +13,13 @@
   (add-hook 'cua-mode-hook
             (lambda () (when cua-mode
                     (unbind-key "C-S-c" cua--region-keymap)))))
+
+
+;; mwc
+
+(use-package mwc
+  :load-path "~/.emacs.d/plugins/mwc")
+
 
 
 

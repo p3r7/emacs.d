@@ -129,6 +129,25 @@ buffer names in the matches window; 0.10 = 10%."
   :type 'boolean
   :group 'lusty-explorer)
 
+(defcustom lusty-score-fn #'lusty-LM-score
+  "Function used to score a candidate against user input.
+Takes two arguments: STR (the candidate string) and ABBREV (the
+user's input pattern).  Should return a float where 0.0 means no
+match and a positive value indicates match quality (higher is
+better).  The built-in default is `lusty-LM-score' (LiquidMetal).
+An alternative adapter for the `orderless' package is provided as
+`lusty-orderless-score'."
+  :type 'function
+  :group 'lusty-explorer)
+
+(defcustom lusty-matches-show-mode-line t
+  "Whether to display a mode-line in the *Lusty-Matches* window.
+When nil, the mode-line is hidden to gain an extra display row.
+When non-nil (the default), the mode-line is shown, providing a
+visual separator between the matches and the minibuffer."
+  :type 'boolean
+  :group 'lusty-explorer)
+
 (defface lusty-match-face
   '((t :inherit highlight))
   "The face used for the current match."
@@ -147,6 +166,16 @@ buffer names in the matches window; 0.10 = 10%."
 (defface lusty-file-face
   nil ;; Use default face...
   "The face used for normal files."
+  :group 'lusty-explorer)
+
+(defface lusty-no-matches
+  '((t :inherit isearch-fail :weight bold))
+  "Face used for styling the \"NO MATCHES\" line."
+  :group 'lusty-explorer)
+
+(defface lusty-truncated
+  '((t :inherit shadow :weight bold))
+  "Face used for styling the \"TRUNCATED\" token."
   :group 'lusty-explorer)
 
 (defvar lusty-buffer-name " *Lusty-Matches*")
@@ -532,9 +561,10 @@ current lusty path."
 
 (defun lusty-sort-by-fuzzy-score (strings abbrev)
   ;; TODO: case-sensitive when abbrev contains capital letter
-  (let* ((strings+scores
+  (let* ((score-fn lusty-score-fn)
+         (strings+scores
           (cl-loop for str in strings
-                   for score = (lusty-LM-score str abbrev)
+                   for score = (funcall score-fn str abbrev)
                    unless (zerop score)
                    collect (cons str score)))
          (sorted
@@ -784,8 +814,8 @@ Not relevant to the user, generally."
           (let ((message-log-max nil))
             (toggle-truncate-lines 1)
             (message "")))
-        ;; No mode-line -- acquire an extra display row.
-        (when mode-line-format
+        (when (and mode-line-format
+                   (not lusty-matches-show-mode-line))
           (setq-local mode-line-format nil))
         ;; Minor look-and-feel tweaks. We disable these display settings in
         ;; the completions buffer in case the user has enabled them globally.
@@ -847,7 +877,7 @@ Not relevant to the user, generally."
                    (- (max (lusty--min-matches-window-height)
                            (with-current-buffer matches-buffer
                              (count-lines (point-min) (point-max))))
-                      (window-height window)))))
+                      (window-body-height window)))))
         (set-window-hscroll window 0)  ; probably not necessary
         (unless (zerop delta)
           (window-resize window
@@ -877,12 +907,13 @@ Not relevant to the user, generally."
         ;; Sort by MRU.
         buffers
       ;; Sort by fuzzy score and MRU order.
-      (let* ((score-table
+      (let* ((score-fn lusty-score-fn)
+             (score-table
               (cl-loop with MRU-factor-step = (/ lusty-buffer-MRU-contribution
                                                  (length buffers))
                        for b in buffers
                        for step from 0.0 by MRU-factor-step
-                       for score = (lusty-LM-score b match-text)
+                       for score = (funcall score-fn b match-text)
                        for MRU-factor = (- 1.0 step)
                        unless (zerop score)
                        collect (cons b (* score MRU-factor))))
@@ -1200,6 +1231,52 @@ level."
 
 
 
+;;; Orderless adapter
+
+(defvar lusty--orderless-compile-cache (cons nil nil)
+  "Cache for orderless compilation result: (ABBREV . PREDICATE).
+Avoids recompiling the same pattern for every candidate.")
+
+(defun lusty-orderless-score (str abbrev)
+  "Score STR against ABBREV using the `orderless' package.
+Returns a positive float if all orderless components match STR,
+0.0 otherwise.  The score is derived from the ratio of query
+length to candidate length, with a bonus for prefix matches.
+Requires the `orderless' package (>= 1.0) to be installed.
+
+The compiled predicate is cached so that repeated calls with the
+same ABBREV (typical when scoring a list of candidates) only
+compile once."
+  (unless (fboundp 'orderless-compile)
+    (unless (require 'orderless nil t)
+      (error "`orderless' package is required for `lusty-orderless-score'")))
+  (let* ((pred (if (equal abbrev (car lusty--orderless-compile-cache))
+                   (cdr lusty--orderless-compile-cache)
+                 ;; Compile and cache.
+                 (let* ((case-fold-search lusty-case-fold)
+                        (compiled (orderless-compile abbrev))
+                        ;; orderless-compile returns (PREDICATE . REGEXPS)
+                        (p (car compiled)))
+                   (setcar lusty--orderless-compile-cache abbrev)
+                   (setcdr lusty--orderless-compile-cache p)
+                   p))))
+    (if (let ((case-fold-search lusty-case-fold))
+          (funcall pred str))
+        ;; All components match; compute a quality score.
+        (let* ((str-len (length str))
+               (abbrev-len (length abbrev))
+               ;; Base score: ratio of query length to candidate length.
+               (len-score (/ (float abbrev-len) str-len))
+               ;; Bonus for prefix match of the first component.
+               (prefix-bonus (if (string-prefix-p
+                                  (car (split-string abbrev " " t))
+                                  str
+                                  lusty-case-fold)
+                                 0.1 0.0)))
+          (min 1.0 (+ len-score prefix-bonus)))
+      0.0)))
+
+
 ;;; LiquidMetal
 
 ;; Port of Ryan McGeary's LiquidMetal fuzzy matching algorithm found at:
