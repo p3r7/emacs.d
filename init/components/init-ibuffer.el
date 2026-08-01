@@ -83,7 +83,7 @@
 
             ("norns"
 	         (or
-              (mode . norns-maiden-repl-mode)
+              (mode . norns-matron-repl-mode)
               (mode . norns-sc-repl-mode)
               (predicate . (and (fboundp #'norns-mode)
                                 norns-mode))
