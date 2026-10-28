@@ -86,13 +86,10 @@
       ad-do-it)))
 
 
-(use-package sh-term
-  :load-path "~/.emacs.d/plugins/sh-term"
-  ;; :hook (shell-mode . shell-term-mode)
-  :after (shell prf-tramp)
-
+(use-package coterm
   :config
-  (add-to-list 'sh-term-visual-commands "htop"))
+  ;; activate globally
+  (coterm-mode))
 
 
 
